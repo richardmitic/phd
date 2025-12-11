@@ -1,0 +1,18 @@
+[project]
+name = "phd"
+version = "0.1.0"
+description = "Monorepo for all PhD work"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "jupyterlab",
+    "jupyter_tikz",
+    "numpy",
+    "seaborn",
+    "pandas",
+    "matplotlib",
+    "requests_cache",
+    "requests",
+    "scikit-learn",
+    "statsmodels",
+]
