@@ -1,0 +1,88 @@
+\documentclass{letter}
+
+\usepackage{csquotes}
+\usepackage[british]{babel}
+
+\signature{Richard Mitic, Andreas Rossholm}
+
+\begin{document}
+
+\begin{letter}{}
+
+\opening{Dear Leonardo, Valeria, Stefania,}
+
+We would like to thank the reviewers for their thorough and detailed feedback. We have identified several common concerns shared by all reviewers (listed below). In order to fully address said concerns, it was necessary to make quite substantial changes to the paper. While we believe that the result is much more coherent and scientifically meritorious, we hope that a change of this scale is not inappropriate. 
+
+Much of the underlying work is the same - we are still comparing the same four algorithms for extracting panning features, and we are still doing so by applying them to music that is known to contain specific panning features. However, the revised version introduces a new concept that was not present in the original - we treat the results of each algorithm as a euclidean space and assess the distance between tracks within that space. In order to provide more coherence within this new concept, we have completely removed the \enquote{synthetic test signals} from the original paper and replaced them with more music excerpts that act as \enquote{anchors} for the edges of the feature space. This was directly inspired by a comment from Reviewer 3 in which they point out that the panning features of the synthetic signals were \enquote{easily predictable}; The anchor tacks are thus chosen for their predictable panning features. The title has also changed based on comments from Reviewer 2.
+
+The following paragraphs detail the concerns raised by the reviewers and how we have addressed them.
+% \\
+% \\
+\bigskip\\
+\filbreak
+{\bf Main points}
+
+\begin{displayquote}
+    \it
+    The paper needs a clearer focus and motivation was unclear.
+\end{displayquote}
+
+We have edited the title, abstract, and introduction to make it clear that the north-star objective is to perform unsupervised learning on panning features, and therefore one must understand exactly what panning features are possible to extract. Downstream uses of the learned features have also been listed. The references that performed similar tasks have been mentioned closer to the start of the text and some other not-so-closely-related references have been omitted.
+\\
+\filbreak
+\begin{displayquote}
+    \it
+    The conclusions were weak and not backed up by an objective metric.
+\end{displayquote}
+
+We have introduced a new concept in order to quantify the differences between panning feature algorithms - we treat the results of each algorithm as a euclidean feature space and assess the distance between tracks within that space. The feature space is bookended by the addition of two \enquote{anchor} tracks, which are strongly mono and strongly stereo. Each feature space is assessed in regard to its mono/stereo bias and pairs of tracks that lie unexpectedly close or far are examined in detail to assess what panning features the algorithms have detected or failed to detect.
+
+The conclusion has been edited to make it clear that the findings in this work should allow anyone doing further work to choose a panning feature algorithm that has the appropriate abilities for their task.
+
+In doing these changes, the need for the synthetic test audio was effectively eliminated it has been dropped.
+\bigskip
+\filbreak
+\begin{displayquote}
+    \it
+    There were inconstancies in the equations and unclear use of symbols.
+\end{displayquote}
+
+After removing the synthetic test audio there are fewer, much simpler equations. All variables are explained in the text and use standard mathematical notation norms. Some particularly confusing symbols used in the figures have been converted to plain English text.
+\bigskip
+\filbreak
+{\bf Smaller points}
+
+\begin{displayquote}
+    \it
+    The analysis of each algorithm was too independent.
+\end{displayquote}
+
+We now calculate a matrix of distances between tracks and \enquote{bias score} for each algorithm so that they can be objectively compared to each other. Section 5 also provides a comparative table and points out several over-arching issues that link all the algorithms.
+\bigskip
+\filbreak
+\begin{displayquote}
+    \it
+    Algorithm parameters were not stated clearly enough.
+\end{displayquote}
+
+We have added a table in section 3 that gives all parameters necessary to reproduce our work.
+\bigskip
+\filbreak
+\begin{displayquote}
+    \it
+    There were too many variations on the term \enquote{stereo field}.
+\end{displayquote}
+We have clarified that all the evaluated algorithms are focused on amplitude panning, and we have standardized our use of the phrase \enquote{panning features} (which is the most common phrase from the literature). There are still some instances of words/phrases like \enquote{spaciousness} or \enquote{stereo width}, which remain because they refer to past work that used those terms.
+\bigskip\\
+
+Thank you for your time and consideration. We hope to see you in Ancona.
+\bigskip\\
+
+\closing{Regards,}
+
+\ps
+
+\end{letter}
+
+
+\end{document}
