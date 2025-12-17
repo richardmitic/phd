@@ -3,6 +3,10 @@
 
 ## Outputs
 *.pdf
+*.html
+*.txt
+*.css
+*.tmp
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
