@@ -1,6 +1,12 @@
 # PhD
 Monorepo for PhD work
 
+## Structure
+
+[papers](papers) - Contains latex source for all papers.
+
+[bin](bin) - Contains helper scripts.
+
 
 ## Jupyter notebooks
 
