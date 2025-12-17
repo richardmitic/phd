@@ -2,7 +2,8 @@
 .vscode
 
 ## Outputs
-*.pdf
+main.pdf
+abstract.pdf
 *.html
 *.txt
 *.css
