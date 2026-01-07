@@ -16,4 +16,8 @@ dependencies = [
     "scikit-learn",
     "statsmodels",
     "segno",
+    "marimo",
+    "pytabix",
+    "anywidget>=0.9.21",
+    "GitPython",
 ]
