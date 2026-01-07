@@ -9,19 +9,15 @@ def _():
     import matplotlib.pyplot as plt
     import marimo as mo
     import slow
-    from versioning import get_module_version, get_git_status
-    import __init__
-    return __init__, get_git_status, get_module_version, mo, slow
+    from versioning import get_module_version
+    return get_module_version, mo, slow
 
 
 @app.cell
-def _(__init__, get_git_status, get_module_version, slow):
+def _(get_module_version, slow):
     print(get_module_version("sub"))
-    print(get_module_version(__init__))
     print(get_module_version("slow"))
     print(get_module_version(slow))
-    get_git_status(slow)
-    get_git_status("sub")
     return
 
 

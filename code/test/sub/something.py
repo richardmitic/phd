@@ -1,2 +1,2 @@
 def something():
-    return None
+    return 1
