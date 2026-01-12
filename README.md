@@ -22,3 +22,8 @@ git config filter.strip-notebook-output.clean '`git rev-parse --show-toplevel`/.
 Now the outputs will be stripped when adding a notebook, but will remain unchanged locally.
 
 To override and commit the outputs from a specific file, run `git -c filter.strip-notebook-output.clean= add <path to your notebook>`
+
+## Latex
+
+### Biber
+If bibliographies built with biber suddenly stop working, delete the cache - [instructions](https://tex.stackexchange.com/questions/140814/biblatex-biber-fails-with-a-strange-error-about-missing-recode-data-xml-file#comment318087_140814).
