@@ -2,7 +2,7 @@
 %%%%%%%%%%%%%%%%%%%%%%% edpsci_author_template.tex %%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\documentclass[a4paper,10pt,onecolumn]{edpsci} %%% option by default two columns
+\documentclass[a4paper,10pt]{edpsci} %%% option by default two columns
 %\documentclass[a4paper,onecolumn,10pt]{edpsci}%%% add the option "onecolumn" to display text only on one column
 % add "frenchtitle" option in documentclass if your article is in French language.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -189,28 +189,28 @@ All audio stimuli consisted of a commercially recorded music track combined with
 
 Each variant of a track was created by applying binaural panning of the speech signal at angles \{45L, 30L, 15L, 0, 15R, 30R, 45R\} (where L and R denote left and right, and the number denotes the panning azimuth in degrees from the centre line), as shown in Figure~\ref{binauralPanning}. Binaural panning was achieved by convolving the mono speech signal with the left and right \glspl{hrir} recorded by binaural microphones on the KEMAR dummy head subject of the SADIE II database~\cite{armstrong_perceptual_2018}. This database of \glspl{hrir} contains a set in which the excitation sound came from the exact angles specified; no interpolation of the \gls{hrir} coefficients was performed. A block diagram for a single azimuth is shown in Figure~\ref{stimulusCreation}, in which thin solid lines represent mono signals, thick solid lines represent stereo signals, and dotted lines represent duration metadata. The \enquote{Upmix} block represents a simple mono-to-stereo process whereby a mono recording is copied into both the left and right channels. The \enquote{Trim} block represents a process where the music excerpt is truncated to match the length of the binaurally panned speech. The \enquote{Normalize loudness} blocks represent changes in audio gain to ensure that the resulting loudnesses of both speech and music were equal.
 
-\begin{figure}[tbp]
+\begin{figure}[hbt]
 \centering
-\includegraphics[trim=0.6cm 0.7cm 0.6cm 0.6cm, clip=true,width=0.35\columnwidth]{speech_angles.pdf}
+\includegraphics[trim=0.6cm 0.7cm 0.6cm 0.6cm, clip=true,width=0.68\columnwidth]{speech_angles.pdf}
 \caption{The binaural panning of the speech signal at the different angles.}
 \label{binauralPanning}
 \end{figure}
 
-\begin{figure}[tbp]
+\begin{figure}[!hbtp]
 \centering
-\includegraphics[width=0.9\columnwidth]{binaural_stimulus_creation.pdf}
+\includegraphics[width=\columnwidth]{binaural_stimulus_creation.pdf}
 \caption{Block diagram of the audio stimulus creation process for a single azimuth.}
 \label{stimulusCreation}
 \end{figure}
 
 Once the binaurally panned speech signal was created, an excerpt of the music track was selected to be (1) musically representative of the track as a whole and (2) precisely the same length as the speech signal. The method of finding a representative section is detailed in \cite{jehan_extracting_2018}. The speech and music signals were then normalized to the same loudness using the pyloudnorm library \cite{steinmetz_pyloudnorm_2021} (which is an implementation of the ITU-R BS.1770 standard \cite{itu-r-bs-1770_lufs}) and summed to produce the final audio stimuli. In total, six different music tracks were selected, each combined with a different speech recording. The speech recordings were generated using both male and female voices, with three recordings featuring male voices and three featuring female voices. Table \ref{musicspeech} summarizes the music tracks, their corresponding speech recordings, and the gender of the voices used.
 \renewcommand{\arraystretch}{1.2}
-\begin{table}[h]
+\begin{table}[htb]
 \centering
 \setlength\tabcolsep{5pt}
 \begin{tabular}{lll}
 \toprule
- \textbf{Music Track} & \textbf{Speech Track} & \textbf{Voice Gender}\\        
+ \textbf{Music Track} & \textbf{Speech Track} & \textbf{Voice}\\        
 \midrule
  Brown Eyed Girl & Van Morrison & Female\\
  Everyday Is A Winding Road & Sheryl Crow & Male\\
@@ -230,6 +230,12 @@ In the experiment, participants could first adjust the volume to a comfortable l
 
 Before the start of the experiment, participants were asked four questions: (1) How old are you?, (2) What is your gender? (Male/Female/Other/Prefer not to say), (3) How often do you use streaming services to listen to the following? Music streaming (A. Never use/B. Daily/C. Weekly/D. Monthly), How many hours do you listen to B/C/D?, Podcast (A. Never use/B. Daily/C. Weekly/D. Monthly), How many hours do you listen to B/C/D?, and (4) Do you consider yourself an expert listener? (A. Yes/B. No/C. I do not know).
 
+\begin{figure*}[htb]
+\centerline{\includegraphics[width=0.65\textwidth]{screenshot_cropped.png}}
+\caption{The experiment interface used in the perceptual evaluation.}
+\label{interface}
+\end{figure*}
+
 The listening section of the test is closely based on the \gls{mushra} standard~\cite{itu-r-bs-1534_MUSHRA}. Participants are presented with a reference signal along with several variants and are asked to rate each based on how pleasant it is to listen to compared to the reference. The ranking scale follows the \gls{mushra} standard in that the opinion is a numeric value between 0 and 100, with the scale split into five equal sections marked by the words \enquote{Excellent}, \enquote{Good}, \enquote{Fair}, \enquote{Poor}, and \enquote{Bad}. Both the order of the variants and the order of the tracks are randomized for each subject, and the names of the variants are replaced with anonymized versions (see Figure~\ref{interface}). The test procedure differs from \gls{mushra} in that the variants for each track do not contain a hidden reference or hidden anchor. This is because the subjects were not asked to evaluate a signal degradation but rather a new signal assumed to be more pleasant than the reference. The information collected by the test interface comprised the ratings given to each variant.
 
 After the experiment, participants were asked to complete a questionnaire about their listening experience. In particular, they were asked:
@@ -242,11 +248,7 @@ After the experiment, participants were asked to complete a questionnaire about 
 
 The experiment interface, in Figure~\ref{interface}, presented the participant with (for each track) a waveform display depicting the track, the track title, the artist name, a set of vertical sliders to give their rating of each variant, and a play/pause button for each variant in addition to the reference. When audio is playing, it is looped, and the waveform display can be used to set the loop points.
 
-\begin{figure}[ht]
-\centerline{\includegraphics[width=0.65\textwidth]{screenshot_cropped.png}}
-\caption{The experiment interface used in the perceptual evaluation.}
-\label{interface}
-\end{figure}
+
 
 \section{Results and Analysis}
 \label{sec:ResultsAnalysis}
@@ -260,29 +262,7 @@ In Section \ref{subsec:audio_stimuli}, it was established that the reference sig
 
 A ratio $R$ representing the proportion of non-centre preference was calculated by $S/N$ where $S$ is the number of results indicating a non-centre preference and $N$ is the total number of results. These values are presented in Table~\ref{table:ratios}, both for the entire dataset and for each music track. Subsequently, these ratios are tested against two null hypotheses using a binomial test. The null hypotheses ($H_0$) and their associated alternative hypotheses ($H_a$) are given in Table~\ref{table:hypotheses}. 
 
-
-\begin{table}[h]
-\centering
-\begin{tabular}{llll}
-\toprule
-& $H_0$ & $H_a$ & Explanation of $H_0$ \\
-\midrule
-(1) & $R=0$ & $R>0$ & The centre variant was always preferred \\
-(2) & $R=\frac{6}{7}$ & $R\neq\frac{6}{7}$ & The participants chose randomly \\
-\bottomrule
-\end{tabular}
-\caption{Null hypotheses that the results were tested against.}
-\label{table:hypotheses}
-\end{table}
-
-Table~\ref{table:ratios} shows the resulting p-values from the binomial test. Assuming a 95\% confidence interval, it can be seen that, with one exception (circled), all null hypotheses can be rejected. The exception is the track \enquote{Fake Plastic Trees}, for which the second null hypothesis (the test participants chose randomly) cannot be rejected. It can therefore be concluded that (for all other tracks) the default, centre-panned voiceover was not universally preferred.
-
-Further tests were performed to determine whether there was any difference between other groupings. The complete dataset was stratified by voiceover gender, participant's age, music streaming usage, podcast usage, and expert listener status. Contingency tables were constructed with the independent variable being the different values of the strata and the dependent variable being the participants' centre/non-centre preference. Chi-square ($\chi^2$) tests were performed on the contingency tables with the null hypothesis that the grouping was independent of preference. For all groupings, the $\chi^2$ statistic was below the critical value and the p-value was above 0.05 (95\% confidence) and therefore the null hypotheses could not be rejected. Thus, all the variables tested were deemed independent of centre / non-centre preference. %The complete results are shown in Appendix~\ref{app:centre_preference_full}. 
-
-%(the numbers comes from the distribution we have in the figures, it took the figures away but in that case we may have it in appendix .. we discuss.
-
-
-\begin{table}[h!]
+\begin{table*}[h!]
 \centering
 \begin{tabular}{lccccc}
 \toprule
@@ -299,27 +279,38 @@ bad guy - Billie Eilish & 15 & 29 & \num{0.52} & \num{2.20e-06} & \num{1.35e-05}
 \end{tabular}
 \caption{Ratios of centre to non-centre preference and their associated p-values for all test results and each individual track. P-values outside the 95\% confidence limit are circled.}
 \label{table:ratios}
+\end{table*}
+
+\begin{table}[th]
+\centering
+\begin{tabular}{llll}
+\toprule
+& $H_0$ & $H_a$ & Explanation of $H_0$ \\
+\midrule
+(1) & $R=0$ & $R>0$ & Centre variant always preferred \\
+(2) & $R=\frac{6}{7}$ & $R\neq\frac{6}{7}$ & Participants chose randomly \\
+\bottomrule
+\end{tabular}
+\caption{Null hypotheses that the results were tested against.}
+\label{table:hypotheses}
 \end{table}
 
+Table~\ref{table:ratios} shows the resulting p-values from the binomial test. Assuming a 95\% confidence interval, it can be seen that, with one exception (circled), all null hypotheses can be rejected. The exception is the track \enquote{Fake Plastic Trees}, for which the second null hypothesis (the test participants chose randomly) cannot be rejected. It can therefore be concluded that (for all other tracks) the default, centre-panned voiceover was not universally preferred.
 
-% \subsubsection{Differences between tracks}
+Further tests were performed to determine whether there was any difference between other groupings. The complete dataset was stratified by voiceover gender, participant's age, music streaming usage, podcast usage, and expert listener status. Contingency tables were constructed with the independent variable being the different values of the strata and the dependent variable being the participants' centre/non-centre preference. Chi-square ($\chi^2$) tests were performed on the contingency tables with the null hypothesis that the grouping was independent of preference. For all groupings, the $\chi^2$ statistic was below the critical value and the p-value was above 0.05 (95\% confidence) and therefore the null hypotheses could not be rejected. Thus, all the variables tested were deemed independent of centre / non-centre preference.
+
 For the track \enquote{Fake Plastic Trees}, the null hypothesis that the test participants chose randomly was unable to be rejected. To speculate on the cause of this, the \gls{sip} of each track can be examined and compared to the \gls{sip} of each speech overlay. The \gls{sip} is calculated according to the method for \enquote{panning histograms} described in~\cite{gomez_music_2008}. A panning histogram is calculated for frequency sub-bands of the original audio, equally spaced on the Bark scale to account for the differing sensitivity of human perception to different frequencies. The relationship between frequency and Barks is $f = 600\sinh(b/6)$ where $f$ is the frequency in Hertz and $b$ is the Bark band number ~\cite{wang_objective_1992}. In line with~\cite{zwicker_critical_1957}, 24 Bark bands with centre frequencies ranging from \qty{100}{\Hz} to \qty{15.5}{\kHz} were analysed.
 
-% \[
-% z(f) = 13\,\arctan\!\bigl(0.00076\,f\bigr)
-%       + 3.5\,\arctan\!\biggl[\Bigl(\tfrac{f}{7500}\Bigr)^{\!2}\biggr]
-% \]
+The resulting \gls{sip}  is a two-dimensional image that represents the transformation of the underlying audio signal into the frequency-azimuth plane. The x-axis represents the panning position of a music source within the stereo field, the y-axis represents frequency, and the colour represents the likelihood that there is energy in the given frequency-azimuth bin. For ease of comparison, the speech \glspl{sip} are displayed as grey shadows overlayed on top of the music \glspl{sip}, where the left and right edges represent the lower and upper quartiles of the sub-band panning histograms.
 
-The resulting \gls{sip} is a two-dimensional image that represents the transformation of the underlying audio signal into the frequency-azimuth plane. The x-axis represents the panning position of a music source within the stereo field, the y-axis represents frequency, and the colour represents the likelihood that there is energy in the given frequency-azimuth bin. For ease of comparison, the speech \glspl{sip} are displayed as grey shadows overlayed on top of the music \glspl{sip}, where the left and right edges represent the lower and upper quartiles of the sub-band panning histograms.
-
-\begin{figure}[th]
+\begin{figure*}[th]
     \centering
-    \includegraphics[width=0.8\columnwidth]{sips.pdf}
-    \label{fig:sips}
+    \includegraphics[width=0.8\textwidth]{sips.pdf}
     \caption{\acrlongpl{sip} of all tracks, with \glspl{sip} for all panned speech variants overlayed in grey. The colour scale is normalized for each track individually, with light and dark colours representing histogram peaks and troughs, respectively. Panning azimuth is a dimensionless value that ranges from left (L) to right (R), with centre (C) in the middle.}
-\end{figure}
+    \label{fig:sips}
+\end{figure*}
 
-Comparing Fake Plastic Trees to all other tracks, it can be seen that the musical energy is spread quite evenly across the middle of the stereo field, and similarly across all frequency bands. In particular, all speech SIPs fall within frequency/azimuth regions where there is already a strong likelihood of musical energy. It is therefore theorized that the apparent randomness in participants' choices was caused by the lack of an obvious musical void in which to put panned speech. In an ideal case, it would be possible to correlate the randomness of the participants' scores with an objective measure derived from the SIPs. However, more music tracks would need to be analysed to gain enough data for a significant result. In \cite{bonett_sample_2000}, it is stated that a minimum of 25 items are required to obtain a reliable value of one of the standard correlation coefficients.
+The \glspl{sip} for all tracks are displayed in Figure \ref{fig:sips}. Comparing Fake Plastic Trees to all other tracks, it can be seen that the musical energy is spread quite evenly across the middle of the stereo field, and similarly across all frequency bands. In particular, all speech \glspl{sip} fall within frequency/azimuth regions where there is already a strong likelihood of musical energy. It is therefore theorized that the apparent randomness in participants' choices was caused by the lack of an obvious musical void in which to put panned speech. In an ideal case, it would be possible to correlate the randomness of the participants' scores with an objective measure derived from the \glspl{sip}. However, more music tracks would need to be analysed to gain enough data for a significant result. In \cite{bonett_sample_2000}, it is stated that a minimum of 25 items are required to obtain a reliable value of one of the standard correlation coefficients.
 
 \subsection{Comparison of Ranked Azimuths}
 \label{sec:comparison_of_ranked_azimuths}
@@ -328,10 +319,11 @@ To test for statistically significant differences between azimuths, a Kruskal-Wa
 Similar Kruskal-Wallis-H tests were performed with data for single tracks, but the null hypothesis could not be rejected for any of them.
 
 \begin{table}[htb]
+\setlength{\tabcolsep}{2.5pt}
 \centering
 \begin{tabular}{lccccccc}
 \toprule
- & Left 45 & Left 30 & Left 15 & Centre & Right 15 & Right 30 & Right 45 \\
+ & L45 & L30 & L15 & C & R15 & R30 & R45 \\
 \midrule
 Median & 53.0 & 54.5 & 55.0 & 63.0 & 59.0 & 57.0 & 55.0 \\
 P-value & \ovalbox{0.006} & 0.064 & 0.341 & 1.000 & 1.000 & 0.267 & \ovalbox{0.015} \\
@@ -358,9 +350,9 @@ The most prominent overarching theme was that difficulty in hearing the panned s
         Music too loud & 10 & 34\% \\
         Left/right preference & 8 & 28 \% \\
         Centre preference & 7 & 24\% \\
-        Clash between singer and voice overlay & 5 & 17\% \\
+        Clash between singing and speech & 5 & 17\% \\
         Speech pitch & 5 & 17\% \\
-        Speech panning location / spatial factors & 4 & 14\% \\
+        Speech location / spatial factors & 4 & 14\% \\
         Music type / genre & 4 & 14\% \\
         \bottomrule
     \end{tabular}
