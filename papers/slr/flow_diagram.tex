@@ -1,0 +1,28 @@
+\begin{tikzpicture}[>=latex, font={\small}, node distance=2cm]
+\tikzstyle{textrect} = [rectangle, minimum width=6cm, text width=5.99cm, minimum height=1cm, draw=black]
+\tikzstyle{bluerect} = [rectangle, rounded corners, minimum width=1.5cm, minimum height=0.75cm, text centered, draw=black, fill=cyan!60!gray!45!white, rotate=90]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+\node (identification_section) [bluerect, minimum width=2cm, yshift=4cm] {Identification};
+\node (databases) [textrect, minimum height=2cm] {Records identified: (n=4313) \begin{itemize}\small\item Scopus: (n=1742)\item Web of Science: (n=882)\item Semantic Scholar: (n=1689)\end{itemize} };
+\node (removed_before_screening) [textrect, right of=databases, xshift=6cm, minimum height=2cm] {Records removed before screening: (n=1416) \begin{itemize}\small\item Duplicate by DOI: (n=960)\item Duplicate by title and year: (n=456)\end{itemize} };
+\node (screening_section) [bluerect, minimum width=9cm, yshift=4cm, xshift=-6.5cm] {Screening};
+\node (screened) [textrect, below of=databases, yshift=-0.5cm] {Records screened: (n=2897)};
+\node (excluded) [textrect, right of=screened, xshift=6cm] {Records excluded: (n=2226)};
+\node (sought) [textrect, below of=screened] {Studies sought for retrieval: (n=671)};
+\node (not_retrieved) [textrect, right of=sought, xshift=6cm] {Not retrieved: (n=45)};
+\node (assessed) [textrect, below of=sought] {Studies assessed for eligibility: (n=626)};
+\node (arrowanchor) [right of=assessed, xshift=3cm] {};
+\node (rep_excluded) [textrect, right of=assessed, xshift=6cm, yshift=-2cm, minimum height=5cm] {Studies Excluded: (n=460) \begin{itemize}\small\item Not music: (n=277)\item No spatial attribute: (n=114)\item Duplicate: (n=40)\item Not English: (n=16)\item Mono audio: (n=4)\item Only subjective: (n=4)\item No audio signal: (n=2)\item Only implementation: (n=1)\item Patent: (n=1)\item Book review: (n=1)\end{itemize}};
+\node (included) [textrect, below of=assessed, yshift=-4.25cm, minimum height=1.5cm] {Studies included in review: (n=166)\\Of which very relevant: (n=27)};
+\node (included_section) [bluerect, left of=included, minimum width=4.5cm, yshift=4cm, xshift=0.5cm] {Included};
+\node (othersources) [textrect, below of=included, yshift=-0.5cm, minimum height=2.5cm] {Studies from other sources: (n=25) \begin{itemize}\small\item Followed references: (n=15)\item Recommendation Service: (n=5)\item Peers: (n=5)\end{itemize} };
+\draw [arrow] (databases) -- (removed_before_screening);
+\draw [arrow] (databases) -- (screened);
+\draw [arrow] (screened) -- (excluded);
+\draw [arrow] (screened) -- (sought);
+\draw [arrow] (sought) -- (not_retrieved);
+\draw [arrow] (sought) -- (assessed);
+\draw [arrow] (assessed.east) -- (arrowanchor);
+\draw [arrow] (assessed) -- (included);
+\draw [arrow] (included) -- (othersources);
+\end{tikzpicture}
