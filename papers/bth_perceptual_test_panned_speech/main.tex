@@ -47,10 +47,10 @@
 \usepackage{csquotes}
 \usepackage{siunitx}
 \usepackage{fancybox}
-% \usepackage[acronym]{glossaries}
 \usepackage[inline]{enumitem}
 
 \usepackage[automake,acronym]{glossaries-extra}
+\setabbreviationstyle[acronym]{long-short}
 \makeglossaries 
 \newacronym{sip}{SIP}{Stereo Image Profile}
 \newacronym{vr}{VR}{Virtual Reality}
@@ -123,13 +123,13 @@ Yan Hu\inst{2}
 %%% onbehalfof  ---------------------------------------------------------------
 %\onbehalfof{On behalf of a great Team}
 
-\institute{School of Innovation, Design and Engineering, Mälardalens Universitetet, Västerås, Sweden\and
+\institute{School of Innovation, Design and Engineering, Mälardalen University, Västerås, Sweden\and
 Department of Computer Science, Blekinge Institute of Technology, Karlskrona, Sweden\and
 Media Quality Lab, Spotify AB, Stockholm, Sweden}
 
-\abstract{Music streaming services have the opportunity to adapt the listening experience for each user. This can include the option of interspersing speech audio with music tracks, providing interesting information to the listener. It is also possible to mix speech audio with music, although there is a lack of research which studies the most effective ways to achieve a pleasant listening experience. This paper describes a subjective test in which volunteer participants were asked to rate the pleasantness of music mixed with relevant speech. The speech signal was panned binaurally between 45\textdegree~left and 45\textdegree~right, in 15\textdegree~ increments, and mixed with various music tracks at equal loudness, with the hypothesis that this would improve the pleasantness ratings compared to centrally panned speech. The results indicate that the centre is not always the optimum panning position, and future work should investigate potential links between panning angle and musical features.}
+\abstract{Music streaming services have the opportunity to adapt the listening experience for each user. This can include the option of interspersing speech audio with music tracks, providing interesting information to the listener. It is also possible to mix speech audio with music, although there is a lack of research that studies the most effective ways to achieve a pleasant listening experience. This paper describes a subjective test in which volunteering participants were asked to rate the pleasantness of music mixed with relevant speech. The speech signal was panned binaurally between 45\textdegree~left and 45\textdegree~right, in 15\textdegree~ increments, and mixed with various music tracks at equal loudness, with the hypothesis that this would improve the pleasantness ratings compared to centrally panned speech. The results indicate that the centre is not always the optimum panning position, and future work should investigate potential links between panning angle and musical features.}
 
-\keywords{Music, Speech, Music Mixtures, Binaural panning, User study, Subjective test, Perceptual evaluation}
+\keywords{Music, Speech, Music Mixtures, Binaural Panning, User Study, Subjective Test, Perceptual Evaluation}
 
 %%% french ---------------------------------------------------------------
 %\abstracttrans{\textbf{Translated title in french. Titre traduit en français.} Cela est le texte. Cela est le texte. Cela est le texte. Cela est le texte. Cela est le texte. Cela est le texte. Cela est le texte. Cela est le texte. Cela est le texte. Cela est le texte. Cela est le texte. Cela est le texte.}
@@ -143,7 +143,7 @@ Media Quality Lab, Spotify AB, Stockholm, Sweden}
 
 \section{Introduction}
 
-The rise of music streaming services in recent years has provided users with listening experiences on multiple levels, and personalized experiences have been identified as a rising factor in the adoption of these services~\cite{barata_music_2021}. When personalization is mentioned, it generally refers to recommending tracks or playlists that a user might like. However, more recently, other areas, such as personalized user interfaces, have also emerged~\cite{noauthor_ai_2024}. In parallel, high-quality text-to-speech services have become much more readily available, to the point where they can be used to generate personalized informational audio about the music, for example, as in \cite{noauthor_spotify_2023}. One option for adding speech to music is to intersperse the two. However, in the realm of \gls{ar}, it is normal to overlay speech on top of background sounds. 
+The rise of music streaming services in recent years has provided users with listening experiences on multiple levels, and personalized experiences have been identified as a rising factor in the adoption of these services~\cite{barata_music_2021}. When personalization is mentioned, it generally refers to recommending tracks or playlists that a user might like. However, more recently, other areas, such as personalized user interfaces, have also emerged~\cite{noauthor_ai_2024}. In parallel, high-quality text-to-speech services have become much more readily available, to the point where they can be used to generate personalized informational audio about the music, for example, as in~\cite{noauthor_spotify_2023}. One option for adding speech to music is to intersperse the two. However, in the realm of \gls{ar}, it is normal to overlay speech on top of background sounds. 
 
 Although all of these technologies have begun to emerge, further research is needed to determine how speech and music should be presented to listeners and to identify user preferences. For example, it is known that mixing music or acoustic noise with speech results in a drop in intelligibility and perceived quality of the speech itself~\cite{fichna2022}. However, there is currently little research on how music and speech can be mixed acceptably and pleasantly. Unexplored variables include the spatial location of the speech, the gender of the voice, and the relative loudness of the music and speech.
 
@@ -152,7 +152,7 @@ This paper describes a perceptual evaluation designed to investigate how the pan
 The remainder of the paper is organized as follows. Section~\ref{Background} describes the relevant concepts for the study, and Section~\ref{RelatedWork} presents related work. The method describing the experiment is presented in Section~\ref{Method}, and the results are analysed and discussed in Section~\ref{sec:ResultsAnalysis}. Finally, the work is concluded, and future work is suggested in Section~\ref{Conclusions}.
 
 \section{Background}\label{Background}
-\gls{srm} is a well-studied phenomenon in which humans can perceive more detail in two sounds that come from different directions than if they come from the same direction. The associated research problem is \enquote{The cocktail party effect}, which refers to the problem of perceiving speech in the presence of other interfering noises \cite{litovsky_spatial_2012}.
+\gls{srm} is a well-studied phenomenon in which humans can perceive more detail in two sounds that come from different directions than if they come from the same direction. The associated research problem is \enquote{The cocktail party effect}, which refers to the problem of perceiving speech in the presence of other interfering noises~\cite{litovsky_spatial_2012}.
 
 Binaural panning is an advanced audio spatialization technique in which a monophonic signal is modelled as a point source at a specific angle from the listener's ears. It can be achieved by convolving the mono signal with the left and right \gls{hrir} recorded from binaural microphones. Headphones are typically required to hear the correct effects of binaural panning. It differs from amplitude panning, in which the amplitude of a signal is adjusted in the left and right channels to make the audio source appear to come from a different direction. Amplitude panning is common in music production, whereas binaural panning is typically used more in \gls{vr}, \gls{ar}, and \gls{xr}.
 
@@ -203,7 +203,7 @@ Each variant of a track was created by applying binaural panning of the speech s
 \label{stimulusCreation}
 \end{figure}
 
-Once the binaurally panned speech signal was created, an excerpt of the music track was selected to be (1) musically representative of the track as a whole and (2) precisely the same length as the speech signal. The method of finding a representative section is detailed in \cite{jehan_extracting_2018}. The speech and music signals were then normalized to the same loudness using the pyloudnorm library \cite{steinmetz_pyloudnorm_2021} (which is an implementation of the ITU-R BS.1770 standard \cite{itu-r-bs-1770_lufs}) and summed to produce the final audio stimuli. In total, six different music tracks were selected, each combined with a different speech recording. The speech recordings were generated using both male and female voices, with three recordings featuring male voices and three featuring female voices. Table \ref{musicspeech} summarizes the music tracks, their corresponding speech recordings, and the gender of the voices used.
+Once the binaurally panned speech signal was created, an excerpt of the music track was selected to be (1) musically representative of the track as a whole and (2) precisely the same length as the speech signal. The method of finding a representative section is detailed in~\cite{jehan_extracting_2018}. The speech and music signals were then normalized to the same loudness using the pyloudnorm library~\cite{steinmetz_pyloudnorm_2021} (which is an implementation of the ITU-R BS.1770 standard~\cite{itu-r-bs-1770_lufs}) and summed to produce the final audio stimuli. In total, six different music tracks were selected, each combined with a different speech recording. The speech recordings were generated using both male and female voices, with three recordings featuring male voices and three featuring female voices. Table~\ref{musicspeech} summarizes the music tracks, their corresponding speech recordings, and the gender of the voices used.
 \renewcommand{\arraystretch}{1.2}
 \begin{table}[htb]
 \centering
@@ -226,7 +226,7 @@ Once the binaurally panned speech signal was created, an excerpt of the music tr
 
 
 \subsection{Procedure and Experiment Interface}
-In the experiment, participants could first adjust the volume to a comfortable level for themselves~\cite{itu-r-bs-1534_MUSHRA}. The application then presented the interface, shown in Figure~\ref{interface}, to familiarize them with the experimental procedures and different equipment. This was done before the formal experiment, which involved listening to and rating various audio clips. Each session lasted a maximum of 30 minutes.
+In the experiment, participants could first adjust the volume to a comfortable level for themselves~\cite{itu-r-bs-1534_MUSHRA}. The application then presented the interface shown in Figure~\ref{interface} to familiarize them with the experimental procedures and the different equipment. This was done before the formal experiment, which involved listening to and rating various audio clips. Each session lasted up to 30 minutes.
 
 Before the start of the experiment, participants were asked four questions: (1) How old are you?, (2) What is your gender? (Male/Female/Other/Prefer not to say), (3) How often do you use streaming services to listen to the following? Music streaming (A. Never use/B. Daily/C. Weekly/D. Monthly), How many hours do you listen to B/C/D?, Podcast (A. Never use/B. Daily/C. Weekly/D. Monthly), How many hours do you listen to B/C/D?, and (4) Do you consider yourself an expert listener? (A. Yes/B. No/C. I do not know).
 
@@ -258,7 +258,7 @@ Before the test, the participants were informed that a higher score indicated a 
 \subsection{Comparison of Centre to Non-Centre Preference}
 \label{sec:noncentrepref}
 
-In Section \ref{subsec:audio_stimuli}, it was established that the reference signal was a monophonic speech recording. It is standard practice that, by default, a monophonic audio signal is placed exactly in the centre of a stereo rendering. The perceptual evaluation, therefore, assesses whether the test participants gave any preference to the non-centred variants of panned speech. To do this, a Boolean variable was assigned denoting whether the top choice was centre or non-centre. If there was a tie, the centre won. This new dataset comprises a list of 174 preferences (29 participants $\times$ 6 tracks).
+In Section \ref{subsec:audio_stimuli}, it was established that the reference signal was a monophonic speech recording. It is standard practice that, by default, a monophonic audio signal is placed exactly in the centre of a stereo rendering. The perceptual evaluation, therefore, assesses whether the test participants gave any preference to the non-centred variants of panned speech. To do this, a Boolean variable was assigned, denoting whether the top choice was centre or non-centre. If there was a tie, the centre won. This new dataset comprises a list of 174 preferences (29 participants $\times$ 6 tracks).
 
 A ratio $R$ representing the proportion of non-centre preference was calculated by $S/N$ where $S$ is the number of results indicating a non-centre preference and $N$ is the total number of results. These values are presented in Table~\ref{table:ratios}, both for the entire dataset and for each music track. Subsequently, these ratios are tested against two null hypotheses using a binomial test. The null hypotheses ($H_0$) and their associated alternative hypotheses ($H_a$) are given in Table~\ref{table:hypotheses}. 
 
@@ -299,7 +299,7 @@ Table~\ref{table:ratios} shows the resulting p-values from the binomial test. As
 
 Further tests were performed to determine whether there was any difference between other groupings. The complete dataset was stratified by voiceover gender, participant's age, music streaming usage, podcast usage, and expert listener status. Contingency tables were constructed with the independent variable being the different values of the strata and the dependent variable being the participants' centre/non-centre preference. Chi-square ($\chi^2$) tests were performed on the contingency tables with the null hypothesis that the grouping was independent of preference. For all groupings, the $\chi^2$ statistic was below the critical value and the p-value was above 0.05 (95\% confidence) and therefore the null hypotheses could not be rejected. Thus, all the variables tested were deemed independent of centre / non-centre preference.
 
-For the track \enquote{Fake Plastic Trees}, the null hypothesis that the test participants chose randomly was unable to be rejected. To speculate on the cause of this, the \gls{sip} of each track can be examined and compared to the \gls{sip} of each speech overlay. The \gls{sip} is calculated according to the method for \enquote{panning histograms} described in~\cite{gomez_music_2008}. A panning histogram is calculated for frequency sub-bands of the original audio, equally spaced on the Bark scale to account for the differing sensitivity of human perception to different frequencies. The relationship between frequency and Barks is $f = 600\sinh(b/6)$ where $f$ is the frequency in Hertz and $b$ is the Bark band number ~\cite{wang_objective_1992}. In line with~\cite{zwicker_critical_1957}, 24 Bark bands with centre frequencies ranging from \qty{100}{\Hz} to \qty{15.5}{\kHz} were analysed.
+For the track \enquote{Fake Plastic Trees}, the null hypothesis that the test participants chose randomly was unable to be rejected. To speculate on the cause of this, the \gls{sip} of each track can be examined and compared to the \gls{sip} of each speech overlay. The \gls{sip} is calculated according to the method for \enquote{panning histograms} described in~\cite{gomez_music_2008}. A panning histogram is calculated for frequency sub-bands of the original audio, equally spaced on the Bark scale to account for the differing sensitivity of human perception to different frequencies. The relationship between frequency and Barks is $f = 600\sinh(b/6)$ where $f$ is the frequency in Hertz and $b$ is the Bark band number~\cite{wang_objective_1992}. In line with~\cite{zwicker_critical_1957}, 24 Bark bands with centre frequencies ranging from \qty{100}{\Hz} to \qty{15.5}{\kHz} were analysed.
 
 The resulting \gls{sip}  is a two-dimensional image that represents the transformation of the underlying audio signal into the frequency-azimuth plane. The x-axis represents the panning position of a music source within the stereo field, the y-axis represents frequency, and the colour represents the likelihood that there is energy in the given frequency-azimuth bin. For ease of comparison, the speech \glspl{sip} are displayed as grey shadows overlayed on top of the music \glspl{sip}, where the left and right edges represent the lower and upper quartiles of the sub-band panning histograms.
 
@@ -310,11 +310,11 @@ The resulting \gls{sip}  is a two-dimensional image that represents the transfor
     \label{fig:sips}
 \end{figure*}
 
-The \glspl{sip} for all tracks are displayed in Figure \ref{fig:sips}. Comparing Fake Plastic Trees to all other tracks, it can be seen that the musical energy is spread quite evenly across the middle of the stereo field, and similarly across all frequency bands. In particular, all speech \glspl{sip} fall within frequency/azimuth regions where there is already a strong likelihood of musical energy. It is therefore theorized that the apparent randomness in participants' choices was caused by the lack of an obvious musical void in which to put panned speech. In an ideal case, it would be possible to correlate the randomness of the participants' scores with an objective measure derived from the \glspl{sip}. However, more music tracks would need to be analysed to gain enough data for a significant result. In \cite{bonett_sample_2000}, it is stated that a minimum of 25 items are required to obtain a reliable value of one of the standard correlation coefficients.
+The \glspl{sip} for all tracks are displayed in Figure~\ref{fig:sips}. Comparing Fake Plastic Trees to all other tracks, it can be seen that the musical energy is spread quite evenly across the middle of the stereo field, and similarly across all frequency bands. In particular, all speech \glspl{sip} fall within frequency/azimuth regions where there is already a strong likelihood of musical energy. It is therefore theorized that the apparent randomness in participants' choices was caused by the lack of an obvious musical void in which to put panned speech. In an ideal case, it would be possible to correlate the randomness of the participants' scores with an objective measure derived from the \glspl{sip}. However, more music tracks would need to be analysed to gain enough data for a significant result. In~\cite{bonett_sample_2000}, it is stated that a minimum of 25 items are required to obtain a reliable value of one of the standard correlation coefficients.
 
 \subsection{Comparison of Ranked Azimuths}
 \label{sec:comparison_of_ranked_azimuths}
-To test for statistically significant differences between azimuths, a Kruskal-Wallis-H test is first conducted with the null hypothesis that all azimuths are ranked equally. With a confidence value of 95\% and seven azimuth classes, a critical value of $12.59$ is found in the $\chi^2$ distribution with six degrees of freedom~\cite{howell2013statistical}. The result of the test is an H-statistic of 18.0 with a p-value of 0.00636. Therefore, the null hypothesis is rejected and it can be concluded that at least one of the azimuths is ranked differently from the others. To determine which one, a Dunn's post-hoc test with Bonferroni correction is performed to compare pairwise p-values. The results of all pairs that included \enquote{Centre} are shown in Table~\ref{table:posthoc}. (All other pairs had p-values of 1 and are omitted from the table). There are two azimuths with a significant difference from \enquote{Centre} - \enquote{Left 45} and \enquote{Right 45}. Looking at the median scores of these two classes, it can be concluded that the extreme-panned speech were less highly rated than the more modest panned or centred speech. Interestingly, even though there are no other statistically significant differences, the \textit{confidence} of a difference from \enquote{Centre} is lower on the right side. We speculate that this might be due to the \enquote{right-ear advantage} -- a phenomenon in which a person is more easily able to interpret a voice presented to the right ear than the left \cite{tanaka_neurophysiological_2021}. More data would need to be collected to test this speculation.
+To test for statistically significant differences between azimuths, a Kruskal-Wallis-H test is first conducted with the null hypothesis that all azimuths are ranked equally. With a confidence value of 95\% and seven azimuth classes, a critical value of $12.59$ is found in the $\chi^2$ distribution with six degrees of freedom~\cite{howell2013statistical}. The result of the test is an H-statistic of 18.0 with a p-value of 0.00636. Therefore, the null hypothesis is rejected and it can be concluded that at least one of the azimuths is ranked differently from the others. To determine which one, a Dunn's post-hoc test with Bonferroni correction is performed to compare pairwise p-values. The results of all pairs that included \enquote{Centre} are shown in Table~\ref{table:posthoc}. (All other pairs had p-values of 1 and are omitted from the table). There are two azimuths with a significant difference from \enquote{Centre} - \enquote{Left 45} and \enquote{Right 45}. Looking at the median scores of these two classes, it can be concluded that the extreme-panned speech were less highly rated than the more modest panned or centred speech. Interestingly, even though there are no other statistically significant differences, the \textit{confidence} of a difference from \enquote{Centre} is lower on the right side. We speculate that this might be due to the \enquote{right-ear advantage} -- a phenomenon in which a person is more easily able to interpret a voice presented to the right ear than the left~\cite{tanaka_neurophysiological_2021}. More data would need to be collected to test this speculation.
 
 Similar Kruskal-Wallis-H tests were performed with data for single tracks, but the null hypothesis could not be rejected for any of them.
 
@@ -360,14 +360,14 @@ The most prominent overarching theme was that difficulty in hearing the panned s
     \label{table:freetextthemes}
 \end{table}
 
-Based on these findings, it is suggested that further experiments stratify the music tracks into those with and without strong vocals, and include a more varied range of music genres among the tracks. Some comments also specifically mentioned that speech with more extreme panning was less pleasant, which is also reflected in the data (see Section~\ref{sec:comparison_of_ranked_azimuths}). It is therefore suggested that future tests use smaller increments of less extreme panning.
+Based on these findings, it is suggested that further experiments stratify the music tracks into those with and without strong vocals and include a more varied range of music genres among the tracks. Some comments also specifically mentioned that speech with more extreme panning was less pleasant, which is also reflected in the data (see Section~\ref{sec:comparison_of_ranked_azimuths}). It is therefore suggested that future tests use smaller increments of less extreme panning.
 
 
 \subsection{Discussion}\label{Discussion}
 %All:
 A constant source of uncertainty during data analysis was the relatively small number of both tracks and participants. In particular, only six tracks were used to limit the duration of each test session. In reality, it was not enough to draw statistical conclusions about differences between tracks. 
 
-Furthermore, several of the statistical tests used (e.g., the binomial test in Section~\ref{sec:noncentrepref}) are based on the assumption that all data are independent. It could be argued that the data collected are not strictly independent since each participant scored multiple tracks. This was a practical compromise made to gather enough data for any analysis. It is a known problem that subjective tests of this variety are slow and costly, and recent efforts in crowdsourcing \gls{mushra} tests have proven fruitful \cite{lechlerCrowdsourcingMUSHRATests2025} (although this work focused on assessing solo speech signals rather than music).
+Furthermore, several of the statistical tests used (e.g., the binomial test in Section~\ref{sec:noncentrepref}) are based on the assumption that all data are independent. It could be argued that the data collected are not strictly independent since each participant scored multiple tracks. This was a practical compromise made to gather enough data for any analysis. It is a known problem that subjective tests of this variety are slow and costly, and recent efforts in crowdsourcing \gls{mushra} tests have proven fruitful~\cite{lechlerCrowdsourcingMUSHRATests2025} (although this work focused on assessing solo speech signals rather than music).
 
 \section{Conclusions and Future Work}
 \label{Conclusions}
@@ -393,7 +393,7 @@ The authors thank all the volunteers who participated in the experiment.
 
 \funding
 
-This research was funded in part by the Knowledge Foundation, Sweden, through the \gls{hints} Profile Project (contract 20220068).
+This research was funded in part by the Knowledge Foundation, Sweden, through the Human-Centered Intelligent Realities (\gls{hints}) Profile Project (contract 20220068).
 
 \conflict
 
@@ -401,7 +401,7 @@ The authors declare no conflict of interest.
 
 \dataavailability
 
-The participants of this study did not give written consent for their data to be shared publicly, so raw test data are not made available. The audio stimuli contained copyrighted works and therefore also cannot be made available.
+The participants of this study did not give written consent for their data to be shared publicly, so raw test data are not made available. The audio stimuli contained copyrighted works and, therefore, cannot be made available.
 
 \authorcontrib
 
@@ -419,7 +419,7 @@ Writing - review \& editing: All authors.
 
 \ethics
 
-This study was conducted in accordance with the principles of the Declaration of Helsinki. The research involved minimal risk, anonymous, and voluntary participation. In accordance with local regulations, formal institutional review board approval was waived due to the study's observational nature and the absence of identifiable personal data. Informed consent was obtained from all participants, and no personally identifiable or sensitive data were collected.
+This study was conducted in accordance with the principles of the Declaration of Helsinki. The research involved minimal risk, anonymous, and voluntary participation. Formal institutional review board approval was waived due to the evaluation's observational nature and the absence of identifiable personal data. Informed consent was obtained from the participants, and no personally identifiable or sensitive data were collected.
 
 \informedconsent
 
