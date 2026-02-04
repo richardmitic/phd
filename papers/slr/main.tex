@@ -851,20 +851,20 @@ TITLE-ABS-KEY(((("music" OR "musical" OR "audio" OR "sound") AND ("stereo" OR "s
     style=python
 ]
 def normalize_title(title):
-    return ''.join(char for char in title if char.isalnum()).lower()
+    return "".join(char for char in title if char.isalnum()).lower()
 
 doi_seen = set()
 title_and_year_seen = set()
 
 for record in search_results:
     norm_title = normalize_title(record.title)
-    if doi != '':
+    if doi != "":
         if doi in doi_seen:
-            record.reject = 'duplicate_by_doi'
+            record.reject = "duplicate_by_doi"
         else:
             doi_seen.add(doi)
     elif (this_title, this_year) in title_and_year_seen:
-        record.reject = 'duplicate_by_title_and_year'
+        record.reject = "duplicate_by_title_and_year"
     title_and_year_seen.add((norm_title, record.year))
 \end{lstlisting}
 \end{singlespace}
