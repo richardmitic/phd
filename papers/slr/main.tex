@@ -648,18 +648,20 @@ An under-studied but nonetheless important metric is the computational complexit
 
 \subsubsection{Existing datasets}
 \label{sec:existing_audio_datasets}
-\Cref{tab:audio_datasets} shows a comprehensive list of audio datasets that were referenced by papers in this review. The only exception is \q{mobygratis} \cite{MobygratisFreeMoby2025}, which was released after the review was performed but nonetheless presents similar opportunities for research. Datasets that were not available publicly such as those used in \gls{mpeg} standardization have been omitted, and the availability of each dataset is noted. The \q{Size} column represents the number of musical tracks or clips present in the dataset, but does not take their lengths into account. Non-musical recordings are not counted. Since it is assumed that larger and more varied datasets are preferable, the table is ordered by \q{Size}. The columns \q{M}, \q{S}, and \q{B} indicated whether the datasets contain multitrack\footnote{A Multitrack recording indicates that individual stems of a recording session are available, but not necessarily a stereo mix.}, stereo, or binaural recordings respectively. \cite{IEEESignalProcessing2025,liCreatingMultitrackClassical2019,bogdanovMTGJamendoDatasetAutomatic2019} also contain lists of audio datasets (with some overlap to those listed here) that might be useful for future research.
+\Cref{tab:audio_datasets} shows a comprehensive list of audio datasets that were referenced by papers in this review. The only exception is \q{mobygratis} \cite{MobygratisFreeMoby2025}, which was released after the review was performed but nonetheless presents similar opportunities for research. Datasets that were not available publicly such as those used in \gls{mpeg} standardization have been omitted, and the availability of each dataset is noted. The \q{Size} column represents the number of musical tracks or clips present in the dataset, but does not take their lengths into account. \q{Duration} is given in days, hours, or minutes as appropriate, and is calculated as the sum of all full track durations. Non-musical recordings are not counted. Since it is assumed that larger and more varied datasets are preferable, the table is ordered by \q{Size}. The columns \q{M}, \q{S}, and \q{B} indicated whether the datasets contain multitrack\footnote{A Multitrack recording indicates that individual stems of a recording session are available, but not necessarily a stereo mix.}, stereo, or binaural recordings respectively. \cite{IEEESignalProcessing2025,liCreatingMultitrackClassical2019,bogdanovMTGJamendoDatasetAutomatic2019} also contain lists of audio datasets (with some overlap to those listed here) that might be useful for future research.
 
 \begin{sidewaystable}[htbp]
 \caption{
-Audio datasets, ordered by size (number of tracks or clips). \\
+Audio datasets, ordered by size (number of tracks or clips).\\
 {\footnotesize
 M=Multitrack, S=Stereo, B=Binaural\\
-\textsuperscript{$\star$}Individual tracks. \textsuperscript{$\dagger$}Individual files. \textsuperscript{$\ddagger$}Must request access. \textsuperscript{$\S$}Exact size unclear.}
+\textsuperscript{$\star$}Individual tracks. \textsuperscript{$\dagger$}Individual files. \textsuperscript{$\ddagger$}Must request access. \textsuperscript{$\S$}Exact size unclear.}\vspace{0.618em}
 }
 \label{tab:audio_datasets}
 \setlength{\tabcolsep}{0.25em}
+{\footnotesize
 \input{datasets.tex}
+}
 \end{sidewaystable}
 
 

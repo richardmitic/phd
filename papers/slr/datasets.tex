@@ -1,33 +1,33 @@
-\begin{tabularx}{\textheight}{lllllllX}
+\begin{tabularx}{\textheight}{llllllllX}
 \toprule
-Name & Audio format & Size & M & S & B & Availability & Notes \\
+Name & Audio format & Size & Duration & M & S & B & Availability & Notes \\
 \midrule
-\glsxtrshort{fma}\cite{defferrardFMADatasetMusic2017} & mp3 various bitrates & 106574 &  & \checkmark &  & Download & Real music. Huge variety. Contains common audio features and tags. \\
-\glsxtrshort{mtgj}\cite{bogdanovMTGJamendoDatasetAutomatic2019} & mp3 320kbps & 55609 &  & \checkmark &  & Download & Real music. Wide variety of genres, instruments, and moods. \\
-ccMixter\cite{CcMixter} & Various mp3/wav & $\approx 48000$\textsuperscript{$\S$} & \checkmark & \checkmark &  & Download\textsuperscript{$\dagger$} & Real music in many genres. Some stereo, some stems. Vast, but some download links are broken. \\
-\glsxtrshort{asascbrm}\cite{zielinskiDatabaseAutomaticSpatial2019} & wav 48kHz 24bit  & 5928 &  &  & \checkmark & Download & Synthesized binaural from other multitrack datasets. 30s clips. \\
-Slakh\cite{manilowCuttingMusicSource2019} & wav 44.1kHz & 2100 & \checkmark & \checkmark &  & Download & Mono stems. Synthesized from midi. \\
-FAIR-Play\cite{gao25DVisualSound2019} & wav 48kHz 16bit  & 1871 &  &  & \checkmark & Download & Binaural. 10s clips. Only 1 recording room. \\
-\glsxtrshort{maestro}\cite{hawthorneEnablingFactorizedPiano2019} & wav 44.1/48kHz 16bit & 1276 &  & \checkmark &  & Download & Only classical piano \\
-\glsxtrshort{msss}\cite{MixingSecretsFree} & wav 44.1kHz 16/24bit  & 625 & \checkmark & \checkmark &  & Download\textsuperscript{$\star$} & Stems uncompressed. Example stereo mixes in mp3 only \\
-mobygratis\cite{MobygratisFreeMoby2025} & wav 44.1kHz 24bit & 499 & \checkmark & \checkmark &  & Download\textsuperscript{$\star$} & Stereo stems and mixdowns. Multiple genres but only 1 artist. \\
-\glsxtrshort{rwc}\cite{gotoDevelopmentRWCMusic2004,gotoRWCMusicDatabase2002,gotoRWCMusicDatabase2003,gotoRWCMusicDatabase2012} & CD, 44.1kHz 16bit & 465 &  & \checkmark &  & CD\textsuperscript{$\ddagger$} & Multiple datasets each of a different genre \\
-MedleyDB 2.0\cite{bittnerMedleyDB20New2016} & wav 44.1kHz 16bit & 330 & \checkmark &  &  & Download\textsuperscript{$\ddagger$} & Real music. Mix of genres. Some instrumental, some vocal. More tracks have been added since publication. \\
-MUSDB18\cite{rafiiMUSDB18CorpusMusic2017} & AAC 256kbps & 150 & \checkmark &  &  & Download & Only stems. Derived from other datasets such as \cite{liutkus2016SignalSeparation2017,bittnerMedleyDBMULTITRACKDATASET2014} \\
-MUSDB18-HQ\cite{rafiiMUSDB18HQUncompressedVersion2019} & wav 44.1kHz & 150 & \checkmark &  &  & Download & Only stems. Derived from other datasets such as \cite{liutkus2016SignalSeparation2017,bittnerMedleyDBMULTITRACKDATASET2014} \\
-MedleyDB\cite{bittnerMedleyDBMULTITRACKDATASET2014} & wav 44.1kHz 16bit  & 132 & \checkmark &  &  & Download\textsuperscript{$\ddagger$} & Stereo mix + dry and processed stems \\
-\glsxtrshort{dsd100}\cite{liutkus2016SignalSeparation2017} & wav 44.1khz & 100 & \checkmark & \checkmark &  & Download & Stems and downmixes, derived from \cite{MixingSecretsFree} \\
-\glsxtrshort{btpab}\cite{zhuAmbisonicBinaural2022} & wav 48kHz 16bit  & 49 &  &  & \checkmark & Download & 60s clips. Only 1 recording session. \\
-FiloSax\cite{fosterFilosax2021,fosterFilosaxDatasetAnnotated2021} & wav 44.1kHz 24bit & 48 & \checkmark &  &  & Download\textsuperscript{$\ddagger$} & Only jazz \\
-\glsxtrshort{daoc}\cite{variousAnechoicOrchestralMusic1988} & CD, 44.1kHz 16bit & 44 &  & \checkmark &  & CD & Anechoic orchestra \\
-\glsxtrshort{urmp}\cite{liCreatingMultitrackClassical2019} & wav 48kHz 24bit  & 44 & \checkmark &  &  & Download & Anechoic classical music. Only stems. \\
-\glsxtrshort{boma}\cite{bangolufsenMusicArchimedes1992,hansenMakingRecordingsSimulation1991} & CD, 44.1kHz 16bit & 31 &  & \checkmark & \checkmark & CD & Anechoic and semi-reverberant orchestra. \\
-\glsxtrshort{tss}\cite{MultitracksTelefunkenElektroakustik2022} & wav 44.1kHz 16bit & 23 & \checkmark &  &  & Download\textsuperscript{$\star$} & Both live and studio sessions. \\
-\glsxtrshort{quasi}\cite{fillonQUASIDatabaseMusical2012} & wav 44.1kHz & 11 & \checkmark &  &  & Download\textsuperscript{$\ddagger$} & Mix of genres \\
-\glsxtrshort{sqam}\cite{UsersHandbookEBU2008} & FLAC 44.1kHz 16bit & 10 &  & \checkmark &  & Download & Not all music, some stereo some mono. \\
-\glsxtrshort{rioossr}\cite{dorazioRecordingsItalianOpera2016} & wav 48kHz 24bit & 4 &  &  &  & Download & Ambisonic and channel-based versions \\
-\glsxtrshort{arsso}\cite{patynenAnechoicRecordingSystem2008} & mp3 192kbps 48kHz & 4 & \checkmark &  &  & \thead[l]{\scalebox{.8}[1.0]{mp3: Download}\\\scalebox{.8}[1.0]{wav: Contact author}} & Anechoic classical music. Only stems. \\
-\glsxtrshort{uiowamis}\cite{UniversityIowaMusical} & \thead[l]{wav 44.1kHz 16bit\\ or 96kHz 24bit} & ?\textsuperscript{$\S$} &  & \checkmark &  & Download\textsuperscript{$\dagger$} & Individual notes. Only piano recorded in stereo. \\
-Bach10\cite{duanMultipleFundamentalFrequency2010} & wav 44.1kHz & ?\textsuperscript{$\S$} &  &  &  & Contact author & Only Bach chorales. \\
+\glsxtrshort{fma}\cite{defferrardFMADatasetMusic2017} & mp3 various bitrates & 106574 & 343d &  & \checkmark &  & Download & Real music. Huge variety. Contains common audio features and tags. \\
+\glsxtrshort{mtgj}\cite{bogdanovMTGJamendoDatasetAutomatic2019} & mp3 320kbps & 55609 & 157d &  & \checkmark &  & Download & Real music. Wide variety of genres, instruments, and moods. \\
+ccMixter\cite{CcMixter} & Various mp3/wav & $\approx 48000$\textsuperscript{$\S$} & ?\textsuperscript{$\S$} & \checkmark & \checkmark &  & Download\textsuperscript{$\dagger$} & Real music in many genres. Some stereo, some stems. Vast, but some download links are broken. \\
+\glsxtrshort{asascbrm}\cite{zielinskiDatabaseAutomaticSpatial2019} & wav 48kHz 24bit  & 5928 & 11h &  &  & \checkmark & Download & Synthesized binaural from other multitrack datasets. 30s clips. \\
+Slakh\cite{manilowCuttingMusicSource2019} & wav 44.1kHz & 2100 & 145h & \checkmark & \checkmark &  & Download & Mono stems. Synthesized from midi. \\
+FAIR-Play\cite{gao25DVisualSound2019} & wav 48kHz 16bit  & 1871 & 5h &  &  & \checkmark & Download & Binaural. 10s clips. Only 1 recording room. \\
+\glsxtrshort{maestro}\cite{hawthorneEnablingFactorizedPiano2019} & wav 44.1/48kHz 16bit & 1276 & 199h &  & \checkmark &  & Download & Only classical piano \\
+\glsxtrshort{msss}\cite{MixingSecretsFree} & wav 44.1kHz 16/24bit  & 625 & 40h & \checkmark & \checkmark &  & Download\textsuperscript{$\star$} & Stems uncompressed. Example stereo mixes in mp3 only \\
+mobygratis\cite{MobygratisFreeMoby2025} & wav 44.1kHz 24bit & 499 & 35h & \checkmark & \checkmark &  & Download\textsuperscript{$\star$} & Stereo stems and mixdowns. Multiple genres but only 1 artist. \\
+\glsxtrshort{rwc}\cite{gotoDevelopmentRWCMusic2004,gotoRWCMusicDatabase2002,gotoRWCMusicDatabase2003,gotoRWCMusicDatabase2012} & CD, 44.1kHz 16bit & 465 & 22h &  & \checkmark &  & CD\textsuperscript{$\ddagger$} & Multiple datasets each of a different genre \\
+MedleyDB 2.0\cite{bittnerMedleyDB20New2016} & wav 44.1kHz 16bit & 330 & 7h & \checkmark &  &  & Download\textsuperscript{$\ddagger$} & Real music. Mix of genres. Some instrumental, some vocal. More tracks have been added since publication. \\
+MUSDB18\cite{rafiiMUSDB18CorpusMusic2017} & AAC 256kbps & 150 & 10h & \checkmark &  &  & Download & Only stems. Derived from other datasets such as \cite{liutkus2016SignalSeparation2017,bittnerMedleyDBMULTITRACKDATASET2014} \\
+MUSDB18-HQ\cite{rafiiMUSDB18HQUncompressedVersion2019} & wav 44.1kHz & 150 & 10h & \checkmark &  &  & Download & Only stems. Derived from other datasets such as \cite{liutkus2016SignalSeparation2017,bittnerMedleyDBMULTITRACKDATASET2014} \\
+MedleyDB\cite{bittnerMedleyDBMULTITRACKDATASET2014} & wav 44.1kHz 16bit  & 132 & 7h & \checkmark &  &  & Download\textsuperscript{$\ddagger$} & Stereo mix + dry and processed stems \\
+\glsxtrshort{dsd100}\cite{liutkus2016SignalSeparation2017} & wav 44.1khz & 100 & 7h & \checkmark & \checkmark &  & Download & Stems and downmixes, derived from \cite{MixingSecretsFree} \\
+\glsxtrshort{btpab}\cite{zhuAmbisonicBinaural2022} & wav 48kHz 16bit  & 49 & 49m &  &  & \checkmark & Download & 60s clips. Only 1 recording session. \\
+FiloSax\cite{fosterFilosax2021,fosterFilosaxDatasetAnnotated2021} & wav 44.1kHz 24bit & 48 & 5h & \checkmark &  &  & Download\textsuperscript{$\ddagger$} & Only jazz \\
+\glsxtrshort{daoc}\cite{variousAnechoicOrchestralMusic1988} & CD, 44.1kHz 16bit & 44 & 25m &  & \checkmark &  & CD & Anechoic orchestra \\
+\glsxtrshort{urmp}\cite{liCreatingMultitrackClassical2019} & wav 48kHz 24bit  & 44 & 1h & \checkmark &  &  & Download & Anechoic classical music. Only stems. \\
+\glsxtrshort{boma}\cite{bangolufsenMusicArchimedes1992,hansenMakingRecordingsSimulation1991} & CD, 44.1kHz 16bit & 31 & 1h &  & \checkmark & \checkmark & CD & Anechoic and semi-reverberant orchestra. \\
+\glsxtrshort{tss}\cite{MultitracksTelefunkenElektroakustik2022} & wav 44.1kHz 16bit & 23 &  & \checkmark &  &  & Download\textsuperscript{$\star$} & Both live and studio sessions. \\
+\glsxtrshort{quasi}\cite{fillonQUASIDatabaseMusical2012} & wav 44.1kHz & 11 & $\approx 30m$\textsuperscript{$\S$} & \checkmark &  &  & Download\textsuperscript{$\ddagger$} & Mix of genres \\
+\glsxtrshort{sqam}\cite{UsersHandbookEBU2008} & FLAC 44.1kHz 16bit & 10 & 1h &  & \checkmark &  & Download & Not all music, some stereo some mono. \\
+\glsxtrshort{rioossr}\cite{dorazioRecordingsItalianOpera2016} & wav 48kHz 24bit & 4 & 5m &  &  &  & Download & Ambisonic and channel-based versions \\
+\glsxtrshort{arsso}\cite{patynenAnechoicRecordingSystem2008} & mp3 192kbps 48kHz & 4 & 11m & \checkmark &  &  & \thead[l]{\scalebox{.8}[1.0]{mp3: Download}\\\scalebox{.8}[1.0]{wav: Contact author}} & Anechoic classical music. Only stems. \\
+\glsxtrshort{uiowamis}\cite{UniversityIowaMusical} & \thead[l]{wav 44.1kHz 16bit\\ or 96kHz 24bit} & ?\textsuperscript{$\S$} & 23h &  & \checkmark &  & Download\textsuperscript{$\dagger$} & Individual notes. Approximately 85\% stereo, 15\% mono. \\
+Bach10\cite{duanMultipleFundamentalFrequency2010} & wav 44.1kHz & ?\textsuperscript{$\S$} & ?\textsuperscript{$\S$} &  &  &  & Contact author & Only Bach chorales. \\
 \bottomrule
 \end{tabularx}
