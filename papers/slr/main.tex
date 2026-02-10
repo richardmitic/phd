@@ -60,9 +60,11 @@
 \usepackage{tikz}
 \usetikzlibrary{positioning}
 \usetikzlibrary{arrows}
+\usetikzlibrary{arrows.meta}
 \usetikzlibrary{calc}
 \usetikzlibrary{shadows}
 \usetikzlibrary{shapes.misc}
+\usetikzlibrary{fit}
 % \usepackage{showframe}
 \usepackage[draft]{fixme}
 \fxuselayouts{inline,nomargin}
@@ -424,7 +426,7 @@ Many of the studies gathered in this review make use of similar fundamental audi
 \subsubsection{Binaural and spatial cues}
 \label{sec:binaural_and_spatial_cues}
 
-The terms \q{binaural cues} and \q{spatial cues} are umbrellas referring to any low-level spatial information extracted from a 2 or more audio channels. They are used very broadly and don't have specific definitions, although some subcategories are common. Among the most used are \glsxtrfull{ild} and \glsxtrfull{itd}, which are usually (although not always) extracted from frequency subbands of a stereo audio signal. They have previously been used in the context of psychoacoustic experiments as ways to explain and quantify the perceived effect of lateral reflections in acoustic spaces \cite{lindemannEvaluationInterauralSignal1982,blauertAuditorySpaciousnessFurther1986}. Even though they contain the word \q{interaural} (Latin for \q{between the ears}) they are freely used throughout the literature to mean amplitude or time difference between any two channels of an audio recording, e.g. binaural \cite{choiObjectiveMeasurementPerceived2008}, stereo \cite{youSpatialLocalizationEvaluation2012}, and multichannel \cite{watcharasupatQuantifyingSpatialAudio2024} audio. \cite{barrySoundSourceSeparation2004} uses \gls{ild} as a ratio instead of its absolute form and \cite{barryBinaspectPythonLibrary2025} coins the term \gls{ilr} to formalize this, noting that since ratios are bounded in the range \numrange{-1}{1} they are usable as inputs for \gls{ml} tasks.
+The terms \q{binaural cues} and \q{spatial cues} are umbrellas referring to any low-level spatial information extracted from a 2 or more audio channels. They are used very broadly and don't have specific definitions, although some subcategories are common. Among the most used are \glsxtrfull{ild} and \glsxtrfull{itd}, which are usually (although not always) extracted from frequency subbands of a stereo audio signal. They have previously been used in the context of psychoacoustic experiments as ways to explain and quantify the perceived effect of lateral reflections in acoustic spaces \cite{lindemannEvaluationInterauralSignal1982,blauertAuditorySpaciousnessFurther1986}. Even though they contain the word \q{interaural} (Latin for \q{between the ears}) they are freely used throughout the literature to mean amplitude or time difference between any two channels of an audio recording, e.g. binaural \cite{choiObjectiveMeasurementPerceived2008}, stereo \cite{youSpatialLocalizationEvaluation2012}, and multichannel \cite{watcharasupatQuantifyingSpatialAudio2024} audio. \cite{barrySoundSourceSeparation2004} uses \gls{ild} as a ratio instead of its absolute form and \cite{barryBinaspectPythonLibrary2025} coins the term \gls{ilr} to formalize this, noting that since ratios are bounded in the range \numrange{-1}{1} they are usable as inputs for \gls{ml} tasks. (In the classical form, \gls{ild} is usually given in decibels and is theoretically unbounded.)
 
 The terms often appear with slight naming variations - synonyms for \gls{ild} include \glsxtrfull{iid} \cite{breebaartParametricCodingStereo2005,supperOnsetGuidedSpatialAnalyser2005,cobosStereoAudioSource2008,dewhirstModellingPerceivedSpatial2008}, \gls{icld} \cite{fallerBinauralCueCoding2002,beackAngleBasedVirtualSource2006,jangCenterChannelSeparation2008}, and \gls{cld} \cite{luthfiExperimentalStudyMPEG2018}.  Likewise, a common synonym for \gls{itd} is \gls{ictd} \cite{baumgarteEstimationAuditorySpatial2002,thompsonActiveMultichannelDownmix2009,hyunRobustInterchannelCorrelation2009}. Another formulation of \gls{itd} is \gls{ipd} \cite{fernandezEnhancingBinauralRendering2022,yeLAVSSLocationGuidedAudioVisual2024,serraMonotostereoParametricStereo2023} (or \gls{icpd} \cite{briandParametricCodingStereo2006}) which is a frequency-dependent time difference. Notably, \gls{itd} can be calculated without knowledge of a centre-frequency, as in \cite{youSpatialLocalizationEvaluation2012} which uses transients instead.
 
@@ -432,7 +434,97 @@ Another common family of cues is \gls{iacc} \cite{choiObjectiveMeasurementPercei
 
 In the classical perceptual model of directional hearing it is accepted that \gls{ipd} is only relevant for frequencies under 1500Hz \cite{morinagaEvaluationMethodCoded,iso-11172-3:mpeg_audio}. However, there are several examples in the literature of \gls{ipd} for all frequency bands being treated equally \cite{prestiVisualizationManipulationStereophonic2014,tardieuProductionEffectAudio2011,hernandez-olivanInterauralTimeDifference2024}. One reason for this is that while the directionality of a single narrowband source cannot be determined by a human using phase differences above 1500Hz, reverberant or decorrelated sources often result in a broadband mixture of phase differences \cite{razzaqAdvancedDSPAlgorithm2016}.
 
-Importantly, there are various ways to calculate all these parameters, and \cite{thaleiserBinauralProjectionMultichannelWiener2023} even notes that different definitions result in binaural/spatial cues with different underlying properties, hence subject to variation from different influences. For example \cite{chenSpatialParametersAudio2010,chenMultimediaApplicationSpatial2010} both use the term \gls{ild} but calculate it the time and \glsxtrlong{tf} domains respectively. For an excellent overview of several classic methods for calculating \gls{ild}, \gls{itd}, and \gls{iacc} the reader is directed to \cite{supperOnsetGuidedSpatialAnalyser2005}. As a rule of thumb, it is advisable that when using any binaural or spatial cue for research, the author should preferably state an exact mathematical definition directly in the text, otherwise referring to a specific definition from another publication. In particular, it is advised that authors should use \q{interaural} terms for binaural audio only, opting for \q{inter-channel} in other cases.
+Importantly, there are various ways to calculate all these parameters, and \cite{thaleiserBinauralProjectionMultichannelWiener2023} even notes that different definitions result in binaural/spatial cues with different underlying properties, hence subject to variation from different influences. For example \cite{chenSpatialParametersAudio2010,chenMultimediaApplicationSpatial2010} both use the term \gls{ild} but calculate it the time and \glsxtrlong{tf} domains respectively. For an excellent overview of several classic methods for calculating \gls{ild}, \gls{itd}, and \gls{iacc} the reader is directed to \cite{supperOnsetGuidedSpatialAnalyser2005}. 
+
+A block diagram showing some common methods to calculate spatial cues is shown in \cref{fig:spatial_cues}. As a rule of thumb, it is advisable that when using any binaural or spatial cue for research, the author should preferably state an exact mathematical definition directly in the text, otherwise referring to a specific definition from another publication. In particular, it is advised that authors should use \q{interaural} terms for binaural audio only, opting for \q{inter-channel} in other cases.
+
+\begin{figure}[tbh!]
+\caption{Block diagrams of common spatial cues}
+\label{fig:spatial_cues}
+\resizebox{\linewidth}{!}{
+
+  \begin{tikzpicture}[>=latex, node distance=4cm]
+
+  \tikzstyle{textrect} = [rectangle, minimum width=3cm, minimum height=1cm, draw=black, fill=white, align=center]
+  \tikzstyle{delta} = [circle, minimum width=1cm, minimum height=1cm, draw=black, fill=white, align=center]
+  \tikzstyle{grouprect} = [rectangle, draw=black, align=center]
+  \tikzstyle{list} = [text depth=2.5cm, minimum height=3cm, text width=3cm, align=left]
+  \tikzstyle{input} = [rounded rectangle, minimum width=3cm, minimum height=1cm, draw=black]
+  \tikzstyle{arrow} = [thick,->,>=stealth]
+  \tikzstyle{stereoarrow} = [thick,->,>=stealth,double]
+  \tikzstyle{stereo} = [copy shadow={shadow xshift=0.1cm,shadow yshift=-0.1cm}]
+  \tikzstyle{output} = [rounded corners]
+  \tikzstyle{optional} = [densely dashed]
+  \tikzstyle{path label} = [above, near start, outer sep = 1em]
+
+  % Common
+  \node[input] (audio) {stereo signal};
+  \node[textrect,stereo] (subband) [right of=audio,yshift=2cm] {subband\\filtering};
+  \node[textrect,stereo] (windowing) [right of=subband] {time windowing};
+  \draw[arrow] (audio) to (subband.west);
+  \draw[arrow] (subband) to (windowing);
+  % \node[fit=(audio)(subband)(windowing)](common){};
+  % \node[fit=(subband)(windowing)](common_time_domain){};
+  \node[textrect,stereo] (stft) [below of=windowing,yshift=-0.5cm] {\glsxtrshort{stft}};
+  \draw[arrow] (audio) to (stft.west);
+
+  % STFT
+  \node[textrect,stereo] (car2pol) [right of=stft] {Polar\\coordinates};
+  \node[delta] (stft_amp_delta) [right of=car2pol,yshift=0.7cm,xshift=-1cm] {$\Delta$};
+  \node[delta] (stft_phase_delta) [right of=car2pol,yshift=-0.7cm,xshift=-1cm] {$\Delta$};
+  \node[textrect,output] (stft_ild) [right of=stft_amp_delta,xshift=-1cm] {\gls{ild}};
+  \node[textrect,output] (stft_ipd) [right of=stft_phase_delta,xshift=-1cm] {\gls{ipd}};
+  \draw[arrow] (stft) to (car2pol);
+  \draw[arrow] (car2pol) to node[above] {$\|$} (stft_amp_delta.west);
+  \draw[arrow] (car2pol) to node[below] {$\angle$} (stft_phase_delta.west);
+  \draw[arrow] (stft_amp_delta) to (stft_ild);
+  \draw[arrow] (stft_phase_delta) to (stft_ipd);
+
+  % ILD
+  \node[textrect,stereo] (amp) [right of=windowing,yshift=1.8cm] {amplitude\\detection};
+  \node[delta] (ild_delta) [right of=amp,xshift=-1cm] {$\Delta$};
+  \node[textrect,output] (ild) [right of=ild_delta,xshift=-1cm] {\gls{ild}};
+  \draw[stereoarrow] (amp) to (ild_delta);
+  \draw[arrow] (ild_delta) to (ild);
+  \node[fit=(amp)(ild_delta)(ild)](ild_path){};
+  
+  % IPD
+  \node[textrect,stereo] (phase) [below of=amp,yshift=2.7cm] {phase\\detection};
+  \node[delta] (ipd_delta) [right of=phase,xshift=-1cm] {$\Delta$};
+  \node[textrect,output] (ipd) [right of=ipd_delta,xshift=-1cm] {\gls{ipd}};
+  \draw[arrow] (phase) to (ipd_delta);
+  \draw[arrow] (ipd_delta) to (ipd);
+  \node[fit=(phase)(ipd_delta)(ipd)](ipd_path){};
+    
+  % ITD
+  \node[textrect,stereo] (transients) [below of=phase,yshift=2.7cm] {transient\\detection};
+  \node[delta] (itd_delta) [right of=transients,xshift=-1cm] {$\Delta$};
+  \node[textrect,output] (itd) [right of=itd_delta,xshift=-1cm] {\gls{itd}};
+  \draw[arrow] (transients) to (itd_delta);
+  \draw[arrow] (itd_delta) to (itd);
+  \node[fit=(transients)(itd_delta)(itd)](itd_path){};
+
+  % IACC
+  \node[textrect,stereo] (xcorr) [below of=transients,yshift=2.7cm] {cross-correlation};
+  \node[textrect,output] (correlogram) [right of=xcorr,xshift=2cm] {correlogram};
+  \node[textrect] (peak) [right of=correlogram] {find peak};
+  \draw[arrow] (xcorr) to (correlogram);
+  \draw[arrow] (correlogram) to (peak);
+  \node[fit=(xcorr)(correlogram)(peak)](iacc_path){};
+
+  % ILD edges
+  \draw[arrow] (windowing.east) to (ild_path.west);
+  \draw[arrow] (windowing.east) to (itd_path.west);
+  \draw[arrow] (windowing.east) to (ipd_path.west);
+  \draw[arrow] (windowing.east) to (iacc_path.west);
+  \draw[arrow] (ipd) to (itd);
+  \draw[arrow] (peak.north) to [out=90,in=0] (itd.east);
+  \node[fit=(ild)(ipd)(itd)(correlogram),grouprect,output,dashed](outputs) {};
+
+  \end{tikzpicture}
+}
+
+\end{figure}
 
 
 \subsubsection{Panning parameters}
@@ -440,9 +532,44 @@ Importantly, there are various ways to calculate all these parameters, and \cite
 
 Another cohort of algorithms is dedicated to estimating the panning that has been applied to monophonic stems in a stereo mix. Those related to amplitude panning differ from the binaural \gls{ild} in that they account for a standard signal model in which the amplitude of the two channels follow the \q{energy-preserving panning law} whereby the sum of the squared channel gains is 1. A formal mathematical formulation is given in \cite{avendanoFrequencyDomainTechniques2002,avendanoFrequencydomainSourceIdentification2003,avendanoFrequencydomainApproachMultichannel2004} under the name \glsxtrfull{pi}, and \cite{breebaartMultiLoudspeakerPlaybackStereo2007,cobosSingingVoiceSeparation2008,drossosStereoGoesMobile2012} use the same technique unaltered. Similar formulations are found under multiple names: \q{panning parameters} \cite{hansenEstimationFundamentalFrequencies2019,defreinRemedyingSoundSource2020,defreinReformulatingBinaryMasking2020}, \q{\glsxtrlong{sps}} \cite{tzanetakisStereoPanningFeatures2007}, \q{pangram} \cite{harmaSpatialDecompositionTimefrequency2004}, \q{azimugram} \cite{barryMusicStructureSegmentation2007,sofianosEffectiveSingingVoice2010}, \q{amplitude panning factors} \cite{fallerMultipleloudspeakerPlaybackStereo2006}, \q{pan map} \cite{cobosStereoAudioSource2008}, \q{pan \gls{tff}} \cite{razzaqAdvancedDSPAlgorithm2016}, \q{mixing parameters} \cite{woodruffRemixingStereoMusic2006,woodruffUsingPitchAmplitude2006}, and \q{panning coefficients}\footnote{Note that \cite{gomezMusicSimilaritySystems2008,guausAudioContentProcessing2009} also use the term \q{panning coefficients} to describe a higher-level panning descriptor derived from a \gls{ph} (see \cref{sec:very_relevant_studies}). This use of the term does not describe the same concept as the ones listed above.} \cite{liUnsupervisedAdaptiveFiltering2005,chunFrequencydependentAmplitudePanning2016,miethObjectiveEvaluationTechniques2017,cabanas-moleroMusicDemixingMachine2023}.
 
-While all the aforementioned parameters have the intention of estimating the panning that was applied to a mono stem, the exact mathematical methods varies tremendously; Interested readers are directed to the original studies. A general theme is that estimations of amplitude panning can be determined through \gls{ild}-related methods and measurements of \q{ambience} can be obtained using techniques based on correlation between the channels \cite{avendanoFrequencyDomainTechniques2002}. An interesting, but rarely-used technique is \cite{liUnsupervisedAdaptiveFiltering2005} in which the stereo subband signal has \gls{pca} applied to find a dominant signal and a panning coefficient is subsequently estimated using a Lagrange Multiplier. \cite{woodruffRemixingStereoMusic2006,woodruffUsingPitchAmplitude2006} demonstrate the estimation of both amplitude and time panning, utilizing \gls{tf}-domain \gls{ild} and \gls{ipd} directly.
+While all the aforementioned parameters have the intention of estimating the panning that was applied to a mono stem, the exact mathematical methods varies tremendously; Interested readers are directed to the original studies, although as an example, a block diagram for \gls{sps} \cite{tzanetakisStereoPanningFeatures2007} is shown in \cref{fig:sps}. 
 
-In all cases there is an implicit assumption that each frequency subband within the mix contains only a single direct sound source. For some use cases (e.g. source separation) this is results in an underspecified problem, but for spatial \textit{description} this is not necessarily a limitation. In fact, one can often expect recorded music to be spatially dense, and any description created from panning parameters should reflect that.
+\begin{figure}[htb!]
+\caption{Block diagram of \gls{sps}}
+\label{fig:sps}
+\resizebox{\linewidth}{!}{
+
+  \begin{tikzpicture}[>=latex, node distance=4cm]
+
+  \tikzstyle{textrect} = [rectangle, minimum width=3cm, minimum height=1cm, draw=black, fill=white, align=center]
+  \tikzstyle{grouprect} = [rectangle, draw=black, align=center]
+  \tikzstyle{list} = [text depth=2.5cm, minimum height=3cm, text width=3cm, align=left]
+  \tikzstyle{input} = [rounded rectangle, minimum width=3cm, minimum height=1cm, draw=black]
+  \tikzstyle{arrow} = [thick,->,>=stealth]
+  \tikzstyle{stereo} = [copy shadow={shadow xshift=0.1cm,shadow yshift=-0.1cm}]
+  \tikzstyle{output} = [rounded corners]
+  \tikzstyle{optional} = [densely dashed]
+  \tikzstyle{path label} = [above, near start, outer sep = 1em]
+
+  \node[input] (audio) {stereo signal};
+  \node[textrect,stereo] (stft) [right of=audio] {\glsxtrshort{stft}};
+  \node[textrect] (similarity) [right of=stft, yshift=1cm] {Channel similarity};
+  \node[textrect] (ambiguity) [below of=similarity, yshift=2cm] {Directional\\ambiguity\\resoultion};
+  \node[textrect,output] (sps) [right of=stft,xshift=4cm] {\gls{sps}};
+  \draw[arrow] (audio) to (stft);
+  \draw[arrow] (stft.east) to (similarity.west);
+  \draw[arrow] (stft.east) to (ambiguity.west);
+  \draw[arrow] (similarity.east) to (sps.north west);
+  \draw[arrow] (ambiguity.east) to (sps.south west);
+
+  \end{tikzpicture}
+}
+
+\end{figure}
+
+A general theme is that estimations of amplitude panning can be determined through \gls{ild}-related methods and measurements of \q{ambience} can be obtained using techniques based on correlation between the channels \cite{avendanoFrequencyDomainTechniques2002}. An interesting, but rarely-used technique is \cite{liUnsupervisedAdaptiveFiltering2005} in which the stereo subband signal has \gls{pca} applied to find a dominant signal and a panning coefficient is subsequently estimated using a Lagrange Multiplier. \cite{woodruffRemixingStereoMusic2006,woodruffUsingPitchAmplitude2006} demonstrate the estimation of both amplitude and time panning, utilizing \gls{tf}-domain \gls{ild} and \gls{ipd} directly.
+
+In all cases there is an implicit assumption that each frequency subband within the mix contains only a single direct sound source. For some use cases (e.g. source separation) this results in an underspecified problem, but for spatial \textit{description} this is not necessarily a limitation. In fact, one can often expect recorded music to be spatially dense, and any description created from panning parameters should reflect that.
 
 
 \subsubsection{\glsxtrlong*{faa}}
