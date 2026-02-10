@@ -573,22 +573,101 @@ In all cases there is an implicit assumption that each frequency subband within 
 
 
 \subsubsection{Time-Frequency decomposition}
-\label{sec:faa}
+\label{sec:tf_decomp}
 In all the cases mentioned in \cref{sec:panning_parameters}, the panning parameters are calculated on individual \gls{tf} bins. Naturally, there are several ways to perform the \gls{tf} decomposition, each with its own nuances. The majority of algorithms described use the \gls{stft} as a starting point due its computational efficiency, although it is noted in several studies that the Fourier transform's lack of perceptually-relevant frequency bands is a problem and should be corrected for. Typically, \gls{fft} frequency bands are combined into groups according to a psychoacoustic model, such as \gls{erb} or Bark  critical bands \cite{smithiiiEquivalentRectangularBandwidth2020,smithiiiBarkFrequencyScale2020}. \cite{tzanetakisStereoPanningFeatures2007} takes an even more drastic approach, forming just 3 subbands (lows, mids, and highs) according to the typical practice of mixing engineers.
 
 \cite{liUnsupervisedAdaptiveFiltering2005} takes a similar approach but instead of using \gls{stft}, the frequency decomposition is achieved via a \gls{pqmf} filterbank, as defined in the \glsxtrshort{mpeg} audio standard \cite{iso-11172-3:mpeg_audio}. \cite{zhuConversionStereoSignal2014,tardieuProductionEffectAudio2011,desenaLocalizationUncertaintyTimeAmplitude2020} choose instead to calculate stereo \q{cochleagrams} in the time domain; A bank of gammatone filters is applied to the original signal and the resulting subbands segmented in time. This has the benefit of being a much closer approximation to human hearing, but comes at the expense of higher computational complexity. Subsequently, it is common to apply an auditory model, i.e. a computation that models the cochlea and its neural connection to the brain. Several versions can be found through the literature, although a classical version is presented in \cite{boddenBinauralModelingAuditory1995}, and \cite{supperOnsetGuidedSpatialAnalyser2005,delgadoDesignChoicesBinaural2023} include comparisons of several models.
 
 \subsubsection{Frequency-azimuth analysis}
+\label{sec:faa}
 After converting audio into bin-level spatial cues, it is common to visualize them in a 2D spectrogram-like plot. A theme across most studies is that it is generally useful to view the change in spatial parameters change over time. We therefore see most often that time is displayed on the X-axis of the plot, with frequency and azimuth being assigned to either the Y-axis or colour/brightness. Further analysis of these plots can generate musical insights, as in \cite{barryMusicStructureSegmentation2007} which uses changes over time to achieve song-structure segmentation of recorded music, and \cite{barryBinaspectPythonLibrary2025} which uses the visualizations directly to compare the rendering quality of different spatial audio formats and lossy compression algorithms. Focused purely on visualization, \cite{prestiVisualizationManipulationStereophonic2014} adds the concept of bin-level \q{clarity}, effectively determining the trustworthiness of a panning parameter estimation. As with the previously discussed spatial cues, the naming of these visualizations varies freely (see \cref{sec:panning_parameters}). Interested readers are directed to the original papers for examples of these visualizations.
 
 \subsubsection{High-level descriptors and perceptual scalars}
 \label{sec:high_level_descriptors}
 
-Subsequent to bin-level analysis, there are several algorithms that condense the derived parameters down into a compact representation for the purpose of describing a certain spatial aspect of the original signal. In this context, \q{high-level descriptors} are those mentioned in \cref{sec:very_relevant_studies}, e.g. \gls{ph}, \gls{asf}, \gls{psf}, and \gls{spf}. \q{Perceptual scalars} are the spatial qualities often evaluated in perceptual testing, which can be predicted both from low-level spatial cues or from the high-level descriptors. Two common ones are \gls{asw} and \gls{lev}. Again, there are many synonyms or near-synonyms for these terms: \q{stereo width}, \q{source width}, \q{auditory source width}, \q{ensemble width}, and \q{stereo image width} for \gls{asw}\; \q{envelopment}, and \q{immersion}, and for \gls{lev}.
+Subsequent to bin-level analysis, there are several algorithms that condense the derived parameters down into a compact representation for the purpose of describing a certain spatial aspect of the original signal. In this context, \q{high-level descriptors} are those mentioned in \cref{sec:very_relevant_studies}, e.g. \gls{ph}, \gls{asf}, \gls{psf}, and \gls{spf}.
 
-\gls{asw} is usually calculated as a summary of either panning or \gls{doa} calculations. For example, \cite{sarroffMeasurementsSpaciousnessStereophonic2008} defines \gls{asw} as the \gls{fwhm} of a Gaussian curve fitted to a \gls{ph}, \cite{supperOnsetGuidedSpatialAnalyser2005} uses the \gls{iqr} of an \gls{iid} histogram, and \cite{dewhirstModellingPerceivedSpatial2008} uses the standard deviation of a combination of \gls{iid} and \gls{itd} histograms. \cite{miethObjectiveEvaluationTechniques2017} on the other hand uses \gls{iacc} and \gls{lef} as proxies for \gls{asw} and \gls{lev} respectively. It has also been shown that perceptual scalars such as \q{immersion} can be predicted from combinations of low-level features, including those which do not contain any spatial information \cite{sarroffComputationalModelPerceived2011}. Similarly, \cite{sunishDevelopmentValidationUnintrusive2010} develops a computer model of \q{envelopment} based on \gls{iacc}, \gls{pca}, and channel energy distribution (albeit for multichannel audio rather than stereo).
+\q{Perceptual scalars} are the spatial qualities often evaluated in perceptual testing, which can be predicted both from low-level spatial cues or from the high-level descriptors. Two common ones are \gls{asw} and \gls{lev}. Again, there are many synonyms or near-synonyms for these terms: \q{stereo width}, \q{source width}, \q{auditory source width}, \q{ensemble width}, and \q{stereo image width} for \gls{asw}\; \q{envelopment}, and \q{immersion}, and for \gls{lev}.
 
-The lack of mathematical standardization in these studies emphasizes the point from \cref{sec:binaural_and_spatial_cues}; future research should preferably state formulas explicitly in the text, falling back to a specific definition in a cited publication.
+\gls{asw} is usually calculated as a summary of either panning or \gls{doa} calculations. For example, \cite{sarroffMeasurementsSpaciousnessStereophonic2008} defines \gls{asw} as the \gls{fwhm} of a Gaussian curve fitted to a \gls{ph}, \cite{supperOnsetGuidedSpatialAnalyser2005} uses the \gls{iqr} of an \gls{iid} histogram, and \cite{dewhirstModellingPerceivedSpatial2008} uses the standard deviation of a combination of \gls{iid} and \gls{itd} histograms. \cite{miethObjectiveEvaluationTechniques2017} on the other hand uses \gls{iacc} and \gls{lef} as proxies for \gls{asw} and \gls{lev} respectively. Continuing from the diagrams given in \cref{sec:panning_parameters}, \cref{fig:asw} shows several exemplary block diagram of algorithms to calculate \gls{asw}. Note that the intermediate \gls{ph} of the first two paths which can be used as a high-level descriptor directly. Importantly, each path is completely disparate and the resulting \glspl{asw}/\glspl{ph} for each one cannot be directly compared, despite having the same name.
+
+It has also been shown that perceptual scalars such as \q{immersion} can be predicted via \gls{ml} from combinations of low-level features, including those which do not contain any spatial information \cite{sarroffComputationalModelPerceived2011}. Similarly, \cite{sunishDevelopmentValidationUnintrusive2010} develops a computer model of \q{envelopment} based on \gls{iacc}, \gls{pca}, and channel energy distribution (albeit for multichannel audio rather than stereo).
+
+
+\begin{figure}[htb!]
+\caption{Block diagrams of algorithms to estimate perceptual scalars. Disparate algorithms are separated by dashed lines.}
+\label{fig:asw}
+\resizebox{\linewidth}{!}{
+
+  \def\looseness{0.5}
+  \begin{tikzpicture}[>=latex, node distance=4cm]
+
+  \tikzstyle{textrect} = [rectangle, minimum width=3cm, minimum height=1cm, draw=black, fill=white, align=center]
+  \tikzstyle{grouprect} = [rectangle, draw=black, align=center]
+  \tikzstyle{list} = [text depth=2.5cm, minimum height=3cm, text width=3cm, align=left]
+  \tikzstyle{input} = [rounded rectangle, minimum width=3cm, minimum height=1cm, draw=black]
+  \tikzstyle{arrow} = [thick,->,>=stealth]
+  \tikzstyle{stereo} = [copy shadow={shadow xshift=0.1cm,shadow yshift=-0.1cm}]
+  \tikzstyle{output} = [rounded corners]
+  \tikzstyle{optional} = [densely dashed]
+  \tikzstyle{path label} = [above, near start, outer sep = 1em]
+  \tikzstyle{divider} = [thick, loosely dashed, black]
+
+
+  \node[input] (sps) {\gls{sps}};
+  \node[textrect] (hists) [right of=sps] {histograms\\over frequency};
+  \node[textrect] (mean) [right of=hists] {Mean over time};
+  \node[textrect] (fwhm) [right of=mean] {\gls{fwhm}};
+  \node[textrect,output] (asw) [right of=fwhm] {\gls{asw}};
+  \node[textrect,output] (ph) [below of=asw,yshift=2.5cm] {\gls{ph}};
+  \draw[arrow] (sps) to (hists);
+  \draw[arrow] (hists) to (mean);
+  \draw[arrow] (mean) to (fwhm);
+  \draw[arrow] (fwhm) to (asw);
+  \draw[arrow] (mean.south) to [out=270,in=180,looseness=\looseness] (ph.west);
+
+  \node[input] (iid) [below of=sps] {\gls{iid}};
+  \node[textrect] (iid_hists) [right of=iid] {histograms\\over frequency};
+  \node[textrect] (iid_mean) [right of=iid_hists] {mean over time};
+  \node[textrect] (iid_iqr) [right of=iid_mean] {\gls{iqr}};
+  \node[textrect,output] (iid_asw) [right of=iid_iqr] {\gls{asw}};
+  \node[textrect,output] (iid_ph) [below of=iid_asw,yshift=2.5cm] {\gls{ph}};
+  \draw[arrow] (iid) to (iid_hists);
+  \draw[arrow] (iid_hists) to (iid_mean);
+  \draw[arrow] (iid_mean) to (iid_iqr);
+  \draw[arrow] (iid_iqr) to (iid_asw);
+  \draw[arrow] (iid_mean.south) to [out=270,in=180,looseness=\looseness] (iid_ph.west);
+
+
+  \node[input] (audio) [below of=iid] {Audio};
+  \node[textrect] (subjective) [right of=audio] {Subjective ratings};
+  \node[textrect] (objective) [below of=subjective,yshift=2.5cm] {Objective metrics};
+  \node[textrect] (ml) [right of=objective] {\gls{ml}};
+  \node[textrect,output] (ml_imm) [right of=ml] {immersion};
+  \draw[arrow] (audio) to (subjective);
+  \draw[arrow] (audio) to [out=0,in=180] (objective);
+  \draw[arrow] (subjective.east) to [out=0,in=90,looseness=\looseness] (ml_imm.north);
+  \draw[arrow] (objective) to (ml);
+  \draw[arrow] (ml) to (ml_imm);
+  \draw[arrow] (ml_imm.south) to [out=270,in=270] (ml.south);
+
+  \node[fit=(sps)(ph)](sps_path){}; 
+  \node[fit=(iid)(iid_ph)](iid_path){};
+  \node[fit=(audio)(ml_imm)](ml_path){};
+  \coordinate (d1w) at ($(sps_path.west)!0.5!(iid_path.west)$);
+  \coordinate (d1e) at ($(sps_path.east)!0.5!(iid_path.east)$);
+  \coordinate (d2w) at ($(iid_path.west)!0.5!(ml_path.west)$);
+  \coordinate (d2e) at (d2w -| d1e);
+  \draw[divider] (d1w) to (d1e);
+  \draw[divider] (d2w) to (d2e);
+
+  \end{tikzpicture}
+}
+
+\end{figure}
+
+
+The lack of mathematical standardization in these studies emphasizes the point from \cref{sec:binaural_and_spatial_cues} \textemdash future research should preferably state formulas explicitly in the text, falling back to a specific definition in a cited publication.
 
 
 \subsubsection{Standardized spatial cues}
