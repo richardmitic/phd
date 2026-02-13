@@ -5,6 +5,8 @@
 \usepackage[british]{babel}
 \usepackage{booktabs}
 \usepackage{subfiles}
+\usepackage{amsmath}
+\usepackage{cleveref}
 
 %% References
 \usepackage[
@@ -15,6 +17,7 @@
 
 %% Acronyms
 \usepackage[automake]{glossaries-extra}
+\setabbreviationstyle[acronym]{long-short}
 \makeglossaries
 \input{../acronyms.tex}
 
@@ -34,31 +37,40 @@
 \pagebreak
 
 \section{Papers}
+\label{sec:papers}
 
 \subsection{Papers included in thesis}
 \begin{refsection}
 
 \subsubsection{Paper A}
+\label{paper:A}
 
 \fullcite{miticObjectiveComparisonPanning2025}
 \\\\
 \textbf{Status} -- published September 2025
 
 \subsubsection{Paper B}
+\label{paper:B}
 \fullcite{miticPerceptualEvaluationBinaurally2026}
 \\\\
-\textbf{Status} -- Submitted to \href{https://dl.acm.org/journal/tomm}{ACM Transactions on Multimedia Computing Communications and Applications} October 2025 - \textbf{Rejected - not good fit for journal}.
-\\
-\textbf{Plan} -- Resumbmit to another journal - either \href{https://acta-acustica.edpsciences.org/}{Acta Acustica} or \href{https://aes.org/publications/journal/}{\gls{jaes}}
+\textbf{Status}
+\begin{itemize}
+    \item[--] Submitted to \href{https://dl.acm.org/journal/tomm}{ACM Transactions on Multimedia Computing Communications and Applications} October 2025 - \textbf{Rejected - not good fit for journal}.
+    \item[--] Submitted to \href{https://acta-acustica.edpsciences.org/}{Acta Acustica} February 2025
+\end{itemize}
+% \\
+\textbf{Plan} -- Await peer review.
 
 \subsubsection{Paper C}
+\label{paper:C}
 \fullcite{miticSystematicLiteratureReviewAwaitingreview}
 \\\\
 \textbf{Status} -- Submitted to \href{https://asmp-eurasipjournals.springeropen.com/}{EURASIP Journal on Audio, Speech, and Music Processing} on 2025-12-16.
 \\
-\textbf{Plan} -- Awaiting review.
+\textbf{Plan} -- Await peer review.
 
 \subsubsection{Paper D}
+\label{paper:D}
 \fullcite{miticClusteringMusicRecordingsNotwritten}
 \\\\
 \textbf{Status} -- not written
@@ -70,6 +82,7 @@
 
 \subsection{Related papers not included in thesis}
 \subsubsection{Paper E}
+\label{paper:E}
 \fullcite{franklinDevelopmentWebBasedRealTime2025}
 
 \end{refsection}
@@ -78,11 +91,11 @@
 
 \section{Introduction}
 
-Extracting spatial information from audio signals has a variety of uses, which generally fall into two broad categories. There is detailed spatial information that is specific to the exact audio clip analysed, and is generally used for a task that requires reconstruction of the original signal such as audio coding, compression, upmixing, and source separation. Secondly, there are methods used to describe the spatial properties of a signal, without the need for reconstruction. These are generally used for \gls{mir}, classification, or interpretation of audio. Industrial uses the latter and not as clear-cut as the former, but the literature gives uses such as music similarity/recommendation \cite{gomezMusicSimilaritySystems2008,ziemerNovelRecordingStudio2020}, or a precursor to upmixing, source separation, and audio enhancement \cite{harmaStereoAudioClassification2011,harmaClassificationTimefrequencyRegions2011}.
+The extraction of spatial information from audio signals is a wide topic within the music and recording industries. Generally, it can be broken up into two broad categories. The first is low-level spatial information that allows the signal to be broken down and reconstructed in some form -- the main industrial use being audio compression and transmission. The second is a high-level spatial description of the underlying audio. An academia this descriptions are used for \gls{mir}, classification, and interpretation of music. Industrial uses are not so clear-cut however, although the literature suggests uses such as music similarity/recommendation \cite{gomezMusicSimilaritySystems2008,ziemerNovelRecordingStudio2020}, or a precursor to other low-level techniques \cite{harmaStereoAudioClassification2011,harmaClassificationTimefrequencyRegions2011}. Since most recorded music is available in stereophonic format, we use the term \gls{sip} to denote the spatial description of a stereophonic recording.
 
-In the aforementioned cases, the audio analysed has either comprised single excerpts or lists of 1000-2000 tracks with labels assigned. However, in recent years much bigger musical datasets have become available, e.g. \cite{bogdanovMTGJamendoDatasetAutomatic2019,defferrardFMADatasetMusic2017}, which contain 55000 and 100000 tracks respectively. These datasets do not contain any metadata regarding spatial information, nor any similar information such as recording methods/style. While they do offer genre and date tags, panning features on their own have previously shown low correlation with genre and decade \cite{tzanetakisStereoPanningInformation2010,tardieuProductionEffectAudio2011}, from which we can infer that genre and date cannot be reliably used a proxy for panning features. If one wishes to use these datasets for the aforementioned use cases, there is hence a need to perform unsupervised learning on the extracted panning features, and for this to be successful we must understand the abilities and limits of the extraction method being used. 
+Most work on \gls{sip} analysis utilizes musical datasets comprising 1,000-2,000 tracks that are privately owned, curated, and labelled. However, in recent years much larger public musical corpora have become available, e.g. MTG-Jamendo \cite{bogdanovMTGJamendoDatasetAutomatic2019} and \gls{fma} \cite{defferrardFMADatasetMusic2017}, which contain 55,000 and 100,000 tracks respectively. These datasets do not contain any metadata regarding spatial information, nor any similar information such as recording methods/style. If one wishes to use these datasets for the aforementioned use cases, there is hence a need to perform unsupervised learning on the set of extracted \glspl{sip}. In order for that to be successful, the capabilities and nuances of each \gls{sip} method must be acutely understood.
 
-The current spatial descriptors can be roughly classified thus:
+The spatial descriptors currently existing in the literature can be roughly classified thus:
 
 \begin{itemize}
     \item High-dimensional descriptors - Spatial information extracted from a signal based on some sort of assumed audio properties (e.g. panning parameters, phase spread)
@@ -99,38 +112,40 @@ The current spatial descriptors can be roughly classified thus:
     \item Microphone arrays - microphones arranged in specific patterns that together provide more spatial information than a single microphone
     * Binaural audio is special case of multichannel, where 2 channels represent sound at a person's ears. It therefore has specific statistical qualities that can inform any research.
     \item Ambisonics - a format capturing an overall physical sound field using \enquote{spherical harmonics}, i.e. sound pressure in various directions at a single point. The simplest form is called \enquote{1st order} and has 4 channels (omnidirectional, X, Y, Z) but research suggests that this is not sufficient to capture enough sound information for good rendering. More directions can be added, but the number of channels increases exponentially with the order.
-    \item Object based audio - Instead of rendering channels, individual sound objects are stored separately along with metadata telling a renderer where to place them in a virtual space. This is currently the most common form of audio being researched and has the most practical use cases, especially in film/TV.
+    \item Object based audio - Instead of rendering channels, individual sound objects are stored separately along with metadata telling an audio renderer where to place them in a virtual space. 
 \end{itemize}
 
-The most common and most well-researched is binaural audio since it is closest to human hearing. It also has the advantage that any other format can be rendered to binaural, given a set of assumptions as to the listening conditions. However, these assumptions don't always hold (e.g. when listening on headphones), so there are other methods that act directly on the audio signals. In those cases, separate methods for each flavour of audio signal are required.
+The most common and most well-researched is binaural audio since it is closest to human hearing. It also has the advantage that any other format can be rendered to binaural, given a set of assumptions as to the listening conditions. However, these assumptions don't always hold (e.g. when listening on headphones), so there are other methods that act on the audio signals in their original format. In those cases, separate methods for each flavour of audio signal are required.
 
-Note: The only type of audio signal not included in this list is mono, even though some researchers argue that there is still spatial information in things such as reverberation.
+The only type of audio signal not included in this list is monophonic since its ability to convey spatial information is limited to things such as room size and source distance \cite{rumseySpatialQualityEvaluation2002,sarroffMeasurementsSpaciousnessStereophonic2008}.
+
+This thesis will concentrate on stereophonic audio, as this is the format that the majority of recording music (including the aforementioned large datasets) are is available in.
 
 
-\section{Problem statement}
+\section{Research Questions}
+\label{sec:request_questions}
 
-The overarching research question can be described as:
+The overarching research question can be formed as:
 
-\begin{itemize}
-\item How can one predict the spatial properties of a music track under specified reproduction conditions?
-\end{itemize}
+\begin{quote}
+How do music producers use stereo field?
+\end{quote}
 
 \noindent This can be broken into several smaller problems:
 
 \begin{enumerate}
 \item What methods can be used to describe the stereo image of music recording?
-\item What is the gamut of stereo images that exist in the entire population of recorded music?
+\item How does the stereo image of a recording relate to real-world musical knowledge?
 \item What patterns can be found by examining the spatial information of a very large musical corpus?
 \end{enumerate}
 
 \section{State of the art}
 
-\cite{bergSystematicEvaluationPerceived2003} specifies a long list of spatial attributes perceived by listeners, but three major ones often referred to by other authors are \enquote{ensemble source width} (sometimes called \enquote{apparent source width}), \enquote{extent of immersion} (sometimes called \enquote{listener envelopment}), and \enquote{extent of reverberation} \cite{soulodreNewObjectiveMeasures2004,sarroffMeasurementsSpaciousnessStereophonic2008,sarroffComputationalModelPerceived2011}. \cite{ziemerUsingPsychoacousticModels2016} and \cite{ziemerSourceWidthMusic2017a} define a scalar measurement of \enquote{spaciousness} (which is very closely related to source width). Other lower-level scalar features exist, such as the \gls{simpl} feature which is used in \cite{chenMixedStereoAudio2014} to aid the classification of speech vs music. 
+\Citeauthor{bergSystematicEvaluationPerceived2003} \cite{bergSystematicEvaluationPerceived2003} specifie a long list of spatial attributes perceived by listeners, but three major ones often referred to in the literature are \enquote{ensemble source width} (sometimes called \enquote{apparent source width}), \enquote{extent of immersion} (sometimes called \enquote{listener envelopment}), and \enquote{extent of reverberation} \cite{soulodreNewObjectiveMeasures2004,sarroffMeasurementsSpaciousnessStereophonic2008,sarroffComputationalModelPerceived2011}. \cite{ziemerUsingPsychoacousticModels2016} and \cite{ziemerSourceWidthMusic2017a} define a scalar measurement of \enquote{spaciousness} (which is very closely related to source width). Other lower-level scalar features exist, such as the \gls{simpl} feature which is used in \cite{chenMixedStereoAudio2014} to aid the classification of speech vs music. 
 
 The above perceptual qualities are often inferred using objective measurements, which aim to describe the physical properties of an audio signal (usually in higher dimensionality) than the perceptual scalars.
-\cite{avendanoFrequencyDomainTechniques2002,avendanoFrequencydomainSourceIdentification2003} are seminal works describing the \enquote{panning index} -- a description of amplitude panning for each time-frequency bin in a stereo spectrogram. \cite{avendanoFrequencyDomainTechniques2002} also presents the \enquote{ambience index} -- a measure of inter-channel correlation in \gls{tf} bins. While they target re-synthesis and upmix as use cases, the underlying techniques have become the basis for many stereo image descriptors since. 
-\cite{barrySoundSourceSeparation2004} is another seminal work which describes a frequency-azimuth plane constructed from phase cancellation of different frequency components. Again, it targets re-panning and re-synthesis by assigning time-frequency bins to individual sources rather than stereo image description.
-While not specifically the subject of this paper, for a comparison of similar techniques for directional segmentation and re-synthesis, the reader is referred to \cite{wellsComparisonAnalysisResynthesis2011}.
+\cite{avendanoFrequencyDomainTechniques2002,avendanoFrequencydomainSourceIdentification2003} are seminal works describing the \enquote{panning index} -- a description of amplitude panning for each \gls{tf} bin in a stereo spectrogram. \cite{avendanoFrequencyDomainTechniques2002} also presents the \enquote{ambience index} -- a measure of inter-channel correlation in \gls{tf} bins. While they target re-synthesis and upmix as use cases, the underlying techniques have become the basis for many stereo image descriptors since. 
+\cite{barrySoundSourceSeparation2004} is another seminal work presenting the \gls{adress} algorithm for separating individual musical sources from a mix. In doing so it describes a method for determining the panning position of individual \gls{tf} bins which has been used since to create spatial descriptors. 
 \cite{kimQuantifyingAlbumEffect2006} states that analysis of a recording's stereo field can be useful for classification, but does not give any techniques to measure it.
 \cite{tzanetakisStereoPanningFeatures2007,tzanetakisStereoPanningInformation2010} reuse the panning index from \cite{avendanoFrequencyDomainTechniques2002} (renamed to \enquote{\gls{sps}}) and derive a set of \gls{spf} that are used for genre classification and \gls{mir}.
 Similarly, \cite{sarroffMeasurementsSpaciousnessStereophonic2008} details a method to produce stereo image descriptors centred around a histogram of spatial energy, but uses the frequency-azimuth plane from \cite{barrySoundSourceSeparation2004} as its basis.
@@ -151,8 +166,31 @@ More recently a \gls{ml}-based technique for disentangling spatial information h
 
 Even though all the audio formats mentioned contain spatial information, the industry uses the term \enquote{spatial audio} to mean multichannel, ambisonic, or object-based. The main industrial use for rendered audio is compression and transmission/distribution, and the formats that have emerged generally allow for all 3 audio types to be used as input, even if they will not necessarily remain in the same format when a file is produced.
 
-The most common industry format is Dolby Atmos - originally designed for cinemas and other such very large speaker arrays, there is now focus in rendering it in headphones for consumer users. Headphone rendering sometimes entails the use of head tracking to make it appear as though audio is always coming from a specific direction, although this is generally limited to specific hardware platforms where tracking data is available. Even though Atmos is being heavily pushed by big industry players, adoption by consumers is slow. An international standard spatial format exists in the form of MPEG-H \cite{mpeg-h}, (and its branded version \enquote{Sony 360}), but adoption of them is even lower. DTS:X is another proprietary spatial audio format, although its usage is generally limited to films released on physical media \cite{publishedDTSWhatIt2021}. Use of the industry formats is sometimes problematic due to patent licensing, and as a response the Alliance for Open Media has also specified a \enquote{patent-free} standard for immersive audio named \gls{imaf} \cite{ImmersiveAudioModel}.
+The most common industry format is Dolby Atmos - originally designed for cinemas and other such very large speaker arrays, there is now focus in rendering it in headphones for consumer users. Headphone rendering sometimes entails the use of head tracking to make it appear as though audio is always coming from a specific direction, although this is generally limited to specific hardware platforms where tracking data is available. Even though Atmos is being heavily pushed by big industry players, adoption by consumers is slow. An international standard spatial format exists in the form of MPEG-H \cite{mpeg-h}, (and its branded version \enquote{Sony 360}), but adoption of them is even lower. DTS:X is another proprietary spatial audio format, although its usage is generally limited to films released on physical media \cite{publishedDTSWhatIt2021}. Use of the industry formats is sometimes problematic due to patent licensing, and as a response the Alliance for Open Media has also specified a \enquote{royalty-free} standard for immersive audio named \gls{iamf} \cite{ImmersiveAudioModel}.
 
+\section{Research Methods}
+The papers mentioned in \cref{sec:papers} used (or will use) the following research methods:
+
+\begin{itemize}
+    \item \textbf{\nameref{paper:A}}: Several \gls{dsp} techniques for determining audio spatial features were performed on a small dataset that had predictable musical characteristics. The different techniques were compared using a new objective metric.
+    \item \textbf{\nameref{paper:B}}: A perceptual test was used to determine listeners' reactions to carefully constructed audio stimuli. Standard statistical analysis was performed on the raw test results, and one particular \gls{dsp} technique (\gls{ph} \cite{gomezMusicSimilaritySystems2008} which was assessed in \nameref{paper:A}) was used to explain the perceptual results.
+    \item \textbf{\nameref{paper:C}}: Following on the small selection of \gls{dsp} techniques assessed in \nameref{paper:A}, a \gls{slr} following the \gls{prisma} standard was performed to gather all currently available methods for determining spatial features of stereophonic musical audio.
+    \item \textbf{\nameref{paper:D}}: Based on the results of the previous three papers, several types of \gls{sip} will be extracted from a very large dataset of recordings, and basic unsupervised machine-learning will be applied to find patterns within the \gls{sip} population.
+\end{itemize}
+
+
+\section{Preliminary results and conclusions}
+
+\nameref{paper:A} revealed that although there are several \gls{dsp} techniques specifically designed for the extraction of recording and panning features, they are all limited in their own ways. One particular technique (\gls{spf} from \cite{tzanetakisStereoPanningFeatures2007}) was particularly promising as a candidate for use in \nameref{paper:D}, and the others could be used with some modifications. Overall it highlighted the importance of choosing both a panning feature \gls{dsp} technique and a distance metric that are appropriate to the overarching task.
+
+\nameref{paper:B} concluded that when listeners are presented with voice overlayed on top of music, the best panning position for the voice was not always in the default centre position. The reasons for this were unclear due to a shortage of data, but the paper did demonstrate a real-world use of \gls{sip} extraction (using a algorithm trialed in \nameref{paper:A}). Most relevant to the research questions presented in \cref{sec:problem_statement}, it revealed that an objective measurement of panning can show detail that is not easily discernable by listening, such as very slight panning away from the centre.
+
+\nameref{paper:C} revealed several more techniques that can be used to extract panning features. Although, given the high number of studies that were assessed for the review, there were relatively few very-relevant ones. The \gls{slr} also revealed that while \gls{ml} has been used on spatial features in the past, both \textit{unsupervised} \gls{ml} and very large music corpora remain fairly unexplored.
+
+Overall the results so far have highlighted the known technique for extracting panning features from music, demonstrated the musical features that the major ones are able to reveal, and highlighted gaps in current research that \nameref{paper:D} aims to fill.
+
+\section{Remaining work for licentiate}
+Initially there is a need to find a new publication venue for \nameref{paper:B}, and this work is already underway. \nameref{paper:D} therefore comprises the bulk of the remaining work. Firstly it involves setting up a system that can gather \glspl{sip} en-mass from real recorded music. Secondly there will be an exploratory phase where many of the standard unsupervised learning techniques will be attempted to discover which are suitable for \gls{sip} data. The results of the \gls{ml} will then need to be assessed in some manner. One option is to correlate them with some known music metadata to reveal which other features are linked to panning. Another option is to perform listening test in order to assess is the \gls{ml} worked as intended.
 
 \printglossaries
 
