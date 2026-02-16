@@ -584,13 +584,12 @@ Subsequent to bin-level analysis, there are several algorithms that condense the
 
 \q{Perceptual scalars} are the spatial qualities often evaluated in perceptual testing, which can be predicted both from low-level spatial cues or from the high-level descriptors. Two common ones are \gls{asw} and \gls{lev}. Again, there are many synonyms or near-synonyms for these terms: \q{stereo width}, \q{source width}, \q{auditory source width}, \q{ensemble width}, and \q{stereo image width} for \gls{asw}\; \q{envelopment}, and \q{immersion}, and for \gls{lev}.
 
-\gls{asw} is usually calculated as a summary of either panning or \gls{doa} calculations. For example, \cite{sarroffMeasurementsSpaciousnessStereophonic2008} defines \gls{asw} as the \gls{fwhm} of a Gaussian curve fitted to a \gls{ph}, \cite{supperOnsetGuidedSpatialAnalyser2005} uses the \gls{iqr} of an \gls{iid} histogram, and \cite{dewhirstModellingPerceivedSpatial2008} uses the standard deviation of a combination of \gls{iid} and \gls{itd} histograms. \cite{miethObjectiveEvaluationTechniques2017} on the other hand uses \gls{iacc} and \gls{lef} as proxies for \gls{asw} and \gls{lev} respectively. Continuing from the diagrams given in \cref{sec:panning_parameters}, \cref{fig:asw} shows several exemplary block diagram of algorithms to calculate \gls{asw}. Note that the intermediate \gls{ph} of the first two paths which can be used as a high-level descriptor directly. Importantly, each path is completely disparate and the resulting \glspl{asw}/\glspl{ph} for each one cannot be directly compared, despite having the same name.
+\gls{asw} is usually calculated as a summary of either panning or \gls{doa} calculations. For example, \cite{sarroffMeasurementsSpaciousnessStereophonic2008} defines \gls{asw} as the \gls{fwhm} of a Gaussian curve fitted to a \gls{ph}, \cite{supperOnsetGuidedSpatialAnalyser2005} uses the \gls{iqr} of an \gls{iid} histogram, and \cite{dewhirstModellingPerceivedSpatial2008} uses the standard deviation of a combination of \gls{iid} and \gls{itd} histograms. \cite{miethObjectiveEvaluationTechniques2017} on the other hand uses \gls{iacc} and \gls{lef} as proxies for \gls{asw} and \gls{lev} respectively. Continuing from the diagrams given in \cref{sec:panning_parameters}, \cref{fig:asw} shows two exemplary block diagrams of algorithms to calculate \gls{asw}. Note that the intermediate \gls{ph} of the first two paths which can be used as a high-level descriptor directly. Importantly, each path is completely disparate and the resulting \glspl{asw}/\glspl{ph} for each one cannot be directly compared, despite having the same name.
 
-It has also been shown that perceptual scalars such as \q{immersion} can be predicted via \gls{ml} from combinations of low-level features, including those which do not contain any spatial information \cite{sarroffComputationalModelPerceived2011}. Similarly, \cite{sunishDevelopmentValidationUnintrusive2010} develops a computer model of \q{envelopment} based on \gls{iacc}, \gls{pca}, and channel energy distribution (albeit for multichannel audio rather than stereo).
 
 
 \begin{figure}[htb!]
-\caption{Block diagrams of algorithms to estimate perceptual scalars. Disparate algorithms are separated by dashed lines.}
+\caption{Block diagrams of algorithms to estimate \gls{asw}. Disparate algorithms are separated by dashed lines.}
 \label{fig:asw}
 \resizebox{\linewidth}{!}{
 
@@ -610,7 +609,7 @@ It has also been shown that perceptual scalars such as \q{immersion} can be pred
 
 
   \node[input] (sps) {\gls{sps}};
-  \node[textrect] (hists) [right of=sps] {histograms\\over frequency};
+  \node[textrect] (hists) [right of=sps] {Histograms\\over frequency};
   \node[textrect] (mean) [right of=hists] {Mean over time};
   \node[textrect] (fwhm) [right of=mean] {\gls{fwhm}};
   \node[textrect,output] (asw) [right of=fwhm] {\gls{asw}};
@@ -622,8 +621,8 @@ It has also been shown that perceptual scalars such as \q{immersion} can be pred
   \draw[arrow] (mean.south) to [out=270,in=180,looseness=\looseness] (ph.west);
 
   \node[input] (iid) [below of=sps] {\gls{iid}};
-  \node[textrect] (iid_hists) [right of=iid] {histograms\\over frequency};
-  \node[textrect] (iid_mean) [right of=iid_hists] {mean over time};
+  \node[textrect] (iid_hists) [right of=iid] {Histograms\\over frequency};
+  \node[textrect] (iid_mean) [right of=iid_hists] {Mean over time};
   \node[textrect] (iid_iqr) [right of=iid_mean] {\gls{iqr}};
   \node[textrect,output] (iid_asw) [right of=iid_iqr] {\gls{asw}};
   \node[textrect,output] (iid_ph) [below of=iid_asw,yshift=2.5cm] {\gls{ph}};
@@ -633,34 +632,60 @@ It has also been shown that perceptual scalars such as \q{immersion} can be pred
   \draw[arrow] (iid_iqr) to (iid_asw);
   \draw[arrow] (iid_mean.south) to [out=270,in=180,looseness=\looseness] (iid_ph.west);
 
-
-  \node[input] (audio) [below of=iid] {Audio};
-  \node[textrect] (subjective) [right of=audio] {Subjective ratings};
-  \node[textrect] (objective) [below of=subjective,yshift=2.5cm] {Objective metrics};
-  \node[textrect] (ml) [right of=objective] {\gls{ml}};
-  \node[textrect,output] (ml_imm) [right of=ml] {immersion};
-  \draw[arrow] (audio) to (subjective);
-  \draw[arrow] (audio) to [out=0,in=180] (objective);
-  \draw[arrow] (subjective.east) to [out=0,in=90,looseness=\looseness] (ml_imm.north);
-  \draw[arrow] (objective) to (ml);
-  \draw[arrow] (ml) to (ml_imm);
-  \draw[arrow] (ml_imm.south) to [out=270,in=270] (ml.south);
-
+  % Divider lines
   \node[fit=(sps)(ph)](sps_path){}; 
   \node[fit=(iid)(iid_ph)](iid_path){};
-  \node[fit=(audio)(ml_imm)](ml_path){};
   \coordinate (d1w) at ($(sps_path.west)!0.5!(iid_path.west)$);
   \coordinate (d1e) at ($(sps_path.east)!0.5!(iid_path.east)$);
-  \coordinate (d2w) at ($(iid_path.west)!0.5!(ml_path.west)$);
-  \coordinate (d2e) at (d2w -| d1e);
   \draw[divider] (d1w) to (d1e);
-  \draw[divider] (d2w) to (d2e);
 
   \end{tikzpicture}
 }
 
 \end{figure}
 
+It has also been shown that perceptual scalars such as \q{immersion} can be predicted via \gls{ml} from combinations of low-level features, including those which do not contain any spatial information \cite{sarroffComputationalModelPerceived2011}. \Cref{fig:ml_immersion} shows a block diagram for this. Similarly, \cite{sunishDevelopmentValidationUnintrusive2010} develops a computer model of \q{envelopment} based on \gls{iacc}, \gls{pca}, and channel energy distribution (albeit for multichannel audio rather than stereo).
+
+\begin{figure}[htb!]
+\caption{Block diagram of prediction of immersion via \gls{ml} on objective metrics.}
+\label{fig:ml_immersion}
+\resizebox{\linewidth}{!}{
+
+  \begin{tikzpicture}[>=latex, node distance=4cm]
+
+  \tikzstyle{textrect} = [rectangle, minimum width=3cm, minimum height=1cm, draw=black, fill=white, align=center]
+  \tikzstyle{grouprect} = [rectangle, draw=black, align=center]
+  \tikzstyle{list} = [text depth=2.5cm, minimum height=3cm, text width=3cm, align=left]
+  \tikzstyle{input} = [rounded rectangle, minimum width=3cm, minimum height=1cm, draw=black]
+  \tikzstyle{arrow} = [thick,->,>=stealth]
+  \tikzstyle{stereo} = [copy shadow={shadow xshift=0.1cm,shadow yshift=-0.1cm}]
+  \tikzstyle{output} = [rounded corners]
+  \tikzstyle{optional} = [densely dashed]
+  \tikzstyle{path label} = [above, near start, outer sep = 1em]
+  \tikzstyle{divider} = [thick, loosely dashed, black]
+
+  \node[input] (audio) [below of=iid] {Audio};
+  \node[textrect] (subjective) [right of=audio,yshift=2.25cm] {Subjective ratings};
+  \node[textrect] (spatial) [below of=subjective,yshift=2.5cm] {Spatial metrics};
+  \node[textrect] (rhythmic) [below of=spatial,yshift=2.5cm] {Rhythmic metrics};
+  \node[textrect] (timbral) [below of=rhythmic,yshift=2.5cm] {Timbral metrics};
+  \node[textrect] (ml) [right of=rhythmic] {\gls{ml}};
+  \node[textrect,output] (ml_imm) [right of=ml] {Immersion};
+  \draw[arrow] (audio) to [out=0,in=180] (subjective);
+  \draw[arrow] (audio) to [out=0,in=180] (spatial);
+  \draw[arrow] (audio) to [out=0,in=180] (rhythmic);
+  \draw[arrow] (audio) to [out=0,in=180] (timbral);
+  \draw[arrow] (subjective.east) to [out=0,in=90] (ml_imm.north);
+  \draw[arrow] (spatial) to [out=0,in=180] ([yshift=0.2cm]ml.west);
+  \draw[arrow] (rhythmic) to [out=0,in=180] (ml.west);
+  \draw[arrow] (timbral) to [out=0,in=180] ([yshift=-0.2cm]ml.west);
+  \draw[arrow] (ml) to (ml_imm);
+  \draw[arrow] (ml_imm.south) to [out=270,in=270] (ml.south);
+
+  \end{tikzpicture}
+}
+
+\end{figure}
 
 The lack of mathematical standardization in these studies emphasizes the point from \cref{sec:binaural_and_spatial_cues} \textemdash future research should preferably state formulas explicitly in the text, falling back to a specific definition in a cited publication.
 
