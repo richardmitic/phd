@@ -693,7 +693,51 @@ The lack of mathematical standardization in these studies emphasizes the point f
 \subsubsection{Machine-learned spatial descriptors}
 \label{sec:ml_spatial_descriptors}
 
-Departing from the traditional \gls{dsp} spatial descriptors, a new family of descriptors generated directly though \gls{ml} and \gls{dl} have emerged. As mentioned in \cref{sec:very_relevant_studies}, \cite{yangUpmixingStyleTransfer2022} encodes the spatial information present in multichannel audio to a vector in latent space by first downmixing the input audio to stereo and then forcing the neural network to upmix back to the original. \cite{manochaSpatializationQualityMetric2023} takes a very similar approach, but acting on binaural input and its accompanying monophonic mixdown. A slightly different method is taken by \cite{satoSelfSupervisedLearningAudioVisual2022}, in which stereo audio captured with accompanying video is modified by either swapping the left and right channel, or using audio from a different video clip. The network then learns to spot said modifications, hence learning the spatial relationship between sound events and visual events.
+Departing from the traditional \gls{dsp} spatial descriptors, a new family of descriptors generated directly though \gls{ml} and \gls{dl} have emerged. As mentioned in \cref{sec:very_relevant_studies}, \cite{yangUpmixingStyleTransfer2022} encodes the spatial information present in multichannel audio to a vector in latent space by first downmixing the input audio to stereo and then forcing the neural network to upmix back to the original. A simplified block diagram of the technique is shown in \cref{fig:ml_descriptor}; the reader is directed to the original paper for details. Note that two different 5-channel mixes are required so that the network learns to disentangle musical content from spatial content. \cite{manochaSpatializationQualityMetric2023} takes a very similar approach, but acting on binaural input and its accompanying monophonic mixdown. A slightly different method is taken by \cite{satoSelfSupervisedLearningAudioVisual2022}, in which stereo audio captured with accompanying video is modified by either swapping the left and right channel, or using audio from a different video clip. The network then learns to spot said modifications, hence learning the spatial relationship between sound events and visual events.
+
+\begin{figure}[htb!]
+\caption{Block diagram of spatial description via \gls{dl} on downmixed audio \cite{yangUpmixingStyleTransfer2022}. $\oplus$ is the concatenation operator. In the 5-channel mixes A and B, stems are randomly panned.}
+\label{fig:ml_descriptor}
+\resizebox{\linewidth}{!}{
+
+  \begin{tikzpicture}[>=latex, node distance=4cm]
+
+  \tikzstyle{textrect} = [rectangle, minimum width=3cm, minimum height=1cm, draw=black, fill=white, align=center]
+  \tikzstyle{concat} = [circle, minimum width=0.618cm, minimum height=0.618cm, draw=black, fill=white, align=center]
+  \tikzstyle{grouprect} = [rectangle, draw=black, align=center]
+  \tikzstyle{list} = [text depth=2.5cm, minimum height=3cm, text width=3cm, align=left]
+  \tikzstyle{input} = [rounded rectangle, minimum width=3cm, minimum height=1cm, draw=black, align=center]
+  \tikzstyle{arrow} = [thick,->,>=stealth]
+  \tikzstyle{stereo} = [copy shadow={shadow xshift=0.1cm,shadow yshift=-0.1cm}]
+  \tikzstyle{output} = [rounded corners]
+  \tikzstyle{optional} = [densely dashed]
+  \tikzstyle{divider} = [thick, loosely dashed, black]
+
+  \node[input] (stems) {Audio stems};
+  \node[textrect] (audio5r) [right of=stems,yshift=1cm] {5-channel\\spectrogram A};
+  \node[textrect] (audio5a) [below of=audio5r,yshift=2cm] {5-channel\\spectrogram B};
+  \node[textrect] (bottleneck) [right of=audio5r] {Bottleneck\\neural network};
+  \node[textrect] (downmix) [right of=audio5a] {Downmix to stereo};
+  \node[concat] (concat) [right of=downmix,xshift=-1.5cm] {};
+  \node[textrect] (upmix) [right of=concat,xshift=-1.5cm] {Upmix\\neural network};
+  \node[textrect,output] (latentvec) [right of=bottleneck,xshift=5cm] {Spatial description\\in latent space};
+  \node[textrect,output] (recon) [right of=upmix] {Reconstructed\\5-channel audio};
+
+  \draw[arrow] (stems) to [out=0,in=180] (audio5r);
+  \draw[arrow] (stems) to [out=0,in=180] (audio5a);
+  \draw[arrow] (audio5r) to [out=0,in=180] (bottleneck);
+  \draw[arrow] (audio5a) to [out=0,in=180] (downmix);
+  \draw[arrow] (downmix) to [out=0,in=180] (concat);
+  \draw[arrow] (concat) to [out=0,in=180] (upmix);
+  \draw[arrow] (upmix) to [out=0,in=180] (recon);
+  \draw[arrow] (bottleneck) to [out=0,in=180] (latentvec);
+  \draw[arrow] (bottleneck) to [out=0,in=90] (concat);
+  \draw (concat.west) -- (concat.east);
+  \draw (concat.north) -- (concat.south);
+
+  \end{tikzpicture}
+}
+\end{figure}
 
 Where latent features are used a spatial descriptor, it is pertinent to remember that the latent space is a product of the training data and loss function, as opposed to the physical or psychoacoustic principals that \gls{dsp}-based descriptors are typically based on. While the inherent dimensionality reduction of latent spaces is useful for comparing spatial feature between recordings, individual dimensions of the space do not usually have a physical analogue. Analysis and interpretation of latent spaces is an ongoing research topic that has seen promising results in other research fields \cite{bornemannLatentSpaceAnalysisImproved2022,mccormickLatentSpacesSeeing2025,nguyenDeepLearningaidedInverse2026}, and creating links between latent and physical space is viewed as critical to the applicability of the learned model \cite{bousquetAutoEncodersLatentSpace2025}.
 
