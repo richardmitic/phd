@@ -693,10 +693,10 @@ The lack of mathematical standardization in these studies emphasizes the point f
 \subsubsection{Machine-learned spatial descriptors}
 \label{sec:ml_spatial_descriptors}
 
-Departing from the traditional \gls{dsp} spatial descriptors, a new family of descriptors generated directly though \gls{ml} and \gls{dl} have emerged. As mentioned in \cref{sec:very_relevant_studies}, \cite{yangUpmixingStyleTransfer2022} encodes the spatial information present in multichannel audio to a vector in latent space by first downmixing the input audio to stereo and then forcing the neural network to upmix back to the original. A simplified block diagram of the technique is shown in \cref{fig:ml_descriptor}; the reader is directed to the original paper for details. Note that two different 5-channel mixes are required so that the network learns to disentangle musical content from spatial content. \cite{manochaSpatializationQualityMetric2023} takes a very similar approach, but acting on binaural input and its accompanying monophonic mixdown. A slightly different method is taken by \cite{satoSelfSupervisedLearningAudioVisual2022}, in which stereo audio captured with accompanying video is modified by either swapping the left and right channel, or using audio from a different video clip. The network then learns to spot said modifications, hence learning the spatial relationship between sound events and visual events.
+Departing from the traditional \gls{dsp} spatial descriptors, a new family of descriptors generated directly though \gls{ml} and \gls{dl} have emerged. As mentioned in \cref{sec:very_relevant_studies}, \cite{yangUpmixingStyleTransfer2022} encodes the spatial information present in multichannel audio to a vector in latent space by first downmixing the input audio to stereo and then forcing the neural network to upmix back to the original. \cite{manochaSpatializationQualityMetric2023} takes a very similar approach, but acting on binaural input and its accompanying monophonic mixdown. In both cases, content invariance of the network is one of the optimization goals, and is essential when using the latent vectors \glspl{sip}. The former achieves it by creating two random 5-channel mixes and using the stereo downmix of one to resynthesize the other, while the latter utilizes an additional training task which optimizes the overall network's spatial embeddings to match that of a pre-trained neural binaural decoder which takes only directional coordinates as input. Simplified block diagrams for both methods are shown in \cref{fig:ml_descriptor}; the reader is directed to the original papers for details. A slightly different method is taken by \cite{satoSelfSupervisedLearningAudioVisual2022}, in which stereo audio captured with accompanying video is modified by either swapping the left and right channel, or using audio from a different video clip. The network then learns to spot said modifications, hence learning the spatial relationship between sound events and visual events.
 
 \begin{figure}[htb!]
-\caption{Block diagram of spatial description via \gls{dl} on downmixed audio \cite{yangUpmixingStyleTransfer2022}. $\oplus$ is the concatenation operator. In the 5-channel mixes A and B, stems are randomly panned.}
+\caption{Block diagrams of spatial description via \gls{dl}.}
 \label{fig:ml_descriptor}
 \resizebox{\linewidth}{!}{
 
@@ -714,26 +714,50 @@ Departing from the traditional \gls{dsp} spatial descriptors, a new family of de
   \tikzstyle{divider} = [thick, loosely dashed, black]
 
   \node[input] (stems) {Audio stems};
+  \node[] (cite_yang) [left of=stems] {\citeauthor{yangUpmixingStyleTransfer2022} \citeyear{yangUpmixingStyleTransfer2022}};
   \node[textrect] (audio5r) [right of=stems,yshift=1cm] {5-channel\\spectrogram A};
   \node[textrect] (audio5a) [below of=audio5r,yshift=2cm] {5-channel\\spectrogram B};
   \node[textrect] (bottleneck) [right of=audio5r] {Bottleneck\\neural network};
   \node[textrect] (downmix) [right of=audio5a] {Downmix to stereo};
-  \node[concat] (concat) [right of=downmix,xshift=-1.5cm] {};
-  \node[textrect] (upmix) [right of=concat,xshift=-1.5cm] {Upmix\\neural network};
-  \node[textrect,output] (latentvec) [right of=bottleneck,xshift=5cm] {Spatial description\\in latent space};
+  \node[textrect] (upmix) [right of=downmix] {Upmix\\neural network};
+  \node[textrect,output] (latentvec) [right of=bottleneck,xshift=4cm] {Spatial description\\in latent space};
   \node[textrect,output] (recon) [right of=upmix] {Reconstructed\\5-channel audio};
 
   \draw[arrow] (stems) to [out=0,in=180] (audio5r);
   \draw[arrow] (stems) to [out=0,in=180] (audio5a);
   \draw[arrow] (audio5r) to [out=0,in=180] (bottleneck);
   \draw[arrow] (audio5a) to [out=0,in=180] (downmix);
-  \draw[arrow] (downmix) to [out=0,in=180] (concat);
-  \draw[arrow] (concat) to [out=0,in=180] (upmix);
+
+  \draw[arrow] (downmix) to [out=0,in=180] (upmix);
+  \draw[arrow] (bottleneck) to [out=0,in=180] ([yshift=0.25cm]upmix.west);
   \draw[arrow] (upmix) to [out=0,in=180] (recon);
   \draw[arrow] (bottleneck) to [out=0,in=180] (latentvec);
-  \draw[arrow] (bottleneck) to [out=0,in=90] (concat);
-  \draw (concat.west) -- (concat.east);
-  \draw (concat.north) -- (concat.south);
+
+  \node[input] (mono) [below of=stems] {Mono source};
+  \node[] (cite_manocha) [left of=mono] {\citeauthor{manochaSAQAMSpatialAudio2022} \citeyear{manochaSpatializationQualityMetric2023}};
+  \node[textrect,stereo] (binrec) [right of=mono] {Binaural recording};
+  \node[textrect,minimum height=3cm] (network) [right of=binrec,yshift=-1cm] {Neural network};
+  \node[textrect,output] (bin_latentvec) [right of=network,xshift=4cm,yshift=1cm] {Spatial description\\in latent space};
+  \node[textrect] (adaptor) [right of=network,yshift=-1cm] {Adaptor};
+  \node[textrect] (pretrained) [below of=adaptor,yshift=2cm] {Pre-trained neural\\binaural synthesizer};
+  \node[input] (direction) [below of=pretrained,yshift=2cm] {Direction};
+  
+  \draw[arrow] (mono) to [out=0,in=180] (binrec);
+  \draw[arrow] (mono) to [out=270,in=180,looseness=0.7] ([yshift=-1cm]network.west);
+  \draw[arrow] (binrec) to ([yshift=1cm]network.west);
+  \draw[arrow] ([yshift=-0.2cm,xshift=0.1cm]binrec.east) to ([yshift=0.8cm]network.west);
+  \draw[arrow] ([yshift=1cm]network.east) to (bin_latentvec.west);
+  \draw[arrow] ([yshift=-1cm]network.east) to (adaptor.west);
+  \draw[arrow] (adaptor.south) to (pretrained.north);
+  \draw[arrow] (direction) to (pretrained);
+  \draw[arrow] (pretrained.west) to [out=180,in=270] (network.south);
+  
+  % Divider lines
+  \node[fit=(stems)(recon)](multichannel_path){}; 
+  \node[fit=(mono)(bin_latentvec)](binaural_path){};
+  \coordinate (d1w) at ($(multichannel_path.south west)!0.5!(binaural_path.north west)$);
+  \coordinate (d1e) at ($(multichannel_path.south east)!0.5!(binaural_path.north east)$);
+  \draw[divider] (d1w) to (d1e);
 
   \end{tikzpicture}
 }
