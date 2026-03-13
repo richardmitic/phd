@@ -1,4 +1,4 @@
-\documentclass[a4paper,draft]{article}
+\documentclass[a4paper]{article}
 
 \usepackage{csquotes}
 \usepackage{hyperref}
@@ -12,7 +12,7 @@
 
 %% References
 \usepackage[
-    style=numeric-comp,
+    style=ieee,
     backend=biber
 ]{biblatex}
 \addbibresource{../library.bib}
@@ -36,13 +36,9 @@
 
 
 \begin{abstract}
-\subfile{abstract}
+Spatial information is crucial to the listener's experience of music, and stereophonic recordings have long been the standard for capturing this spatiality. Recent advancements in computing, coupled with the availability of new, very large musical corpora, have created opportunities for large-scale quantitative analysis of the stereo image of recorded music. This licentiate thesis addresses a key gap in current research: direct analysis of raw music recordings to describe the stereo image. It will explore existing methods, assess their effectiveness, and demonstrate potential use cases for spatial analysis within audio reproduction, transmission and musical performance.
 \end{abstract}
 
-\pagebreak
-
-
-\listoffixmes
 
 \section*{Papers included in the thesis}
 \label{sec:papers_basic}
@@ -57,8 +53,6 @@
 \end{enumerate}
 \end{refsection}
 
-Test labels: \ref{paper:auxtrument},\ref{paper:dafx},\ref{paper:bth}, \ref{paper:slr}
-
 \pagebreak
 
 \section{Introduction}
@@ -69,7 +63,9 @@ Within the music community, it is common to speak about spatiality in a qualitat
 
 A typical use case for spatial descriptors that has emerged both in academia and industry is classification, and in particular, auto-tagging of musical genre/performer \cite{tzanetakisStereoPanningInformation2010,ziemerGoniometersArePowerful2023}. Such features can be used in music similarity and recommendation tasks \cite{gomezMusicSimilaritySystems2008,ziemerNovelRecordingStudio2020}. It has also been shown that stereo field classification of subsections within a larger work can act as a precursor to other tasks such as segmentation, audio enhancement, upmixing, and source separation \cite{barryMusicStructureSegmentation2007,harmaStereoAudioClassification2011,harmaClassificationTimefrequencyRegions2011}. The latter is very relevant to the audio distribution industry, which is currently experimenting with newer audio formats such as ambisonic and object-based audio. While these new formats offer exciting opportunities for both distributors and listeners, there remains a huge back-catalogue of stereophonic recordings that could benefit from a high-level understanding of their spatial content. 
 
-Historically, binaural audio (which is a subclass of stereo) has been of particular interest because its relevance to human hearing. Thus, it is extremely widely studied and the underlying fundamental techniques are well-established \cite{blauertTechnologyBinauralListening2013}. Yet there remains a gap in current research regarding direct analysis of raw music recordings, and in particular, describing the stereo image of said recordings at a high level. This thesis aims to fill that gap. It will firstly demonstrate use cases where the spatial analysis of stereo audio has the opportunity to solve real-world problems in audio transmission, dissemination, and reproduction. Accordingly, it will gather existing methods to describe stereo image and assess their abilities to detect the spatial aspects of a variety of musical audio sources.
+Historically, binaural audio (which is a subclass of stereo) has been of particular interest because its relevance to human hearing. Thus, it is extremely widely studied, and the underlying fundamental techniques are well-established \cite{blauertTechnologyBinauralListening2013}. Yet there remains a gap in current research regarding direct analysis of raw music recordings, and in particular, describing the stereo image of said recordings at a high level. This thesis aims to fill that gap. It will firstly demonstrate use cases where the spatial analysis of stereo audio has the opportunity to solve real-world problems in audio transmission, dissemination, and reproduction. Accordingly, it will gather existing methods to describe stereo image and assess their abilities to detect the spatial aspects of a variety of musical audio sources.
+
+\pagebreak
 
 \section{Research Questions}
 \label{sec:request_questions}
@@ -86,15 +82,6 @@ How do music producers use stereo field?
 \item How does the stereo image of a recording relate to real-world musical knowledge? \label{rq:usecase}
 \item What methods can be used to describe the stereo image of music recording? \label{rq:methods}
 \end{enumerate}
-
-\fxfatal{Expand notes of how each paper related to the research questions}
-Auxtrument paper - real use case where stereo field and reproduction thereof is important. One conclusion was that network bandwidth and latency was a major factor. Audio quality needed to remain high so that spatial qualities were preserved, but that resulted in high bandwidth. It would've been great to have a standard audio format that focused on keeping spatial information intact.
-
-BTH paper - Another real use case where stereo image profile can be used as a precursor to a different task. Speech was panned binaurally and mixed with music. Participants were asked to rate the pleasantness of each variant. The results showed that the default centre position was not always preferred, although more data would need to be collected to directly link the SIP with the best panning position. 
-
-SLR - gather all existing methods to generate a SIP. It breaks each one down into its fundamental components and draws links between them, finally culminating in a framework for creating new SIPs. It covers both oldskool DSP methods and newer \gls{dl} methods.
-
-DAFx paper - Compare several very relevant SIP methods on real music to see what they can detect. It assigns a score to each one denoting how well they are able to separate some tracks that were hand-picked to represent different used of stereo field.
 
 \section{State of the art}
 
@@ -221,7 +208,7 @@ April & Hopefully receive feedback for paper \ref{paper:bth}.\\
 1st May & Send application for licentiate.\\
 May & Write kappa.\\
 5th June & Finish course \enquote{Research Ethics I}.\\
-June 30th & End licentiate studies.\\
+30th June & End licentiate studies.\\
 September & Defend thesis.\\
 \end{tabular}
 
