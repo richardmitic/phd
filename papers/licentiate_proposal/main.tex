@@ -8,6 +8,7 @@
 \usepackage{amsmath}
 \usepackage{cleveref}
 \usepackage{fixme}
+\usepackage{enumitem}
 
 %% References
 \usepackage[
@@ -43,56 +44,20 @@
 
 \listoffixmes
 
-\section{Papers included in the thesis}
-\label{sec:papers}
+\section*{Papers included in the thesis}
+\label{sec:papers_basic}
 
+% refsection allows the full citations to be printed without appearing in the bibliography
 \begin{refsection}
-
-\subsection{Paper A}
-\label{paper:A}
-\fullcite{franklinDevelopmentWebBasedRealTime2025}
-\\\\
-\textbf{Status} -- published March 2025
-
-\subsection{Paper B}
-\label{paper:B}
-
-\fullcite{miticObjectiveComparisonPanning2025}
-\\\\
-\textbf{Status} -- published September 2025
-
-\subsection{Paper C}
-\label{paper:C}
-\fullcite{miticPerceptualEvaluationBinaurally2026}
-\\\\
-\textbf{Status}
-\begin{itemize}
-    \item Submitted to \href{https://dl.acm.org/journal/tomm}{ACM Transactions on Multimedia Computing Communications and Applications} October 2025 - \textbf{Rejected - not good fit for journal}.
-    \item Submitted to \href{https://acta-acustica.edpsciences.org/}{Acta Acustica} February 2025
-\end{itemize}
-% \\
-\textbf{Plan} -- Await peer review.
-
-\subsection{Paper D}
-\label{paper:D}
-\fullcite{miticSystematicLiteratureReview2026}
-\\\\
-\textbf{Status}
-\begin{itemize}
-\item Submitted to \href{https://asmp-eurasipjournals.springeropen.com/}{EURASIP Journal on Audio, Speech, and Music Processing} on 2025-12-16.
-\item Feedback received 2026-02-02. Changes required -- see below.
-\end{itemize}
-\textbf{Plan} -- Work through required changes. Deadline is 2026-04-03.
-\begin{itemize}
-    \item Update search results for the period between original search and submission.
-    \item Get a colleague to double-check a subset of the original screening.
-    \item Add more, smaller diagrams, and break up existing big diagrams.
-    \item Reorganize text to make relationship between discovered papers more obvious.
-    \item Minor clarifications and typos.
-\end{itemize}
-
-
+\begin{enumerate}[label=\textbf{\Alph*}]
+    \item \fullcite{franklinDevelopmentWebBasedRealTime2025} \label{paper:auxtrument}
+    \item \fullcite{miticObjectiveComparisonPanning2025}\label{paper:dafx}
+    \item \fullcite{miticPerceptualEvaluationBinaurally2026}\label{paper:bth}
+    \item \fullcite{miticSystematicLiteratureReview2026}\label{paper:slr}
+\end{enumerate}
 \end{refsection}
+
+Test labels: \ref{paper:auxtrument},\ref{paper:dafx},\ref{paper:bth}, \ref{paper:slr}
 
 \pagebreak
 
@@ -118,8 +83,8 @@ How do music producers use stereo field?
 \noindent This can be broken into several smaller problems:
 
 \begin{enumerate}
-\item How does the stereo image of a recording relate to real-world musical knowledge?
-\item What methods can be used to describe the stereo image of music recording?
+\item How does the stereo image of a recording relate to real-world musical knowledge? \label{rq:usecase}
+\item What methods can be used to describe the stereo image of music recording? \label{rq:methods}
 \end{enumerate}
 
 \fxfatal{Expand notes of how each paper related to the research questions}
@@ -130,7 +95,6 @@ BTH paper - Another real use case where stereo image profile can be used as a pr
 SLR - gather all existing methods to generate a SIP. It breaks each one down into its fundamental components and draws links between them, finally culminating in a framework for creating new SIPs. It covers both oldskool DSP methods and newer \gls{dl} methods.
 
 DAFx paper - Compare several very relevant SIP methods on real music to see what they can detect. It assigns a score to each one denoting how well they are able to separate some tracks that were hand-picked to represent different used of stereo field.
-
 
 \section{State of the art}
 
@@ -160,29 +124,110 @@ Even though the newer audio formats are being heavily pushed by big industry pla
 A common use case given in academia for calculating stereo features of individual tracks is music similarity detection and recommendation. However, the industry has generally not adopted these techniques, opting instead to use textural and contextual data for each track.
 
 
-\section{Research Methods}
-The papers mentioned in \cref{sec:papers} used (or will use) the following research methods:
+\section{Paper details}
+\label{sec:paper_details}
 
+% refsection allows the full citations to be printed without appearing in the bibliography
+\begin{refsection} 
+
+\subsection*{Paper \ref{paper:auxtrument}}
+
+\textbf{\citetitle{franklinDevelopmentWebBasedRealTime2025}}
+
+\subsubsection*{Status}
+Published March 2025
+
+\subsubsection*{Research methods}
+This paper presents a retrospective of a project to build a distributed audio performance over mobile networks. It follows the practice-based research methodology as defined by \citeauthorandnumber{candyPracticeBasedResearch2006}.
+
+\subsubsection*{Remaining work}
+None
+
+\subsubsection*{Results and conclusions}
+The paper documents a real use case where stereo field and reproduction thereof is of prime importance. One conclusion was that network reliability was a limiting factor of the audio performance, sometimes leading to a degraded spatial impression. Research question \ref{rq:usecase} is addressed -- Finding an adequate balance between audio spatial quality and network utilization would require tools to measure the stereo image.
+
+
+\subsection*{Paper \ref{paper:dafx}}
+
+\textbf{\citetitle{miticObjectiveComparisonPanning2025}}
+
+\subsubsection*{Status}
+Published September 2025
+
+\subsubsection*{Research methods}
+Several \gls{dsp} techniques for determining audio spatial features were performed on a small dataset that had predictable musical characteristics. The different techniques were compared using a new objective metric.
+
+\subsubsection*{Remaining work}
+None
+
+\subsubsection*{Results and conclusions}
+The paper revealed that although there are several \gls{dsp} techniques specifically designed for the extraction of recording and panning features, they are all limited in their own ways. One particular technique (\gls{spf} from \cite{tzanetakisStereoPanningFeatures2007}) was particularly promising as a candidate for use later in the doctoral phase of studies, and the others could be used with some modifications. Overall it highlighted the importance of choosing both a panning feature \gls{dsp} technique and a distance metric that are appropriate to the overarching task, thereby addressing research question \ref{rq:methods}.
+
+
+\subsection*{Paper \ref{paper:bth}}
+\textbf{\citetitle{miticPerceptualEvaluationBinaurally2026}}
+
+\subsubsection*{Status}
 \begin{itemize}
-    \item \textbf{\nameref{paper:A}}: Several \gls{dsp} techniques for determining audio spatial features were performed on a small dataset that had predictable musical characteristics. The different techniques were compared using a new objective metric.
-    \item \textbf{\nameref{paper:B}}: A perceptual test was used to determine listeners' reactions to carefully constructed audio stimuli. Standard statistical analysis was performed on the raw test results, and one particular \gls{dsp} technique (\gls{ph} \cite{gomezMusicSimilaritySystems2008} which was assessed in \nameref{paper:A}) was used to explain the perceptual results.
-    \item \textbf{\nameref{paper:C}}: Following on the small selection of \gls{dsp} techniques assessed in \nameref{paper:A}, a \gls{slr} following the \gls{prisma} standard was performed to gather all currently available methods for determining spatial features of stereophonic musical audio.
-    \item \textbf{\nameref{paper:D}}: Based on the results of the previous three papers, several types of \gls{sip} will be extracted from a very large dataset of recordings, and basic unsupervised machine-learning will be applied to find patterns within the \gls{sip} population.
+    \item Submitted to \href{https://dl.acm.org/journal/tomm}{ACM Transactions on Multimedia Computing Communications and Applications} October 2025. \textbf{Rejected - not good fit for journal}.
+    \item Submitted to \href{https://acta-acustica.edpsciences.org/}{Acta Acustica} February 2025.
 \end{itemize}
 
+\subsubsection*{Research methods}
+A perceptual test was used to determine listeners' reactions to carefully constructed audio stimuli. Standard statistical analysis was performed on the raw test results, and one particular \gls{dsp} technique assessed in paper \ref{paper:dafx} (\gls{ph} \cite{gomezMusicSimilaritySystems2008}) was used in an attempt to explain the perceptual results.
 
-\section{Preliminary results and conclusions}
+\subsubsection*{Remaining Work}
+Await peer review and address any comments that come up.
 
-\nameref{paper:A} revealed that although there are several \gls{dsp} techniques specifically designed for the extraction of recording and panning features, they are all limited in their own ways. One particular technique (\gls{spf} from \cite{tzanetakisStereoPanningFeatures2007}) was particularly promising as a candidate for use in \nameref{paper:D}, and the others could be used with some modifications. Overall it highlighted the importance of choosing both a panning feature \gls{dsp} technique and a distance metric that are appropriate to the overarching task.
+\subsubsection*{Results and conclusions}
+The paper concluded that when listeners are presented with voice overlayed on top of music, the best panning position for the voice was not always in the default centre position. The reasons for this were unclear due to a shortage of data, but the paper did demonstrate a real-world use of \gls{sip} extraction (using a modified algorithm trialled in paper \ref{paper:dafx}). Most relevant to the research question \ref{rq:usecase}, it revealed that an objective measurement of panning can show detail that is not easily discernable by listening, such as very slight panning away from the centre.
 
-\nameref{paper:B} concluded that when listeners are presented with voice overlayed on top of music, the best panning position for the voice was not always in the default centre position. The reasons for this were unclear due to a shortage of data, but the paper did demonstrate a real-world use of \gls{sip} extraction (using a algorithm trialed in \nameref{paper:A}). Most relevant to the research questions presented in \cref{sec:problem_statement}, it revealed that an objective measurement of panning can show detail that is not easily discernable by listening, such as very slight panning away from the centre.
 
-\nameref{paper:C} revealed several more techniques that can be used to extract panning features. Although, given the high number of studies that were assessed for the review, there were relatively few very-relevant ones. The \gls{slr} also revealed that while \gls{ml} has been used on spatial features in the past, both \textit{unsupervised} \gls{ml} and very large music corpora remain fairly unexplored.
+\subsection*{Paper \ref{paper:slr}}
+\textbf{\citetitle{miticSystematicLiteratureReview2026}}
+\subsubsection*{Status}
+\begin{itemize}
+\item Submitted to \href{https://asmp-eurasipjournals.springeropen.com/}{EURASIP Journal on Audio, Speech, and Music Processing} on 2025-12-16.
+\item Feedback received 2026-02-02. Changes required -- see below.
+\end{itemize}
 
-Overall the results so far have highlighted the known technique for extracting panning features from music, demonstrated the musical features that the major ones are able to reveal, and highlighted gaps in current research that \nameref{paper:D} aims to fill.
+\subsubsection*{Research methods}
+Following on from the small selection of \gls{dsp} techniques assessed in paper \ref{paper:dafx}, a \gls{slr} following the \gls{prisma} standard was performed to gather all currently available methods for determining spatial features of stereophonic musical audio.
+
+\subsubsection*{Remaining work}
+Work through required changes. Deadline is 2026-04-03.
+\begin{itemize}
+    \item Update search results for the period between original search and submission.
+    \item Get a colleague to double-check a subset of the original screening.
+    \item Add more, smaller diagrams, and break up existing big diagrams.
+    \item Reorganize text to make relationship between discovered papers more obvious.
+    \item Minor clarifications and typos.
+\end{itemize}
+
+\subsubsection*{Preliminary results and conclusions}
+Addressing research question \ref{rq:methods}, the review revealed several more techniques that can be used to make spatial descriptions of stereo music. Despite the high number of studies that were assessed, there were relatively few \enquote{very relevant} ones. The \gls{slr} also revealed that while \gls{ml}/\gls{dl} have been used on spatial features in the past, both \textit{unsupervised} \gls{ml} and very large music corpora remain fairly unexplored. It also details a framework for how to create a \gls{sip} algorithm that is useful for any given dataset and use case.
+
+\end{refsection}
+
 
 \section{Remaining work for licentiate}
-Initially there is a need to find a new publication venue for \nameref{paper:B}, and this work is already underway. \nameref{paper:D} therefore comprises the bulk of the remaining work. Firstly it involves setting up a system that can gather \glspl{sip} en-mass from real recorded music. Secondly there will be an exploratory phase where many of the standard unsupervised learning techniques will be attempted to discover which are suitable for \gls{sip} data. The results of the \gls{ml} will then need to be assessed in some manner. One option is to correlate them with some known music metadata to reveal which other features are linked to panning. Another option is to perform listening test in order to assess is the \gls{ml} worked as intended.
+The current timeline for 2026 is:
+\\\\
+\begin{tabular}{ll}
+25th March & Present licentiate proposal.\\
+31st March & Begin course \enquote{Research Ethics I}.\\
+3rd April & Submit version of paper \ref{paper:slr} with all comments addressed.\\
+April & Hopefully receive feedback for paper \ref{paper:bth}.\\
+1st May & Send application for licentiate.\\
+May & Write kappa.\\
+5th June & Finish course \enquote{Research Ethics I}.\\
+June 30th & End licentiate studies.\\
+September & Defend thesis.\\
+\end{tabular}
+
+\section{Continuation to doctoral studies}
+While the licentiate thesis gives the theoretical and practical basis for analysis of stereo image in music recordings, the doctoral section will concentrate on applying the knowledge gained to large musical datasets and real musical phenomena. In particular, the use of unsupervised and self-supervised learning on the spatial features of musical recordings will be investigated. Other unknowns that have arisen during the licentiate work could also be investigated. For example, it is unknown whether the public musical corpora are representative of professional music collections. It is also not known how much typical audio distortions like lossy compression affect the measurements of stereo field. In short, the doctoral thesis will solve real-world problems using techniques surfaced by the licentiate.
+
 
 \printglossaries
 
