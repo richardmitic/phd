@@ -107,6 +107,8 @@
 %% https://tex.stackexchange.com/questions/4302/prettiest-way-to-typeset-c-cplusplus
 \def\CC{{C\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\tiny\bf ++}}}
 
+\newcommand{\searchdate}{26\textsuperscript{th} February 2026}
+
 % There are a lot of quotes in this document so make the command shorter.
 \newcommand{\q}[1]{\enquote{#1}}
 
@@ -184,7 +186,7 @@
 
 \abstract{
 
-Recorded music contains a wealth of spatial information which is of interest for many types of audio research. Describing a recording's spatial features has been attempted in the past, but was limited in scope. Since then, the amount of recorded music available for research has exploded, and it is therefore pertinent to find descriptors of spatial features that can be used to analyse new datasets. To that end, a \gls{slr} was conducted in order to ascertain all existing methods to describe the spatial features of stereophonic musical audio. The Scopus, \gls{wos}, and \gls{ss} databases were searched on 30\textsuperscript{th} September 2024, and articles were deemed eligible if the method they described included any extraction of spatial information from a music audio signal. The spatial features in question were recorded, along with any downstream tasks they were applied to and audio datasets they were applied on. Links and similarities were drawn between studies to identify the core methods of describing stereo field. \nStudiesIncluded~articles were included, with \nStudiesIncludedVeryRelevant~of those deemed \q{very relevant}. The fundamental methods of extracting spatial information are detailed and a framework for creating a custom \gls{sip} is drawn up, followed by suggestions for future research. The review was limited by the substantial volume of literature to be assessed by a single reviewer, although this wide breadth served to mitigate bias by gathering at least one example of all existing \gls{sip} methods. The inconsistent application of terminology within the existing literature presented a significant challenge. The work was funded in part by \gls{kks}.
+Recorded music contains a wealth of spatial information which is of interest for many types of audio research. Describing a recording's spatial features has been attempted in the past, but was limited in scope. Since then, the amount of recorded music available for research has exploded, and it is therefore pertinent to find descriptors of spatial features that can be used to analyse new datasets. To that end, a \gls{slr} was conducted in order to ascertain all existing methods to describe the spatial features of stereophonic musical audio. The Scopus, \gls{wos}, and \gls{ss} databases were searched on \searchdate, and articles were deemed eligible if the method they described included any extraction of spatial information from a music audio signal. The spatial features in question were recorded, along with any downstream tasks they were applied to and audio datasets they were applied on. Links and similarities were drawn between studies to identify the core methods of describing stereo field. \nStudiesIncluded~articles were included, with \nStudiesIncludedVeryRelevant~of those deemed \q{very relevant}. The fundamental methods of extracting spatial information are detailed and a framework for creating a custom \gls{sip} is drawn up, followed by suggestions for future research. The review was limited by the substantial volume of literature to be assessed by a single reviewer, although this wide breadth served to mitigate bias by gathering at least one example of all existing \gls{sip} methods. The inconsistent application of terminology within the existing literature presented a significant challenge. The work was funded in part by \gls{kks}.
 }
 
 %%================================%%
@@ -232,7 +234,7 @@ This section defines all processes for performing the review, and discusses some
 
 \subsection{Search process}\label{sec:search_process}
 
-The review follows the \gls{pco} protocol \cite{pollockHowSystematicReview2018}. The population is defined as \q{music}, the context as \q{stereo}, and the outcome as \q{spatial information}. Since these terms and their synonyms are often not standardized, a list of negative search terms were also included to exclude some obvious false positives. Several very specific terms that were already known to the author were also included, and any article using those terms was included in the initial search result. The full lists of synonyms, specific terms, and negative terms used to form search queries, plus the search queries themselves can be found in appendix \ref{ap:search_terms}. The search was performed on 30\textsuperscript{th} September 2024.
+The review follows the \gls{pco} protocol \cite{pollockHowSystematicReview2018}. The population is defined as \q{music}, the context as \q{stereo}, and the outcome as \q{spatial information}. Since these terms and their synonyms are often not standardized, a list of negative search terms were also included to exclude some obvious false positives. Several very specific terms that were already known to the author were also included, and any article using those terms was included in the initial search result. The full lists of synonyms, specific terms, and negative terms used to form search queries, plus the search queries themselves can be found in appendix \ref{ap:search_terms}. The search was performed on \searchdate.
 
 
 \begin{table}[htbp]
@@ -386,6 +388,7 @@ Some studies presented edge cases during assessment. The following non-exhaustiv
 
 \subsection{Very Relevant Studies}
 \label{sec:very_relevant_studies}
+\fxerror{There were two new very relevant papers added in the updated search}
 
 This section will highlight the studies that are very relevant to the review's aim given in \cref{sec:new_aims}, summarize each study, and draw links between them. Generally speaking, very relevant tasks are those that relate to creating a high-level spatial description of a recording, or describing the spatial features of large musical corpora. The tasks deemed not very relevant are more concerned with low-level spatial features and often require the audio to be reconstructed or altered after analysis. A full list of downstream tasks can be found in appendix \ref{app:downstream_tasks}. In this \gls{slr} the \nStudiesIncludedVeryRelevant~studies deemed to be very relevant are those whose downstream task was at least one of \q{\gls{mir}}, \q{spatial analysis}, \q{musicology}, \q{psychoacoustics}, \q{visualization}, or \q{classification}. These studies tend to fall into tightly-related cohorts, often referencing each other.
 
