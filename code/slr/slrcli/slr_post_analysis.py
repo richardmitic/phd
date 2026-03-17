@@ -300,12 +300,16 @@ def hard_coded_numbers_of_papers() -> pd.Series:
 
 def latex_macros_for_flow_diagram(s: pd.Series) -> pd.Series:
     flattened = pd.Series()
+    preprints = hard_coded_numbers_of_papers()["preprints"]
     for k, v in s.items():
         if isinstance(v, Tuple):
             flattened[k] = v[0]
             flattened = pd.concat([flattened, v[1]])
         else:
             flattened[k] = v
+    
+    # This one is a bit of anomaly so just add it 
+    flattened["preprints"] = preprints
 
     return '\n'.join([latex_macro(latex_macro_name(k), v) for k,v in flattened.items()])
 
