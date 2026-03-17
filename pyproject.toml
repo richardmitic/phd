@@ -16,4 +16,5 @@ dependencies = [
     "scikit-learn",
     "statsmodels",
     "segno",
+    "typer",
 ]

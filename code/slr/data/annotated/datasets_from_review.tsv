@@ -1,0 +1,80 @@
+Name	acronym	reference	URL	Audio format	Notes	Size (number of music tracks)	Contains list of other datasets	Use	Multitrack	Stereo	Binaural	Availabilty of audio	Duration
+B&O Music for Archimedes	boma	bangolufsenMusicArchimedes1992,hansenMakingRecordingsSimulation1991	https://www.angelofarina.it/Public/Anecoic/Archimedes/CD-cover/Archimedes.htm	CD, 44.1kHz 16bit	Anechoic and semi-reverberant orchestra.	31		y		y	y	CD, commercial	1h
+University of Iowa Musical Instrument Samples	uiowamis	UniversityIowaMusical	https://theremin.music.uiowa.edu/mis.html	\thead[l]{wav 44.1kHz 16bit\\ or 96kHz 24bit}	Isolated notes, not musical compositions. $\approx 85%$ stereo.	? notracks		y		y		Download individual files	23h
+Bach10		duanMultipleFundamentalFrequency2010	http://music.cs.northwestern.edu/lab/research.php	wav 44.1kHz	Only Bach chorales.	? unclear		y				Contact author	? unclear
+ByTeDance paired ambisonic and binaural 	btpab	zhuAmbisonicBinaural2022	https://doi.org/10.5281/zenodo.7212782	wav 48kHz 16bit 	60s clips. Only 1 recording session.	49		y			y	Download	49m
+Demixing Secrets Database	dsd100	liutkus2016SignalSeparation2017	https://sigsep.github.io/datasets/dsd100.html	wav 44.1khz	Stems and downmixes, derived from \cite{MixingSecretsFree}	100		y	y	y		Download	7h
+Database for Automatic Spatial Audio Scene Classification in Binaural Recordings of Music	asascbrm	zielinskiDatabaseAutomaticSpatial2019	http://doi.org/10.5281/zenodo.2639058	wav 48kHz 24bit 	Synthesized binaural from other multitrack datasets. 30s clips.	5928		y			y	Download	11h
+Denon anechoic orchestral collection	daoc	variousAnechoicOrchestralMusic1988	https://www.discogs.com/release/8306193-Various-Anechoic-Orchestral-Music-Recording	CD, 44.1kHz 16bit	Anechoic orchestra	44		y		y		CD, commercial	25m
+FAIR-Play		gao25DVisualSound2019	https://github.com/facebookresearch/FAIR-Play	wav 48kHz 16bit 	Binaural. 10s clips. Only 1 recording room.	1871		y			y	Download	5h
+Free Music Archive	fma	defferrardFMADatasetMusic2017	https://github.com/mdeff/fma?tab=readme-ov-file	mp3 various bitrates	Real music. Huge variety. Contains common audio features and tags.	106574		y		y		Download	343d
+MedleyDB		bittnerMedleyDBMULTITRACKDATASET2014	https://medleydb.weebly.com/	wav 44.1kHz 16bit 	Stereo mix + dry and processed stems	132		y	y			Download request access	7h
+MedleyDB 2.0		bittnerMedleyDB20New2016	https://medleydb.weebly.com/	wav 44.1kHz 16bit	Real music. Mix of genres. Some instrumental, some vocal. More tracks have been added since publication.	330		y	y			Download request access	7h
+MUSDB18		rafiiMUSDB18CorpusMusic2017	https://doi.org/10.5281/zenodo.1117372	AAC 256kbps	Only stems. Derived from other datasets such as \cite{liutkus2016SignalSeparation2017,bittnerMedleyDBMULTITRACKDATASET2014}	150		y	y			Download	10h
+MUSDB18-HQ		rafiiMUSDB18HQUncompressedVersion2019	https://doi.org/10.5281/zenodo.3338373	wav 44.1kHz	Only stems. Derived from other datasets such as \cite{liutkus2016SignalSeparation2017,bittnerMedleyDBMULTITRACKDATASET2014}	150		y	y			Download	10h
+QUaero Audio SIgnals	quasi	fillonQUASIDatabaseMusical2012	https://adasp.telecom-paris.fr/resources/2012-03-12-quasi-database/	wav 44.1kHz	Mix of genres	11		y	y			Download request access	$\approx 30$m unclear
+Real World Computing	rwc	gotoDevelopmentRWCMusic2004,gotoRWCMusicDatabase2002,gotoRWCMusicDatabase2003,gotoRWCMusicDatabase2012	https://staff.aist.go.jp/m.goto/RWC-MDB/	CD, 44.1kHz 16bit	Multiple datasets each of a different genre	465		y		y		CD, contact admin	22h
+EBU Sound Quality Assessment Material	sqam	UsersHandbookEBU2008	https://qc.ebu.io/testmaterial/523/	FLAC 44.1kHz 16bit	Not all music, some stereo some mono.	10		y		y		Download	1h
+Slakh		manilowCuttingMusicSource2019	http://www.slakh.com/ https://zenodo.org/record/4599666	wav 44.1kHz	Mono stems. Synthesized from midi.	2100		y	y	y		Download	145h
+University of Rochester Multi-Modal Music Performance	urmp	liCreatingMultitrackClassical2019	https://labsites.rochester.edu/air/projects/URMP.html https://datadryad.org/dataset/doi:10.5061/dryad.ng3r749	wav 48kHz 24bit 	Anechoic classical music. Only stems.	44	y	y	y			Download	1h
+ccMixter		CcMixter	http://ccmixter.org/	Various mp3/wav	Real music in many genres. Some stereo, some stems. Vast, but some download links are broken.	$\approx 48000$ unclear		y	y	y		Download individual files	? unclear
+Anechoic Recording System for Symphony Orchestra	arsso	patynenAnechoicRecordingSystem2008	https://doi.org/10.3813/aaa.918104 https://research.cs.aalto.fi/acoustics/virtual-acoustics/research/acoustic-measurement-and-analysis/85-anechoic-recordings.html	mp3 192kbps 48kHz	Anechoic classical music. Only stems.	4		y	y			\thead[l]{\scalebox{.8}[1.0]{mp3: Download}\\\scalebox{.8}[1.0]{wav: Contact author}}	11m
+Recordings of Italian opera orchestra and soloists in a silent room	rioossr	dorazioRecordingsItalianOpera2016	https://acustica.ing.unibo.it/opera (dead) https://www.angelofarina.it/Public/Anecoic/Dorazio/	wav 48kHz 24bit	Ambisonic and channel-based versions	4		y				Download	5m
+Mixing Secrets for The Small Studio	msss	MixingSecretsFree	https://cambridge-mt.com/ms/mtk/	wav 44.1kHz 16/24bit 	Stems uncompressed. Example stereo mixes in mp3 only	625		y	y	y		Download individual tracks	40h
+Telefunken Studio Sessions	tss	MultitracksTelefunkenElektroakustik2022	https://www.telefunken-elektroakustik.com/multitracks/	wav 44.1kHz 16bit	Both live and studio sessions.	23		y	y			Download individual tracks	1.5h
+MTG Jamendo	mtgj	bogdanovMTGJamendoDatasetAutomatic2019	https://mtg.github.io/mtg-jamendo-dataset/	mp3 320kbps	Real music. Wide variety of genres, instruments, and moods.	55609	y	y		y		Download	157d
+MIDI and Audio Edited for Synchronous TRacks and Organization	maestro	hawthorneEnablingFactorizedPiano2019	https://magenta.tensorflow.org/datasets/maestro	wav 44.1/48kHz 16bit	Only classical piano	1276		y		y		Download	199h
+FiloSax		fosterFilosax2021,fosterFilosaxDatasetAnnotated2021	https://dave-foster.github.io/filosax/	wav 44.1kHz 24bit	Only jazz	48		y	y			Download request access	5h
+mobygratis		MobygratisFreeMoby2025	https://mobygratis.com/	wav 44.1kHz 24bit	Stereo stems and mixdowns. Multiple genres but only 1 artist.	499		y	y	y		Download individual tracks	35h
+BS. 1534-1 test database		ISO/IEC JTC1/SC29/WG11, “Report on the verification tests of MPEG-4 High Efficiency AAC,” ISO/IEC JTC1/SC29/WG11, N6009, October 2003.			Not public								
+DIRHA-English		only speech, ignore											
+Demixing Secret Dataset		duplicate, ignore											
+EBU SQAM		EBU - TECH 3253, “Sound Quality Assessment Material recordings for subjective tests,” 2008.			duplicate								
+FAIR-Play		duplicate, ignore											
+FUSS		S. Wisdom, H. Erdogan, D.P. Ellis, R. Serizel, N. Turpault, E. Fonseca, J. Salamon, P. Seetharaman, J.R. Hershey: What’s all the fuss about free universal sound separation data?, in ICASSP 2021–2021 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP), Jun 2021, Toronto/Virtual, Canada. IEEE, 2021, pp. 186–190.	https://zenodo.org/records/4012661	?	Synthetic. Created from sound events from freesound. Sound events, not necessarily music.								
+Hits in Spatial Audio playlist		not a real dataset, ripped from apple music, probably ignore											
+IOWA database of anechoic recordings of individual instruments playing single notes		duplicate, ignore											
+Iowa MIS		duplicate, ignore											
+LOCATA		H. W. Lo ̈llmann, C. Evers, A. Schmidt, H. Mellmann, H. Barfuss, P. A. Naylor, and W. Kellermann, “The locata challenge data corpus for acoustic source localization and tracking,” in 2018 IEEE 10th Sensor Array and Multichannel Signal Processing Workshop (SAM). IEEE, 2018, pp. 410–414.			only speech								
+MAPS		V. Emiya, R. Badeau, and B. David, “Multipitch estimation of piano sounds using a new probabilistic spectral smoothness principle,” IEEE Trans. Speech Audio Process., vol. 18, no. 6, pp. 1643–1654, Aug. 2010.			Available on request								
+METU SPARG AIR		H. H. Orhun Olgun, “METU SPARG Eigenmike em32 Acoustic Impulse Response Dataset v0.1.0 (Version 0.1.0) [Data set]. Zenodo. @ONLINE,” 2019			Impulse responses								
+MPEG-4 HE-AAC stereo verification test		ISO/IEC JTC1/SC29/WG11, “Report on the verification tests of MPEG-4 High Efficiency AAC,” ISO/IEC JTC1/SC29/WG11, N6009, October 2003.			Audio not publicly available								
+MPEG-H test signals		not linked in paper - probably ignore											
+MUSDB		duplicate - ignore											
+MUSIC		Hang Zhao, Chuang Gan, Andrew Rouditchenko, Carl Vondrick, Josh McDermott, and Antonio Torralba. The sound of pixels. In ECCV, 2018. 1, 2, 4, 6, 7	https://github.com/roudimit/MUSIC_dataset		Youtube video IDs								
+Many. Read the paper		split out below - ignore											
+NIGENS		Trowitzsch, I., J. Taghia, Y. Kashef, et al. The nigens general sound events database. arXiv preprint arXiv:1902.08314, 2019.			Sound events								
+PseudoMUSIC		not available, ignore											
+RØDE Ambisonic sound library		RØDE Ambisonic sound library, https://library.soundfield.com/			not music								
+SOFA		Z. Tang, J. D. Kanu, K. Hogan, and D. Manocha, “Regression and classification for direction-of-arrival estimation with convolutional recurrent neural networks,” arXiv preprint arXiv:1904.08452, 2019.			not music								
+STARSS22		A. Politis, K. Shimada, P. Sudarsanam, S. Adavanne, D. Krause, Y. Koyama, N. Takahashi, S. Takahashi, Y. Mitsufuji, and T. Virtanen, “STARSS22: A dataset of spatial recordings of real scenes with spatiotemporal annotations of sound events,” in Proc. 8th Detect. Classif. Acoust. Scenes Events Workshop (DCASE2022), 2022, pp. 125–129.	https://zenodo.org/records/6387880	wav 24kHz	FOA and mic array. Both 4 channels. Mostly sound events but some music. Real recordings.	unspecified, but small						Download	
+SiSEC		S. Araki, F. Nesta, E. Vincent, Z. Koldovsky`, G. Nolte, A. Ziehe, and A. Benichoux, “The 2011 signal separation evaluation campaign (sisec2011):-audio source separation,” in Int. Conf. Latent Variable Anal. Signal Sep. Springer, pp. 414–422, 2012.			Broken link								
+TIMIT		speech - ignore											
+TMIT		error - ignore											
+USAC verification test database		ISO/IEC JTC1/SC29/WG11, “USAC Verification Test Report N12232,” https: //www.ietf.org/lib/dt/documents/ LIAISON/file1298.doc, 2011.											
+Unified Speech and Audio Coding (USAC) Verification Test		duplicate											
+Unified Speech and Audio Coding (USAC) Verification Tests (VT)		duplicate											
+University of Iowa musical instruments database		duplicate											
+University of Rochester Multimodal Music Performance (URMP) database		duplicate - ignore											
+VCTK		speech - ignore											
+YT-All		not available											
+YT-Clean		not available											
+YT-Music		not available											
+YT-music		not available											
+anechoic chamber		error - ignore											
+dEchorate		https://zenodo.org/records/4626590			not music								
+http://research.spa.aalto.fi/publications/papers/hoac/					Too small								
+librispeech		speech - probably ignoe											
+low freq		error											
+many		error											
+many HRTFs. Read appendix.		hrtfs - probably ignore											
+mpeg		not public											
+mpeg dataset		not public											
+musdb18		duplicate											
+youtube-360		not public											
+													
+Added after review													
+Audio and Acoustic Signal Processing Technical Committee Online Resources 		OnlineResourcesIEEE	https://signalprocessingsociety.org/community-involvement/audio-and-acoustic-signal-processing/online-resources	-	List of other datasets	-	y					-	
+MusicNet		https://zenodo.org/record/5120004#.Yhxr0-jMJBA	https://zenodo.org/record/5120004#.Yhxr0-jMJBA	wav, mono	only classical	330							
+Gamelan Music Dataset	gmd	dewinurdiyahGamelanMusicDataset2023	https://zenodo.org/records/8333916	wav 44.1kHz 24bit	Only gamelan. Stereo stems and mixdowns, plus mono single notes	10			y	y		Download	
+Spheres		garcia-martinezSpheresDatasetMultitrack2025	https://zenodo.org/records/17347681	wav 48kHz, 16bit	Instruments are recorded separately but all mics are used for all instruments.	2		y	y	y		Download	52m
