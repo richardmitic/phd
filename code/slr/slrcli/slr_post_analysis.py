@@ -533,6 +533,23 @@ def post_process(
 
 
 @app.command()
+def included_studies(
+    raw_data_tsv: str,
+    included_tsv: str,
+    very_relevant_tsv: str,
+):
+    raw_data = pd.read_csv(raw_data_tsv, sep="\t")
+    cleaned = clean_raw_data(raw_data)
+    reasons = organize_rejection_reasons(cleaned)
+    print(reasons)
+
+    included = cleaned[cleaned.reject.isin(reasons["included"])]
+    very_relevant = cleaned[cleaned.reject.isin(reasons["included_very_relevant"])]
+
+    included.to_csv(included_tsv, sep='\t')
+    very_relevant.to_csv(very_relevant_tsv, sep='\t')
+
+@app.command()
 def random_sample(
     raw_data_tsv: str,
     sample_tsv: str,
