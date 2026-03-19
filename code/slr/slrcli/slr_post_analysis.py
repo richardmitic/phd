@@ -20,6 +20,8 @@ very_relevant_tasks = {
     "classification",
 }
 
+splitable_columns = ["audio model", "contents of signal", "specific datasets", "downstream task", "novel mechanism category", "spatial attributes", "spatial attribute novel/referenced/modified", "validation technique"]
+
 def explode_comma_separated_lists(arr: pd.Series) -> pd.Series:
     def split_into_set(l):
         if type(l) == str:
@@ -213,7 +215,7 @@ def latex_macro(name, val):
 
 def clean_raw_data(raw_data: pd.DataFrame) -> pd.DataFrame:
     cleaned = raw_data.copy(deep=True)
-    cleaned = split_lists(cleaned, ["audio model", "contents of signal", "specific datasets", "downstream task", "novel mechanism category", "spatial attributes", "spatial attribute novel/referenced/modified", "validation technique"])
+    cleaned = split_lists(cleaned, splitable_columns)
     cleaned = reject_maybes_too_old(cleaned)
     cleaned = correct_naming_inconsistances(cleaned)
     cleaned = clean_audio_model(cleaned)
@@ -537,17 +539,21 @@ def included_studies(
     raw_data_tsv: str,
     included_tsv: str,
     very_relevant_tsv: str,
+    with_non_music_tsv: str,
 ):
     raw_data = pd.read_csv(raw_data_tsv, sep="\t")
     cleaned = clean_raw_data(raw_data)
     reasons = organize_rejection_reasons(cleaned)
     print(reasons)
+    print(reasons["all"])
 
     included = cleaned[cleaned.reject.isin(reasons["included"])]
     very_relevant = cleaned[cleaned.reject.isin(reasons["included_very_relevant"])]
+    with_non_music = cleaned[cleaned.reject.isin(reasons["included"] | {'ta_not_music', 'full_not_music'})]
 
     included.to_csv(included_tsv, sep='\t')
     very_relevant.to_csv(very_relevant_tsv, sep='\t')
+    with_non_music.to_csv(with_non_music_tsv, sep='\t')
 
 @app.command()
 def random_sample(
