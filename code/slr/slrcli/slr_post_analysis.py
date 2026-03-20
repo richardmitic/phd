@@ -668,6 +668,7 @@ def write_datasets_table(
 def supplementary(
     all_data_tsv: Annotated[str, typer.Argument(help="File path of complete results, with or without annotations")],
     supplementary_data_csv: Annotated[str, typer.Argument(help="File path of output supplementary file")],
+    appendix_table_tex: Annotated[str, typer.Argument(help="File path of appendix table tex file")],
 ):
     df = pd.read_csv(all_data_tsv, sep='\t').fillna("")
     df_out = pd.DataFrame()
@@ -675,16 +676,25 @@ def supplementary(
         df_db = df[df.db == db]
         print(db, df_db.shape)
         df_out = pd.concat([df_out, df_db.sort_values("year", ascending=False)])
-    want_colums = [
-        "url",
-        "title",
-        "abstract",
-        "year",
-        "authors",
-        "source",
-        "DOI",
-        # "citation_count",
-        "db",
-        "db_id",
-    ]
-    df_out[want_colums].to_csv(supplementary_data_csv, index=None)
+    want_colums = pd.Series({
+        "url": "The \\gls{url} of the record within the database",
+        "title": "The title of the article",
+        "abstract": "The abstract of the article",
+        "year": "The year of publication",
+        "authors": "The authors of the article, in the raw format given by the search results",
+        "source": "The publication venue",
+        "DOI": "The \\gls{doi} of the article",
+        "db": "The name of the database from which the record was extracted",
+        "db_id": "The unique identifier within the database",
+    })
+    df_out[want_colums.index].to_csv(supplementary_data_csv, index=None)
+    explanation_table = pd.DataFrame({"Header": want_colums.index, "Explanation": want_colums.values})
+    
+    ltx = explanation_table.to_latex(
+        index=False,
+        formatters = {
+            "Header": lambda h: f"\\verb|{h}|"
+        }
+    ).replace("tabular", "tabularx").replace("{ll}", "{\\textwidth}{lX}")
+    Path(appendix_table_tex).write_text(ltx)
+

@@ -1052,28 +1052,12 @@ While the focus was on stereophonic recordings, many studies are equally relevan
 \section*{Declarations}
 
 \subsection*{Availability of data and materials}
-\fxerror{Make a new supplementary file with the latest search results}
 The dataset supporting the conclusions of this article is included as an additional file. It comprises a concatenation of search results from the three databases searched, in \gls{csv} format. The columns are:
 
 \begin{table}[htbp]
   \centering
   \caption{Explanation of fields in accompanying file of database search results}
-  \begin{tabularx}{\textwidth}{lX}
-    \toprule
-    Header & Explanation \\
-    \midrule
-    \verb|url|             & The \gls{url} of the record within the database \\
-    \verb|title|           & The title of the article \\
-    \verb|abstract|        & The abstract of the article \\
-    \verb|year|            & The year of publication \\
-    \verb|authors|         & The authors of the article, in the raw format given by the search results \\
-    \verb|source|          & The publication venue \\
-    \verb|DOI|             & The \gls{doi} of the article \\
-    \verb|citation_count|  & The number of citations recorded within the specific database \\
-    \verb|db|              & The name of the database from which the record was extracted \\
-    \verb|db_id|           & The unique ID number within the database \\
-    \bottomrule
-  \end{tabularx}
+  \input{search_results.tex}
   \label{tab:search_results_csv}
 \end{table}
 
