@@ -798,8 +798,8 @@ The diagram shows two separate paths for \gls{dsp} and \gls{ml} -based features 
 % \afterpage{\clearpage}
 
 \begin{figure}[t!]
-\caption{Flow diagram of a generic \gls{sip} algorithm. Doubled blocks denote steps where the same processing is applied to both stereo channels. Dashed blocks are optional. Only one of the major branches (\gls{dsp}/\gls{ml}) need be followed.}
-\label{fig:sip_general}
+\caption{Flow diagram of a generic \gls{sip} algorithm. Doubled blocks denote steps where the same processing is applied to both stereo channels. Dashed blocks are optional. The diagram is split between \gls{dsp} and \gls{ml} techniques, only one of which need be applied.}
+\label{fig:sip_general2}
 \bigskip
 \resizebox{\linewidth}{!}{
 
@@ -813,27 +813,29 @@ The diagram shows two separate paths for \gls{dsp} and \gls{ml} -based features 
   \tikzstyle{output} = [rounded corners]
   \tikzstyle{optional} = [densely dashed]
   \tikzstyle{path label} = [above, near start, outer sep = 1em]
+  \tikzstyle{divider} = [thick, loosely dashed, black]
+  \tikzstyle{section} = [rectangle, rounded corners=4, minimum width=1cm, draw=black, fill=white!90!black, label={[rotate=90, black]center:#1}, inner sep=0]
 
   % Audio input
   \node[input] (audio) {stereo signal};
 
   % DSP path
-  \node[textrect,stereo,list] (tfd) [below of=audio, xshift=-4cm] { \gls{tf} decomposition:
+  \node[textrect,stereo,list] (tfd) [right of=audio] { \gls{tf} decomposition:
     \begin{itemize}
       \item \gls{stft}
       \item Cochleagram
       \item \gls{pqmf} filterbank
     \end{itemize}
   };
-  \node[textrect,stereo,list,optional] (pg) [below of=tfd] {Perceptual frequency grouping:
+  \node[textrect,stereo,list,optional] (pg) [right of=tfd] {Perceptual frequency grouping:
     \begin{itemize}
       \item \gls{erb} bands
       \item Bark bands
       \item Low/mid/high
     \end{itemize}
   };
-  \node[textrect,stereo,optional] (pem) [below of=pg] {Peripheral ear model};
-  \node[textrect,list,text width=3.5cm] (bin) [below of=pem] {Bin-level spatial cues:
+  \node[textrect,stereo,optional] (pem) [right of=pg] {Peripheral ear model};
+  \node[textrect,list,text width=3.5cm] (bin) [right of=pem] {Bin-level spatial cues:
     \begin{itemize}
       \item \gls{ild}
       \item \gls{itd}/\gls{ipd}
@@ -841,7 +843,22 @@ The diagram shows two separate paths for \gls{dsp} and \gls{ml} -based features 
       \item \gls{pca}
       \item \gls{pi}
     \end{itemize}};
-  \node[textrect,output,list] (viz) [below of=bin, xshift=-4cm] {Visualizations:
+
+  \node[textrect,output,list] (ps) [below of=bin,yshift=-2cm] {Perceptual scalars:
+    \begin{itemize}
+      \item \gls{asw}
+      \item \gls{lev}
+    \end{itemize}
+  };
+  \node[textrect,output,list] (hld) [left of=ps] {High level descriptors:
+    \begin{itemize}
+      \item \gls{ph}
+      \item \gls{spf}
+      \item \gls{asf}
+      \item \gls{psf}
+    \end{itemize}
+  };
+  \node[textrect,output,list] (viz) [left of=hld] {Visualizations:
     \begin{itemize}
       \item Pangram
       \item Spatiogram
@@ -849,42 +866,38 @@ The diagram shows two separate paths for \gls{dsp} and \gls{ml} -based features 
       \item Pan map
     \end{itemize}
   };
-  \node[textrect,output,list] (ps) [below of=bin] {Perceptual scalars:
-    \begin{itemize}
-      \item \gls{asw}
-      \item \gls{lev}
-    \end{itemize}
-  };
-  \node[textrect,output,list] (hld) [below of=bin, xshift=5cm, text width=4cm] {High level descriptors:
-  \begin{minipage}[t]{2.1cm}
-    \vspace{0pt}
-    \begin{itemize}
-      \item \gls{ph}
-      \item \gls{spf}
-      \item \gls{asf}
-      \item \gls{psf}
-    \end{itemize}
-  \end{minipage}%
-  \begin{minipage}[t]{1.9cm}
-    \vspace{0pt}
-    \begin{itemize}
-      \item Latent vector
-    \end{itemize}
-  \end{minipage}
-  };
 
-  % ML path
-  \node[textrect,optional] (ms) [below of=audio, xshift=4cm] {Mid/side conversion};
-  \node[textrect,stereo,list] (fc) [below of=ms] {Feature creation:
+  % DSP edges
+  \draw[arrow] (audio) -- (tfd);
+  \draw[arrow] (tfd) -- (pg);
+  \draw[arrow] (pg) -- (pem);
+  \draw[arrow] (pem) -- (bin);
+  \draw[arrow] (bin.south) to [out=270,in=90,looseness=0.618] (viz.north);
+  \draw[arrow] (bin) -- (ps);
+  \draw[arrow] (bin.south) to [out=270,in=90] (hld.north);
+  \draw[arrow] (hld) -- (ps);
+
+
+  % % ML path
+  % Audio input
+  \node[input] (ml_audio) [below of=audio,yshift=-10cm] {stereo signal};
+
+  \node[textrect,list] (ms) [right of=ml_audio,text width=3.5cm] {Audio manipulations:
+    \begin{itemize}
+      \item Mid/side
+      \item Channel flip
+      \item Downmix
+    \end{itemize}
+  };
+  \node[textrect,stereo,list] (fc) [right of=ms] {Feature creation:
     \begin{itemize}
       \item \gls{stft}
       \item Mel spectrogram
-      \item Channel flip
     \end{itemize}
   };
-  \node[textrect,optional] (naf) [right of=fc] {Non-audio features};
+  \node[input,optional] (naf) [below of=ml_audio] {Non-audio features};
   \node[textrect] (ml) [below of=fc] {Model training};
-  \node[textrect,output,list] (mlout) [below of=ml, yshift=-4cm, xshift=2cm] {\gls{ml} output:
+  \node[textrect,output,list] (mlout) [below of=ml] {\gls{ml} output:
     \begin{itemize}
       \item Classification
       \item Generative output
@@ -892,37 +905,39 @@ The diagram shows two separate paths for \gls{dsp} and \gls{ml} -based features 
     \end{itemize}
   };
   \node[textrect] (loss) [right of=ml] {Loss function \\ (with spatial terms)};
-  \node[textrect] (obj) [right of=mlout, yshift=4cm, xshift=-1cm] {Objective evaluation \\ (optional spatial terms)};
-
-  % DSP edges
-  \draw[arrow] (audio) to [out=210,in=90] node [path label] {\gls{dsp}} (tfd);
-  \draw[arrow] (tfd) -- (pg);
-  \draw[arrow] (pg) -- (pem);
-  \draw[arrow] (pem) -- (bin);
-  \draw[arrow] (bin) to [out=180,in=90] (viz.north);
-  \draw[arrow] (bin) -- (ps);
-  \draw[arrow] (bin) to [out=0,in=90] ($(hld.north west)!0.5!(hld.north)$);
-  \draw[arrow] (hld) -- (ps);
+  \node[textrect] (obj) [right of=mlout] {Objective evaluation \\ (optional spatial terms)};
+  \node[textrect,output,list] (latentvec) [below of=ml,xshift=-4cm] {High-level descriptors: \begin{itemize} \item Latent vector \end{itemize}};
 
   % ML edges
-  \draw[arrow] (audio) to [out=330,in=90] node [path label] {\gls{ml}} (ms);
+  \draw[arrow] (ml_audio) -- (ms);
   \draw[arrow] (ms) -- (fc);
-  \draw[arrow] (fc) -- (ml);
-  \draw[arrow] (naf.south) to [out=270,in=90] ($(ml.north)!0.5!(ml.north east)$);
-  \draw[arrow] (ml) to [out=235,in=90] ($(hld.north)!0.5!(hld.north east)$);
-  \draw[arrow] (ml) to [out=305,in=90] (mlout.north);
+  \draw[arrow] (fc.south) to [out=270,in=90] (ml.north);
+  \draw[arrow] (naf) to (ml);
+  \draw[arrow] (ml.south) -- (mlout.north);
+  \draw[arrow] ($(ml.south west)!0.5!(ml.south)$) to [out=270,in=90] (latentvec.north);
   \draw[arrow] (ml.north east) to [out=45,in=135] (loss.north);
   \draw[arrow] (loss.south) to [out=225,in=-45] (ml.south east);
-  \draw[arrow] (mlout.east) to [out=0,in=270] (obj.south);
-  \draw[arrow] (obj.north) to [out=90,in=-45] ([xshift=-1em]ml.south east);
+  \draw[arrow] (mlout.east) -- (obj.west);
+  
+  % Nodes around each individual graph
+  \node[fit=(audio)(ps)(bin)(tfd)](dsp_graph){}; 
+  \node[fit=(ml_audio)(ms)(latentvec)(mlout)(obj)](ml_graph){};
+  
+  % Divider line between graphs
+  \coordinate (d1w) at ($(dsp_graph.south west)!0.5!(ml_graph.north-|dsp_graph.west)$);
+  \coordinate (d1e) at ($(dsp_graph.south east)!0.5!(ml_graph.north-|dsp_graph.east)$);
+  \draw[divider] (d1w) to (d1e);
 
-  % High level descriptor divider line
-  \draw[dotted, thick] ([yshift=-1.8em]hld.north) -- (hld.south) {};
-
+  % Graph labels
+  \coordinate (dsp_graph_west) at ([xshift=-1cm]dsp_graph.west);
+  \coordinate (ml_graph_west) at (ml_graph.west-|dsp_graph_west);
+  \node[section={\gls{dsp}}, fit={(dsp_graph.south) (dsp_graph.north)}] (dsp_label) at (dsp_graph_west) {};
+  \node[section={\gls{ml}}, fit={(ml_graph.south) (ml_graph.north)}] (ml_label) at (ml_graph_west) {};
   \end{tikzpicture}
 }
 
 \end{figure}
+
 
 Although not shown on the diagram, it is important to choose spatial features that are relevant for the type of input audio and the intended output features. For example, if the input is standard stereophonic music and the output is intended to convey amplitude panning, then all phase-based spatial cues can be eliminated. However, if the output is intended to show \gls{lev} (even given the same stereophonic input), then phase cues cannot be eliminated. If the input audio is binaural, both phase and amplitude differences are relevant, but the frequency bands in which they are relevant differ depending on the intended output. E.g. \gls{doa} only requires phase below approximately 1500Hz \cite{morinagaEvaluationMethodCoded}, but other tasks should follow a binaural hearing model with more complex frequency weighting \cite{schaferExtensionPEAQMeasure2013,nowakQualityAssessmentSpherical2019}.
 
