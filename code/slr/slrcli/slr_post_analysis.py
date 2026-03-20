@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
-from typing import Dict, List, Tuple, Set
-from numpy.typing import NDArray
+from typing import Dict, List, Tuple, Set, Annotated
 import ast
 from pathlib import Path
 from jupyter_tikz import TexFragment
@@ -664,3 +663,28 @@ def write_datasets_table(
         .replace('\\end{tabular}', '\\end{tabularx}')
 
     Path(latex_out).write_text(ltx)
+
+@app.command()
+def supplementary(
+    all_data_tsv: Annotated[str, typer.Argument(help="File path of complete results, with or without annotations")],
+    supplementary_data_csv: Annotated[str, typer.Argument(help="File path of output supplementary file")],
+):
+    df = pd.read_csv(all_data_tsv, sep='\t').fillna("")
+    df_out = pd.DataFrame()
+    for db in ['scopus', 'web_of_science', 'semantic_scholar']:
+        df_db = df[df.db == db]
+        print(db, df_db.shape)
+        df_out = pd.concat([df_out, df_db.sort_values("year", ascending=False)])
+    want_colums = [
+        "url",
+        "title",
+        "abstract",
+        "year",
+        "authors",
+        "source",
+        "DOI",
+        # "citation_count",
+        "db",
+        "db_id",
+    ]
+    df_out[want_colums].to_csv(supplementary_data_csv, index=None)
