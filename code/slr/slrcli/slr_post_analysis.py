@@ -293,9 +293,9 @@ def calculate_inclusion_ratios(
 def hard_coded_numbers_of_papers() -> pd.Series:
     return pd.Series({
         "followed_references": 15,
-        "recommendation_service": 5,
+        "recommendation_service": 4,
         "peers": 5,
-        "preprints": 9, # FIXME: Check that the number of preprints is correct
+        "preprints": 14,
     })
 
 
