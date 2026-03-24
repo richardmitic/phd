@@ -57,6 +57,7 @@
 \usepackage{setspace}
 \usepackage{siunitx}
 \usepackage{afterpage}
+\usepackage{mwe}
 \usepackage{tikz}
 \usetikzlibrary{positioning}
 \usetikzlibrary{arrows}
@@ -112,6 +113,9 @@
 % There are a lot of quotes in this document so make the command shorter.
 \newcommand{\q}[1]{\enquote{#1}}
 
+% Command to do a single cite by author and year. Most citations are numbers.
+\newcommand{\citeauthorandyear}[1]{\citeauthor{#1}, \citeyear{#1}}
+
 %% Acronyms
 \usepackage[automake]{glossaries-extra}
 \setabbreviationstyle[acronym]{long-short}
@@ -148,6 +152,31 @@
     showstringspaces=false,
     keywordstyle=\color{deepblue},
     stringstyle=\color{deepgreen},
+}
+
+%% Shared tikz styles
+\tikzstyle{textrect} = [rectangle, minimum width=3cm, minimum height=1cm, draw=black, fill=white, align=center]
+\tikzstyle{list} = [text depth=2.5cm, minimum height=3cm, text width=3cm, align=left]
+\tikzstyle{input} = [rounded rectangle, minimum width=3cm, minimum height=1cm, draw=black]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+\tikzstyle{stereo} = [copy shadow={shadow xshift=0.1cm,shadow yshift=-0.1cm}]
+\tikzstyle{stereoarrow} = [thick,->,>=stealth,double]
+\tikzstyle{output} = [rounded corners]
+\tikzstyle{optional} = [densely dashed]
+\tikzstyle{divider} = [thick, loosely dashed, black]
+\tikzstyle{group} = [draw=red]
+\tikzstyle{delta} = [circle, minimum width=1cm, minimum height=1cm, draw=black, fill=white, align=center]
+\tikzset{
+  section/.style 2 args = {
+    rectangle,
+    rounded corners=4,
+    minimum width=1cm,
+    draw=black,
+    fill=white!90!black,
+    inner sep=0,
+    label={[rotate=90, black, align=center]center:#1}, 
+    fit={(#2.south) (#2.north)}, 
+  }
 }
 
 \begin{document}
@@ -433,92 +462,92 @@ Another common family of cues is \gls{iacc} \cite{choiObjectiveMeasurementPercei
 
 In the classical perceptual model of directional hearing it is accepted that \gls{ipd} is only relevant for frequencies under 1500Hz \cite{morinagaEvaluationMethodCoded,iso-11172-3:mpeg_audio}. However, there are several examples in the literature of \gls{ipd} for all frequency bands being treated equally \cite{prestiVisualizationManipulationStereophonic2014,tardieuProductionEffectAudio2011,hernandez-olivanInterauralTimeDifference2024}. One reason for this is that while the directionality of a single narrowband source cannot be determined by a human using phase differences above 1500Hz, reverberant or decorrelated sources often result in a broadband mixture of phase differences \cite{razzaqAdvancedDSPAlgorithm2016}.
 
-Importantly, there are various ways to calculate all these parameters, and \cite{thaleiserBinauralProjectionMultichannelWiener2023} even notes that different definitions result in binaural/spatial cues with different underlying properties, hence subject to variation from different influences. For example \cite{chenSpatialParametersAudio2010,chenMultimediaApplicationSpatial2010} both use the term \gls{ild} but calculate it the time and \glsxtrlong{tf} domains respectively. For an excellent overview of several classic methods for calculating \gls{ild}, \gls{itd}, and \gls{iacc} the reader is directed to \cite{supperOnsetGuidedSpatialAnalyser2005}. 
+Importantly, there are various ways to calculate all these parameters, and \cite{thaleiserBinauralProjectionMultichannelWiener2023} even notes that different definitions result in binaural/spatial cues with different underlying properties, hence subject to variation from different influences. For example \cite{chenSpatialParametersAudio2010,chenMultimediaApplicationSpatial2010} both use the term \gls{ild} but calculate it the time and \glsxtrlong{tf} domains respectively. For an excellent overview of several classic methods for calculating \gls{ild}, \gls{itd}, and \gls{iacc} the reader is directed to \cite{supperOnsetGuidedSpatialAnalyser2005}, and block diagrams showing some generic methods are shown in \cref{fig:spatial_cues}. 
 
-A block diagram showing some common methods to calculate spatial cues is shown in \cref{fig:spatial_cues}. As a rule of thumb, it is advisable that when using any binaural or spatial cue for research, the author should preferably state an exact mathematical definition directly in the text, otherwise referring to a specific definition from another publication. In particular, it is advised that authors should use \q{interaural} terms for binaural audio only, opting for \q{inter-channel} in other cases.
+As a rule of thumb, it is advisable that when using any binaural or spatial cue for research, the author should preferably state an exact mathematical definition directly in the text, otherwise referring to a specific definition from another publication. In particular, it is advised that authors should use \q{interaural} terms for binaural audio only, opting for \q{inter-channel} in other cases.
 
 \begin{figure}[tbh!]
-\caption{Block diagrams of common spatial cues}
+\caption{Block diagrams of common spatial cues. $\Delta$ represents the inter-channel difference. $\|$ and $\angle$ represent the magnitude and phase components of the \gls{stft} respectively.}
 \label{fig:spatial_cues}
 \resizebox{\linewidth}{!}{
 
   \begin{tikzpicture}[>=latex, node distance=4cm]
 
-  \tikzstyle{textrect} = [rectangle, minimum width=3cm, minimum height=1cm, draw=black, fill=white, align=center]
-  \tikzstyle{delta} = [circle, minimum width=1cm, minimum height=1cm, draw=black, fill=white, align=center]
   \tikzstyle{grouprect} = [rectangle, draw=black, align=center]
-  \tikzstyle{list} = [text depth=2.5cm, minimum height=3cm, text width=3cm, align=left]
-  \tikzstyle{input} = [rounded rectangle, minimum width=3cm, minimum height=1cm, draw=black]
-  \tikzstyle{arrow} = [thick,->,>=stealth]
-  \tikzstyle{stereoarrow} = [thick,->,>=stealth,double]
-  \tikzstyle{stereo} = [copy shadow={shadow xshift=0.1cm,shadow yshift=-0.1cm}]
-  \tikzstyle{output} = [rounded corners]
-  \tikzstyle{optional} = [densely dashed]
-  \tikzstyle{path label} = [above, near start, outer sep = 1em]
 
-  % Common
-  \node[input] (audio) {stereo signal};
-  \node[textrect,stereo] (subband) [right of=audio,yshift=2cm] {subband\\filtering};
+  \pgfmathsetmacro{\sep}{1.5cm}
+  \pgfmathsetmacro{\upup}{1.5*\sep}
+  \pgfmathsetmacro{\up}{0.5*\sep}
+  \pgfmathsetmacro{\down}{-0.5*\sep}
+  \pgfmathsetmacro{\downdown}{-1.5*\sep}
+
+  % Time domain
+  \node[input] (audio) {Stereo audio};
+  \node[textrect,stereo] (subband) [right of=audio] {subband\\filtering};
   \node[textrect,stereo] (windowing) [right of=subband] {time windowing};
   \draw[arrow] (audio) to (subband.west);
   \draw[arrow] (subband) to (windowing);
-  % \node[fit=(audio)(subband)(windowing)](common){};
-  % \node[fit=(subband)(windowing)](common_time_domain){};
-  \node[textrect,stereo] (stft) [below of=windowing,yshift=-0.5cm] {\glsxtrshort{stft}};
-  \draw[arrow] (audio) to (stft.west);
-
-  % STFT
-  \node[textrect,stereo] (car2pol) [right of=stft] {Polar\\coordinates};
-  \node[delta] (stft_amp_delta) [right of=car2pol,yshift=0.7cm,xshift=-1cm] {$\Delta$};
-  \node[delta] (stft_phase_delta) [right of=car2pol,yshift=-0.7cm,xshift=-1cm] {$\Delta$};
-  \node[textrect,output] (stft_ild) [right of=stft_amp_delta,xshift=-1cm] {\gls{ild}};
-  \node[textrect,output] (stft_ipd) [right of=stft_phase_delta,xshift=-1cm] {\gls{ipd}};
-  \draw[arrow] (stft) to (car2pol);
-  \draw[arrow] (car2pol) to node[above] {$\|$} (stft_amp_delta.west);
-  \draw[arrow] (car2pol) to node[below] {$\angle$} (stft_phase_delta.west);
-  \draw[arrow] (stft_amp_delta) to (stft_ild);
-  \draw[arrow] (stft_phase_delta) to (stft_ipd);
 
   % ILD
-  \node[textrect,stereo] (amp) [right of=windowing,yshift=1.8cm] {amplitude\\detection};
+  \node[textrect,stereo] (amp) [right of=windowing,yshift=\upup] {amplitude\\detection};
   \node[delta] (ild_delta) [right of=amp,xshift=-1cm] {$\Delta$};
   \node[textrect,output] (ild) [right of=ild_delta,xshift=-1cm] {\gls{ild}};
-  \draw[stereoarrow] (amp) to (ild_delta);
+  \draw[arrow] (amp) to (ild_delta);
   \draw[arrow] (ild_delta) to (ild);
-  \node[fit=(amp)(ild_delta)(ild)](ild_path){};
   
   % IPD
-  \node[textrect,stereo] (phase) [below of=amp,yshift=2.7cm] {phase\\detection};
+  \node[textrect,stereo] (phase) [right of=windowing,yshift=\up] {phase\\detection};
   \node[delta] (ipd_delta) [right of=phase,xshift=-1cm] {$\Delta$};
   \node[textrect,output] (ipd) [right of=ipd_delta,xshift=-1cm] {\gls{ipd}};
   \draw[arrow] (phase) to (ipd_delta);
   \draw[arrow] (ipd_delta) to (ipd);
-  \node[fit=(phase)(ipd_delta)(ipd)](ipd_path){};
     
   % ITD
-  \node[textrect,stereo] (transients) [below of=phase,yshift=2.7cm] {transient\\detection};
+  \node[textrect,stereo] (transients) [right of=windowing,yshift=\down] {transient\\detection};
   \node[delta] (itd_delta) [right of=transients,xshift=-1cm] {$\Delta$};
   \node[textrect,output] (itd) [right of=itd_delta,xshift=-1cm] {\gls{itd}};
   \draw[arrow] (transients) to (itd_delta);
   \draw[arrow] (itd_delta) to (itd);
-  \node[fit=(transients)(itd_delta)(itd)](itd_path){};
 
   % IACC
-  \node[textrect,stereo] (xcorr) [below of=transients,yshift=2.7cm] {cross-correlation};
-  \node[textrect,output] (correlogram) [right of=xcorr,xshift=2cm] {correlogram};
-  \node[textrect] (peak) [right of=correlogram] {find peak};
-  \draw[arrow] (xcorr) to (correlogram);
-  \draw[arrow] (correlogram) to (peak);
-  \node[fit=(xcorr)(correlogram)(peak)](iacc_path){};
+  \node[textrect] (iacc) [right of=windowing,yshift=\downdown] {cross-correlation};
+  \node[textrect,output] (correlogram) [right of=iacc,xshift=2cm] {correlogram};
+  \draw[arrow] (iacc) to (correlogram);
 
   % ILD edges
-  \draw[arrow] (windowing.east) to (ild_path.west);
-  \draw[arrow] (windowing.east) to (itd_path.west);
-  \draw[arrow] (windowing.east) to (ipd_path.west);
-  \draw[arrow] (windowing.east) to (iacc_path.west);
+  \draw[arrow] (windowing.east) [out=0,in=180] to (amp.west);
+  \draw[arrow] (windowing.east) [out=0,in=180] to (phase.west);
+  \draw[arrow] (windowing.east) [out=0,in=180] to (transients.west);
+  \draw[arrow] (windowing.east) [out=0,in=180] to (iacc.west);
   \draw[arrow] (ipd) to (itd);
-  \draw[arrow] (peak.north) to [out=90,in=0] (itd.east);
-  \node[fit=(ild)(ipd)(itd)(correlogram),grouprect,output,dashed](outputs) {};
+  \draw[arrow] (correlogram) to (itd);
+
+  %STFT
+  \node[input] (audio_stft) [below of=audio,yshift=-2cm] {Stereo audio};
+  \node[textrect,stereo] (stft) [right of=audio_stft,xshift=4cm] {\glsxtrshort{stft}};
+  \node[textrect,stereo] (car2pol) [right of=stft] {cartesian\\ to polar};
+  \node[delta] (stft_amp_delta) [right of=car2pol,yshift=\up,xshift=-1cm] {$\Delta$};
+  \node[delta] (stft_phase_delta) [right of=car2pol,yshift=\down,xshift=-1cm] {$\Delta$};
+  \node[textrect,output] (stft_ild) [right of=stft_amp_delta,xshift=-1cm] {\gls{ild}};
+  \node[textrect,output] (stft_ipd) [right of=stft_phase_delta,xshift=-1cm] {\gls{ipd}};
+  \node[textrect,output] (stft_itd) [right of=stft_phase_delta,xshift=-1cm,yshift=-\sep] {\gls{itd}};
+  \draw[arrow] (audio_stft) to (stft);
+  \draw[arrow] (stft) to (car2pol);
+  \draw[arrow] (car2pol.east) to [out=0,in=180] node[above,xshift=-0.1cm] {$\|$} (stft_amp_delta.west);
+  \draw[arrow] (car2pol.east) to [out=0,in=180] node[below,xshift=-0.1cm] {$\angle$} (stft_phase_delta.west);
+  \draw[arrow] (stft_amp_delta) to (stft_ild);
+  \draw[arrow] (stft_phase_delta) to (stft_ipd);
+  \draw[arrow] (stft_ipd) to (stft_itd);
+
+  \node[group, fit=(audio)(amp)(iacc)(correlogram)(ild)] (timedomain) {};
+  \node[group, fit=(audio_stft)(stft_ild)(stft_ipd)(stft_itd)] (freqdomain) {};
+
+  \node[section={Time domain}{timedomain}] at ([xshift=-1cm]timedomain.west) {};
+  \node[section={Frequency\\domain}{freqdomain}] at ([xshift=-1cm]freqdomain.west) {};
+
+  \coordinate (d1w) at ($(timedomain.south west)!0.5!(freqdomain.north west)$);
+  \coordinate (d1e) at (d1w -| timedomain.east);
+  \draw[divider] (d1w) to (d1e);
 
   \end{tikzpicture}
 }
@@ -531,35 +560,36 @@ A block diagram showing some common methods to calculate spatial cues is shown i
 
 Another cohort of algorithms is dedicated to estimating the panning that has been applied to monophonic stems in a stereo mix. Those related to amplitude panning differ from the binaural \gls{ild} in that they account for a standard signal model in which the amplitude of the two channels follow the \q{energy-preserving panning law} whereby the sum of the squared channel gains is 1. A formal mathematical formulation is given in \cite{avendanoFrequencyDomainTechniques2002,avendanoFrequencydomainSourceIdentification2003,avendanoFrequencydomainApproachMultichannel2004} under the name \glsxtrfull{pi}, and \cite{breebaartMultiLoudspeakerPlaybackStereo2007,cobosSingingVoiceSeparation2008,drossosStereoGoesMobile2012} use the same technique unaltered. Similar formulations are found under multiple names: \q{panning parameters} \cite{hansenEstimationFundamentalFrequencies2019,defreinRemedyingSoundSource2020,defreinReformulatingBinaryMasking2020}, \q{\glsxtrlong{sps}} \cite{tzanetakisStereoPanningFeatures2007}, \q{pangram} \cite{harmaSpatialDecompositionTimefrequency2004}, \q{azimugram} \cite{barryMusicStructureSegmentation2007,sofianosEffectiveSingingVoice2010}, \q{amplitude panning factors} \cite{fallerMultipleloudspeakerPlaybackStereo2006}, \q{pan map} \cite{cobosStereoAudioSource2008}, \q{pan \gls{tff}} \cite{razzaqAdvancedDSPAlgorithm2016}, \q{mixing parameters} \cite{woodruffRemixingStereoMusic2006,woodruffUsingPitchAmplitude2006}, and \q{panning coefficients}\footnote{Note that \cite{gomezMusicSimilaritySystems2008,guausAudioContentProcessing2009} also use the term \q{panning coefficients} to describe a higher-level panning descriptor derived from a \gls{ph} (see \cref{sec:very_relevant_studies}). This use of the term does not describe the same concept as the ones listed above.} \cite{liUnsupervisedAdaptiveFiltering2005,chunFrequencydependentAmplitudePanning2016,miethObjectiveEvaluationTechniques2017,cabanas-moleroMusicDemixingMachine2023}.
 
-While all the aforementioned parameters have the intention of estimating the panning that was applied to a mono stem, the exact mathematical methods varies tremendously; Interested readers are directed to the original studies, although as an example, a block diagram for \gls{sps} \cite{tzanetakisStereoPanningFeatures2007} is shown in \cref{fig:sps}. 
+While all the aforementioned parameters have the intention of estimating the panning that was applied to a mono stem, the exact mathematical methods varies tremendously; Interested readers are directed to the original studies, although as an example, a block diagram for \gls{sps} \cite{tzanetakisStereoPanningFeatures2007} is shown in \cref{fig:sps}. Note that unlike the frequency-domain spatial cues shown in \cref{fig:spatial_cues}, the stereo spectrogram is not converted to magnitude and phase components, but instead is processed by the complex functions \q{Channel similarity} and \q{Partial similarity}.
 
 \begin{figure}[htb!]
-\caption{Block diagram of \gls{sps}}
+\caption{Block diagram of \gls{sps} \cite{tzanetakisStereoPanningFeatures2007}.}
 \label{fig:sps}
+\bigskip
 \resizebox{\linewidth}{!}{
 
   \begin{tikzpicture}[>=latex, node distance=4cm]
 
-  \tikzstyle{textrect} = [rectangle, minimum width=3cm, minimum height=1cm, draw=black, fill=white, align=center]
-  \tikzstyle{grouprect} = [rectangle, draw=black, align=center]
-  \tikzstyle{list} = [text depth=2.5cm, minimum height=3cm, text width=3cm, align=left]
-  \tikzstyle{input} = [rounded rectangle, minimum width=3cm, minimum height=1cm, draw=black]
-  \tikzstyle{arrow} = [thick,->,>=stealth]
-  \tikzstyle{stereo} = [copy shadow={shadow xshift=0.1cm,shadow yshift=-0.1cm}]
-  \tikzstyle{output} = [rounded corners]
-  \tikzstyle{optional} = [densely dashed]
-  \tikzstyle{path label} = [above, near start, outer sep = 1em]
+  \pgfmathsetmacro{\sep}{1.5cm}
 
-  \node[input] (audio) {stereo signal};
+  \node[input] (audio) {Stereo audio};
   \node[textrect,stereo] (stft) [right of=audio] {\glsxtrshort{stft}};
-  \node[textrect] (similarity) [right of=stft, yshift=1cm] {Channel similarity};
-  \node[textrect] (ambiguity) [below of=similarity, yshift=2cm] {Directional\\ambiguity\\resoultion};
-  \node[textrect,output] (sps) [right of=stft,xshift=4cm] {\gls{sps}};
+  \node[textrect] (similarity) [right of=stft, yshift=\sep] {Channel similarity};
+  \node[textrect,stereo] (parsim) [right of=stft,yshift=-\sep] {Partial similarity};
+  % \node[textrect] (r_sim) [right of=stft, yshift=-1.2cm] {Partial similarity\\(right)};
+  \node[delta] (sim_diff) [right of=parsim, xshift=-1cm] {$\Delta$};
+  \node[textrect] (ambiguity) [right of=sim_diff, xshift=-1cm] {Directional\\ambiguity\\resoultion};
+  \node[textrect,output] (sps) [right of=ambiguity, yshift=\sep] {\gls{sps}};
   \draw[arrow] (audio) to (stft);
-  \draw[arrow] (stft.east) to (similarity.west);
-  \draw[arrow] (stft.east) to (ambiguity.west);
-  \draw[arrow] (similarity.east) to (sps.north west);
-  \draw[arrow] (ambiguity.east) to (sps.south west);
+  \draw[arrow] (stft.east) [out=0,in=180] to (similarity.west);
+  \draw[arrow] (stft.east) [out=0,in=180] to (parsim.west);
+  \draw[arrow] (parsim) to (sim_diff);
+  \draw[arrow] (sim_diff) to (ambiguity);
+  \draw[arrow] (similarity.east) [out=0,in=90,looseness=0.4] to (sps.north);
+  \draw[arrow] (ambiguity.east) [out=0,in=270] to (sps.south);
+
+  \node[group,fit=(audio)(similarity)(sps)(parsim)] (everything) {};
+  \node[section={\citeauthorandyear{tzanetakisStereoPanningFeatures2007}}{everything}] at ([xshift=-1cm]everything.west) {};
 
   \end{tikzpicture}
 }
@@ -579,7 +609,7 @@ In all the cases mentioned in \cref{sec:panning_parameters}, the panning paramet
 
 \subsubsection{Frequency-azimuth analysis}
 \label{sec:faa}
-After converting audio into bin-level spatial cues, it is common to visualize them in a 2D spectrogram-like plot. A theme across most studies is that it is generally useful to view the change in spatial parameters change over time. We therefore see most often that time is displayed on the X-axis of the plot, with frequency and azimuth being assigned to either the Y-axis or colour/brightness. Further analysis of these plots can generate musical insights, as in \cite{barryMusicStructureSegmentation2007} which uses changes over time to achieve song-structure segmentation of recorded music, and \cite{barryBinaspectPythonLibrary2025} which uses the visualizations directly to compare the rendering quality of different spatial audio formats and lossy compression algorithms. Focused purely on visualization, \cite{prestiVisualizationManipulationStereophonic2014} adds the concept of bin-level \q{clarity}, effectively determining the trustworthiness of a panning parameter estimation. As with the previously discussed spatial cues, the naming of these visualizations varies freely (see \cref{sec:panning_parameters}). Interested readers are directed to the original papers for examples of these visualizations.
+After converting audio into bin-level spatial cues, it is common to visualize them in a 2D spectrogram-like plot. A theme across most studies is that it is generally useful to view the change in spatial parameters change over time. We therefore see most often that time is displayed on the X-axis of the plot, with frequency and azimuth being assigned to either the Y-axis or colour/brightness. Further analysis of these plots can generate musical insights, as in \cite{barryMusicStructureSegmentation2007} which uses changes over time to achieve song-structure segmentation of recorded music, and \cite{barryBinaspectPythonLibrary2025} which uses the visualizations directly to compare the rendering quality of different spatial audio formats and lossy compression algorithms. Focused purely on visualization, \cite{prestiVisualizationManipulationStereophonic2014} adds the concept of bin-level \q{clarity}, effectively determining the trustworthiness of a panning parameter estimation. As with the previously discussed spatial cues, the naming of these visualizations varies freely (see \cref{sec:panning_parameters}), and interested readers are directed to the original papers for examples.
 
 \subsubsection{High-level descriptors and perceptual scalars}
 \label{sec:high_level_descriptors}
@@ -593,43 +623,32 @@ Subsequent to bin-level analysis, there are several algorithms that condense the
 
 
 \begin{figure}[htb!]
-\caption{Block diagrams of algorithms to estimate \gls{asw}. Disparate algorithms are separated by dashed lines.}
+\caption{Block diagrams of algorithms to estimate \gls{asw}. Disparate algorithms are separated by a dashed line.}
 \label{fig:asw}
+\bigskip
 \resizebox{\linewidth}{!}{
 
-  \def\looseness{0.5}
+  \def\looseness{0.618}
   \begin{tikzpicture}[>=latex, node distance=4cm]
-
-  \tikzstyle{textrect} = [rectangle, minimum width=3cm, minimum height=1cm, draw=black, fill=white, align=center]
-  \tikzstyle{grouprect} = [rectangle, draw=black, align=center]
-  \tikzstyle{list} = [text depth=2.5cm, minimum height=3cm, text width=3cm, align=left]
-  \tikzstyle{input} = [rounded rectangle, minimum width=3cm, minimum height=1cm, draw=black]
-  \tikzstyle{arrow} = [thick,->,>=stealth]
-  \tikzstyle{stereo} = [copy shadow={shadow xshift=0.1cm,shadow yshift=-0.1cm}]
-  \tikzstyle{output} = [rounded corners]
-  \tikzstyle{optional} = [densely dashed]
-  \tikzstyle{path label} = [above, near start, outer sep = 1em]
-  \tikzstyle{divider} = [thick, loosely dashed, black]
-
-
+  
   \node[input] (sps) {\gls{sps}};
   \node[textrect] (hists) [right of=sps] {Histograms\\over frequency};
   \node[textrect] (mean) [right of=hists] {Mean over time};
   \node[textrect] (fwhm) [right of=mean] {\gls{fwhm}};
   \node[textrect,output] (asw) [right of=fwhm] {\gls{asw}};
-  \node[textrect,output] (ph) [below of=asw,yshift=2.5cm] {\gls{ph}};
+  \node[textrect,output] (ph) [below of=asw,yshift=1.5cm] {\gls{ph}};
   \draw[arrow] (sps) to (hists);
   \draw[arrow] (hists) to (mean);
   \draw[arrow] (mean) to (fwhm);
   \draw[arrow] (fwhm) to (asw);
   \draw[arrow] (mean.south) to [out=270,in=180,looseness=\looseness] (ph.west);
 
-  \node[input] (iid) [below of=sps] {\gls{iid}};
+  \node[input] (iid) [below of=sps, yshift=-2cm] {\gls{iid}};
   \node[textrect] (iid_hists) [right of=iid] {Histograms\\over frequency};
   \node[textrect] (iid_mean) [right of=iid_hists] {Mean over time};
   \node[textrect] (iid_iqr) [right of=iid_mean] {\gls{iqr}};
   \node[textrect,output] (iid_asw) [right of=iid_iqr] {\gls{asw}};
-  \node[textrect,output] (iid_ph) [below of=iid_asw,yshift=2.5cm] {\gls{ph}};
+  \node[textrect,output] (iid_ph) [below of=iid_asw,yshift=1.5cm] {\gls{ph}};
   \draw[arrow] (iid) to (iid_hists);
   \draw[arrow] (iid_hists) to (iid_mean);
   \draw[arrow] (iid_mean) to (iid_iqr);
@@ -637,8 +656,12 @@ Subsequent to bin-level analysis, there are several algorithms that condense the
   \draw[arrow] (iid_mean.south) to [out=270,in=180,looseness=\looseness] (iid_ph.west);
 
   % Divider lines
-  \node[fit=(sps)(ph)](sps_path){}; 
-  \node[fit=(iid)(iid_ph)](iid_path){};
+  \node[group,fit=(sps)(ph)](sps_path){}; 
+  \node[group,fit=(iid)(iid_ph)](iid_path){};
+  
+  \node[section={\citeauthorandyear{sarroffMeasurementsSpaciousnessStereophonic2008}}{sps_path}] (sps_label) at ([xshift=-1cm]sps_path.west){};
+  \node[section={\citeauthorandyear{supperOnsetGuidedSpatialAnalyser2005}}{iid_path}] (iid_label) at ([xshift=-1cm]iid_path.west){};
+
   \coordinate (d1w) at ($(sps_path.west)!0.5!(iid_path.west)$);
   \coordinate (d1e) at ($(sps_path.east)!0.5!(iid_path.east)$);
   \draw[divider] (d1w) to (d1e);
@@ -653,22 +676,12 @@ It has also been shown that perceptual scalars such as \q{immersion} can be pred
 \begin{figure}[htb!]
 \caption{Block diagram of prediction of immersion via \gls{ml} on objective metrics.}
 \label{fig:ml_immersion}
+\bigskip
 \resizebox{\linewidth}{!}{
 
   \begin{tikzpicture}[>=latex, node distance=4cm]
 
-  \tikzstyle{textrect} = [rectangle, minimum width=3cm, minimum height=1cm, draw=black, fill=white, align=center]
-  \tikzstyle{grouprect} = [rectangle, draw=black, align=center]
-  \tikzstyle{list} = [text depth=2.5cm, minimum height=3cm, text width=3cm, align=left]
-  \tikzstyle{input} = [rounded rectangle, minimum width=3cm, minimum height=1cm, draw=black]
-  \tikzstyle{arrow} = [thick,->,>=stealth]
-  \tikzstyle{stereo} = [copy shadow={shadow xshift=0.1cm,shadow yshift=-0.1cm}]
-  \tikzstyle{output} = [rounded corners]
-  \tikzstyle{optional} = [densely dashed]
-  \tikzstyle{path label} = [above, near start, outer sep = 1em]
-  \tikzstyle{divider} = [thick, loosely dashed, black]
-
-  \node[input] (audio) [below of=iid] {Audio};
+  \node[input] (audio) [below of=iid] {Stereo audio};
   \node[textrect] (subjective) [right of=audio,yshift=2.25cm] {Subjective ratings};
   \node[textrect] (spatial) [below of=subjective,yshift=2.5cm] {Spatial metrics};
   \node[textrect] (rhythmic) [below of=spatial,yshift=2.5cm] {Rhythmic metrics};
@@ -686,39 +699,31 @@ It has also been shown that perceptual scalars such as \q{immersion} can be pred
   \draw[arrow] (ml) to (ml_imm);
   \draw[arrow] (ml_imm.south) to [out=270,in=270] (ml.south);
 
+  \node[group,fit=(audio)(subjective)(ml_imm)(timbral)] (everything) {};
+  \node[group,section={\citeauthorandyear{sarroffPredictingPerceivedSpaciousness2009}}{everything}] (label) at ([xshift=-1cm]everything.west) {};
+
   \end{tikzpicture}
 }
 
 \end{figure}
 
-The lack of mathematical standardization in these studies emphasizes the point from \cref{sec:binaural_and_spatial_cues} \textemdash future research should preferably state formulas explicitly in the text, falling back to a specific definition in a cited publication.
+The lack of mathematical standardization in these studies emphasizes the point from \cref{sec:binaural_and_spatial_cues} \textemdash~ future research should preferably state formulas explicitly in the text, falling back to a specific definition in a cited publication.
 
 
 \subsubsection{Machine-learned spatial descriptors}
 \label{sec:ml_spatial_descriptors}
 
-Departing from the traditional \gls{dsp} spatial descriptors, a new family of descriptors generated directly though \gls{ml} and \gls{dl} have emerged. As mentioned in \cref{sec:very_relevant_studies}, \cite{yangUpmixingStyleTransfer2022} encodes the spatial information present in multichannel audio to a vector in latent space by first downmixing the input audio to stereo and then forcing the neural network to upmix back to the original. \cite{manochaSpatializationQualityMetric2023} takes a very similar approach, but acting on binaural input and its accompanying monophonic mixdown. In both cases, content invariance of the network is one of the optimization goals, and is essential when using the latent vectors \glspl{sip}. The former achieves it by creating two random 5-channel mixes and using the stereo downmix of one to resynthesize the other, while the latter utilizes an additional training task which optimizes the overall network's spatial embeddings to match that of a pre-trained neural binaural decoder which takes only directional coordinates as input. Simplified block diagrams for both methods are shown in \cref{fig:ml_descriptor}; the reader is directed to the original papers for details. A slightly different method is taken by \cite{satoSelfSupervisedLearningAudioVisual2022}, in which stereo audio captured with accompanying video is modified by either swapping the left and right channel, or using audio from a different video clip. The network then learns to spot said modifications, hence learning the spatial relationship between sound events and visual events.
+Departing from the traditional \gls{dsp} spatial descriptors, a new family of descriptors generated directly though \gls{ml} and \gls{dl} have emerged. As mentioned in \cref{sec:very_relevant_studies}, \cite{yangUpmixingStyleTransfer2022} encodes the spatial information present in multichannel audio to a vector in latent space by first downmixing the input audio to stereo and then forcing the neural network to upmix back to the original. \cite{manochaSpatializationQualityMetric2023} takes a very similar approach, but acting on binaural input and its accompanying monophonic mixdown. In both cases, content invariance of the network is one of the optimization goals, and is essential when using the latent vectors as \glspl{sip}. The former achieves it by creating two random 5-channel mixes and using the stereo downmix of one to resynthesize the other, while the latter utilizes an additional training task which optimizes the overall network's spatial embeddings to match that of a pre-trained neural binaural decoder which takes only directional coordinates as input. Simplified block diagrams for both methods are shown in \cref{fig:ml_descriptor}; the reader is directed to the original papers for details. A slightly different method is taken by \cite{satoSelfSupervisedLearningAudioVisual2022}, in which stereo audio captured with accompanying video is modified by either swapping the left and right channel, or using audio from a different video clip. The network then learns to spot said modifications, hence learning the spatial relationship between sound events and visual events.
 
 \begin{figure}[htb!]
 \caption{Block diagrams of spatial description via \gls{dl}.}
 \label{fig:ml_descriptor}
+\bigskip
 \resizebox{\linewidth}{!}{
 
   \begin{tikzpicture}[>=latex, node distance=4cm]
 
-  \tikzstyle{textrect} = [rectangle, minimum width=3cm, minimum height=1cm, draw=black, fill=white, align=center]
-  \tikzstyle{concat} = [circle, minimum width=0.618cm, minimum height=0.618cm, draw=black, fill=white, align=center]
-  \tikzstyle{grouprect} = [rectangle, draw=black, align=center]
-  \tikzstyle{list} = [text depth=2.5cm, minimum height=3cm, text width=3cm, align=left]
-  \tikzstyle{input} = [rounded rectangle, minimum width=3cm, minimum height=1cm, draw=black, align=center]
-  \tikzstyle{arrow} = [thick,->,>=stealth]
-  \tikzstyle{stereo} = [copy shadow={shadow xshift=0.1cm,shadow yshift=-0.1cm}]
-  \tikzstyle{output} = [rounded corners]
-  \tikzstyle{optional} = [densely dashed]
-  \tikzstyle{divider} = [thick, loosely dashed, black]
-
   \node[input] (stems) {Audio stems};
-  \node[] (cite_yang) [left of=stems] {\citeauthor{yangUpmixingStyleTransfer2022} \citeyear{yangUpmixingStyleTransfer2022}};
   \node[textrect] (audio5r) [right of=stems,yshift=1cm] {5-channel\\spectrogram A};
   \node[textrect] (audio5a) [below of=audio5r,yshift=2cm] {5-channel\\spectrogram B};
   \node[textrect] (bottleneck) [right of=audio5r] {Bottleneck\\neural network};
@@ -737,8 +742,7 @@ Departing from the traditional \gls{dsp} spatial descriptors, a new family of de
   \draw[arrow] (upmix) to [out=0,in=180] (recon);
   \draw[arrow] (bottleneck) to [out=0,in=180] (latentvec);
 
-  \node[input] (mono) [below of=stems] {Mono source};
-  \node[] (cite_manocha) [left of=mono] {\citeauthor{manochaSAQAMSpatialAudio2022} \citeyear{manochaSpatializationQualityMetric2023}};
+  \node[input] (mono) [below of=stems] {Mono audio};
   \node[textrect,stereo] (binrec) [right of=mono] {Binaural recording};
   \node[textrect,minimum height=3cm] (network) [right of=binrec,yshift=-1cm] {Neural network};
   \node[textrect,output] (bin_latentvec) [right of=network,xshift=4cm,yshift=1cm] {Spatial description\\in latent space};
@@ -757,8 +761,13 @@ Departing from the traditional \gls{dsp} spatial descriptors, a new family of de
   \draw[arrow] (pretrained.west) to [out=180,in=270] (network.south);
   
   % Divider lines
-  \node[fit=(stems)(recon)](multichannel_path){}; 
-  \node[fit=(mono)(bin_latentvec)](binaural_path){};
+  \node[group,fit=(stems)(recon)(latentvec)](multichannel_path){}; 
+  \node[group,fit=(mono)(bin_latentvec)(direction)](binaural_path){};
+
+
+  \node[section={\citeauthorandyear{yangUpmixingStyleTransfer2022}}{multichannel_path}] (cite_yang) at ([xshift=-1cm]multichannel_path.west) {};
+  \node[section={\citeauthorandyear{manochaSpatializationQualityMetric2023}}{binaural_path}] (cite_manocha) at ([xshift=-1cm]binaural_path.west) {};
+
   \coordinate (d1w) at ($(multichannel_path.south west)!0.5!(binaural_path.north west)$);
   \coordinate (d1e) at ($(multichannel_path.south east)!0.5!(binaural_path.north east)$);
   \draw[divider] (d1w) to (d1e);
@@ -780,7 +789,7 @@ This review surfaced two spatial measurement systems that have attempted to beco
 
 There also exist several audio coding standards such as \gls{bcc}, \gls{ps}, \glsxtrshort{mpeg}-surround, \gls{saoc}, and most recently \gls{ivas} that include the calculation of spatial cues which can be directly integrated into future research (assuming one has access to encoder software). Excellent overviews of these standards and their underlying techniques are given in \cite{herreParametricStereoCoding2022,bruhn3GPPIVASCodec2025}.
 
-Another avenue of standardization is the use of shared open-source software to extract spatial cues. The most established is the \glsxtrfull{amt} \cite{majdakAMT1xToolbox2022} -- a set of \textsc{Matlab} routines containing a vast number of algorithms for all aspects of human hearing, include spatial ones. Essentia \cite{bogdanovESSENTIAOpensourceLibrary2013} is a \CC~framework for \gls{mir}, again containing several spatial algorithms. Released more recently, Binaspect \cite{barryBinaspectPythonLibrary2025} is a Python library designed specifically for extraction and visualization of spatial queues from binaural audio. The \gls{gccphat} algorithm (which is a measure of \gls{doa} usually used in speech-processing, but also with examples for musical audio \cite{munoz-montoroMultichannelBlindMusic2022,antoniukBlindEstimationEnsemble2023,namballaMusicSourceSeparation2025}) has implementations in several major programming languages \cite{pearlmanZeroGCCPHAT2025,xiongGcc_phatpy2017,wootersMinidspc2013,GccphatGeneralizedCrosscorrelation}. For research involving transfer functions or impulse responses, the \gls{sofa} file format has emerged as the de facto standard for distributing spatially oriented acoustical data.
+Another avenue of standardization is the use of shared open-source software to extract spatial cues. The most established is the \glsxtrfull{amt} \cite{majdakAMT1xToolbox2022} -- a set of \textsc{Matlab} routines containing a vast number of algorithms for all aspects of human hearing, include spatial ones. Essentia \cite{bogdanovESSENTIAOpensourceLibrary2013} is a \CC~framework for \gls{mir}, again containing several spatial algorithms. Released more recently, Binaspect \cite{barryBinaspectPythonLibrary2025} is a Python library designed specifically for extraction and visualization of spatial queues from binaural audio. The \gls{gccphat} algorithm (which is a measure of \gls{doa} usually used in speech-processing, but also with examples for musical audio \cite{munoz-montoroMultichannelBlindMusic2022,antoniukBlindEstimationEnsemble2023,namballaMusicSourceSeparation2025}) has implementations in several major programming languages \cite{pearlmanZeroGCCPHAT2025,xiongGcc_phatpy2017,wootersMinidspc2013,GccphatGeneralizedCrosscorrelation}. For research involving transfer functions or impulse responses, the \gls{sofa} file format has emerged as the de facto standard for distributing spatially oriented acoustical data \cite{aes69-2020-SOFA}.
 
 
 \subsection{Framework for \glspl{sip}}
@@ -804,17 +813,6 @@ The diagram shows two separate paths for \gls{dsp} and \gls{ml} -based features 
 \resizebox{\linewidth}{!}{
 
   \begin{tikzpicture}[>=latex, node distance=4cm]
-
-  \tikzstyle{textrect} = [rectangle, minimum width=3cm, minimum height=1cm, draw=black, fill=white, align=center]
-  \tikzstyle{list} = [text depth=2.5cm, minimum height=3cm, text width=3cm, align=left]
-  \tikzstyle{input} = [rounded rectangle, minimum width=3cm, minimum height=1cm, draw=black]
-  \tikzstyle{arrow} = [thick,->,>=stealth]
-  \tikzstyle{stereo} = [copy shadow={shadow xshift=0.2cm,shadow yshift=-0.2cm}]
-  \tikzstyle{output} = [rounded corners]
-  \tikzstyle{optional} = [densely dashed]
-  \tikzstyle{path label} = [above, near start, outer sep = 1em]
-  \tikzstyle{divider} = [thick, loosely dashed, black]
-  \tikzstyle{section} = [rectangle, rounded corners=4, minimum width=1cm, draw=black, fill=white!90!black, label={[rotate=90, black]center:#1}, inner sep=0]
 
   % Audio input
   \node[input] (audio) {stereo signal};
@@ -920,8 +918,8 @@ The diagram shows two separate paths for \gls{dsp} and \gls{ml} -based features 
   \draw[arrow] (mlout.east) -- (obj.west);
   
   % Nodes around each individual graph
-  \node[fit=(audio)(ps)(bin)(tfd)](dsp_graph){}; 
-  \node[fit=(ml_audio)(ms)(latentvec)(mlout)(obj)](ml_graph){};
+  \node[group,fit=(audio)(ps)(bin)(tfd)](dsp_graph){}; 
+  \node[group,fit=(ml_audio)(ms)(latentvec)(mlout)(obj)](ml_graph){};
   
   % Divider line between graphs
   \coordinate (d1w) at ($(dsp_graph.south west)!0.5!(ml_graph.north-|dsp_graph.west)$);
@@ -931,8 +929,8 @@ The diagram shows two separate paths for \gls{dsp} and \gls{ml} -based features 
   % Graph labels
   \coordinate (dsp_graph_west) at ([xshift=-1cm]dsp_graph.west);
   \coordinate (ml_graph_west) at (ml_graph.west-|dsp_graph_west);
-  \node[section={\gls{dsp}}, fit={(dsp_graph.south) (dsp_graph.north)}] (dsp_label) at (dsp_graph_west) {};
-  \node[section={\gls{ml}}, fit={(ml_graph.south) (ml_graph.north)}] (ml_label) at (ml_graph_west) {};
+  \node[section={\gls{dsp}}{dsp_graph}] (dsp_label) at (dsp_graph_west) {};
+  \node[section={\gls{ml}}{ml_graph}] (ml_label) at (ml_graph_west) {};
   \end{tikzpicture}
 }
 
