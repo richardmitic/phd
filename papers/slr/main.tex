@@ -483,35 +483,35 @@ As a rule of thumb, it is advisable that when using any binaural or spatial cue 
 
   % Time domain
   \node[input] (audio) {Stereo audio};
-  \node[textrect,stereo] (subband) [right of=audio] {subband\\filtering};
-  \node[textrect,stereo] (windowing) [right of=subband] {time windowing};
+  \node[textrect,stereo] (subband) [right of=audio] {Subband\\filtering};
+  \node[textrect,stereo] (windowing) [right of=subband] {Time windowing};
   \draw[arrow] (audio) to (subband.west);
   \draw[arrow] (subband) to (windowing);
 
   % ILD
-  \node[textrect,stereo] (amp) [right of=windowing,yshift=\upup] {amplitude\\detection};
+  \node[textrect,stereo] (amp) [right of=windowing,yshift=\upup] {Amplitude\\detection};
   \node[delta] (ild_delta) [right of=amp,xshift=-1cm] {$\Delta$};
   \node[textrect,output] (ild) [right of=ild_delta,xshift=-1cm] {\gls{ild}};
   \draw[arrow] (amp) to (ild_delta);
   \draw[arrow] (ild_delta) to (ild);
   
   % IPD
-  \node[textrect,stereo] (phase) [right of=windowing,yshift=\up] {phase\\detection};
+  \node[textrect,stereo] (phase) [right of=windowing,yshift=\up] {Phase\\detection};
   \node[delta] (ipd_delta) [right of=phase,xshift=-1cm] {$\Delta$};
   \node[textrect,output] (ipd) [right of=ipd_delta,xshift=-1cm] {\gls{ipd}};
   \draw[arrow] (phase) to (ipd_delta);
   \draw[arrow] (ipd_delta) to (ipd);
     
   % ITD
-  \node[textrect,stereo] (transients) [right of=windowing,yshift=\down] {transient\\detection};
+  \node[textrect,stereo] (transients) [right of=windowing,yshift=\down] {Transient\\detection};
   \node[delta] (itd_delta) [right of=transients,xshift=-1cm] {$\Delta$};
   \node[textrect,output] (itd) [right of=itd_delta,xshift=-1cm] {\gls{itd}};
   \draw[arrow] (transients) to (itd_delta);
   \draw[arrow] (itd_delta) to (itd);
 
   % IACC
-  \node[textrect] (iacc) [right of=windowing,yshift=\downdown] {cross-correlation};
-  \node[textrect,output] (correlogram) [right of=iacc,xshift=2cm] {correlogram};
+  \node[textrect] (iacc) [right of=windowing,yshift=\downdown] {Cross-correlation};
+  \node[textrect,output] (correlogram) [right of=iacc,xshift=2cm] {Correlogram};
   \draw[arrow] (iacc) to (correlogram);
 
   % ILD edges
@@ -525,7 +525,7 @@ As a rule of thumb, it is advisable that when using any binaural or spatial cue 
   %STFT
   \node[input] (audio_stft) [below of=audio,yshift=-2cm] {Stereo audio};
   \node[textrect,stereo] (stft) [right of=audio_stft,xshift=4cm] {\glsxtrshort{stft}};
-  \node[textrect,stereo] (car2pol) [right of=stft] {cartesian\\ to polar};
+  \node[textrect,stereo] (car2pol) [right of=stft] {Cartesian\\ to polar};
   \node[delta] (stft_amp_delta) [right of=car2pol,yshift=\up,xshift=-1cm] {$\Delta$};
   \node[delta] (stft_phase_delta) [right of=car2pol,yshift=\down,xshift=-1cm] {$\Delta$};
   \node[textrect,output] (stft_ild) [right of=stft_amp_delta,xshift=-1cm] {\gls{ild}};
@@ -815,7 +815,7 @@ The diagram shows two separate paths for \gls{dsp} and \gls{ml} -based features 
   \begin{tikzpicture}[>=latex, node distance=4cm]
 
   % Audio input
-  \node[input] (audio) {stereo signal};
+  \node[input] (audio) {Stereo audio};
 
   % DSP path
   \node[textrect,stereo,list] (tfd) [right of=audio] { \gls{tf} decomposition:
@@ -878,7 +878,7 @@ The diagram shows two separate paths for \gls{dsp} and \gls{ml} -based features 
 
   % % ML path
   % Audio input
-  \node[input] (ml_audio) [below of=audio,yshift=-10cm] {stereo signal};
+  \node[input] (ml_audio) [below of=audio,yshift=-10cm] {Stereo audio};
 
   \node[textrect,list] (ms) [right of=ml_audio,text width=3.5cm] {Audio manipulations:
     \begin{itemize}
@@ -919,7 +919,7 @@ The diagram shows two separate paths for \gls{dsp} and \gls{ml} -based features 
   
   % Nodes around each individual graph
   \node[group,fit=(audio)(ps)(bin)(tfd)](dsp_graph){}; 
-  \node[group,fit=(ml_audio)(ms)(latentvec)(mlout)(obj)](ml_graph){};
+  \node[group,fit=(ml_audio)(ms)(latentvec)(mlout)(obj)(naf)](ml_graph){};
   
   % Divider line between graphs
   \coordinate (d1w) at ($(dsp_graph.south west)!0.5!(ml_graph.north-|dsp_graph.west)$);
