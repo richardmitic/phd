@@ -164,7 +164,7 @@
 \tikzstyle{output} = [rounded corners]
 \tikzstyle{optional} = [densely dashed]
 \tikzstyle{divider} = [thick, loosely dashed, black]
-\tikzstyle{group} = [draw=red]
+\tikzstyle{group} = []
 \tikzstyle{delta} = [circle, minimum width=1cm, minimum height=1cm, draw=black, fill=white, align=center]
 \tikzset{
   section/.style 2 args = {
@@ -178,6 +178,9 @@
     fit={(#2.south) (#2.north)}, 
   }
 }
+
+% Add some padding between captions and diagrams
+\setlength{\abovecaptionskip}{10pt plus 3pt minus 2pt}
 
 \begin{document}
 
@@ -380,7 +383,6 @@ The search initially identified \nRecordsIdentified~studies, of which \nRecordsR
 \begin{figure}[htb]
 \caption{\gls{prisma} flow diagram.}
 \label{fig:rejection_flow}
-\bigskip
 \centering
 \resizebox{0.95\linewidth}{!}{
   \input{flow_diagram.tex}
@@ -566,7 +568,6 @@ While all the aforementioned parameters have the intention of estimating the pan
 \begin{figure}[htb!]
 \caption{Block diagram of \gls{sps} \cite{tzanetakisStereoPanningFeatures2007}.}
 \label{fig:sps}
-\bigskip
 \resizebox{\linewidth}{!}{
 
   \begin{tikzpicture}[>=latex, node distance=4cm]
@@ -626,7 +627,6 @@ Subsequent to bin-level analysis, there are several algorithms that condense the
 \begin{figure}[htb!]
 \caption{Block diagrams of algorithms to estimate \gls{asw}. Disparate algorithms are separated by a dashed line.}
 \label{fig:asw}
-\bigskip
 \resizebox{\linewidth}{!}{
 
   \def\looseness{0.618}
@@ -677,7 +677,6 @@ It has also been shown that perceptual scalars such as \q{immersion} can be pred
 \begin{figure}[htb!]
 \caption{Block diagram of prediction of immersion via \gls{ml} on objective metrics.}
 \label{fig:ml_immersion}
-\bigskip
 \resizebox{\linewidth}{!}{
 
   \begin{tikzpicture}[>=latex, node distance=4cm]
@@ -719,7 +718,6 @@ Departing from the traditional \gls{dsp} spatial descriptors, a new family of de
 \begin{figure}[htb!]
 \caption{Block diagrams of spatial description via \gls{dl}.}
 \label{fig:ml_descriptor}
-\bigskip
 \resizebox{\linewidth}{!}{
 
   \begin{tikzpicture}[>=latex, node distance=4cm]
@@ -810,7 +808,6 @@ The diagram shows two separate paths for \gls{dsp} and \gls{ml} -based features 
 \begin{figure}[t!]
 \caption{Flow diagram of a generic \gls{sip} algorithm. Doubled blocks denote steps where the same processing is applied to both stereo channels. Dashed blocks are optional. The diagram is split between \gls{dsp} and \gls{ml} techniques, only one of which need be applied.}
 \label{fig:sip_general2}
-\bigskip
 \resizebox{\linewidth}{!}{
 
   \begin{tikzpicture}[>=latex, node distance=4cm]
@@ -964,6 +961,7 @@ An under-studied but nonetheless important metric is the computational complexit
 \Cref{tab:audio_datasets} shows a comprehensive list of audio datasets that were referenced by papers in this review. The only exception is \q{mobygratis} \cite{MobygratisFreeMoby2025}, which was released after the review was performed but nonetheless presents similar opportunities for research. Datasets that were not available publicly such as those used in \gls{mpeg} standardization have been omitted, and the availability of each dataset is noted. The \q{Size} column represents the number of musical tracks or clips present in the dataset, but does not take their lengths into account. \q{Duration} is given in days, hours, or minutes as appropriate, and is calculated as the sum of all track or clip durations. Non-musical recordings are not counted. Since it is assumed that larger and more varied datasets are preferable, the table is ordered by \q{Size}. The columns \q{M}, \q{S}, and \q{B} indicated whether the datasets contain multitrack\footnote{A Multitrack recording indicates that individual stems of a recording session are available, but not necessarily a stereo mix.}, stereo, or binaural recordings respectively. \cite{IEEESignalProcessing2025,liCreatingMultitrackClassical2019,bogdanovMTGJamendoDatasetAutomatic2019} also contain lists of audio datasets (with some overlap to those listed here) that might be useful for future research.
 
 \begin{sidewaystable}[htbp]
+\setlength{\abovecaptionskip}{2pt} % this table is an exception where the caption can be much closer to the figure
 \caption{
 Audio datasets, ordered by size (number of tracks or clips).\\
 {\footnotesize
