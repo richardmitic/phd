@@ -1015,21 +1015,23 @@ Likewise, relatively few studies perform any spatial analysis of extremely large
 
 \cite{ziemerUsingPsychoacousticModels2016,wilsonPerceptionAudioQuality2016} present a further basis for investigation, concluding that two objective measures of spaciousness (\gls{iccc} and \gls{spf}) did not match the results of a perceptual music similarity test. This issue warrants further investigation, since research into the \glspl{sip} of tracks in a large music corpus will naturally involve a measure of similarity.
 
-To demonstrate the effectiveness of the framework outlined in \cref{sec:framework_for_sips}, we will consider a hypothetical experiment on a dataset that has not yet received any investigation into stereo image. Suppose the intention was to recreate the analysis of trends in production techniques from \cite{mourgelaExploringTrendsAudio2024}, but using a large open dataset such as \gls{fma} (which contains studio-produced music, encoded using \gls{mp3} at various bitrates). Said study employed a simple stereo field classification based on \gls{ild}. Each track is classified as either \q{mono}, \q{narrow}, \q{balanced}, or \q{wide}. In order to recreate such tags for \gls{fma}, we could follow the \gls{dsp} framework to create a \gls{sip} as suggested in \cref{tab:hypothetical_sip}.
+\subsubsection{Example use of \gls{sip} framework}
+To demonstrate the effectiveness of the framework outlined in \cref{sec:framework_for_sips}, we will consider a hypothetical experiment on a dataset that has not yet received any investigation into stereo image. Suppose the intention was to recreate the analysis of trends in production techniques from \cite{mourgelaExploringTrendsAudio2024}, but using a large open dataset such as \gls{fma}. Said study employed a simple stereo field classification based on \gls{ild}. Each track is classified as either \q{mono}, \q{narrow}, \q{balanced}, or \q{wide}. The exact equation to calculate the stereo width is not given in the study. In order to recreate such tags for \gls{fma} we can follow the \gls{dsp} framework to create a \gls{sip} as suggested in \cref{tab:hypothetical_sip}.
 
 \begin{table}[thb]
+  \renewcommand{\arraystretch}{1.3} % This table is much easier to read with some space between the lines
   \centering
-  \caption{Hypothetical use of \gls{sip} framework to analyse new dataset}
+  \caption{Hypothetical use of \gls{sip} framework to recreate stereo width analysis from \cite{mourgelaExploringTrendsAudio2024} on the \gls{fma} dataset}.
   \label{tab:hypothetical_sip}
   \begin{tabularx}{\linewidth}{llX}
     \toprule
     Component & Method & Reasoning \\
     \midrule
-    \gls{tf} decomposition & \gls{pqmf} & Dataset is already encoded as \gls{mp3}, so filtering has already been performed. \\
-    Frequency grouping & None & The \gls{pqmf} used in \gls{mp3} is already perceptually motivated. \\
-    Peripheral ear model & None & \gls{pqmf} does not require a peripheral ear model. \\
-    Spatial cue & \gls{ild} & Copy the spatial cue specified in \cite{mourgelaExploringTrendsAudio2024}. \\
-    Perceptual scalar & Stereo width & Calculated by e.g. mean of all bin-level \gls{ild} values, quantized to 4 values. \\
+    \gls{tf} decomposition & \gls{stft} & Common and computationally efficient.\\
+    Frequency grouping & None & \cite{mourgelaExploringTrendsAudio2024} does not give a perceptual frequency grouping for stereo width. \\
+    Peripheral ear model & None & \gls{stft} does not require a peripheral ear model. \\
+    Spatial cue & \gls{icld} & \cite{mourgelaExploringTrendsAudio2024} states that the stereo width classification is \enquote{based on the \gls{icld}}.\\
+    Perceptual scalar & Stereo width & Calculated by e.g. mean of all bin-level \gls{icld} values, quantized to 4 values. \\
     \bottomrule
 \end{tabularx}
 \end{table}
