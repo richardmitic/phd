@@ -698,3 +698,85 @@ def supplementary(
     ).replace("tabular", "tabularx").replace("{ll}", "{\\textwidth}{lX}")
     Path(appendix_table_tex).write_text(ltx)
 
+
+@app.command()
+def post_hoc(
+    post_hoc_tsv: Annotated[str, typer.Argument(help="File path of post-hoc annotations")], 
+    table_tex: Annotated[str, typer.Argument(help="File path of results table tex file")],
+):
+    df = pd.read_csv(post_hoc_tsv, sep='\t').fillna("")
+    
+    def _mapper(s: str) -> str:
+        mapping = {
+            "ta_not_audio": "not_audio",
+            "full_not_audio": "not_audio",
+            "ta_no_spatial_analysis": "no_spatial_analysis",
+            "ta_no_spatial_descriptor": "no_spatial_analysis",
+            "m_full_no_spatial_descriptor": "no_spatial_analysis",
+            "full_no_spatial_descriptor": "no_spatial_analysis",
+            "ta_not_music": "not_music",
+            "full_not_music": "not_music",
+            "n": "no",
+            "m": "unclear_too_old",
+            "m_recent": "unclear",
+            "ta_not_english": "not_english",
+            "ta_english": "not_english",
+            "full_not_english": "not_english",
+        }
+        return mapping.get(s, s)
+
+    # Map Richard's tags to the same text that Andreas was given in the dropdown menu
+    df['reject'] = df["reject"].map(_mapper)
+
+    # Blank fields required deiscussion. Mark them as unclear.
+    df.loc[df['Reject Andreas'].isna(), 'Reject Andreas'] = 'unclear'
+
+    # Reject Andreas' maybes that are too old.
+    df.loc[(df.year < 2020) & (df['Reject Andreas'] == 'unclear'), 'Reject Andreas'] = 'unclear_too_old'
+    
+    outcomes = pd.DataFrame(
+        [
+            ("Both included", "OK"),
+            ("Initially rejected, post-hoc included", "Researchers discuss"),
+            ("Initially accepted, post-hoc rejected", "OK"),
+            ("Rejected for same reason", "OK"),
+            ("Rejected for different reasons","OK"),
+        ],
+        columns=["Outcome", "Treatment"]
+    )
+
+    def _decide_outcome(row: pd.Series):
+        # Returns index into outcomes table
+        if (row['reject'] == 'no' and row['Reject Andreas'] == 'no') or (row['reject'] == 'unclear' and row['Reject Andreas'] == 'unclear'):
+            return outcomes.loc[0, "Outcome"]
+        elif row['reject'] != 'no' and row['Reject Andreas'] == 'no':
+            return outcomes.loc[1, "Outcome"]
+        elif row['reject'] == 'no' and row['Reject Andreas'] != 'no':
+            return outcomes.loc[2, "Outcome"]
+        elif row['reject'] == row['Reject Andreas']:
+            return outcomes.loc[3, "Outcome"]
+        elif row['reject'] != row['Reject Andreas']:
+            return outcomes.loc[4, "Outcome"]
+        else:
+            raise Exception("This shouldn't happen...")
+
+    df["post_hoc_outcome"] = df.apply(_decide_outcome, axis=1)
+
+    counts = df["post_hoc_outcome"].value_counts()
+
+    outcomes["Count"] = outcomes["Outcome"].map(counts)
+    outcomes = outcomes.iloc[:, [0,2,1]] # Reorder columns to get count in the middle
+    outcomes.sort_values(by="Count", inplace=True)
+    
+    # append total
+    outcomes.loc[len(outcomes)] = ["Total", outcomes.Count.sum(), "--"]
+
+    # and put a midrule between the values and the total
+    tex = outcomes.to_latex(index=False, column_format='lcl')
+    tex = tex.splitlines()
+    # tex.insert(-3, '\\cmidrule{1-2}')
+    tex.insert(-3, '\\midrule')
+    tex = '\n'.join(tex)
+
+    Path(table_tex).write_text(tex)
+    print(outcomes)
