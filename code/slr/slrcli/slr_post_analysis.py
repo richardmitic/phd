@@ -510,7 +510,11 @@ def post_process(
     # Make table showing the ratios of "definitely" and "maybe" studies that were eventually included
     inclusion_ratios = calculate_inclusion_ratios(cleaned, reasons)
     print(f"Inclusion ratios:\n{inclusion_ratios}\n")
-    inclusion_ratios.to_latex(inclusion_ratios_tex, column_format='rccc')
+    inc_table_tex = inclusion_ratios.to_latex(column_format='rccc')
+    inc_table_tex = inc_table_tex.splitlines()
+    inc_table_tex.insert(-3, '\\midrule')
+    inc_table_tex = '\n'.join(inc_table_tex)
+    Path(inclusion_ratios_tex).write_text(inc_table_tex)
 
     # Calculate the numbers of papers that were rejected for specific reason and draw the PRISMA flow diagram
     flow_diagram_data = calculate_flow_diagram_data(cleaned, reasons)
