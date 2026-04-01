@@ -116,7 +116,7 @@ def make_diff(
 
     blueline = r'\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE'
     greenline = r'\providecommand{\DIFadd}[1]{{\protect\color{deepgreen}\uwave{#1}}} %DIF PREAMBLE'
-    diff_tex = _check_txt_output(['latexdiff', str(main_old), str(main_new)]).replace(blueline, greenline)
+    diff_tex = _check_txt_output(['latexdiff', '--no-del', str(main_old), str(main_new)]).replace(blueline, greenline)
     main_diff.write_text(diff_tex)
     
     shutil.copy(git_root / "papers/slr/sn-jnl.cls", output_dir_path / "sn-jnl.cls")
