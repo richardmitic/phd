@@ -803,6 +803,7 @@ The diagram shows two separate paths for \gls{dsp} and \gls{ml} -based features 
 %% ends up in a place within the text that doesn't make sense.
 % \afterpage{\clearpage}
 
+%BEGIN DIFNOMARKUP
 \begin{figure}[t!]
 \caption{Flow diagram of a generic \gls{sip} algorithm. Doubled blocks denote steps where the same processing is applied to both stereo channels. Dashed blocks are optional. The diagram is split between \gls{dsp} and \gls{ml} techniques, only one of which need be applied.}
 \label{fig:sip_general2}
@@ -931,6 +932,7 @@ The diagram shows two separate paths for \gls{dsp} and \gls{ml} -based features 
 }
 
 \end{figure}
+%END DIFNOMARKUP
 
 
 Although not shown on the diagram, it is important to choose spatial features that are relevant for the type of input audio and the intended output features. For example, if the input is standard stereophonic music and the output is intended to convey amplitude panning, then all phase-based spatial cues can be eliminated. However, if the output is intended to show \gls{lev} (even given the same stereophonic input), then phase cues cannot be eliminated. If the input audio is binaural, both phase and amplitude differences are relevant, but the frequency bands in which they are relevant differ depending on the intended output. E.g. \gls{doa} only requires phase below approximately 1500Hz \cite{morinagaEvaluationMethodCoded}, but other tasks should follow a binaural hearing model with more complex frequency weighting \cite{schaferExtensionPEAQMeasure2013,nowakQualityAssessmentSpherical2019}.
