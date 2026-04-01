@@ -1,6 +1,11 @@
 import re
 import shutil
 from pathlib import Path
+from typing import Annotated
+from subprocess import check_call, check_output
+from tempfile import TemporaryDirectory
+import contextlib
+import os
 
 import typer
 
@@ -53,6 +58,65 @@ def prepare_submission(
     replace_input_directives(input_dir_path / "main.tex", output_dir_path / output_file_name)
 
 
+@contextlib.contextmanager
+def new_wd(x):
+    d = os.getcwd()
+
+    # This could raise an exception, but it's probably
+    # best to let it propagate and let the caller
+    # deal with it, since they requested x
+    os.chdir(x)
+
+    try:
+        yield
+
+    finally:
+        # This could also raise an exception, but you *really*
+        # aren't equipped to figure out what went wrong if the
+        # old working directory can't be restored.
+        os.chdir(d)
 
 
+def _check_txt_output(*args, **kwargs):
+    return check_output(*args, **kwargs).decode('utf-8').strip()
 
+
+def _prepare_version_in_worktree(tempdir: Path, commitish: str, output_path: Path):
+    worktree_path = tempdir / commitish
+    check_call(['git', 'worktree', 'add', '--detach', str(worktree_path), commitish])
+    with new_wd(worktree_path):
+        # Build the paper to make sure the bibliography is created
+        check_call(['latexmk', '-pdf', 'main.tex'], cwd="papers/slr")
+        # Now prepare a single tex file
+        prepare_submission("papers/slr", "papers/slr_submission")
+        # And read the contents
+        shutil.copy("papers/slr_submission/main.tex", output_path)
+    check_call(['git', 'worktree', 'remove', '--force', str(worktree_path)])
+
+
+@app.command()
+def make_diff(
+    earlier_commit: Annotated[str, typer.Argument(help="The earlier git hash to compare against")],
+    later_commit: Annotated[str, typer.Argument(help="The later git hash to compare against")],
+    output_dir: str,
+):
+    """Generate a single tex file highlighting changes since a given git hash"""
+    # input_dir_path = Path(input_dir).resolve()
+    output_dir_path = Path(output_dir).resolve()
+    output_dir_path.mkdir(exist_ok=True)
+    git_root = Path(_check_txt_output(['git', 'rev-parse', '--show-toplevel']))
+
+    main_old = output_dir_path / "main-old.tex"
+    main_new = output_dir_path / "main-new.tex"
+    main_diff = output_dir_path / "main-diff.tex"
+
+    with TemporaryDirectory() as tempdir:
+        _prepare_version_in_worktree(Path(tempdir), earlier_commit, main_old)
+        _prepare_version_in_worktree(Path(tempdir), later_commit, main_new)
+
+    blueline = r'\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE'
+    greenline = r'\providecommand{\DIFadd}[1]{{\protect\color{deepgreen}\uwave{#1}}} %DIF PREAMBLE'
+    diff_tex = _check_txt_output(['latexdiff', str(main_old), str(main_new)]).replace(blueline, greenline)
+    main_diff.write_text(diff_tex)
+    
+    shutil.copy(git_root / "papers/slr/sn-jnl.cls", output_dir_path / "sn-jnl.cls")
