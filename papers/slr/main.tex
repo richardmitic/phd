@@ -564,7 +564,7 @@ Another cohort of algorithms is dedicated to estimating the panning that has bee
 While all the aforementioned parameters have the intention of estimating the panning that was applied to a mono stem, the exact mathematical methods varies tremendously; Interested readers are directed to the original studies, although as an example, a block diagram for \gls{sps} \cite{tzanetakisStereoPanningFeatures2007} is shown in \cref{fig:sps}. Note that unlike the frequency-domain spatial cues shown in \cref{fig:spatial_cues}, the stereo spectrogram is not converted to magnitude and phase components, but instead is processed by the complex functions \q{Channel similarity} and \q{Partial similarity}.
 
 \begin{figure}[htb!]
-\caption{Block diagram of \gls{sps} \cite{tzanetakisStereoPanningFeatures2007}.}
+\caption{Block diagram of \gls{sps} \cite{tzanetakisStereoPanningFeatures2007}. $\Delta$ represents the inter-channel difference.}
 \label{fig:sps}
 \resizebox{\linewidth}{!}{
 
@@ -576,7 +576,6 @@ While all the aforementioned parameters have the intention of estimating the pan
   \node[textrect,stereo] (stft) [right of=audio] {\glsxtrshort{stft}};
   \node[textrect] (similarity) [right of=stft, yshift=\sep] {Channel similarity};
   \node[textrect,stereo] (parsim) [right of=stft,yshift=-\sep] {Partial similarity};
-  % \node[textrect] (r_sim) [right of=stft, yshift=-1.2cm] {Partial similarity\\(right)};
   \node[delta] (sim_diff) [right of=parsim, xshift=-1cm] {$\Delta$};
   \node[textrect] (ambiguity) [right of=sim_diff, xshift=-1cm] {Directional\\ambiguity\\resoultion};
   \node[textrect,output] (sps) [right of=ambiguity, yshift=\sep] {\gls{sps}};
@@ -801,12 +800,11 @@ The diagram shows two separate paths for \gls{dsp} and \gls{ml} -based features 
 %% sense to see it as soon as possible in the text rather than at the end.
 %% Uncomment this line and change the figure position to 'p!' if the diagram
 %% ends up in a place within the text that doesn't make sense.
-% \afterpage{\clearpage}
+\afterpage{\clearpage}
 
-%BEGIN DIFNOMARKUP
-\begin{figure}[t!]
+\begin{figure}[p!]
 \caption{Flow diagram of a generic \gls{sip} algorithm. Doubled blocks denote steps where the same processing is applied to both stereo channels. Dashed blocks are optional. The diagram is split between \gls{dsp} and \gls{ml} techniques, only one of which need be applied.}
-\label{fig:sip_general2}
+\label{fig:sip_general}
 \resizebox{\linewidth}{!}{
 
   \begin{tikzpicture}[>=latex, node distance=4cm]
@@ -932,7 +930,6 @@ The diagram shows two separate paths for \gls{dsp} and \gls{ml} -based features 
 }
 
 \end{figure}
-%END DIFNOMARKUP
 
 
 Although not shown on the diagram, it is important to choose spatial features that are relevant for the type of input audio and the intended output features. For example, if the input is standard stereophonic music and the output is intended to convey amplitude panning, then all phase-based spatial cues can be eliminated. However, if the output is intended to show \gls{lev} (even given the same stereophonic input), then phase cues cannot be eliminated. If the input audio is binaural, both phase and amplitude differences are relevant, but the frequency bands in which they are relevant differ depending on the intended output. E.g. \gls{doa} only requires phase below approximately 1500Hz \cite{morinagaEvaluationMethodCoded}, but other tasks should follow a binaural hearing model with more complex frequency weighting \cite{schaferExtensionPEAQMeasure2013,nowakQualityAssessmentSpherical2019}.
