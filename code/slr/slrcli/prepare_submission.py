@@ -1,8 +1,8 @@
 import re
 import shutil
 from pathlib import Path
-from typing import Annotated
-from subprocess import check_call, check_output
+from typing import Annotated, Optional
+from subprocess import check_call, check_output, run
 from tempfile import TemporaryDirectory
 import contextlib
 import os
@@ -76,22 +76,39 @@ def new_wd(x):
         # old working directory can't be restored.
         os.chdir(d)
 
+@contextlib.contextmanager
+def new_worktree(worktree_path, commitish):
+    # print(f"boom {type(worktree_path)} {commitish} {worktree_path}")
+    check_call(['git', 'worktree', 'add', '--detach', str(worktree_path), commitish])
+
+    try:
+        yield
+
+    finally:
+        run(['git', 'worktree', 'remove', '--force', str(worktree_path)]) 
 
 def _check_txt_output(*args, **kwargs):
     return check_output(*args, **kwargs).decode('utf-8').strip()
 
 
-def _prepare_version_in_worktree(tempdir: Path, commitish: str, output_path: Path):
+def _prepare_version_in_worktree(
+    tempdir: Path, 
+    commitish: str, 
+    output_tex: Optional[Path] = None, 
+    output_cls: Optional[Path] = None, 
+):
     worktree_path = tempdir / commitish
-    check_call(['git', 'worktree', 'add', '--detach', str(worktree_path), commitish])
-    with new_wd(worktree_path):
-        # Build the paper to make sure the bibliography is created
-        check_call(['latexmk', '-pdf', 'main.tex'], cwd="papers/slr")
-        # Now prepare a single tex file
-        prepare_submission("papers/slr", "papers/slr_submission")
-        # And read the contents
-        shutil.copy("papers/slr_submission/main.tex", output_path)
-    check_call(['git', 'worktree', 'remove', '--force', str(worktree_path)])
+    with new_worktree(worktree_path, commitish):
+        with new_wd(worktree_path):
+            # Build the paper to make sure the bibliography is created
+            check_call(['latexmk', '-pdf', 'main.tex'], cwd="papers/slr")
+            # Now prepare a single tex file
+            prepare_submission("papers/slr", "papers/slr_submission")
+            # And get the outputs
+            if output_tex:
+                shutil.copy("papers/slr_submission/main.tex", output_tex)
+            if output_cls:
+                shutil.copy("papers/slr_submission/sn-jnl.cls", output_cls)
 
 
 @app.command()
@@ -111,8 +128,8 @@ def make_diff(
     main_diff = output_dir_path / "main-diff.tex"
 
     with TemporaryDirectory() as tempdir:
-        _prepare_version_in_worktree(Path(tempdir), earlier_commit, main_old)
-        _prepare_version_in_worktree(Path(tempdir), later_commit, main_new)
+        _prepare_version_in_worktree(Path(tempdir), earlier_commit, output_tex=main_old)
+        _prepare_version_in_worktree(Path(tempdir), later_commit, output_tex=main_new)
 
     blueline = r'\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE'
     greenline = r'\providecommand{\DIFadd}[1]{{\protect\color{deepgreen}\uwave{#1}}} %DIF PREAMBLE'
@@ -120,3 +137,45 @@ def make_diff(
     main_diff.write_text(diff_tex)
     
     shutil.copy(git_root / "papers/slr/sn-jnl.cls", output_dir_path / "sn-jnl.cls")
+
+@app.command()
+def make_all(
+    earlier_commit: Annotated[str, typer.Argument(help="The earlier git hash to compare against")],
+    later_commit: Annotated[str, typer.Argument(help="The later git hash to compare against")],
+    output_dir: str,
+    main_output_slug: str = "main",
+    diff_output_slug: str = "main-diff",
+):
+    """
+    Generate:
+        - A single tex file containing the entire manuscript
+        - A single tex file containing the entire manuscript with changes highlighted
+        - A PDF file
+        - A PDF file with changes highlighted
+    """ 
+
+    output_dir_path = Path(output_dir).resolve()
+    output_dir_path.mkdir(exist_ok=True)
+
+    # This is a build directory for the diff version.
+    with TemporaryDirectory() as diff_build_dir:
+        make_diff(earlier_commit, later_commit, diff_build_dir)
+        with new_wd(diff_build_dir):
+            check_call(['latexmk', '-pdf', 'main-diff.tex'])
+            shutil.copy("main-diff.tex", output_dir_path / f"{diff_output_slug}.tex")
+            shutil.copy("main-diff.pdf", output_dir_path / f"{diff_output_slug}.pdf")
+
+    # This is a build directory for the main version.
+    with TemporaryDirectory() as main_build_dir:
+        main_build_dir = Path(main_build_dir).resolve()
+        _prepare_version_in_worktree(
+            main_build_dir, 
+            later_commit, 
+            output_tex=main_build_dir / "main.tex",
+            output_cls=main_build_dir / "sn-jnl.cls",
+        )
+        with new_wd(main_build_dir):
+            check_call(['latexmk', '-pdf', 'main.tex'])
+            shutil.copy("main.tex", output_dir_path / f"{main_output_slug}.tex")
+            shutil.copy("main.pdf", output_dir_path / f"{main_output_slug}.pdf") 
+            shutil.copy("sn-jnl.cls", output_dir_path / "sn-jnl.cls")
