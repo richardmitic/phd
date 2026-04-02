@@ -620,7 +620,7 @@ Subsequent to bin-level analysis, there are several algorithms that condense the
 
 
 \begin{figure}[htb!]
-\caption{Block diagrams of algorithms to estimate \gls{asw}. Disparate algorithms are separated by a dashed line.}
+\caption{Block diagrams of two algorithms to estimate \gls{asw} \cite{sarroffMeasurementsSpaciousnessStereophonic2008,supperOnsetGuidedSpatialAnalyser2005}. Disparate algorithms are separated by a dashed line.}
 \label{fig:asw}
 \resizebox{\linewidth}{!}{
 
@@ -670,7 +670,7 @@ Subsequent to bin-level analysis, there are several algorithms that condense the
 It has also been shown that perceptual scalars such as \q{immersion} can be predicted via \gls{ml} from combinations of low-level features, including those which do not contain any spatial information \cite{sarroffComputationalModelPerceived2011}. \Cref{fig:ml_immersion} shows a block diagram for this. Similarly, \cite{sunishDevelopmentValidationUnintrusive2010} develops a computer model of \q{envelopment} based on \gls{iacc}, \gls{pca}, and channel energy distribution (albeit for multichannel audio rather than stereo).
 
 \begin{figure}[htb!]
-\caption{Block diagram of prediction of immersion via \gls{ml} on objective metrics.}
+\caption{Block diagram of prediction of immersion via \gls{ml} on objective metrics \cite{sarroffPredictingPerceivedSpaciousness2009}.}
 \label{fig:ml_immersion}
 \resizebox{\linewidth}{!}{
 
@@ -711,7 +711,7 @@ The lack of mathematical standardization in these studies emphasizes the point f
 Departing from the traditional \gls{dsp} spatial descriptors, a new family of descriptors generated directly though \gls{ml} and \gls{dl} have emerged. As mentioned in \cref{sec:very_relevant_studies}, \cite{yangUpmixingStyleTransfer2022} encodes the spatial information present in multichannel audio to a vector in latent space by first downmixing the input audio to stereo and then forcing the neural network to upmix back to the original. \cite{manochaSpatializationQualityMetric2023} takes a very similar approach, but acting on binaural input and its accompanying monophonic mixdown. In both cases, content invariance of the network is one of the optimization goals, and is essential when using the latent vectors as \glspl{sip}. The former achieves it by creating two random 5-channel mixes and using the stereo downmix of one to resynthesize the other, while the latter utilizes an additional training task which optimizes the overall network's spatial embeddings to match that of a pre-trained neural binaural decoder which takes only directional coordinates as input. Simplified block diagrams for both methods are shown in \cref{fig:ml_descriptor}; the reader is directed to the original papers for details. A slightly different method is taken by \cite{satoSelfSupervisedLearningAudioVisual2022}, in which stereo audio captured with accompanying video is modified by either swapping the left and right channel, or using audio from a different video clip. The network then learns to spot said modifications, hence learning the spatial relationship between sound events and visual events.
 
 \begin{figure}[htb!]
-\caption{Block diagrams of spatial description via \gls{dl}.}
+\caption{Block diagrams of spatial description via \gls{dl} \cite{yangUpmixingStyleTransfer2022,manochaSpatializationQualityMetric2023}.}
 \label{fig:ml_descriptor}
 \resizebox{\linewidth}{!}{
 
