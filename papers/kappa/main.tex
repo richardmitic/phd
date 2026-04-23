@@ -108,7 +108,9 @@ How do music producers use stereo field?
 \section{Background}
 
 \subsection{Directional hearing}
-Humans are able to perceive the incoming direction of a sound by the virtue of have two ears which are both detecting similar, but not identical sound waves. There are two fundamental properties of these signals that enable directional hearing -- amplitude difference and time difference. Figure \cref{fig:directional_hearing} shows how these two properties enable directional hearing. Firstly, the difference in distance between the sound source and each ear will create a delay in receiving the sound at either ear. Secondly, the head itself creates a physical barrier that will attenuate sound waves at one ear more-so that at the other ear. These fundamental concepts have come to bee known as \gls{itd} and \gls{ild} respectively. Over time a person will learn to associate patterns in \gls{itd}/\gls{ild} with the physical location of the sound source.
+The psychoacoustic theory behind spatial hearing has been an active area of research since the mid 20th century, with early examples including the Jeffress model in which time differences between sound events at each ear contribute to a person's ability to locate sounds in space \cite{jeffressPlaceTheorySound1948}. The work of \citeauthor{lindemannEvaluationInterauralSignal1982} a few decades later expanded on this idea by translating the earlier theory to a \gls{dsp} context, and establishing the \gls{ild}, \gls{itd}, and \gls{iacc} as important measures to describe the spatial aspects of binaural signals in a quantifiable way \cite{lindemannEvaluationInterauralSignal1982}.
+
+Put simply, humans are able to perceive the incoming direction of a sound by observing both the amplitude difference and time difference of coincident sound waves arriving at the left and right ears. Figure \cref{fig:directional_hearing} shows how these two properties enable directional hearing. Firstly, the head itself creates a physical barrier that will attenuate sound waves at one ear more-so that at the other ear. Secondly, the difference in distance between the sound source and each ear will create a delay in receiving the sound at either ear. Over time a person will learn to associate patterns in \gls{itd}/\gls{ild} with the physical location of the sound source.
 
 \begin{figure}[htb]
     \centering
@@ -305,8 +307,6 @@ The terms \q{stereo image} is used to describe the overall distribution of sound
 
 
 \section{State of the art}
-
-The psychoacoustic theory behind spatial hearing has been an active area of research since the mid 20th century, with early examples including the Jeffress model in which time differences between sound events at each ear contribute to a person's ability to locate sounds in space \cite{jeffressPlaceTheorySound1948}. Lindemann's work a few decades later \cite{lindemannEvaluationInterauralSignal1982} expanded on this idea by translating the earlier theory to a \gls{dsp} context, and establishing the \gls{ild}, \gls{itd}, and \gls{iacc} as important measures to describe the spatial aspects of binaural signals in a quantifiable way.
 
 These low-level spatial cues have formed the basis of many other algorithms since. One such use is the prediction of perceptual ratings given by subjects in response to concert hall acoustics or the audio quality of music reproduction systems. \Citeauthor{bergSystematicEvaluationPerceived2003} \cite{bergSystematicEvaluationPerceived2003} give a long list of typical perceptual measures, although later literature has focused on the measures of \gls{asw} and \gls{lev}. However, as stated by \citeauthor{sarroffComputationalModelPerceived2011} \cite{sarroffComputationalModelPerceived2011}, the task of describing the spatial aspects of recorded music is inherently different to that acoustical signals since said recordings may exhibit spatial aspects that cannot occur in physical acoustic space.
 
