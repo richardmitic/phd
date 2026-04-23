@@ -14,6 +14,7 @@
 % drawing figures
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric}
+\usetikzlibrary {arrows.meta}
 \usepackage{pgfplots}
 
 %% References
@@ -36,7 +37,7 @@
 
 \tikzset{
     speaker/.pic={
-        \draw[black, rotate=-90, transform shape] (-3,0) -- (3,0) -- (2,2) -- (-2,2) -- (-3,0) (-2,2) -- (-2,4) -- (2,4) -- (2,2);
+        \draw[black, rotate=-90, transform shape] (-3,0) -- (3,0) -- (2,2) -- (-2,2) -- cycle (-2,2) -- (-2,4) -- (2,4) -- (2,2);
     },
     head/.pic={
         \filldraw[color=black, fill=white] (0,0) circle[radius=1];
@@ -115,6 +116,49 @@ Humans are able to perceive the incoming direction of a sound by the virtue of h
     \caption{Illustration of how humans perceive the direction of an incoming sound.}
     \label{fig:directional_hearing}
 \end{figure}
+
+
+\begin{figure}[htb]
+    \centering
+
+    \begin{tikzpicture}
+
+        % ILD speaker
+        \begin{scope}[rotate around={30:(0,0)}]
+            \coordinate (speaker_loc) at (4,0);
+            \pic[transform shape, scale=0.2] (itd_speaker) at (speaker_loc) {speaker};
+            \draw[decorate, decoration={expanding waves, angle=28,segment length=0.4cm}] (speaker_loc) -- (-2,0);
+        \end{scope}
+
+        % ILD head
+        \coordinate (shadow_top) at (110:1);
+        \coordinate (shadow_middle) at (200:2);
+        \coordinate (shadow_bottom) at (290:1);
+        \fill[lightgray] plot [smooth, tension=1.618] coordinates {(shadow_top) (shadow_middle) (shadow_bottom)};
+        \pic[transform shape] (itd_head) at (0,0) {head};
+
+
+        % ITD 
+        \begin{scope}[yshift=-6cm]
+            % ITD speaker
+            \begin{scope}[rotate around={30:(0,0)}]
+                \coordinate (speaker_loc) at (4,0);
+                \pic[transform shape, scale=0.2] (itd_speaker) at (speaker_loc) {speaker};
+            \end{scope}
+
+            % ILD head
+            \pic[transform shape] (ild_head) at (0,0) {head};
+            \coordinate (left_ear) at (-1.1,0);
+            \coordinate (right_ear) at (1.1,0);
+            \draw[-Stealth] (speaker_loc) -- (left_ear) node[midway, above] {$d_L$};
+            \draw[-Stealth] (speaker_loc) -- (right_ear) node[midway, below] {$d_R$};
+            \node[right] at (speaker_loc |- 0,0) {$d_L > d_R$};
+        \end{scope}
+
+    \end{tikzpicture}
+    % \caption{Example stereo image created by a music producer. Mono stems are shown as black dots and stereo stems as grey fills. Dashed lines represent the extent of the stereo image. Dotted lines represent the maximum boundaries of the possible stereo image.}
+\end{figure}
+
 
 \fxerror{Something about how different measures apply to different frequency ranges.}
 
@@ -233,9 +277,6 @@ The terms \q{stereo image} is used to describe the overall distribution of sound
             \pic[transform shape, scale=0.2] (right_speaker) at (\rad*\expand,0) {speaker};
         \end{scope}
 
-        % Draw full stereo image arc by first jumping from the origin to the start, then drawing the arc.
-        \draw (0,0) (150:\rad) arc (150:30:\rad);
-
         % Piano
         \path[fill,lightgray] (0,0) -- (120:\rad)  arc (120:80:\rad) -- (0,0);
         \node[above right] at (120:2) {Piano};
@@ -247,11 +288,14 @@ The terms \q{stereo image} is used to describe the overall distribution of sound
         \fill (0,0) (60:\rad) circle (2pt) node[above right] {Violin};
 
         % Stereo image
-        \path[draw,dashed] (0,0) -- (120:\rad);
-        \path[draw,dashed] (0,0) -- (60:\rad);
-        \path[draw,dotted] (0,0) -- (150:\rad);
-        \path[draw,dotted] (0,0) -- (30:\rad);
-        
+        \path[draw, dashed] (0,0) -- (120:\rad);
+        \path[draw, dashed] (0,0) -- (60:\rad);
+        \path[draw, dotted] (0,0) -- (150:\rad);
+        \path[draw, dotted] (0,0) -- (30:\rad);
+
+        % Draw full stereo image arc
+        \draw (150:\rad) arc (150:30:\rad);
+
         % Music producer
         \pic[scale=0.618] (producer) at (0,0) {head};
 
