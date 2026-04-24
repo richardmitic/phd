@@ -17,4 +17,7 @@ dependencies = [
     "statsmodels",
     "segno",
     "typer",
+    "sofar",
+    "pyfar",
+    "librosa",
 ]
