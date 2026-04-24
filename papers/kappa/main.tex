@@ -11,6 +11,8 @@
 \usepackage{enumitem}
 \usepackage{graphicx}
 
+\fxsetup{draft,inline,nomargin,theme=color}
+
 % drawing figures
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric}
@@ -60,6 +62,7 @@
 Spatial information is crucial to the listener's experience of music, and stereophonic recordings have long been the standard for capturing this spatiality. Recent advancements in computing, coupled with the availability of new, very large musical corpora, have created opportunities for large-scale quantitative analysis of the stereo image of recorded music. This licentiate thesis addresses a key gap in current research: direct analysis of raw music recordings to describe the stereo image. It will explore existing methods, assess their effectiveness, and demonstrate potential use cases for spatial analysis within audio reproduction, transmission and musical performance.
 \end{abstract}
 
+\listoffixmes
 
 \section*{Papers included in the thesis}
 \label{sec:papers_basic}
@@ -122,53 +125,70 @@ Put simply, humans are able to perceive the incoming direction of a sound by obs
 
 \begin{figure}[htb]
     \centering
+    % \resizebox{\textwidth}{!}{
+        \begin{tikzpicture}
 
-    \begin{tikzpicture}
-
-        % ILD speaker
-        \begin{scope}[rotate around={30:(0,0)}]
-            \coordinate (speaker_loc) at (4,0);
-            \pic[transform shape, scale=0.2] (itd_speaker) at (speaker_loc) {speaker};
-            \draw[decorate, decoration={expanding waves, angle=28,segment length=0.4cm}] (speaker_loc) -- (-2,0);
-        \end{scope}
-
-        % ILD head
-        \coordinate (shadow_top) at (110:1);
-        \coordinate (shadow_middle) at (200:2);
-        \coordinate (shadow_bottom) at (290:1);
-        \fill[lightgray] plot [smooth, tension=1.618] coordinates {(shadow_top) (shadow_middle) (shadow_bottom)};
-        \pic[transform shape] (itd_head) at (0,0) {head};
-
-
-        % ITD 
-        \begin{scope}[yshift=-6cm]
-            % ITD speaker
+            % ILD speaker
             \begin{scope}[rotate around={30:(0,0)}]
                 \coordinate (speaker_loc) at (4,0);
                 \pic[transform shape, scale=0.2] (itd_speaker) at (speaker_loc) {speaker};
+                \draw[decorate, decoration={expanding waves, angle=28,segment length=0.4cm}] (speaker_loc) -- (-2,0);
             \end{scope}
 
             % ILD head
-            \pic[transform shape] (ild_head) at (0,0) {head};
-            \coordinate (left_ear) at (-1.1,0);
-            \coordinate (right_ear) at (1.1,0);
-            \draw[-Stealth] (speaker_loc) -- (left_ear) node[midway, above] {$d_L$};
-            \draw[-Stealth] (speaker_loc) -- (right_ear) node[midway, below] {$d_R$};
-            \node[right] at (speaker_loc |- 0,0) {$d_L > d_R$};
-        \end{scope}
+            \coordinate (shadow_top) at (110:1);
+            \coordinate (shadow_middle) at (200:2);
+            \coordinate (shadow_bottom) at (290:1);
+            \fill[lightgray] plot [smooth, tension=1.618] coordinates {(shadow_top) (shadow_middle) (shadow_bottom)};
+            \pic[transform shape] (itd_head) at (0,0) {head};
 
-    \end{tikzpicture}
+
+            % ITD 
+            \begin{scope}[yshift=-6cm]
+                % ITD speaker
+                \begin{scope}[rotate around={30:(0,0)}]
+                    \coordinate (speaker_loc) at (4,0);
+                    \pic[transform shape, scale=0.2] (itd_speaker) at (speaker_loc) {speaker};
+                \end{scope}
+
+                % ILD head
+                \pic[transform shape] (ild_head) at (0,0) {head};
+                \coordinate (left_ear) at (-1.1,0);
+                \coordinate (right_ear) at (1.1,0);
+                \draw[-Stealth] (speaker_loc) -- (left_ear) node[midway, above] {$d_L$};
+                \draw[-Stealth] (speaker_loc) -- (right_ear) node[midway, below] {$d_R$};
+                \node[right] at (speaker_loc |- 0,0) {$d_L > d_R$};
+            \end{scope}
+
+            % \node (itd_plot) at (10, -3) {\includegraphics{figures/example_pan.png}};
+
+        \end{tikzpicture}
+    % }
     % \caption{Example stereo image created by a music producer. Mono stems are shown as black dots and stereo stems as grey fills. Dashed lines represent the extent of the stereo image. Dotted lines represent the maximum boundaries of the possible stereo image.}
 \end{figure}
 
+The relative importance of \gls{ild} and \gls{itd} differ depending on the frequency of the incoming sound. The reasons for this are twofold. Firstly, a person's inter-aural distance (the physical distance between their ears) must be longer than the wavelength of the incoming sound wave in order for them to detect the phase difference between wave peaks. Secondly the hair cells inside the human cochlea can only detect the fine structure of a sound wave up until roughly 1.6kHz \cite{lindemannEvaluationInterauralSignal1982}. \citeauthor{lindemannEvaluationInterauralSignal1982} gives a rule of thumb that time differences of less than 7.5ms are heard as a single auditory event (for which direction could be inferred), and delays above 21ms are heard as uncorrelated events. Hence, at 1.6kHz and below \gls{itd} is more important, whereas above 1.6kHz \gls{ild} is more important. Furthermore, \citeauthor{blauertSpatialHearingOne1996}'s subsequent work found firstly that both \gls{ild} and \gls{itd} are relevant within a frequency band, and secondly that the angle of incidence of the sound wave plays a role in how the cues are perceived \cite{blauertSpatialHearingOne1996}. Despite this, the aforementioned rules of thumb are still broadly accepted, even being encoded into international standards such as \cite{iso-11172-3:mpeg_audio}. As an example, \cref{fig:example_pan} shows two recordings (a low-frequency kick drum and high-frequency hi-hat) that originate from the right-hand side of a listener.
 
-\fxerror{Something about how different measures apply to different frequency ranges.}
+\begin{figure}[htb]
+    \centering
+    \includegraphics[height=0.3\textheight]{figures/example_pan.png}
+    \caption{Example sounds that come the right-hand side.}
+    \label{fig:example_pan}
+\end{figure}
+
+
+\fxerror{Explain cochlea?}
 
 \subsection{Loudness perception}
-Humans perceive the loudness of sound, not in terms of the absolute amplitude of the sound wave, but the \textit{power} of the sound wave. This is 
+Humans perceive the loudness of sound, not in terms of the absolute amplitude of the sound wave, but the \textit{power} of the sound wave. Mathematically speaking, perceived loudness is proportional to the \gls{rms} \gls{spl} raised to an exponent \cite{mooreIntroductionPsychologyHearing2013}. Observing that the calculation of \gls{rms} naturally involves taking the square of the original time function (see \cref{eq:rms}), it follows multiplication of a signal by $\sqrt{2}$ will result in double perceived loudness. Conversely, multiplying a signal by $\frac{1}{\sqrt{2}}$ will halve the perceived loudness.
+
+\begin{equation}
+    \label{eq:rms}
+    f_{RMS} = \sqrt{\frac{1}{T_2 - T_1} \int_{T_1}^{T_2}[f(t)^2]dt}
+\end{equation}
 
 \subsection{Panning}
-The concepts of directional hearing are applied in music production to make sound sources appear as though they originate from a specific direction or position, often referred to as the \q{phantom position}. In musical terms, this is call \q{panning}. In accordance with the two signal differences a that humans are able to detect, there are also two basic types of panning -- amplitude panning and time panning. By way of example, \cref{fig:phantom_amplitude} shows how the phantom position can be moved anywhere in between the speakers that are reproducing the sound by applying different amplitude gains to the left and right channel of a stereo recording.
+The concepts of directional hearing are applied in music production to make sound sources appear as though they originate from a specific direction or position, often referred to as the \q{phantom position}. In recording studio vernacular, this is call \q{panning}. In accordance with the two signal differences a that humans are able to detect, there are also two basic types of panning -- amplitude panning and time panning. By way of example, \cref{fig:phantom_amplitude} shows how the phantom position can be moved anywhere in between the speakers that are reproducing the sound by applying different amplitude gains to the left and right channel of a stereo recording.
 
 \begin{figure}[htb]
     \centering
@@ -176,6 +196,43 @@ The concepts of directional hearing are applied in music production to make soun
     \caption{Illustration of a phantom position created by amplitude panning.}
     \label{fig:phantom_amplitude}
 \end{figure}
+
+\begin{figure}[htb]
+    \centering
+
+    \begin{tikzpicture}
+        \def\rad{4};
+        \def\expand{1.02};
+        \def\soundwaveangle{10};
+        \def\soundwavesegmentlength{0.3cm};
+
+        \begin{scope}[rotate around={150:(0,0)}]
+            \pic[transform shape, scale=0.2] (left_speaker) at (\rad*\expand,0) {speaker};
+        \end{scope}
+
+        \begin{scope}[rotate around={30:(0,0)}]
+            \pic[transform shape, scale=0.2] (right_speaker) at (\rad*\expand,0) {speaker};
+        \end{scope}
+        
+        \begin{scope}[rotate around={115:(0,0)}]
+            \pic[transform shape, scale=0.2, dotted, line width=0.8pt, line cap=round, dash pattern=on 0pt off 3\pgflinewidth] (phantom_speaker) at (\rad*\expand,0) {speaker};
+        \end{scope}
+
+        % Stereo image
+        \draw[decorate, decoration={expanding waves, angle=15, segment length=\soundwavesegmentlength}, line width=1.5pt] (115:\rad) -- (0,0);
+        \draw[decorate, decoration={expanding waves, angle=10, segment length=\soundwavesegmentlength}, line width=1pt] (150:\rad) -- (0,0);
+        \draw[decorate, decoration={expanding waves, angle=5, segment length=\soundwavesegmentlength}, line width=0.5pt] (30:\rad) -- (0,0);
+
+        % Draw full stereo image arc
+        \draw (150:\rad) arc (150:30:\rad);
+
+        % Music producer
+        \pic (producer) at (0,0) {head};
+
+    \end{tikzpicture}
+    \caption{Perception of a phantom sound source created by amplitude panning. The phantom position is represented by a dotted loudspeaker. The sound wave from the left speaker has higher amplitude than that of the right speaker, thereby creating a phantom source which appears to come from the left.}
+\end{figure}
+
 
 Another frequently used technique is \q{binaural panning}, which assigns combinations of amplitude and time difference to each stereo channel. This is typically achieved by applying a \gls{hrir} to the raw audio signal. An \gls{hrir} is pair of impulse responses recorded with microphones placed in the ears of either a real person or a dummy head. To obtain an \gls{hrir}, a known test signal is played from a specific position in a room, and is recorded using the previously mentioned binaural microphones. The \gls{hrir} can then be convolved with any other monophonic recording to make it appear as though it came from the position of the original sound source.
 
@@ -186,28 +243,6 @@ Another frequently used technique is \q{binaural panning}, which assigns combina
     \label{fig:phantom_binaural}
 \end{figure}
 
-\begin{figure}[htb]
-    \begin{tikzpicture}[samples=200, domain=0:5*360]
-        \begin{axis}[
-            width=10cm, height=4cm,
-            enlarge x limits=false,
-            xtick=\empty,
-            axis lines*=middle,
-            hide y axis
-        ]
-        \addplot [no markers, smooth] {sin(10*x) * exp(-0.002*x)};
-        \end{axis}
-    \end{tikzpicture}
-\end{figure}
-
-\begin{figure}[htb]
-    \resizebox{0.5\textwidth}{!} {
-        \begin{tikzpicture}
-            \draw (0,0) -- (1,1) -- (2,-1) -- (3,0.5) -- (4,-0.5) -- (5,0.25) -- (6,-0.25) -- (7,0.1) -- (8,-0.1) -- (9,0);
-        \end{tikzpicture}
-    }
-    
-\end{figure}
 
 In traditional recording studio setups, the recording engineer or producer will use one or more microphones to capture an original sound source. These singular sound sources are commonly called \q{stems}. During the production process, the stems may be panned to create a sense of space in the final mix. In the case that the stem was recorded using two microphones, the stem would be called a \q{stereo stem}, and the term \q{panning} is usually replaced by \q{balance}, and only amplitude panning (as opposed to time or binaural panning) would be applied.
 
@@ -253,7 +288,7 @@ Amplitude panning is the most common panning technique is traditional music prod
 \end{figure}
 
 \subsection{Stereo image}
-The terms \q{stereo image} is used to describe the overall distribution of sound across the horizontal plane after panning and any other production techniques have been applied. One may also use terms like \q{stereo field}, \q{soundstage}, or \q{panorama}, which all refer to the same thing.  They are usually used in qualitative descriptions such as \q{big}, \q{wide}, and \q{ambient} rather than quantitative measures \cite{owsinskiMixingEngineersHandbook2006}. When mixing a musical recording, a producer will pan individual stems to their desired position within the stereo image. Those stems which are recorded in stereo in fact have their own stereo image, which can also be controlled by the producer. The combination of all stems into a final stereo mix, constitutes the overall stereo image. 
+The term \q{stereo image} is used to describe the overall distribution of sound across the horizontal plane after panning and any other production techniques have been applied. One may also use terms like \q{stereo field}, \q{soundstage}, or \q{panorama}, which all refer to the same thing.  They are usually used in qualitative descriptions such as \q{big}, \q{wide}, and \q{ambient} rather than quantitative measures \cite{owsinskiMixingEngineersHandbook2006}. When mixing a musical recording, a producer will pan individual stems to their desired position within the stereo image. Those stems which are recorded in stereo in fact have their own stereo image, which can also be controlled by the producer. The combination of all stems into a final stereo mix, constitutes the overall stereo image. 
 
 \Cref{fig:stereo_image} shows a simple example stereo image, as perceived by the producer. It contains two mono stems -- vocals and violin, and one stereo stem -- piano. There are some common tropes seen throughout many productions, some of which are shown in the diagram. Firstly, vocals are recorded in mono and panned to the centre. Secondly, since the piano is panned slightly left, the violin is panned roughly the same amount to the right in order to achieve a balanced mix. Thirdly, all stems are placed in the stereo image in a way that emulates a natural performance on a stage, and to avoid separate instruments masking each other. Note that while these practices are typical, they are purely an artistic choice on behalf of the producer \cite{owsinskiMixingEngineersHandbook2006}; Recordings breaking the trend are not difficult to find.
 
@@ -305,14 +340,15 @@ The terms \q{stereo image} is used to describe the overall distribution of sound
     \caption{Example stereo image created by a music producer. Mono stems are shown as black dots and stereo stems as grey fills. Dashed lines represent the extent of the stereo image. Dotted lines represent the maximum boundaries of the possible stereo image.}
 \end{figure}
 
+Describing the stereo image of a recording has its roots in the acoustics domain, in which typical use cases are the analysis of concert halls and music reproduction systems. In these cases, the previously mentioned low-level spatial cues typically form the basis of the analysis. \Citeauthor{bergSystematicEvaluationPerceived2003} \cite{bergSystematicEvaluationPerceived2003} give a long list of typical perceptual measures that can be derived from the low-level cues, although later literature has focused on the measures of \gls{asw} and \gls{lev}. However, as stated by \citeauthor{sarroffComputationalModelPerceived2011} \cite{sarroffComputationalModelPerceived2011}, the task of describing the spatial aspects of recorded music is inherently different to that of acoustical signals since said recordings may exhibit spatial aspects that cannot occur in physical acoustic space.
 
-\section{State of the art}
+\section{Stereo image description - state of the art}
 
-These low-level spatial cues have formed the basis of many other algorithms since. One such use is the prediction of perceptual ratings given by subjects in response to concert hall acoustics or the audio quality of music reproduction systems. \Citeauthor{bergSystematicEvaluationPerceived2003} \cite{bergSystematicEvaluationPerceived2003} give a long list of typical perceptual measures, although later literature has focused on the measures of \gls{asw} and \gls{lev}. However, as stated by \citeauthor{sarroffComputationalModelPerceived2011} \cite{sarroffComputationalModelPerceived2011}, the task of describing the spatial aspects of recorded music is inherently different to that acoustical signals since said recordings may exhibit spatial aspects that cannot occur in physical acoustic space.
+Early examples of the use of spatial cues for analysis of recorded music are the \enquote{\gls{pi}} and \enquote{ambience index} specified by \citeauthor{avendanoFrequencyDomainTechniques2002} \cite{avendanoFrequencyDomainTechniques2002}, which are loosely analogous to \gls{ild} and \gls{iacc} in the acoustics domain. To estimate the \gls{pi}, a signal model is assumed whereby a musical source is panned within the mix using the \enquote{energy preserving pan law}, in which amplitude differences are applied to each channel such that the sum of the squared amplitudes equals 1. While this panning technique does not affect the phase of either channel, existing phase differences between channels are measured using the \enquote{ambience index}, which is defined such that it is low when the stereo channels are correlated (indicating a direct sound source), and high when channels are uncorrelated (indicating an ambient or reverberant sound source). 
 
-Early examples of the use of spatial cues for analysis of recorded music are the \enquote{\gls{pi}} and \enquote{ambience index} specified by \citeauthor{avendanoFrequencyDomainTechniques2002} \cite{avendanoFrequencyDomainTechniques2002}, which are loosely analogous to \gls{ild} and \gls{iacc} in the acoustics domain. To estimate the \gls{pi}, a signal model is assumed whereby a musical source is panned within the mix using the \enquote{energy preserving pan law}, in which amplitude differences are applied to each channel such that the sum of the squared amplitudes equals 1. While this panning technique does not affect the phase of either channel, existing phase differences between channels are measured using the \enquote{ambience index}, which is defined such that it is low when the stereo channels are correlated (indicating a direct sound source), and high when channels are uncorrelated (indicating an ambient or reverberant sound source). The same signal model has been the basis for much musical research since, e.g. the \gls{adress} algorithm \cite{barrySoundSourceSeparation2004} (and its subsequent downstream projects \cite{cooneyEnhancedImplementationADRess2006,sofianosEffectiveSingingVoice2010,defreinReformulatingBinaryMasking2020,defreinRemedyingSoundSource2020}) which attempts to separate sound sources by locating them in the horizontal plane.
+The same signal model has been the basis for much musical research since, e.g. the \gls{adress} algorithm \cite{barrySoundSourceSeparation2004} (and its subsequent downstream projects \cite{cooneyEnhancedImplementationADRess2006,sofianosEffectiveSingingVoice2010,defreinReformulatingBinaryMasking2020,defreinRemedyingSoundSource2020}) which attempts to separate sound sources by locating them in the horizontal plane. Importantly, both the panning and ambience index are calculated in the \gls{tf} domain and result in one value for each \gls{tf} bin, and hence enable use cases that require resynthesis or editing of audio after analysis. For the purpose of description, it is arguable that a summary of such spatial cues is more useful.
 
-Using the same signal model, the spatial description of recorded music specifically has been attempted several times. Firstly by Tzanetakis et al. in \cite{tzanetakisStereoPanningFeatures2007,tzanetakisStereoPanningInformation2010}, who use the \gls{pi} to define a set of \gls{spf} used for genre classification and \gls{mir}. \gls{spf} firstly splits the mix into perpetually relevant frequency bands, secondly describes the \enquote{amount of panning} present in each band, and optionally estimates the number of sources present in the mix. For a more detailed inspection of precisely where in the horizontal plane musical energy is located, one can instead utilize a \gls{ph} using the techniques described by \citeauthorandnumber{sarroffMeasurementsSpaciousnessStereophonic2008} or \citeauthorandnumber{gomezMusicSimilaritySystems2008}.
+Using the same signal model proposed by \citeauthor{avendanoFrequencyDomainTechniques2002}, the spatial description of recorded music specifically has been attempted several times. Firstly by Tzanetakis et al. in \cite{tzanetakisStereoPanningFeatures2007,tzanetakisStereoPanningInformation2010}, who use the \gls{pi} to define a set of \gls{spf} used for genre classification and \gls{mir}. \gls{spf} firstly splits the mix into perpetually relevant frequency bands, secondly describes the \enquote{amount of panning} present in each band, and optionally estimates the number of sources present in the mix. For a more detailed inspection of precisely where in the horizontal plane musical energy is located, one can instead utilize a \gls{ph} using the techniques described by \citeauthorandnumber{sarroffMeasurementsSpaciousnessStereophonic2008} or \citeauthorandnumber{gomezMusicSimilaritySystems2008}.
 
 While the aforementioned studies focus on descriptions of amplitude panning in stereo mixes, recording engineers can make use of other techniques such as to add spatial feeling to their mix. These techniques (described by \citeauthor{tardieuProductionEffectAudio2011} as \enquote{Phase Stereo}) can be quantified using their definition of the \gls{ssps} \cite{tardieuProductionEffectAudio2011}. In the same manuscript another method of quantifying amplitude panning is defined, which is based on the \gls{ild} of a cochleagram, and aims to contain more precision in the frequency axis than the azimuthal axis.
 
