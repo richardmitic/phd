@@ -349,12 +349,12 @@ Early examples of the use of spatial cues for analysis of recorded music are the
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.5\textwidth]{figures/waveforms.pdf}
+    \includegraphics[height=0.9\textheight]{figures/waveforms.pdf}
     \caption{Example panning and ambience index}
     \label{fig:pi_ai}
 \end{figure}
 
-\Cref{fig:pi_ai} shows the panning index and ambiance index for an example music recording. The recording itself is a solo singer recorded with no ambient components, panned from left to right over the course of the musical phrase. At the midway point, an artificial reverb effect is added and slowly faded in. One can observe firstly that the ambiance is low while there is no reverb and increases steadily in frequency bands where audio energy is present, until finally all frequency bands have high ambiance. Secondly, the panning index start hard left and moves steadily right, become more and more unclear as the reverb is faded in. 
+As the panning and ambience indices are key to many subsequent works, \cref{fig:pi_ai} demonstrates them on an example music recording. The recording itself is a solo singer recorded in an anechoic chamber, amplitude panned from left to right over the course of the musical phrase. At the midway point, an artificial reverb effect (i.e. a source of ambience) is added and slowly faded in. One can observe firstly that the ambience is low while there is no reverb, then increases steadily in frequency bands where audio energy is present, until finally all frequency bands have high ambience. Secondly, the panning index starts hard left and moves steadily right, becoming more and more unclear as the reverb is faded in. 
 
 The same signal model has been the basis for much musical research since, e.g. the \gls{adress} algorithm \cite{barrySoundSourceSeparation2004} (and its subsequent downstream projects \cite{cooneyEnhancedImplementationADRess2006,sofianosEffectiveSingingVoice2010,defreinReformulatingBinaryMasking2020,defreinRemedyingSoundSource2020}) which attempts to separate sound sources by locating them in the horizontal plane. Importantly, both the panning and ambience index are calculated in the \gls{tf} domain and result in one value for each \gls{tf} bin, and hence enable use cases that require resynthesis or editing of audio after analysis. For the purpose of description, it is arguable that a summary of such spatial cues is more useful.
 
