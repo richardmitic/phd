@@ -10,6 +10,7 @@
 \usepackage{fixme}
 \usepackage{enumitem}
 \usepackage{graphicx}
+\usepackage{afterpage}
 
 \fxsetup{draft,inline,nomargin,theme=color}
 
@@ -17,6 +18,10 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric}
 \usetikzlibrary {arrows.meta}
+\usetikzlibrary {arrows}
+\usetikzlibrary{positioning}
+\usetikzlibrary{fit}
+\usetikzlibrary{backgrounds}
 \usepackage{pgfplots}
 
 %% References
@@ -342,11 +347,29 @@ The term \q{stereo image} is used to describe the overall distribution of sound 
 
 Describing the stereo image of a recording has its roots in the acoustics domain, in which typical use cases are the analysis of concert halls and music reproduction systems. In these cases, the previously mentioned low-level spatial cues typically form the basis of the analysis. \Citeauthor{bergSystematicEvaluationPerceived2003} \cite{bergSystematicEvaluationPerceived2003} give a long list of typical perceptual measures that can be derived from the low-level cues, although later literature has focused on the measures of \gls{asw} and \gls{lev}. However, as stated by \citeauthor{sarroffComputationalModelPerceived2011} \cite{sarroffComputationalModelPerceived2011}, the task of describing the spatial aspects of recorded music is inherently different to that of acoustical signals since said recordings may exhibit spatial aspects that cannot occur in physical acoustic space.
 
-\section{Stereo image description - state of the art}
+\subsection{Music production}
+
+Explain what a \gls{daw} is and get a nice picture of a session. This is how producers normally work. Show some panning. Show some analysis tools like goniometers and plugins.
+
+
+\subsection{Time-Frequency representation of audio}
+
+\subsubsection{\gls{stft}}
+
+\subsubsection{Cochleagrams}
+
+
+\subsection{Machine learning}
+The large scale of the vast music repositories being addressed by the research questions naturally implies that some sort of machine learning is necessary. Broadly speaking, machine learning techniques can be broken into two classes - supervised and unsupervised. The former requires the training dataset to be labelled, while the latter does not. In relation to research question 1, we assume that a music producer's \gls{daw} session is the only source of objective ground-truth data. Furthermore, we assume that \gls{daw} sessions are not publicly available, as was found in \cite{colonelReverseEngineeringRecording2021,rodriguezSpectralDynamicConstellations2024}; The only public-facing output of a recording session is the mixdown. It follows then that any spatial information derived from a mixdown will be unlabelled data and will therefore require unsupervised learning in order to make sense of it.
+
+
+\section{Related works}
+
+\subsection{Stereo image description}
 
 Early examples of the use of spatial cues for analysis of recorded music are the \enquote{\gls{pi}} and \enquote{ambience index} specified by \citeauthor{avendanoFrequencyDomainTechniques2002} \cite{avendanoFrequencyDomainTechniques2002}, which are loosely analogous to \gls{ild} and \gls{iacc} in the acoustics domain. To estimate the \gls{pi}, a signal model is assumed whereby a musical source is panned within the mix using the \enquote{energy preserving pan law}, in which amplitude differences are applied to each channel such that the sum of the squared amplitudes equals 1. While this panning technique does not affect the phase of either channel, existing phase differences between channels are measured using the \enquote{ambience index}, which is defined such that it is low when the stereo channels are correlated (indicating a direct sound source), and high when channels are uncorrelated (indicating an ambient or reverberant sound source). 
 
-
+\afterpage{\clearpage}
 \begin{figure}[htb]
     \centering
     \includegraphics[height=0.9\textheight]{figures/waveforms.pdf}
@@ -368,14 +391,104 @@ All the above use classical \gls{dsp} to create their spatial descriptors, but m
 
 Neural generation of spatial audio continues to be a hot topic up to the present day, with many attempts to generate high-quality binaural, ambisonic or multichannel audio from mono sources \cite{limEnhancingSpatialAudio2024,liCyclicLearningBinaural2024,liTASPersonalizedTextguided2024,chenCCStereoAudioVisualContextual2025,melechovskySonicMasterControllableAllinOne2025,santosLargeScaleSelfSupervisedLearning2025,wangSpatialV2AVisualGuidedHighfidelity2026}. In doing so, the networks must infer spatial information from a source other than audio (typically an accompanying video or text prompt), and in the process will learn the spatial qualities of their audio training data.
 
+\subsection{Analysis of large musical datasets}
 
-\section{State of practice}
+\section{Research Methodology}
 
-In industry, spatial analysis of music signals is most commonly used for audio coding, compression, and transmission/distribution. International standards for audio coding include MPEG-Surround \cite{iso/iec23003-1InformationTechnologyMPEG2007}, which encodes multichannel audio based on the spatial cues \gls{ild}, \gls{ipd}, and \gls{iacc}. However, there has recently been a shift away from channel-based audio (such as MPEG-Surround) to scene- and object-based paradigms. In fact, the subsequent \gls{mpeg} standard MPEG-H \cite{mpeg-h} includes options to encode all three audio paradigms. The most common industry format is currently Dolby Atmos\texttrademark. Originally designed for cinemas and other such very large speaker arrays, there is now focus on rendering it in headphones for consumer users. Headphone rendering sometimes entails the use of head tracking to make it appear as though audio is always coming from a specific direction, although this is generally limited to specific hardware platforms where tracking data is available. Most recently, \gls{3gpp} have begun standardization of \gls{ivas} \cite{IVASCodecNG}, a telephony standard which again, includes all the aforementioned audio paradigms.
+\Cref{fig:research_methodology} shows a diagram of the research methodology for each paper included in this thesis and shows how each research track fed into subsequent tracks.
 
-Even though the newer audio formats are being heavily pushed by big industry players, adoption by consumers and music professionals is slow.  Adoption of MPEG-H and its branded version \enquote{Sony 360} is even lower. \enquote{DTS:X} is another proprietary spatial audio format, although its usage is generally limited to films released on physical media \cite{publishedDTSWhatIt2021}. Use of the industry formats is sometimes problematic due to patent licensing, and as a response the Alliance for Open Media has also specified a \enquote{royalty-free} standard for immersive audio named \gls{iamf} \cite{ImmersiveAudioModel}. Within the domain of spatial audio generation, \gls{vr} and \gls{ar} are the most common use cases given, although they are also yet to find mainstream adoption.
+\begin{figure}[h!]
+    \centering
 
-A common use case given in academia for calculating stereo features of individual tracks is music similarity detection and recommendation. However, the industry has generally not adopted these techniques, opting instead to use textural and contextual data for each track.
+    \tikzset{
+        begin/.style={draw, inner sep=0pt, minimum width=0.3pt, minimum height=6pt},
+        end/.style={circle, draw, fill=white, minimum size=1pt},
+        arrow/.style = {->, >=Latex}
+    }
+
+    \definecolor{bgcolorA}{HTML}{E0EAEB}  % 🔵 Pale, cool blue-grey
+    \definecolor{bgcolorB}{HTML}{E9EBE0}  % 🌿 Pale, neutral sage green
+    \definecolor{bgcolorC}{HTML}{E0D7E6}  % 💜 Pale lavender/mauve
+    \definecolor{bgcolorD}{HTML}{EAD8C0}  % 🟠 Pale sandy beige/peach (NEW)
+
+    \resizebox{\textwidth}{!}{
+        \begin{tikzpicture}[node distance=2cm]
+            
+            \node (aux_begin) [begin, label={[name=aux_label] left:Auxtrument}]  {};
+            \node (ork_begin) [begin, below of=aux_begin, label={[name=ork_label] left:Orkester}]  {};
+            \node (dafx_begin) [begin, below of=ork_begin, xshift=4cm]  {};
+            \node (bth_begin) [begin, below of=dafx_begin] {};
+            \node (slr_begin) [begin, below of=bth_begin, xshift=4cm] {};
+
+            \node (aux_end) [end, right of=aux_begin, xshift=4cm, label={[name=A_label] right:Paper A}] {};
+            \draw (aux_begin) -- (aux_end);
+
+            \coordinate (ork_end) at ([xshift=7cm] ork_begin);
+            \node (paperB) [end, right of=dafx_begin, xshift=4cm, label={[name=B_label] right:Paper B}] {};
+            \draw (ork_begin) -- (ork_end);
+            \draw (dafx_begin) -- (paperB);
+            \node (ork_to_dafx_begin) [right of=ork_begin] {};
+            \draw[arrow] (ork_to_dafx_begin) to [in=180, out=0] (dafx_begin);
+            
+            \node (bth_end) [end, right of=bth_begin, xshift=8cm, label={[name=C_label] right:Paper C}] {};
+            \draw (bth_begin) -- (bth_end);
+            
+            \node (slr_end) [end, right of=slr_begin, xshift=10cm, label={[name=D_label] right:Paper D}] {};
+            \draw (slr_begin) -- (slr_end);
+
+            \coordinate (ork_to_bth_begin) at (ork_end);
+            \coordinate (ork_to_bth_end) at ([xshift=3cm]ork_end |- bth_begin);
+            \draw[arrow] (ork_end) to [in=180, out=0] (ork_to_bth_end);
+        
+            \node (ork_to_slr_begin) [right of=ork_begin, xshift=2cm] {};
+            \draw[arrow] (ork_to_slr_begin) to [in=180, out=0] (slr_begin);
+
+            \coordinate (slightly_above) at ([yshift=1cm]aux_begin);
+            \coordinate (slightly_below) at ([yshift=-1cm]slr_begin);
+
+            \node (rq1_done) at (bth_end |- slightly_above) {RQ \ref{rq:usecase} answered};
+            \node (rq2_done) at (slr_end |- slightly_above) {RQ \ref{rq:methods} answered};
+            \draw[dotted, thick] (rq1_done) -- (bth_end |- slightly_below);
+            \draw[dotted, thick] (rq2_done) -- (slr_end |- slightly_below);
+
+            \begin{scope}[on background layer, inner sep=15pt, rounded corners]
+                \node (exploratory) [fill=bgcolorA, fit=(aux_begin) (aux_label) (ork_end) (ork_label) (A_label), label={[align=right] left:{Exploratory\\RQ1,RQ2}}] {};
+                \node (objective) [fill=bgcolorD, fit=(dafx_begin) (B_label), label={[align=right] left:{Objective experiment\\RQ1}}] {};
+                \node (perceptual) [fill=bgcolorB, fit=(bth_begin) (bth_end) (C_label), label={[align=right] left:{Perceputal test\\RQ1}}] {};
+                \node (litrev) [fill=bgcolorC, fit=(slr_begin) (slr_end) (D_label), label={[align=right] left:{\gls{slr}\\RQ2}}] {};
+                % \draw[help lines,step=1] (0,0) grid (18,-10);
+            \end{scope}
+
+            \node (all) [fit=(exploratory) (litrev)] {}; 
+            \draw[arrow] ([yshift=-0.618cm]all.south west) -- ([yshift=-0.618cm]all.south east) node [midway, below] {Time};
+
+        \end{tikzpicture}
+    }
+    \caption{Diagram of research methodologies and their relation to published papers and research questions.}
+    \label{fig:research_methodology}
+\end{figure}
+
+The research was initiated with a period of exploration and refinement of the research questions. Two work streams (named Auxtrument and Orkester) were established early on as frameworks to explore the importance of spatial information in musical audio, firstly from a musical performance perspective, and secondly from a scientific perspective. 
+
+The Auxtrument initiative consisted of a joint project with many other researchers to make a musical performance that explored the use of space and merged realities. A custom instrument (the Auxtrument) was designed and built, the purpose of which was to generate a networked artificial reverberation chamber, embodying local sound sources with new spatial qualities \cite{franklinMergingPlacesRealTime2024,franklinComposingNetworkedReverberation2025}. This resulted in the retrospective paper, named \q{paper A} in this thesis \cite{franklinDevelopmentWebBasedRealTime2025}.
+
+Running concurrently to Auxtrument, the \q{Orkester} initiative was an exploration of the more technical side of stereo field description. It involved a limited literature search to find methods of describing stereo field, followed by a period of software development to implement the discovered methods. Once the implementation was reliable, a period of musical exploration commenced, testing the various algorithms on recordings that were known to contain interesting spatial features. This had several outcomes. The most direct consequence was the inception of an objective experiment to determine how the various stereo field description techniques reacted to different musical recordings. This culminated in paper B \cite{miticObjectiveComparisonPanning2025}. 
+
+Concurrently to the objective experiment, a perceptual listening test was planned and executed to determine how listeners react to the panning position of speech overlayed on top of music. The software developed for Orkester was subsequently used to analyse  the audio stimuli from the perceptual test in order to draw conclusions in paper C\cite{miticPerceptualEvaluationBinaurally2026}, which described the results and analysis of the perceptual test.
+
+Lastly, through the developement of Orkester it became apparent that the original literature search was far from comprehensive. This spurred paper D\cite{miticSystematicLiteratureReview2026}, which was a systematic literature review designed to find all existing techniques that could be used to create a \gls{sip}.  
+
+The combination of the exploratory work, objective experiment, and perceptual test provided a satisfactory answer for RQ\ref{rq:usecase}. The initial literature search plus the \gls{slr} provided an answer to RQ\ref{rq:methods}.
+
+
+
+% \section{State of practice}
+
+% In industry, spatial analysis of music signals is most commonly used for audio coding, compression, and transmission/distribution. International standards for audio coding include MPEG-Surround \cite{iso/iec23003-1InformationTechnologyMPEG2007}, which encodes multichannel audio based on the spatial cues \gls{ild}, \gls{ipd}, and \gls{iacc}. However, there has recently been a shift away from channel-based audio (such as MPEG-Surround) to scene- and object-based paradigms. In fact, the subsequent \gls{mpeg} standard MPEG-H \cite{mpeg-h} includes options to encode all three audio paradigms. The most common industry format is currently Dolby Atmos\texttrademark. Originally designed for cinemas and other such very large speaker arrays, there is now focus on rendering it in headphones for consumer users. Headphone rendering sometimes entails the use of head tracking to make it appear as though audio is always coming from a specific direction, although this is generally limited to specific hardware platforms where tracking data is available. Most recently, \gls{3gpp} have begun standardization of \gls{ivas} \cite{IVASCodecNG}, a telephony standard which again, includes all the aforementioned audio paradigms.
+
+% Even though the newer audio formats are being heavily pushed by big industry players, adoption by consumers and music professionals is slow.  Adoption of MPEG-H and its branded version \enquote{Sony 360} is even lower. \enquote{DTS:X} is another proprietary spatial audio format, although its usage is generally limited to films released on physical media \cite{publishedDTSWhatIt2021}. Use of the industry formats is sometimes problematic due to patent licensing, and as a response the Alliance for Open Media has also specified a \enquote{royalty-free} standard for immersive audio named \gls{iamf} \cite{ImmersiveAudioModel}. Within the domain of spatial audio generation, \gls{vr} and \gls{ar} are the most common use cases given, although they are also yet to find mainstream adoption.
+
+% A common use case given in academia for calculating stereo features of individual tracks is music similarity detection and recommendation. However, the industry has generally not adopted these techniques, opting instead to use textural and contextual data for each track.
 
 
 \section{Paper details}
