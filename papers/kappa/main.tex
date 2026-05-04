@@ -29,7 +29,7 @@
     style=ieee,
     backend=biber
 ]{biblatex}
-\addbibresource{../library.bib}
+\addbibresource{../library_biblatex.bib}
 
 %% Acronyms
 \usepackage[automake]{glossaries-extra}
@@ -367,14 +367,48 @@ The assessment of how the two stereo channels interact is of prime importance wh
     \label{fig:goniometer}
 \end{figure}
 
-In a large \gls{daw} session containing many tracks, the producer will make artistic choices about where in the stereo field to pan each track. While there are some typical practices in the industry, it must be emphasized that panning and creation of stereo field more generally is an artistic process, and the plugins that display stereo information usually serve as visual aides to notify the producer if their mix might exhibit a deterioration of the stereo field when played back in non-ideal reproduction settings.
+In a large \gls{daw} session containing many tracks, the producer will make artistic choices about where in the stereo field to pan each track. While there are some typical practices in the industry, it must be emphasized that panning and creation of stereo field more generally is an artistic process \cite{izhakiPanning2023}, and the plugins that display stereo information usually serve as visual aides to notify the producer if their mix might exhibit a deterioration of the stereo field when played back in non-ideal reproduction settings.
 
 \subsection{Time-Frequency representation of audio}
 
-\subsubsection{\gls{stft}}
+In order to perform many types of audio analysis, the audio signal can be converted from the time domain into the \gls{tf} domain. In perceptual acoustics research there are two common forms of \gls{tf} representation, each with its own nuances. This section provides those details
 
-\subsubsection{Cochleagrams}
+\subsubsection{\gls{stft} spectrogram}
 
+The \gls{stft} spectrogram is one of the most popular \gls{tf} representions across all audio-processing domains due its computational efficiency. The fundamental principle is that a time-domain signal is split into short (1 to 100ms) chunks, and the \gls{fft} is performed on each chunk, thereby converting that chunk into the frequency domain.  By arranging subsequent frames along a time axis it is possible to represent the original signal as a 2D image known as a spectrogram. When the time-domain signal is entirely real, (which is the case for most audio signals), the result of the \gls{fft} will be a complex signal which is symmetrical around the Nyquist frequency (half of the sampling frequency) and the upper half is therefore dropped. Futhermore, the complex numbers are usually converted into magnitude/phase representation to better match the human auditory system.
+
+The important parameters of the \gls{stft} are
+\begin{itemize}
+    \item Frame size - The number of samples in each audio chunk. This must be a power of 2 to gain maximal computational efficiency.
+    \item Hop size - The number of sample between the start of subsequent frames. Sometimes expressed as a percentage of the frame size.
+\end{itemize}
+
+The frame size dictates the resolution of the spectrogram's frequency axis since the frequency bins will be spaced evenly between 0Hz and the Nyquist frequency. Importantly, a longer frame size will result in lower time accuracy within each frame; sharp transients in the time domain will appear as wideband energy in the frequency domain, but information about exactly where in the frame the transient occurred is lost. To counteract this inaccuracy, a smaller hop size can be used so that transients might be detected as sharp changes between \gls{stft} frames. \Cref{fig:stft_accuracy} shows this tradeoff for a short vocal sample. Note that as the frame size increased there is a loss in time accuracy. The appropriate values of frame and hop size should therefore be chosen based on knowledge of the signal being analysed.
+
+A fundamental property of the \gls{fft} is that it assumes that the signal repeats outside the time frame that is being analysed. Since this is generally not the case for small chunks of audio, it is normal to apply a time-domain windowing function to each frame so that large transients do not occur at the boundaries. Like the frame and hop size, the choice of windowing function should be based on the signal itself and the intended outcome of the analysis. For most audio applications, the \q{Hann} window can be used \cite{LibrosastftLibrosa0110}. 
+
+\afterpage{\clearpage}
+\begin{figure}[t]
+    \centering
+    \includegraphics[height=0.8\textheight]{figures/spectrogram_accuracy.pdf}
+    \caption{\gls{stft} spectrograms with differing frame and hop sizes.}
+    \label{fig:stft_accuracy}
+\end{figure}
+
+\subsubsection{Mel spectrogram}
+
+One major drawback of the \gls{stft} spectrogram is that the frequency bins are spaced linearly from 0Hz to the Nyquist frequency, whereas human hearing works on a logarithmic scale. The \gls{stft} therefore contain redundant information in higher frequencies. One solution is to divide the entire spectrum into frequency bands on a logarithmic scale, and create weighted averages of frequency bins within each band. The standard method is to calculate \q{Mel filterbank}, which will use increasingly wider frequency bands as the centre frequency rises. An example is shown in \cref{fig:spect_comp}. Note that information in the higher frequencies has been condensed more-so that the lower frequencies.
+
+\subsubsection{Cochleagram}
+
+As an alternative to the two spectrogram representations, a cochleagram aims to make a \gls{tf} representation that models the acoustic response of the human cochlea more closely. To that end, all processing is performed in the time domain and is sometimes referred to as a \q{peripheral ear model}. Several examples appear in the literature \cite{choiObjectiveMeasurementPerceived2008,delgadoDesignChoicesBinaural2023}, although a common one is described by \cref{fig:peripheral_ear_flow}. The original signal is first processed by a bank of time-domain filters with their centre frequencies placed according to a perceptual scale and subsequently processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patters on the cilia and basilar membrane. Each band is then divided into overlapping time segments. The amplitude of each \gls{tf} segment can then be calculated as the mean of all values in the chunk, each forming one pixel in the cochleagram. \Cref{fig:spect_comp} shows a comparison of all spectrogram types. 
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/spect_comp.pdf}
+    \caption{An example audio signal displayed as \gls{stft} spectrogram (above), Mel spectrogram (mid), and cochleagram (below).}
+    \label{fig:spect_comp}
+\end{figure}
 
 \subsection{Machine learning}
 The large scale of the vast music repositories being addressed by the research questions naturally implies that some sort of machine learning is necessary. Broadly speaking, machine learning techniques can be broken into two classes - supervised and unsupervised. The former requires the training dataset to be labelled, while the latter does not. In relation to research question 1, we assume that a music producer's \gls{daw} session is the only source of objective ground-truth data. Furthermore, we assume that \gls{daw} sessions are not publicly available, as was found in \cite{colonelReverseEngineeringRecording2021,rodriguezSpectralDynamicConstellations2024}; The only public-facing output of a recording session is the mixdown. It follows then that any spatial information derived from a mixdown will be unlabelled data and will therefore require unsupervised learning in order to make sense of it.
