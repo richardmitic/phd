@@ -22,6 +22,7 @@
 \usetikzlibrary{positioning}
 \usetikzlibrary{fit}
 \usetikzlibrary{backgrounds}
+\usetikzlibrary{shapes.misc}
 \usepackage{pgfplots}
 
 %% References
@@ -50,7 +51,11 @@
         \filldraw[color=black, fill=white] (0,0) circle[radius=1];
         \filldraw[color=black, fill=white] (1.1,0) ellipse (0.1 and 0.2);
         \filldraw[color=black, fill=white] (-1.1,0) ellipse (0.1 and 0.2);
-    }
+    },
+    flow_input/.style={rounded rectangle, draw=black, minimum height=1cm, minimum width=3cm},
+    flow_process/.style={rectangle, draw=black, minimum height=1cm, minimum width=3cm},
+    flow_output/.style={rectangle, rounded corners, draw=black, minimum height=1cm, minimum width=3cm},
+    arrow/.style={->, >=Latex}
 }
 
 
@@ -383,9 +388,9 @@ The important parameters of the \gls{stft} are
     \item Hop size - The number of sample between the start of subsequent frames. Sometimes expressed as a percentage of the frame size.
 \end{itemize}
 
-The frame size dictates the resolution of the spectrogram's frequency axis since the frequency bins will be spaced evenly between 0Hz and the Nyquist frequency. Importantly, a longer frame size will result in lower time accuracy within each frame; sharp transients in the time domain will appear as wideband energy in the frequency domain, but information about exactly where in the frame the transient occurred is lost. To counteract this inaccuracy, a smaller hop size can be used so that transients might be detected as sharp changes between \gls{stft} frames. \Cref{fig:stft_accuracy} shows this tradeoff for a short vocal sample. Note that as the frame size increased there is a loss in time accuracy. The appropriate values of frame and hop size should therefore be chosen based on knowledge of the signal being analysed.
+The frame size dictates the resolution of the spectrogram's frequency axis since the frequency bins will be spaced evenly between 0Hz and the Nyquist frequency. Importantly, a longer frame size will result in lower time accuracy within each frame; sharp transients in the time domain will appear as wideband energy in the frequency domain, but information about exactly where in the frame the transient occurred is lost. To counteract this inaccuracy, a smaller hop size can be used so that transients might be detected as sharp changes between \gls{stft} frames. \Cref{fig:stft_accuracy} shows this trade-off for a short vocal sample. Note that as the frame size increases there is a loss in time accuracy, with smaller hop sizes partially able to counteract. The appropriate values of frame and hop size should therefore be chosen based on knowledge of the signal being analysed.
 
-A fundamental property of the \gls{fft} is that it assumes that the signal repeats outside the time frame that is being analysed. Since this is generally not the case for small chunks of audio, it is normal to apply a time-domain windowing function to each frame so that large transients do not occur at the boundaries. Like the frame and hop size, the choice of windowing function should be based on the signal itself and the intended outcome of the analysis. For most audio applications, the \q{Hann} window can be used \cite{LibrosastftLibrosa0110}. 
+A fundamental property of the \gls{fft} is that it assumes that the signal repeats outside the time frame that is being analysed. Since this is generally not the case for audio signals, it is normal to apply a time-domain windowing function to each frame so that large transients do not occur at the boundaries. Like the frame and hop sizes, the choice of windowing function should be based on the signal itself and the intended outcome of the analysis. For most audio applications, the \q{Hann} window can be used \cite{LibrosastftLibrosa0110}. 
 
 \afterpage{\clearpage}
 \begin{figure}[t]
@@ -397,11 +402,35 @@ A fundamental property of the \gls{fft} is that it assumes that the signal repea
 
 \subsubsection{Mel spectrogram}
 
-One major drawback of the \gls{stft} spectrogram is that the frequency bins are spaced linearly from 0Hz to the Nyquist frequency, whereas human hearing works on a logarithmic scale. The \gls{stft} therefore contain redundant information in higher frequencies. One solution is to divide the entire spectrum into frequency bands on a logarithmic scale, and create weighted averages of frequency bins within each band. The standard method is to calculate \q{Mel filterbank}, which will use increasingly wider frequency bands as the centre frequency rises. An example is shown in \cref{fig:spect_comp}. Note that information in the higher frequencies has been condensed more-so that the lower frequencies.
+One major drawback of the \gls{stft} spectrogram is that the frequency bins are spaced linearly from 0Hz to the Nyquist frequency, whereas the human perception of pitch works on a logarithmic scale. The \gls{stft} therefore contain redundant information in higher frequencies. One solution is to divide the entire spectrum into frequency bands that have a bandwidth relate logarithmically to their centre frequency, and create weighted averages of frequency bins within each band. The standard method is to calculate a \q{Mel filterbank}, and example of which is shown in \cref{fig:spect_comp}. Note that information in the higher frequencies has been condensed more-so that the lower frequencies.
 
 \subsubsection{Cochleagram}
 
-As an alternative to the two spectrogram representations, a cochleagram aims to make a \gls{tf} representation that models the acoustic response of the human cochlea more closely. To that end, all processing is performed in the time domain and is sometimes referred to as a \q{peripheral ear model}. Several examples appear in the literature \cite{choiObjectiveMeasurementPerceived2008,delgadoDesignChoicesBinaural2023}, although a common one is described by \cref{fig:peripheral_ear_flow}. The original signal is first processed by a bank of time-domain filters with their centre frequencies placed according to a perceptual scale and subsequently processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patters on the cilia and basilar membrane. Each band is then divided into overlapping time segments. The amplitude of each \gls{tf} segment can then be calculated as the mean of all values in the chunk, each forming one pixel in the cochleagram. \Cref{fig:spect_comp} shows a comparison of all spectrogram types. 
+As an alternative to the two spectrogram representations, a cochleagram aims to make a \gls{tf} representation that models the acoustic response of the human cochlea more closely. To that end, all processing is performed in the time domain and is sometimes referred to as a \q{peripheral ear model}. Several examples appear in the literature \cite{boddenBinauralModelingAuditory1995,choiObjectiveMeasurementPerceived2008,delgadoDesignChoicesBinaural2023}. In the classical method \cite{boddenBinauralModelingAuditory1995} the original signal is first processed by a bank of time-domain gammatone filters with their centre frequencies placed according to a perceptual scale and each sub-band is subsequently processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patterns of the cilia and basilar membrane. Each time-domain signal is then divided into overlapping time segments. The amplitude of each \gls{tf} segment can then be calculated as the mean of all values its values, forming one pixel in the cochleagram. \Cref{fig:spect_comp} shows a comparison of all spectrogram types. 
+
+% \begin{figure}[htb]
+%     \centering
+
+%     \begin{tikzpicture}[node distance=1.618cm]
+ 
+%     \node (audio) [flow_input] {stereo audio};
+%     \node (filterbank) [flow_process, below of=audio] {filter bank};
+%     \node (rectify) [flow_process, below of=filterbank] {half-wave rectify};
+%     \node (sqrt) [flow_process, below of=rectify] {square root};
+%     \node (lpf) [flow_process, below of=sqrt] {low-pass filter};
+%     \node (chunk) [flow_process, below of=lpf] {time segmentation};
+%     \node (coch) [flow_output, below of=chunk] {cochleagram};
+
+%     \draw[arrow] (audio) -- (filterbank);
+%     \draw[arrow] (filterbank) -- (rectify);
+%     \draw[arrow] (rectify) -- (sqrt);
+%     \draw[arrow] (sqrt) -- (lpf);
+%     \draw[arrow] (lpf) -- (chunk);
+%     \draw[arrow] (chunk) -- (coch);
+
+%     \end{tikzpicture}
+%     \caption{Flow diagram of cochleagram creation}
+% \end{figure}
 
 \begin{figure}[htb]
     \centering
@@ -464,7 +493,7 @@ Neural generation of spatial audio continues to be a hot topic up to the present
     \tikzset{
         begin/.style={draw, inner sep=0pt, minimum width=0.3pt, minimum height=6pt},
         end/.style={circle, draw, fill=white, minimum size=1pt},
-        arrow/.style = {->, >=Latex}
+        % arrow/.style = {->, >=Latex}
     }
 
     \definecolor{bgcolorA}{HTML}{E0EAEB}  % 🔵 Pale, cool blue-grey
