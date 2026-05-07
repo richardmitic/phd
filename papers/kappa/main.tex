@@ -120,7 +120,18 @@ How do music producers use stereo field?
 
 \section{Background}
 
+\subsection{The mechanics of human hearing}
+\label{sec:hearing}
+
+\citeauthor{lindsayHumanInformationProcessing1972}'s book \citetitle{lindsayHumanInformationProcessing1972} \cite{lindsayHumanInformationProcessing1972} gives a detailed description of how the human ear is constructed and how it enables us to hear. The relevant parts are summarized below.
+
+The ear contains three major sections, loosely labelled the \q{outer}, \q{middle}, and \q{inner} ear. When air vibrations (i.e. sound waves) flow into the ear, mechanical coupling in the middle ear transmits vibrations to the cochlea (which the major organ of the inner ear). The cochlea is a conical tube which is coiled up into a spiral, filled with an incompressible fluid, and covered on either end by a membrane. Through the centre of the tube runs the basilar membrane, which is a covered in hairs named cilia. When vibrations are mechanically transmitted to the cochlea, the internal fluid responds by transmitting those vibrations to the basilar membrane, and the cilia will bend and twist accordingly. The cilia are linked to nerve fibres, and will initiate electrical pulses when manipulated. These electrical pulses are sent to the brain and interpreted as sounds.
+
+Along the length of the cochlea, the cilia have different \q{critical frequencies} that they respond to. The critical frequency increases logarithmically as one moves from the base to the apex of the cochlea. This is what gives humans their characteristic 20-20000Hz hearing range.
+
 \subsection{Directional hearing}
+Following from \cref{sec:hearing}, this section will discuss humans' ability to discern the direction or location of a sound source.
+
 The psychoacoustic theory behind spatial hearing has been an active area of research since the mid 20th century, with early examples including the Jeffress model in which time differences between sound events at each ear contribute to a person's ability to locate sounds in space \cite{jeffressPlaceTheorySound1948}. The work of \citeauthor{lindemannEvaluationInterauralSignal1982} a few decades later expanded on this idea by translating the earlier theory to a \gls{dsp} context, and establishing the \gls{ild}, \gls{itd}, and \gls{iacc} as important measures to describe the spatial aspects of binaural signals in a quantifiable way \cite{lindemannEvaluationInterauralSignal1982}.
 
 Put simply, humans are able to perceive the incoming direction of a sound by observing both the amplitude difference and time difference of coincident sound waves arriving at the left and right ears. Figure \cref{fig:directional_hearing} shows how these two properties enable directional hearing. Firstly, the head itself creates a physical barrier that will attenuate sound waves at one ear more-so that at the other ear. Secondly, the difference in distance between the sound source and each ear will create a delay in receiving the sound at either ear. Over time a person will learn to associate patterns in \gls{itd}/\gls{ild} with the physical location of the sound source.
@@ -187,8 +198,6 @@ The relative importance of \gls{ild} and \gls{itd} differ depending on the frequ
 \end{figure}
 
 
-\fxerror{Explain cochlea?}
-
 \subsection{Loudness perception}
 Humans perceive the loudness of sound, not in terms of the absolute amplitude of the sound wave, but the \textit{power} of the sound wave. Mathematically speaking, perceived loudness is proportional to the \gls{rms} \gls{spl} raised to an exponent \cite{mooreIntroductionPsychologyHearing2013}. Observing that the calculation of \gls{rms} naturally involves taking the square of the original time function (see \cref{eq:rms}), it follows multiplication of a signal by $\sqrt{2}$ will result in double perceived loudness. Conversely, multiplying a signal by $\frac{1}{\sqrt{2}}$ will halve the perceived loudness.
 
@@ -196,6 +205,7 @@ Humans perceive the loudness of sound, not in terms of the absolute amplitude of
     \label{eq:rms}
     f_{RMS} = \sqrt{\frac{1}{T_2 - T_1} \int_{T_1}^{T_2}[f(t)^2]dt}
 \end{equation}
+
 
 \subsection{Panning}
 The concepts of directional hearing are applied in music production to make sound sources appear as though they originate from a specific direction or position, often referred to as the \q{phantom position}. In recording studio vernacular, this is call \q{panning}. In accordance with the two signal differences a that humans are able to detect, there are also two basic types of panning -- amplitude panning and time panning. By way of example, \cref{fig:phantom_amplitude} shows how the phantom position can be moved anywhere in between the speakers that are reproducing the sound by applying different amplitude gains to the left and right channel of a stereo recording.
@@ -374,13 +384,98 @@ The assessment of how the two stereo channels interact is of prime importance wh
 
 In a large \gls{daw} session containing many tracks, the producer will make artistic choices about where in the stereo field to pan each track. While there are some typical practices in the industry, it must be emphasized that panning and creation of stereo field more generally is an artistic process \cite{izhakiPanning2023}, and the plugins that display stereo information usually serve as visual aides to notify the producer if their mix might exhibit a deterioration of the stereo field when played back in non-ideal reproduction settings.
 
+\subsection{Digital audio signals}
+When a sound wave is converted into an electrical signal by a microphone, it can be considered to be operating in continuous time. To convert the analogue signal into a digital one, it is sampled at regular intervals. The sampling frequency ($f_s$) is related to the sampling interval ($\Delta$) by the relationship $\Delta = \frac{1}{f_s}$.
+
+Shannon's sampling theorem states that a signal can be perfectly recreated when sampled at twice the highest frequency contained in the signal. Conversely, the highest frequency the highest frequency that can be represented by sampling a signal at a given sampling frequency is half of that frequency. This limit is called the \q{Nyquist frequency} and is calculated by $f_N = \frac{f_s}{2}$ \cite{yaoNyquistFrequency1983}. 
+
+This is illustrated by \Cref{fig:nyquist}, which shows the sampling of three waveforms. The lower plot shows a signal at the Nyquist frequency ($f_N$), which can be perfectly reconstructed from the digital samples. The upper two waveforms have frequencies equidistant but in opposite directions from the Nyquist frequency ($f_N \pm f_{\delta}$). The digital samples shown in circles could represent either of the two waveforms. In practice, when the analogue waveform is reconstructed, the lower frequency will always take precedence.
+
+% When a signal is sampled, the value is defined only at the time of the sample and is undefined for the period in between samples. Therefore, the digital signal in \cref{fig:nyquist} marked by circles could represent either of the two underlying analogue signals $f(t) = \cos((f_N \pm \Delta) t)$. 
+
+% Analogue signals can be mapped to digital signals \cite{cheungLecture10Discrete}. The time period in between samples can be calculated as $T_s = \frac{1}{f_s}$. Consider the following example of a cosine wave at frequency $\omega$. The analogue signal $f(t) = \cos(\omega t)$ maps to the digital signal $f[n] = \cos(\omega T_s n)$. Now consider the case where $\omega = f_N$. $f[n] = \cos(f_N T_s n) = \cos(\frac{f_s}{2} \frac{1}{fs} n) = \cos(\frac{n}{2})$.
+
+% Now consider the case where $\omega = f_N + a$. $f[n] = \cos((f_N + a) T_s n) = \cos(\frac{f_s}{2} \frac{1}{fs} n) = \cos(\frac{n}{2})$.
+
+
+\begin{figure}[htb]
+    \centering
+    \begin{tikzpicture}[samples=200, node distance=2cm]
+        \pgfmathsetmacro{\halfpi}{1.57079632679}
+        \begin{axis}[
+            width=10cm, height=8cm,
+            axis x line=center,
+            axis y line=center,
+            % hide x axis,
+            enlarge x limits=true,
+            enlarge y limits=true,
+            xtick={0},
+            % axis lines*=middle,
+            % hide y axis,
+            xlabel={time},
+            % ylabel={$g$},
+            xlabel style={below right},
+            % ylabel style={above left},
+            % ymax=1.1,
+            % xmax=1.1,
+            legend style={at={(1,1)}, anchor=north west}
+        ]
+        \addplot [domain=0:360, smooth, forget plot] {cos(0.5*x)+1};
+        \addplot [domain=0:360, smooth, forget plot] {cos(5.5*x)+1};
+        \addplot [domain=0:360, only marks, samples at={0,60,120,180,240,300,360}, mark=o] {cos(0.5*x)+1};
+        \addlegendentry{$f[n] = \cos((f_N \pm \Delta) T_s n)$};
+
+        \addplot [domain=0:360, smooth, forget plot] {cos(3*x)-1};
+        \addplot [domain=0:360, only marks, samples at={0,60,120,180,240,300,360}, mark=square] {cos(3*x)-1};
+        \addlegendentry{$f[n] = \cos(f_N T_s n)$};
+
+        % \addplot [domain=0:360, smooth, forget plot] {cos(1*x)-3};
+        % \addplot [domain=0:360, only marks, samples at={0,60,120,180,240,300,360}, mark=diamond] {cos(1*x)-3};
+        % \addlegendentry{$f_s < f_N$};
+
+        \pgfplotsinvokeforeach 
+            {60, 120, 180, 240, 300, 360} 
+            {\addplot [domain=0:360, smooth, dotted, forget plot] coordinates {(#1, -2.2) (#1, 2.2)};}
+        
+        \begin{scope}[font=\footnotesize]
+        \node (t0) at (axis cs: 60,  2.4) {$t$};
+        \node (t1) at (axis cs: 120, 2.4) {$t + T_s$};
+        \node (t2) at (axis cs: 180, 2.4) {$t + 2T_s$};
+        \node (t3) at (axis cs: 240, 2.4) {$\dots$};
+
+        \node (t0) at (axis cs: 60,  -2.4) {$n=0$};
+        \node (t1) at (axis cs: 120, -2.4) {$n=1$};
+        \node (t2) at (axis cs: 180, -2.4) {$n=2$};
+        \node (t3) at (axis cs: 240, -2.4) {$\dots$};
+        \end{scope}
+        % \node (t4) at (axis cs: 300, 2.4) {...};
+        % \node (t5) at (axis cs: 360, 2.4) {$t_5$};
+        % \pgfplotsinvokeforeach 
+        %     {60, 120, 180, 240, 300, 360} 
+        %     {\node at (axis cs: 2.4, #1) {T};}
+        % \node () (axis cs: -0.5, 1) {Above and below nyquist};
+        % \node (axis cs: -0.5,-1) {nyquist};
+        % \node (origin) at (axis cs: 0,0) {origin};
+        % \node (upper) at (axis cs: 0,1) {};
+        % \node (lower) at (axis cs: 0,-1) {};
+
+        \end{axis}
+
+        % \node (upper_label) [left of=upper, align=left] {Above and below\\Nyquist frequency};
+        % \node (lower_label) [left of=lower, align=left] {Nyquist frequency};
+        
+    \end{tikzpicture}
+    \caption{Aliasing in sampled digital audio signals. Dotted vertical lines represent the times at which the signals are sampled. The upper plot shows two cosine waves at equal distance above and below the Nyquist frequency ($f_N$). The middle plot is a cosine wave at $f_N$. The lower plot is a cosine wave below $f_N$. Sampled values are shown as marks on the plots. Note that the two upper signals can both be represented by same digital samples.}
+    \label{fig:nyquist}
+\end{figure}
+
 \subsection{Time-Frequency representation of audio}
 
-In order to perform many types of audio analysis, the audio signal can be converted from the time domain into the \gls{tf} domain. In perceptual acoustics research there are two common forms of \gls{tf} representation, each with its own nuances. This section provides those details
+In order to perform many types of audio analysis, the audio signal can be converted from the time domain into the \gls{tf} domain. In perceptual acoustics research there are several common forms of \gls{tf} representation, each with its own nuances. This section provides those details.
 
 \subsubsection{\gls{stft} spectrogram}
 
-The \gls{stft} spectrogram is one of the most popular \gls{tf} representions across all audio-processing domains due its computational efficiency. The fundamental principle is that a time-domain signal is split into short (1 to 100ms) chunks, and the \gls{fft} is performed on each chunk, thereby converting that chunk into the frequency domain.  By arranging subsequent frames along a time axis it is possible to represent the original signal as a 2D image known as a spectrogram. When the time-domain signal is entirely real, (which is the case for most audio signals), the result of the \gls{fft} will be a complex signal which is symmetrical around the Nyquist frequency (half of the sampling frequency) and the upper half is therefore dropped. Futhermore, the complex numbers are usually converted into magnitude/phase representation to better match the human auditory system.
+The \gls{stft} spectrogram is one of the most popular \gls{tf} representions across all audio processing work due to its computational efficiency. The fundamental principle is that a time-domain signal is split into short (1 to 100ms) overlapping chunks, and the \gls{fft} is performed on each chunk, thereby converting that chunk into the frequency domain.  By arranging subsequent frames along a time axis it is possible to represent the original signal as a 2D image known as a spectrogram. When the time-domain signal is entirely real, (which is the case for monophonic audio signals), the result of the \gls{fft} will be a complex signal which is symmetrical around the Nyquist frequency and the upper half is therefore dropped. Furthermore, the complex numbers are usually converted into magnitude/phase representation to better match the human auditory system.
 
 The important parameters of the \gls{stft} are
 \begin{itemize}
@@ -390,10 +485,10 @@ The important parameters of the \gls{stft} are
 
 The frame size dictates the resolution of the spectrogram's frequency axis since the frequency bins will be spaced evenly between 0Hz and the Nyquist frequency. Importantly, a longer frame size will result in lower time accuracy within each frame; sharp transients in the time domain will appear as wideband energy in the frequency domain, but information about exactly where in the frame the transient occurred is lost. To counteract this inaccuracy, a smaller hop size can be used so that transients might be detected as sharp changes between \gls{stft} frames. \Cref{fig:stft_accuracy} shows this trade-off for a short vocal sample. Note that as the frame size increases there is a loss in time accuracy, with smaller hop sizes partially able to counteract. The appropriate values of frame and hop size should therefore be chosen based on knowledge of the signal being analysed.
 
-A fundamental property of the \gls{fft} is that it assumes that the signal repeats outside the time frame that is being analysed. Since this is generally not the case for audio signals, it is normal to apply a time-domain windowing function to each frame so that large transients do not occur at the boundaries. Like the frame and hop sizes, the choice of windowing function should be based on the signal itself and the intended outcome of the analysis. For most audio applications, the \q{Hann} window can be used \cite{LibrosastftLibrosa0110}. 
+A fundamental property of the \gls{fft} is that it assumes that the signal repeats outside the time frame that is being analysed. Since this is generally not the case for audio signals, it is standard practice to apply a time-domain windowing function to each frame so that large transients do not occur at the boundaries. Like the frame and hop sizes, the choice of windowing function should be based on the signal itself and the intended outcome of the analysis. For most audio applications, the \q{Hann} window can be used \cite{LibrosastftLibrosa0110}. 
 
-\afterpage{\clearpage}
-\begin{figure}[t]
+% \afterpage{\clearpage}
+\begin{figure}[p]
     \centering
     \includegraphics[height=0.8\textheight]{figures/spectrogram_accuracy.pdf}
     \caption{\gls{stft} spectrograms with differing frame and hop sizes.}
@@ -402,7 +497,14 @@ A fundamental property of the \gls{fft} is that it assumes that the signal repea
 
 \subsubsection{Mel spectrogram}
 
-One major drawback of the \gls{stft} spectrogram is that the frequency bins are spaced linearly from 0Hz to the Nyquist frequency, whereas the human perception of pitch works on a logarithmic scale. The \gls{stft} therefore contain redundant information in higher frequencies. One solution is to divide the entire spectrum into frequency bands that have a bandwidth relate logarithmically to their centre frequency, and create weighted averages of frequency bins within each band. The standard method is to calculate a \q{Mel filterbank}, and example of which is shown in \cref{fig:spect_comp}. Note that information in the higher frequencies has been condensed more-so that the lower frequencies.
+One major drawback of the \gls{stft} spectrogram is that the frequency bins are spaced linearly from 0Hz to the Nyquist frequency, whereas the human perception of pitch works on a logarithmic scale. The \gls{stft} therefore contains redundant information in higher frequencies. One solution is to divide the entire spectrum into frequency bands that are spaced logarithmically within the entire spectrum and calculate weighted averages of the frequency bins within each band. The standard method is to calculate a \q{Mel filter bank}, an example of which is shown in \cref{fig:mel_filters}. When the Mel filter bank is applied to an \gls{stft} spectrogram, the result is called a \q{Mel spectrogram}. An example is shown in \cref{fig:spect_comp}. Note that information in the higher frequencies has been condensed more-so that the lower frequencies.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/mel_filters.pdf}
+    \caption{Example Mel filter bank containing 8 filters.}
+    \label{fig:mel_filters}
+\end{figure}
 
 \subsubsection{Cochleagram}
 
@@ -432,7 +534,7 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
 %     \caption{Flow diagram of cochleagram creation}
 % \end{figure}
 
-\begin{figure}[htb]
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=0.8\textwidth]{figures/spect_comp.pdf}
     \caption{An example audio signal displayed as \gls{stft} spectrogram (above), Mel spectrogram (mid), and cochleagram (below).}
