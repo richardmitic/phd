@@ -101,22 +101,37 @@ Historically, binaural audio (which is a subclass of stereo) has been of particu
 
 \pagebreak
 
-\section{Research Questions}
+\section{Research Questions and Contributions}
 \label{sec:request_questions}
 
-The overarching research question can be formed as:
+The underlying purpose of the research documented in this thesis relates to \gls{mir}, and in particular to generating an understanding of the links between human musical creativity and musical output. While it might be possible for the creative people involved to explain how they make their music, it is far more objective to analyse their output as a representation of their musical ideas.
+\\\\
+\noindent Given this context, the overarching research question can be formed as:
 
 \begin{quote}
 How do music producers use stereo field?
 \end{quote}
 
-\noindent This can be broken into several smaller problems:
+\noindent ...which can be broken into several smaller problems:
 
 \begin{enumerate}
 \item How does the stereo image of a recording relate to real-world musical knowledge? \label{rq:usecase}
 \item What methods can be used to describe the stereo image of music recording? \label{rq:methods}
 \end{enumerate}
 
+One could argue that the overarching question might be answered by interviewing music producers, but this would quickly run into a problem of scale. The two smaller research questions were therefore designed to allow the overarching question to be answered by objective analysis on musical recordings - something that is abundant nowadays.
+
+\subsection{Research contributions}
+This section presents a summary of the research contributions achieved by the 4 included papers, and how explains their relationship to the research questions.
+
+\subsubsection{An understanding of the musical uses of stereo field}
+The design and execution of the Auxtrument led to a direct understanding of how a musical can use stereo field to convey a message that would otherwise be difficult to communicate. With respect to the overarching research question, the act of creating musical output gives a small window into how a music producer might use stereo field. Paper \ref{paper:auxtrument} was a retrospective account of the process of building the Auxtrument, which additionally provides a technical contribution to any musicians wishing to make a similar performance in the future. The paper also provided suggestions for future iterations of Auxtrument-style instruments and the standardized \glspl{api} which are built into web browsers, providing a basis for future work.
+
+The Orkester framework and software library presented the opportunity to apply a more technical approach to RQ\ref{rq:usecase}. The exploration of stereo field in existing recordings furthered the knowledge gained from an individual musical project by allowing us to analytically compare stereo fields created by many producers. This allowed us to establish an understanding of the range and variation that stereo field can embody.
+
+% \subsubsection{Signal processing techniques relating to stereo field}
+
+% \subsubsection{Setup for future work on large datasets of audio}
 
 \section{Background}
 
@@ -359,6 +374,7 @@ The term \q{stereo image} is used to describe the overall distribution of sound 
 
     \end{tikzpicture}
     \caption{Example stereo image created by a music producer. Mono stems are shown as black dots and stereo stems as grey fills. Dashed lines represent the extent of the stereo image. Dotted lines represent the maximum boundaries of the possible stereo image.}
+    \label{fig:stereo_image}
 \end{figure}
 
 Describing the stereo image of a recording has its roots in the acoustics domain, in which typical use cases are the analysis of concert halls and music reproduction systems. In these cases, the previously mentioned low-level spatial cues typically form the basis of the analysis. \Citeauthor{bergSystematicEvaluationPerceived2003} \cite{bergSystematicEvaluationPerceived2003} give a long list of typical perceptual measures that can be derived from the low-level cues, although later literature has focused on the measures of \gls{asw} and \gls{lev}. However, as stated by \citeauthor{sarroffComputationalModelPerceived2011} \cite{sarroffComputationalModelPerceived2011}, the task of describing the spatial aspects of recorded music is inherently different to that of acoustical signals since said recordings may exhibit spatial aspects that cannot occur in physical acoustic space.
@@ -660,15 +676,15 @@ Neural generation of spatial audio continues to be a hot topic up to the present
     \label{fig:research_methodology}
 \end{figure}
 
-The research was initiated with a period of exploration and refinement of the research questions. Two work streams (named Auxtrument and Orkester) were established early on as frameworks to explore the importance of spatial information in musical audio, firstly from a musical performance perspective, and secondly from a scientific perspective. 
+The research was initiated with a period of exploration and refinement of the research questions. Two work streams (named Auxtrument and Orkester) were established early on as frameworks to explore the importance of spatial information in musical audio, firstly from a musical performance perspective, and secondly from a signal processing perspective. 
 
 The Auxtrument initiative consisted of a joint project with many other researchers to make a musical performance that explored the use of space and merged realities. A custom instrument (the Auxtrument) was designed and built, the purpose of which was to generate a networked artificial reverberation chamber, embodying local sound sources with new spatial qualities \cite{franklinMergingPlacesRealTime2024,franklinComposingNetworkedReverberation2025}. This resulted in the retrospective paper, named \q{paper A} in this thesis \cite{franklinDevelopmentWebBasedRealTime2025}.
 
-Running concurrently to Auxtrument, the \q{Orkester} initiative was an exploration of the more technical side of stereo field description. It involved a limited literature search to find methods of describing stereo field, followed by a period of software development to implement the discovered methods. Once the implementation was reliable, a period of musical exploration commenced, testing the various algorithms on recordings that were known to contain interesting spatial features. This had several outcomes. The most direct consequence was the inception of an objective experiment to determine how the various stereo field description techniques reacted to different musical recordings. This culminated in paper B \cite{miticObjectiveComparisonPanning2025}. 
+Running concurrently to Auxtrument, the \q{Orkester} initiative was an exploration of the more technical side of stereo field description. It involved a limited literature search to find methods of describing stereo field, followed by a period of software development to implement the discovered methods. Once the implementation was reliable, a period of musical exploration commenced, testing the various algorithms on recordings that were known to contain interesting spatial features. This had several outcomes. The most direct consequence was the inception of an objective experiment to determine how the various stereo field description techniques reacted to different musical recordings, which culminated in paper B \cite{miticObjectiveComparisonPanning2025}. 
 
-Concurrently to the objective experiment, a perceptual listening test was planned and executed to determine how listeners react to the panning position of speech overlayed on top of music. The software developed for Orkester was subsequently used to analyse  the audio stimuli from the perceptual test in order to draw conclusions in paper C\cite{miticPerceptualEvaluationBinaurally2026}, which described the results and analysis of the perceptual test.
+Concurrently to the objective experiment, a perceptual listening test was planned and executed to determine how listeners react to the panning position of speech overlayed on top of music. The software developed for Orkester was subsequently used to analyse  the audio stimuli from the perceptual test in order to draw conclusions in paper C, which described the results and analysis of the perceptual test \cite{miticPerceptualEvaluationBinaurally2026}.
 
-Lastly, through the developement of Orkester it became apparent that the original literature search was far from comprehensive. This spurred paper D\cite{miticSystematicLiteratureReview2026}, which was a systematic literature review designed to find all existing techniques that could be used to create a \gls{sip}.  
+Lastly, through the developement of Orkester it became apparent that the original literature search was far from comprehensive. This spurred paper D, which was a systematic literature review designed to find all existing techniques that could be used to create a \gls{sip} \cite{miticSystematicLiteratureReview2026}.  
 
 The combination of the exploratory work, objective experiment, and perceptual test provided a satisfactory answer for RQ\ref{rq:usecase}. The initial literature search plus the \gls{slr} provided an answer to RQ\ref{rq:methods}.
 
