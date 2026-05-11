@@ -513,12 +513,12 @@ A fundamental property of the \gls{fft} is that it assumes that the signal repea
 
 \subsubsection{Mel spectrogram}
 
-One major drawback of the \gls{stft} spectrogram is that the frequency bins are spaced linearly from 0Hz to the Nyquist frequency, whereas the human perception of pitch works on a logarithmic scale. The \gls{stft} therefore contains redundant information in higher frequencies. One solution is to divide the entire spectrum into frequency bands that are spaced logarithmically within the entire spectrum and calculate weighted averages of the frequency bins within each band. The standard method is to calculate a \q{Mel filter bank}, an example of which is shown in \cref{fig:mel_filters}. When the Mel filter bank is applied to an \gls{stft} spectrogram, the result is called a \q{Mel spectrogram}. An example is shown in \cref{fig:spect_comp}. Note that information in the higher frequencies has been condensed more-so that the lower frequencies.
+One major drawback of the \gls{stft} spectrogram is that the frequency bins are spaced linearly from 0Hz to the Nyquist frequency, whereas the human perception of pitch works on a logarithmic scale. The \gls{stft} therefore contains redundant information in higher frequencies. One solution is to divide the entire spectrum into frequency bands that are spaced logarithmically within the entire spectrum and calculate weighted averages of the frequency bins within each band. The standard method is to use a \q{Mel filter bank}, an example of which is shown in \cref{fig:mel_filters}. When the Mel filter bank is applied to an \gls{stft} spectrogram, the result is called a \q{Mel spectrogram}. An example is shown in \cref{fig:spect_comp}. Note that information in the higher frequencies has been condensed more-so that the lower frequencies.
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.5\textwidth]{figures/mel_filters.pdf}
-    \caption{Example Mel filter bank containing 8 filters.}
+    \includegraphics[width=0.8\textwidth]{figures/mel_filters.pdf}
+    \caption{Example Mel filter bank containing 8 filters. Note that the bandwidth of each filter is roughly equal in logarithmic space. Since each filter is designed to give a weighted average of linearly spaced \gls{fft} bins, the amplitudes are scaled so that the sum of the weights in each band is equal.}
     \label{fig:mel_filters}
 \end{figure}
 
