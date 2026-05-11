@@ -41,6 +41,10 @@
 %% Macros
 \newcommand{\citeauthorandnumber}[1]{\citeauthor{#1} \cite{#1}}
 \newcommand{\q}[1]{\enquote{#1}}
+% \newcommand{\rqa}{\gls{rq}\ref{rq:usecase}}
+% \newcommand{\rqb}{\gls{rq}\ref{rq:methods}}
+\newcommand{\rqa}{\hyperref[rq:usecase]{$RQ_1$}}
+\newcommand{\rqb}{\hyperref[rq:methods]{$RQ_2$}}
 
 
 \tikzset{
@@ -102,11 +106,14 @@ Historically, binaural audio (which is a subclass of stereo) has been of particu
 \pagebreak
 
 \section{Research Questions and Contributions}
-\label{sec:request_questions}
+\label{sec:research_questions_and_contributions}
 
 The underlying purpose of the research documented in this thesis relates to \gls{mir}, and in particular to generating an understanding of the links between human musical creativity and musical output. While it might be possible for the creative people involved to explain how they make their music, it is far more objective to analyse their output as a representation of their musical ideas.
-\\\\
-\noindent Given this context, the overarching research question can be formed as:
+% \\\\
+\subsection{Research Questions}
+\label{sec:research_questions}
+
+Given the aforementioned context, the overarching \gls{rq} can be formed as:
 
 \begin{quote}
 How do music producers use stereo field?
@@ -115,23 +122,32 @@ How do music producers use stereo field?
 \noindent ...which can be broken into several smaller problems:
 
 \begin{enumerate}
-\item How does the stereo image of a recording relate to real-world musical knowledge? \label{rq:usecase}
-\item What methods can be used to describe the stereo image of music recording? \label{rq:methods}
+\item[$RQ_1$:] How does the stereo image of a recording relate to real-world musical knowledge? \label{rq:usecase}
+\item[$RQ_2$:] What methods can be used to describe the stereo image of music recording? \label{rq:methods}
 \end{enumerate}
 
-One could argue that the overarching question might be answered by interviewing music producers, but this would quickly run into a problem of scale. The two smaller research questions were therefore designed to allow the overarching question to be answered by objective analysis on musical recordings - something that is abundant nowadays.
+One could argue that the overarching question might be answered by interviewing music producers, but this would quickly run into a problem of scale. The two smaller \glspl{rq} were therefore designed to allow the overarching question to be answered by objective analysis on musical recordings (which are abundant nowadays).
 
 \subsection{Research contributions}
-This section presents a summary of the research contributions achieved by the 4 included papers, and how explains their relationship to the research questions.
+This section presents a summary of the research contributions achieved by the 4 included papers, and how explains their relationship to the \glspl{rq}.
 
 \subsubsection{An understanding of the musical uses of stereo field}
 The design and execution of the Auxtrument led to a direct understanding of how a musical can use stereo field to convey a message that would otherwise be difficult to communicate. With respect to the overarching research question, the act of creating musical output gives a small window into how a music producer might use stereo field. Paper \ref{paper:auxtrument} was a retrospective account of the process of building the Auxtrument, which additionally provides a technical contribution to any musicians wishing to make a similar performance in the future. The paper also provided suggestions for future iterations of Auxtrument-style instruments and the standardized \glspl{api} which are built into web browsers, providing a basis for future work.
 
-The Orkester framework and software library presented the opportunity to apply a more technical approach to RQ\ref{rq:usecase}. The exploration of stereo field in existing recordings furthered the knowledge gained from an individual musical project by allowing us to analytically compare stereo fields created by many producers. This allowed us to establish an understanding of the range and variation that stereo field can embody.
+The Orkester framework and software library presented the opportunity to apply a more technical approach to \rqa. The exploration of stereo field in existing recordings furthered the knowledge gained from an individual musical project by allowing us to analytically compare stereo fields created by many producers. This allowed us to establish an understanding of the range and variation that stereo field can embody.
 
-% \subsubsection{Signal processing techniques relating to stereo field}
+\subsubsection{Signal processing techniques relating to stereo field}
+The work on Orkester and the resulting paper \ref{paper:dafx} contribute an understanding of how some established techniques for measuring stereo field react to existing recorded music. Moreover, the understanding is not limited to the techniques specified in paper \ref{paper:dafx} since the development of Orkester involved a small-scale literature search and subsequent implementation of many other techniques, not just those that were eventually included in the paper. 
 
-% \subsubsection{Setup for future work on large datasets of audio}
+In order to fully answer \rqb, a much more extensive \gls{slr} (paper \ref{paper:slr}) was performed with two intentions. First and foremost, the intention was to conclusively find all existing mathematical techniques that describe stereo field. In addition, there was a goal to find \q{cross-pollination} opportunities from disparate areas of audio research which nonetheless derive spatial cues from audio signals. In doing so, it was possible to form a \q{general model} of \glspl{sip}, thereby making it easier to for future researchers to find or create a \gls{sip} that suits their specific use case.
+
+\subsubsection{Psychoacoustics of mixed music and speech}
+The perceptual listening test described in paper \ref{paper:bth} provided a new perspective on a classic problem in psychoacoustics research. While there is extensive literature describing how people perceive music or speech that has been intentionally masked by another sound, our experiment used music and speech that were intended to complement each other. The results firstly suggested that while people prefer speech that is panned towards the centre, there was an opportunity to increase the audible pleasantness by using very subtle panning, and moreover that said panning might be automated by analysis of the stereo field (thereby helping to answer \rqa). Furthermore, it became clear that the intelligibility of speech was paramount to pleasantness, despite the original assumption that the music and speech complemented each other.
+
+\subsubsection{Setup for future work on large datasets of audio}
+In regard to the future work described in \cref{sec:future_work}, the \gls{slr} provided both a list of relevant audio datasets,  and a many standardized implementations of mathematical techniques that extract spatial information from audio.
+Paper \ref{paper:dafx} also presented a good opportunity to assess the computational complexity of the algorithms implemented in Orkester, thereby highlighting some opportunities for optimization when they are applied to extremely large corpora.
+
 
 \section{Background}
 
@@ -800,7 +816,8 @@ May & Write kappa.\\
 September & Defend thesis.\\
 \end{tabular}
 
-\section{Continuation to doctoral studies}
+\section{Future work and continuation to doctoral studies}
+\label{sec:future_work}
 While the licentiate thesis gives the theoretical and practical basis for analysis of stereo image in music recordings, the doctoral section will concentrate on applying the knowledge gained to large musical datasets and real musical phenomena. In particular, the use of unsupervised and self-supervised learning on the spatial features of musical recordings will be investigated. Other unknowns that have arisen during the licentiate work could also be investigated. For example, it is unknown whether the public musical corpora are representative of professional music collections. It is also not known how much typical audio distortions like lossy compression affect the measurements of stereo field. In short, the doctoral thesis will solve real-world problems using techniques surfaced by the licentiate.
 
 
