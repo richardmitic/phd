@@ -1,9 +1,10 @@
-\documentclass[a4paper]{article}
+\documentclass{UUThesisTemplate}
 
 \usepackage{csquotes}
 \usepackage{hyperref}
 \usepackage[british]{babel}
 \usepackage{booktabs}
+\usepackage{tabularx}
 \usepackage{subfiles}
 \usepackage{amsmath}
 \usepackage{cleveref}
@@ -11,6 +12,10 @@
 \usepackage{enumitem}
 \usepackage{graphicx}
 \usepackage{afterpage}
+\usepackage{type1cm}
+% \usepackage[latin1]{inputenc}
+% \usepackage[T1]{fontenc}
+\usepackage{mathptmx}
 
 \fxsetup{draft,inline,nomargin,theme=color}
 
@@ -24,6 +29,7 @@
 \usetikzlibrary{backgrounds}
 \usetikzlibrary{shapes.misc}
 \usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 
 %% References
 \usepackage[
@@ -46,6 +52,11 @@
 \newcommand{\rqa}{\hyperref[rq:usecase]{$RQ_1$}}
 \newcommand{\rqb}{\hyperref[rq:methods]{$RQ_2$}}
 
+% Numbering of headings down to the subsection level
+\numberingdepth{subsection}
+
+% Including headings down to the subsection level in contents
+\contentsdepth{subsection}
 
 \tikzset{
     speaker/.pic={
@@ -59,41 +70,59 @@
     flow_input/.style={rounded rectangle, draw=black, minimum height=1cm, minimum width=3cm},
     flow_process/.style={rectangle, draw=black, minimum height=1cm, minimum width=3cm},
     flow_output/.style={rectangle, rounded corners, draw=black, minimum height=1cm, minimum width=3cm},
-    arrow/.style={->, >=Latex}
+    arrow/.style={->, >=Latex},
+    section_label/.style={rectangle, rounded corners, draw=darkgray, fill=lightgray, rotate=90, minimum height=0.618cm, minimum width=4cm},
 }
 
-
-\title{Licentiate Proposal - Analysis of stereo image in vast repositories of recorded music}
-
-\author{Richard Mitic}
-
-\begin{document}
-
-\maketitle
-
-
+\abstractdummy{
 \begin{abstract}
 Spatial information is crucial to the listener's experience of music, and stereophonic recordings have long been the standard for capturing this spatiality. Recent advancements in computing, coupled with the availability of new, very large musical corpora, have created opportunities for large-scale quantitative analysis of the stereo image of recorded music. This licentiate thesis addresses a key gap in current research: direct analysis of raw music recordings to describe the stereo image. It will explore existing methods, assess their effectiveness, and demonstrate potential use cases for spatial analysis within audio reproduction, transmission and musical performance.
 \end{abstract}
+}
+
+% \title{Licentiate Proposal - Analysis of stereo image in vast repositories of recorded music}
+
+% \author{Richard Mitic}
+
+\begin{document}
+\frontmatter
+
+% \maketitle
 
 \listoffixmes
+\frontmatterCS
 
-\section*{Papers included in the thesis}
-\label{sec:papers_basic}
+\dedication{Dedicated blah to all hard-working \\doctoral students at Uppsala University}
+
+
+
+
+% \chapter*{Papers included in the thesis}
+% \label{sec:papers_basic}
 
 % refsection allows the full citations to be printed without appearing in the bibliography
-\begin{refsection}
-\begin{enumerate}[label=\textbf{\Alph*}]
+% \begin{refsection}
+% \begin{enumerate}[label=\textbf{\Alph*}]
+\begin{listofpapers}
     \item \fullcite{franklinDevelopmentWebBasedRealTime2025} \label{paper:auxtrument}
     \item \fullcite{miticObjectiveComparisonPanning2025}\label{paper:dafx}
     \item \fullcite{miticPerceptualEvaluationBinaurally2026}\label{paper:bth}
     \item \fullcite{miticSystematicLiteratureReview2026}\label{paper:slr}
-\end{enumerate}
-\end{refsection}
+\end{listofpapers}
+% \end{enumerate}
+% \end{refsection}
+    
+\begingroup
+    % To adjust the indentation in your table of contents, uncomment and enter the widest numbers for each level
+    %  E.g.  \settocnumwidth{widest chapter number}{widest section number}{widest subsection number}...{...}
+    %  \settocnumwidth{5}{4}{5}{3}{3}{3}
+    \tableofcontents
+\endgroup
 
-\pagebreak
 
-\section{Introduction}
+\mainmatter
+
+\chapter{Introduction}
 
 It is a widely accepted truth in the world of music production and recording that spatial information in audio is crucial to  listeners' sense of immersion and connection with the music. To capture that spatiality, stereophonic recording and reproduction has been the standard format since it gained popularity in the 1950s \cite{lanierHIFITWOCHANNELCOMMOTION1957}. The spatial analysis of subsequent decades worth of stereo recordings presents a unique opportunity to study human musicality, as each recording reflects and encodes the creative choices made by the musicians and recordists involved.
 
@@ -105,12 +134,12 @@ Historically, binaural audio (which is a subclass of stereo) has been of particu
 
 \pagebreak
 
-\section{Research Questions and Contributions}
+\chapter{Research Questions and Contributions}
 \label{sec:research_questions_and_contributions}
 
 The underlying purpose of the research documented in this thesis relates to \gls{mir}, and in particular to generating an understanding of the links between human musical creativity and musical output. While it might be possible for the creative people involved to explain how they make their music, it is far more objective to analyse their output as a representation of their musical ideas.
 % \\\\
-\subsection{Research Questions}
+\section{Research Questions}
 \label{sec:research_questions}
 
 Given the aforementioned context, the overarching \gls{rq} can be formed as:
@@ -128,30 +157,30 @@ How do music producers use stereo field?
 
 One could argue that the overarching question might be answered by interviewing music producers, but this would quickly run into a problem of scale. The two smaller \glspl{rq} were therefore designed to allow the overarching question to be answered by objective analysis on musical recordings (which are abundant nowadays).
 
-\subsection{Research contributions}
+\section{Research contributions}
 This section presents a summary of the research contributions achieved by the 4 included papers, and how explains their relationship to the \glspl{rq}.
 
-\subsubsection{An understanding of the musical uses of stereo field}
+\subsection{An understanding of the musical uses of stereo field}
 The design and execution of the Auxtrument led to a direct understanding of how a musical can use stereo field to convey a message that would otherwise be difficult to communicate. With respect to the overarching research question, the act of creating musical output gives a small window into how a music producer might use stereo field. Paper \ref{paper:auxtrument} was a retrospective account of the process of building the Auxtrument, which additionally provides a technical contribution to any musicians wishing to make a similar performance in the future. The paper also provided suggestions for future iterations of Auxtrument-style instruments and the standardized \glspl{api} which are built into web browsers, providing a basis for future work.
 
 The Orkester framework and software library presented the opportunity to apply a more technical approach to \rqa. The exploration of stereo field in existing recordings furthered the knowledge gained from an individual musical project by allowing us to analytically compare stereo fields created by many producers. This allowed us to establish an understanding of the range and variation that stereo field can embody.
 
-\subsubsection{Signal processing techniques relating to stereo field}
+\subsection{Signal processing techniques relating to stereo field}
 The work on Orkester and the resulting paper \ref{paper:dafx} contribute an understanding of how some established techniques for measuring stereo field react to existing recorded music. Moreover, the understanding is not limited to the techniques specified in paper \ref{paper:dafx} since the development of Orkester involved a small-scale literature search and subsequent implementation of many other techniques, not just those that were eventually included in the paper. 
 
 In order to fully answer \rqb, a much more extensive \gls{slr} (paper \ref{paper:slr}) was performed with two intentions. First and foremost, the intention was to conclusively find all existing mathematical techniques that describe stereo field. In addition, there was a goal to find \q{cross-pollination} opportunities from disparate areas of audio research which nonetheless derive spatial cues from audio signals. In doing so, it was possible to form a \q{general model} of \glspl{sip}, thereby making it easier to for future researchers to find or create a \gls{sip} that suits their specific use case.
 
-\subsubsection{Psychoacoustics of mixed music and speech}
+\subsection{Psychoacoustics of mixed music and speech}
 The perceptual listening test described in paper \ref{paper:bth} provided a new perspective on a classic problem in psychoacoustics research. While there is extensive literature describing how people perceive music or speech that has been intentionally masked by another sound, our experiment used music and speech that were intended to complement each other. The results firstly suggested that while people prefer speech that is panned towards the centre, there was an opportunity to increase the audible pleasantness by using very subtle panning, and moreover that said panning might be automated by analysis of the stereo field (thereby helping to answer \rqa). Furthermore, it became clear that the intelligibility of speech was paramount to pleasantness, despite the original assumption that the music and speech complemented each other.
 
-\subsubsection{Setup for future work on large datasets of audio}
+\subsection{Setup for future work on large datasets of audio}
 In regard to the future work described in \cref{sec:future_work}, the \gls{slr} provided both a list of relevant audio datasets,  and a many standardized implementations of mathematical techniques that extract spatial information from audio.
 Paper \ref{paper:dafx} also presented a good opportunity to assess the computational complexity of the algorithms implemented in Orkester, thereby highlighting some opportunities for optimization when they are applied to extremely large corpora.
 
 
-\section{Background}
+\chapter{Background}
 
-\subsection{The mechanics of human hearing}
+\section{The mechanics of human hearing}
 \label{sec:hearing}
 
 \citeauthor{lindsayHumanInformationProcessing1972}'s book \citetitle{lindsayHumanInformationProcessing1972} \cite{lindsayHumanInformationProcessing1972} gives a detailed description of how the human ear is constructed and how it enables us to hear. The relevant parts are summarized below.
@@ -160,39 +189,83 @@ The ear contains three major sections, loosely labelled the \q{outer}, \q{middle
 
 Along the length of the cochlea, the cilia have different \q{critical frequencies} that they respond to. The critical frequency increases logarithmically as one moves from the base to the apex of the cochlea. This is what gives humans their characteristic 20-20000Hz hearing range.
 
-\subsection{Directional hearing}
+\section{Directional hearing}
 Following from \cref{sec:hearing}, this section will discuss humans' ability to discern the direction or location of a sound source.
 
 The psychoacoustic theory behind spatial hearing has been an active area of research since the mid 20th century, with early examples including the Jeffress model in which time differences between sound events at each ear contribute to a person's ability to locate sounds in space \cite{jeffressPlaceTheorySound1948}. The work of \citeauthor{lindemannEvaluationInterauralSignal1982} a few decades later expanded on this idea by translating the earlier theory to a \gls{dsp} context, and establishing the \gls{ild}, \gls{itd}, and \gls{iacc} as important measures to describe the spatial aspects of binaural signals in a quantifiable way \cite{lindemannEvaluationInterauralSignal1982}.
 
 Put simply, humans are able to perceive the incoming direction of a sound by observing both the amplitude difference and time difference of coincident sound waves arriving at the left and right ears. Figure \cref{fig:directional_hearing} shows how these two properties enable directional hearing. Firstly, the head itself creates a physical barrier that will attenuate sound waves at one ear more-so that at the other ear. Secondly, the difference in distance between the sound source and each ear will create a delay in receiving the sound at either ear. Over time a person will learn to associate patterns in \gls{itd}/\gls{ild} with the physical location of the sound source.
 
-\begin{figure}[htb]
-    \centering
-    \includegraphics[height=0.3\textheight]{figures/directional_hearing.pdf}
-    \caption{Illustration of how humans perceive the direction of an incoming sound.}
-    \label{fig:directional_hearing}
-\end{figure}
+% \begin{figure}[htb]
+%     \centering
+%     \includegraphics[height=0.3\textheight]{figures/directional_hearing.pdf}
+%     \caption{Illustration of how humans perceive the direction of an incoming sound.}
+%     \label{fig:directional_hearing}
+% \end{figure}
 
 
 \begin{figure}[htb]
     \centering
-    % \resizebox{\textwidth}{!}{
+    \resizebox{\textwidth}{!}{
         \begin{tikzpicture}
+        \pgfmathsetmacro{\pibyfour}{0.7853981634}
+        \pgfmathsetmacro{\ildamp}{0.18}
 
             % ILD speaker
             \begin{scope}[rotate around={30:(0,0)}]
                 \coordinate (speaker_loc) at (4,0);
                 \pic[transform shape, scale=0.2] (itd_speaker) at (speaker_loc) {speaker};
                 \draw[decorate, decoration={expanding waves, angle=28,segment length=0.4cm}] (speaker_loc) -- (-2,0);
+                % \draw[black] (4,0) -- (-4,0);
+                \coordinate (shadow_top) at (0,1);
+                \coordinate (shadow_middle) at (-2,0);
+                \coordinate (shadow_bottom) at (0,-1);
             \end{scope}
 
             % ILD head
-            \coordinate (shadow_top) at (110:1);
-            \coordinate (shadow_middle) at (200:2);
-            \coordinate (shadow_bottom) at (290:1);
             \fill[lightgray] plot [smooth, tension=1.618] coordinates {(shadow_top) (shadow_middle) (shadow_bottom)};
             \pic[transform shape] (itd_head) at (0,0) {head};
+            \node[section_label, minimum width=5.5cm] (itd_label) at (-3, 0) {\glsxtrshort{ild}};
+            
+            % Small waveforms at each ear
+            % \begin{scope}[xshift=1.2cm, scale=0.2]
+            % \draw[fill=black] (0,0) -- (1,1) -- (2,0.5) -- (3, 0.25) -- (4,0.125) -- (4,-0.125) -- (3,-0.25) -- (2,-0.5) -- (1,-1) -- cycle;
+            % \end{scope}
+            % \begin{scope}[xshift=-2cm, xscale=0.2, yscale=0.1]
+            % \draw[fill=black] (0,0) -- (1,1) -- (2,0.5) -- (3, 0.25) -- (4,0.125) -- (4,-0.125) -- (3,-0.25) -- (2,-0.5) -- (1,-1) -- cycle;
+            % \end{scope}
+
+            \begin{scope}[xshift=6cm, yshift=-2cm]
+                \begin{axis}[
+                    height=6cm, 
+                    width=10cm, 
+                    ymax=1,
+                    ymin=-1,
+                    xmin=-1,
+                    xmax=11,
+                    axis x line=center,
+                    axis y line=none,
+                    ticks=none,
+                    xlabel={time},
+                    xlabel style=below right,
+                ]
+                \input{figures/ild_L.tex}
+                \input{figures/ild_R.tex}
+                \addplot[densely dotted] coordinates {(0, 0.5+\ildamp) (10, 0.5+\ildamp)};
+                \addplot[densely dotted] coordinates {(0, 0.5-\ildamp) (10, 0.5-\ildamp)};
+                \addplot[densely dotted] coordinates {(0, -0.5+\ildamp*2) (10, -0.5+\ildamp*2)};
+                \addplot[densely dotted] coordinates {(0, -0.5-\ildamp*2) (10, -0.5-\ildamp*2)};
+                \addplot[latex-latex] coordinates {(-0.2, 0.5+\ildamp) (-0.2, 0.5-\ildamp)};
+                \addplot[latex-latex] coordinates {(-0.2, -0.5+\ildamp*2) (-0.2, -0.5-\ildamp*2)};
+                \node (a1) at (axis cs: -0.5, 0.5) {$a_L$};
+                \node (a2) at (axis cs: -0.5, -0.5) {$a_R$};
+                \coordinate (ild_left_y) at (yticklabel cs: 0.75);
+                \coordinate (ild_right_y) at (yticklabel cs: 0.25);
+                \end{axis}
+            \end{scope}
+
+            \node[anchor=east] at (ild_left_y) {Left};
+            \node[anchor=east] at (ild_right_y) {Right};
 
 
             % ITD 
@@ -209,17 +282,46 @@ Put simply, humans are able to perceive the incoming direction of a sound by obs
                 \coordinate (right_ear) at (1.1,0);
                 \draw[-Stealth] (speaker_loc) -- (left_ear) node[midway, above] {$d_L$};
                 \draw[-Stealth] (speaker_loc) -- (right_ear) node[midway, below] {$d_R$};
-                \node[right] at (speaker_loc |- 0,0) {$d_L > d_R$};
+                % \node[right] at (4,0) {$d_L > d_R$};
+                \node[section_label, minimum width=5.5cm] (itd_label) at (-3, 0) {\glsxtrshort{itd}};
+
+                \begin{scope}[xshift=6cm,yshift=-2cm]
+                    \begin{axis}[
+                        height=6cm, 
+                        width=10cm, 
+                        ymax=1.5,
+                        ymin=-1,
+                        xmin=-1,
+                        xmax=11,
+                        axis x line=center,
+                        axis y line=none,
+                        ticks=none,
+                        xlabel={time},
+                        xlabel style=below right,
+                    ]
+                    \input{figures/itd_L.tex}
+                    \input{figures/itd_R.tex}
+                    \addplot[densely dotted] coordinates {(\pibyfour 4, 1) (\pibyfour, -1)};
+                    \addplot[densely dotted] coordinates {(\pibyfour + 1, 1) (\pibyfour + 1, -1)};
+                    \node (t1) at (axis cs: \pibyfour,1.1) {$t_1$};
+                    \node (t2) at (axis cs: \pibyfour+1,1.1) {$t_2$};
+                    \coordinate (itd_left_y) at (yticklabel cs: 0.6);
+                    \coordinate (itd_right_y) at (yticklabel cs: 0.2);
+                    \end{axis}
+                \end{scope}
+
+                \node[anchor=east] at (itd_left_y) {Left};
+                \node[anchor=east] at (itd_right_y) {Right};
+
             \end{scope}
 
-            % \node (itd_plot) at (10, -3) {\includegraphics{figures/example_pan.png}};
-
         \end{tikzpicture}
-    % }
-    % \caption{Example stereo image created by a music producer. Mono stems are shown as black dots and stereo stems as grey fills. Dashed lines represent the extent of the stereo image. Dotted lines represent the maximum boundaries of the possible stereo image.}
+    }
+    \caption{Illustration of how humans perceive the direction of an incoming sound. The physical barrier of the head causes an \glsxtrfull{ild} between sound waves received at the two ears ($a_R-a_L$). The difference in distance from the source to the ears ($d_R - d_L$) causes an \glsxtrfull{itd} between the two ear ($t_2-t_1$).}
+    \label{fig:directional_hearing}
 \end{figure}
 
-The relative importance of \gls{ild} and \gls{itd} differ depending on the frequency of the incoming sound. The reasons for this are twofold. Firstly, a person's inter-aural distance (the physical distance between their ears) must be longer than the wavelength of the incoming sound wave in order for them to detect the phase difference between wave peaks. Secondly the hair cells inside the human cochlea can only detect the fine structure of a sound wave up until roughly 1.6kHz \cite{lindemannEvaluationInterauralSignal1982}. \citeauthor{lindemannEvaluationInterauralSignal1982} gives a rule of thumb that time differences of less than 7.5ms are heard as a single auditory event (for which direction could be inferred), and delays above 21ms are heard as uncorrelated events. Hence, at 1.6kHz and below \gls{itd} is more important, whereas above 1.6kHz \gls{ild} is more important. Furthermore, \citeauthor{blauertSpatialHearingOne1996}'s subsequent work found firstly that both \gls{ild} and \gls{itd} are relevant within a frequency band, and secondly that the angle of incidence of the sound wave plays a role in how the cues are perceived \cite{blauertSpatialHearingOne1996}. Despite this, the aforementioned rules of thumb are still broadly accepted, even being encoded into international standards such as \cite{iso-11172-3:mpeg_audio}. As an example, \cref{fig:example_pan} shows two recordings (a low-frequency kick drum and high-frequency hi-hat) that originate from the right-hand side of a listener.
+The relative importance of \gls{ild} and \gls{itd} differ depending on the frequency of the incoming sound. The reasons for this are twofold. Firstly, a person's inter-aural distance (the physical distance between their ears) must be longer than the wavelength of the incoming sound wave in order for them to detect the phase difference between wave peaks. Secondly the hair cells inside the human cochlea can only detect the fine structure of a sound wave up until roughly 1.6kHz \cite{lindemannEvaluationInterauralSignal1982}. \citeauthor{lindemannEvaluationInterauralSignal1982} gives a rule of thumb that time differences of less than 7.5ms are heard as a single auditory event (for which direction could be inferred), and delays above 21ms are heard as uncorrelated events. Hence, at 1.6kHz and below \gls{itd} is more important, whereas above 1.6kHz \gls{ild} is more important. Furthermore, \citeauthor{blauertSpatialHearingOne1996}'s subsequent work found firstly that both \gls{ild} and \gls{itd} are relevant within a frequency band, and secondly that the angle of incidence of the sound wave plays a role in how the cues are perceived \cite{blauertSpatialHearingOne1996}. Despite this, Lindemann's rules of thumb are still broadly accepted, even being encoded into international standards such as \cite{iso-11172-3:mpeg_audio}. As an example, \cref{fig:example_pan} shows two recordings (a low-frequency kick drum and high-frequency hi-hat) that originate from the right-hand side of a listener.
 
 \begin{figure}[htb]
     \centering
@@ -229,7 +331,7 @@ The relative importance of \gls{ild} and \gls{itd} differ depending on the frequ
 \end{figure}
 
 
-\subsection{Loudness perception}
+\section{Loudness perception}
 Humans perceive the loudness of sound, not in terms of the absolute amplitude of the sound wave, but the \textit{power} of the sound wave. Mathematically speaking, perceived loudness is proportional to the \gls{rms} \gls{spl} raised to an exponent \cite{mooreIntroductionPsychologyHearing2013}. Observing that the calculation of \gls{rms} naturally involves taking the square of the original time function (see \cref{eq:rms}), it follows multiplication of a signal by $\sqrt{2}$ will result in double perceived loudness. Conversely, multiplying a signal by $\frac{1}{\sqrt{2}}$ will halve the perceived loudness.
 
 \begin{equation}
@@ -238,7 +340,7 @@ Humans perceive the loudness of sound, not in terms of the absolute amplitude of
 \end{equation}
 
 
-\subsection{Panning}
+\section{Panning}
 The concepts of directional hearing are applied in music production to make sound sources appear as though they originate from a specific direction or position, often referred to as the \q{phantom position}. In recording studio vernacular, this is call \q{panning}. In accordance with the two signal differences a that humans are able to detect, there are also two basic types of panning -- amplitude panning and time panning. By way of example, \cref{fig:phantom_amplitude} shows how the phantom position can be moved anywhere in between the speakers that are reproducing the sound by applying different amplitude gains to the left and right channel of a stereo recording.
 
 % \begin{figure}[htb]
@@ -339,7 +441,7 @@ Amplitude panning is the most common panning technique is traditional music prod
     \label{fig:equal_power_panning}
 \end{figure}
 
-\subsection{Stereo image}
+\section{Stereo image}
 The term \q{stereo image} is used to describe the overall distribution of sound across the horizontal plane after panning and any other production techniques have been applied. One may also use terms like \q{stereo field}, \q{soundstage}, or \q{panorama}, which all refer to the same thing.  They are usually used in qualitative descriptions such as \q{big}, \q{wide}, and \q{ambient} rather than quantitative measures \cite{owsinskiMixingEngineersHandbook2006}. When mixing a musical recording, a producer will pan individual stems to their desired position within the stereo image. Those stems which are recorded in stereo in fact have their own stereo image, which can also be controlled by the producer. The combination of all stems into a final stereo mix, constitutes the overall stereo image. 
 
 \Cref{fig:stereo_image} shows a simple example stereo image, as perceived by the producer. It contains two mono stems -- vocals and violin, and one stereo stem -- piano. There are some common tropes seen throughout many productions, some of which are shown in the diagram. Firstly, vocals are recorded in mono and panned to the centre. Secondly, since the piano is panned slightly left, the violin is panned roughly the same amount to the right in order to achieve a balanced mix. Thirdly, all stems are placed in the stereo image in a way that emulates a natural performance on a stage, and to avoid separate instruments masking each other. Note that while these practices are typical, they are purely an artistic choice on behalf of the producer \cite{owsinskiMixingEngineersHandbook2006}; Recordings breaking the trend are not difficult to find.
@@ -395,7 +497,7 @@ The term \q{stereo image} is used to describe the overall distribution of sound 
 
 Describing the stereo image of a recording has its roots in the acoustics domain, in which typical use cases are the analysis of concert halls and music reproduction systems. In these cases, the previously mentioned low-level spatial cues typically form the basis of the analysis. \Citeauthor{bergSystematicEvaluationPerceived2003} \cite{bergSystematicEvaluationPerceived2003} give a long list of typical perceptual measures that can be derived from the low-level cues, although later literature has focused on the measures of \gls{asw} and \gls{lev}. However, as stated by \citeauthor{sarroffComputationalModelPerceived2011} \cite{sarroffComputationalModelPerceived2011}, the task of describing the spatial aspects of recorded music is inherently different to that of acoustical signals since said recordings may exhibit spatial aspects that cannot occur in physical acoustic space.
 
-\subsection{Music production}
+\section{Music production}
 A typical setup for a music producer is to use a \gls{daw} - graphical software that allows them to record and edit audio. There are many different \glspl{daw} available, but one such example (Reaper) is shown in \cref{fig:daw}. In particular, it shows a single recorded audio track which has it's panning automated. It also contains a single effects track which applies a stereo reverb effect to the recorded audio. This effects track has its \q{dry/wet} mix parameter automated, which controls the ratio of non-processed to processed sound. In a more complete recording session, the \gls{daw} would contain many more audio and effects tracks, each with their own panning control.
 
 \begin{figure}[htb]
@@ -416,7 +518,7 @@ The assessment of how the two stereo channels interact is of prime importance wh
 
 In a large \gls{daw} session containing many tracks, the producer will make artistic choices about where in the stereo field to pan each track. While there are some typical practices in the industry, it must be emphasized that panning and creation of stereo field more generally is an artistic process \cite{izhakiPanning2023}, and the plugins that display stereo information usually serve as visual aides to notify the producer if their mix might exhibit a deterioration of the stereo field when played back in non-ideal reproduction settings.
 
-\subsection{Digital audio signals}
+\section{Digital audio signals}
 When a sound wave is converted into an electrical signal by a microphone, it can be considered to be operating in continuous time. To convert the analogue signal into a digital one, it is sampled at regular intervals. The sampling frequency ($f_s$) is related to the sampling interval ($\Delta$) by the relationship $\Delta = \frac{1}{f_s}$.
 
 Shannon's sampling theorem states that a signal can be perfectly recreated when sampled at twice the highest frequency contained in the signal. Conversely, the highest frequency the highest frequency that can be represented by sampling a signal at a given sampling frequency is half of that frequency. This limit is called the \q{Nyquist frequency} and is calculated by $f_N = \frac{f_s}{2}$ \cite{yaoNyquistFrequency1983}. 
@@ -501,11 +603,11 @@ This is illustrated by \Cref{fig:nyquist}, which shows the sampling of three wav
     \label{fig:nyquist}
 \end{figure}
 
-\subsection{Time-Frequency representation of audio}
+\section{Time-Frequency representation of audio}
 
 In order to perform many types of audio analysis, the audio signal can be converted from the time domain into the \gls{tf} domain. In perceptual acoustics research there are several common forms of \gls{tf} representation, each with its own nuances. This section provides those details.
 
-\subsubsection{\gls{stft} spectrogram}
+\subsection{\gls{stft} spectrogram}
 
 The \gls{stft} spectrogram is one of the most popular \gls{tf} representions across all audio processing work due to its computational efficiency. The fundamental principle is that a time-domain signal is split into short (1 to 100ms) overlapping chunks, and the \gls{fft} is performed on each chunk, thereby converting that chunk into the frequency domain.  By arranging subsequent frames along a time axis it is possible to represent the original signal as a 2D image known as a spectrogram. When the time-domain signal is entirely real, (which is the case for monophonic audio signals), the result of the \gls{fft} will be a complex signal which is symmetrical around the Nyquist frequency and the upper half is therefore dropped. Furthermore, the complex numbers are usually converted into magnitude/phase representation to better match the human auditory system.
 
@@ -527,7 +629,7 @@ A fundamental property of the \gls{fft} is that it assumes that the signal repea
     \label{fig:stft_accuracy}
 \end{figure}
 
-\subsubsection{Mel spectrogram}
+\subsection{Mel spectrogram}
 
 One major drawback of the \gls{stft} spectrogram is that the frequency bins are spaced linearly from 0Hz to the Nyquist frequency, whereas the human perception of pitch works on a logarithmic scale. The \gls{stft} therefore contains redundant information in higher frequencies. One solution is to divide the entire spectrum into frequency bands that are spaced logarithmically within the entire spectrum and calculate weighted averages of the frequency bins within each band. The standard method is to use a \q{Mel filter bank}, an example of which is shown in \cref{fig:mel_filters}. When the Mel filter bank is applied to an \gls{stft} spectrogram, the result is called a \q{Mel spectrogram}. An example is shown in \cref{fig:spect_comp}. Note that information in the higher frequencies has been condensed more-so that the lower frequencies.
 
@@ -538,7 +640,7 @@ One major drawback of the \gls{stft} spectrogram is that the frequency bins are 
     \label{fig:mel_filters}
 \end{figure}
 
-\subsubsection{Cochleagram}
+\subsection{Cochleagram}
 
 As an alternative to the two spectrogram representations, a cochleagram aims to make a \gls{tf} representation that models the acoustic response of the human cochlea more closely. To that end, all processing is performed in the time domain and is sometimes referred to as a \q{peripheral ear model}. Several examples appear in the literature \cite{boddenBinauralModelingAuditory1995,choiObjectiveMeasurementPerceived2008,delgadoDesignChoicesBinaural2023}. In the classical method \cite{boddenBinauralModelingAuditory1995} the original signal is first processed by a bank of time-domain gammatone filters with their centre frequencies placed according to a perceptual scale and each sub-band is subsequently processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patterns of the cilia and basilar membrane. Each time-domain signal is then divided into overlapping time segments. The amplitude of each \gls{tf} segment can then be calculated as the mean of all values its values, forming one pixel in the cochleagram. \Cref{fig:spect_comp} shows a comparison of all spectrogram types. 
 
@@ -573,13 +675,13 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
     \label{fig:spect_comp}
 \end{figure}
 
-\subsection{Machine learning}
+\section{Machine learning}
 The large scale of the vast music repositories being addressed by the research questions naturally implies that some sort of machine learning is necessary. Broadly speaking, machine learning techniques can be broken into two classes - supervised and unsupervised. The former requires the training dataset to be labelled, while the latter does not. In relation to research question 1, we assume that a music producer's \gls{daw} session is the only source of objective ground-truth data. Furthermore, we assume that \gls{daw} sessions are not publicly available, as was found in \cite{colonelReverseEngineeringRecording2021,rodriguezSpectralDynamicConstellations2024}; The only public-facing output of a recording session is the mixdown. It follows then that any spatial information derived from a mixdown will be unlabelled data and will therefore require unsupervised learning in order to make sense of it.
 
 
-\section{Related works}
+\chapter{Related works}
 
-\subsection{Stereo image description}
+\section{Stereo image description}
 
 \fxerror{Binaural analysis, \cite{supperOnsetGuidedSpatialAnalyser2005,takanenBinauralAuditoryModel2012,antoniukBlindEstimationEnsemble2023}}
 
@@ -615,9 +717,9 @@ All the above use classical \gls{dsp} to create their spatial descriptors, but m
 
 Neural generation of spatial audio continues to be a hot topic up to the present day, with many attempts to generate high-quality binaural, ambisonic or multichannel audio from mono sources \cite{limEnhancingSpatialAudio2024,liCyclicLearningBinaural2024,liTASPersonalizedTextguided2024,chenCCStereoAudioVisualContextual2025,melechovskySonicMasterControllableAllinOne2025,santosLargeScaleSelfSupervisedLearning2025,wangSpatialV2AVisualGuidedHighfidelity2026}. In doing so, the networks must infer spatial information from a source other than audio (typically an accompanying video or text prompt), and in the process will learn the spatial qualities of their audio training data.
 
-\subsection{Analysis of large musical datasets}
+\section{Analysis of large musical datasets}
 
-\section{Research Methodology}
+\chapter{Research Methodology}
 
 \Cref{fig:research_methodology} shows a diagram of the research methodology for each paper included in this thesis and shows how each research track fed into subsequent tracks.
 
@@ -630,10 +732,10 @@ Neural generation of spatial audio continues to be a hot topic up to the present
         % arrow/.style = {->, >=Latex}
     }
 
-    \definecolor{bgcolorA}{HTML}{E0EAEB}  % 🔵 Pale, cool blue-grey
-    \definecolor{bgcolorB}{HTML}{E9EBE0}  % 🌿 Pale, neutral sage green
-    \definecolor{bgcolorC}{HTML}{E0D7E6}  % 💜 Pale lavender/mauve
-    \definecolor{bgcolorD}{HTML}{EAD8C0}  % 🟠 Pale sandy beige/peach (NEW)
+    \definecolor{bgcolorA}{HTML}{E0EAEB}  % Pale, cool blue-grey
+    \definecolor{bgcolorB}{HTML}{E9EBE0}  % Pale, neutral sage green
+    \definecolor{bgcolorC}{HTML}{E0D7E6}  % Pale lavender/mauve
+    \definecolor{bgcolorD}{HTML}{EAD8C0}  % Pale sandy beige/peach
 
     \resizebox{\textwidth}{!}{
         \begin{tikzpicture}[node distance=2cm]
@@ -694,19 +796,19 @@ Neural generation of spatial audio continues to be a hot topic up to the present
 
 The research was initiated with a period of exploration and refinement of the research questions. Two work streams (named Auxtrument and Orkester) were established early on as frameworks to explore the importance of spatial information in musical audio, firstly from a musical performance perspective, and secondly from a signal processing perspective. 
 
-The Auxtrument initiative consisted of a joint project with many other researchers to make a musical performance that explored the use of space and merged realities. A custom instrument (the Auxtrument) was designed and built, the purpose of which was to generate a networked artificial reverberation chamber, embodying local sound sources with new spatial qualities \cite{franklinMergingPlacesRealTime2024,franklinComposingNetworkedReverberation2025}. This resulted in the retrospective paper, named \q{paper A} in this thesis \cite{franklinDevelopmentWebBasedRealTime2025}.
+The Auxtrument initiative consisted of a joint project with many other researchers to make a musical performance that explored the use of space and merged realities. A custom instrument (the Auxtrument) was designed and built, the purpose of which was to generate a networked artificial reverberation chamber, embodying local sound sources with new spatial qualities \cite{franklinMergingPlacesRealTime2024,franklinComposingNetworkedReverberation2025}. This resulted in the retrospective paper \ref{paper:auxtrument} \cite{franklinDevelopmentWebBasedRealTime2025}.
 
-Running concurrently to Auxtrument, the \q{Orkester} initiative was an exploration of the more technical side of stereo field description. It involved a limited literature search to find methods of describing stereo field, followed by a period of software development to implement the discovered methods. Once the implementation was reliable, a period of musical exploration commenced, testing the various algorithms on recordings that were known to contain interesting spatial features. This had several outcomes. The most direct consequence was the inception of an objective experiment to determine how the various stereo field description techniques reacted to different musical recordings, which culminated in paper B \cite{miticObjectiveComparisonPanning2025}. 
+Running concurrently to Auxtrument, the \q{Orkester} initiative was an exploration of the more technical side of stereo field description. It involved a limited literature search to find methods of describing stereo field, followed by a period of software development to implement the discovered methods. Once the implementation was reliable, a period of musical exploration commenced, testing the various algorithms on recordings that were known to contain interesting spatial features. This had several outcomes. The most direct consequence was the inception of an objective experiment to determine how the various stereo field description techniques reacted to different musical recordings, which culminated in paper \ref{paper:dafx} \cite{miticObjectiveComparisonPanning2025}. 
 
-Concurrently to the objective experiment, a perceptual listening test was planned and executed to determine how listeners react to the panning position of speech overlayed on top of music. The software developed for Orkester was subsequently used to analyse  the audio stimuli from the perceptual test in order to draw conclusions in paper C, which described the results and analysis of the perceptual test \cite{miticPerceptualEvaluationBinaurally2026}.
+Concurrently to the objective experiment, a perceptual listening test was planned and executed to determine how listeners react to the panning position of speech overlayed on top of music. The software developed for Orkester was subsequently used to analyse  the audio stimuli from the perceptual test in order to draw conclusions in paper \ref{paper:bth}, which described the results and analysis of the perceptual test \cite{miticPerceptualEvaluationBinaurally2026}.
 
 Lastly, through the developement of Orkester it became apparent that the original literature search was far from comprehensive. This spurred paper D, which was a systematic literature review designed to find all existing techniques that could be used to create a \gls{sip} \cite{miticSystematicLiteratureReview2026}.  
 
-The combination of the exploratory work, objective experiment, and perceptual test provided a satisfactory answer for RQ\ref{rq:usecase}. The initial literature search plus the \gls{slr} provided an answer to RQ\ref{rq:methods}.
+The combination of the exploratory work, objective experiment, and perceptual test provided a satisfactory answer for \rqa. The initial literature search plus the \gls{slr} provided an answer to \rqb.
 
 
 
-% \section{State of practice}
+% \chapter{State of practice}
 
 % In industry, spatial analysis of music signals is most commonly used for audio coding, compression, and transmission/distribution. International standards for audio coding include MPEG-Surround \cite{iso/iec23003-1InformationTechnologyMPEG2007}, which encodes multichannel audio based on the spatial cues \gls{ild}, \gls{ipd}, and \gls{iacc}. However, there has recently been a shift away from channel-based audio (such as MPEG-Surround) to scene- and object-based paradigms. In fact, the subsequent \gls{mpeg} standard MPEG-H \cite{mpeg-h} includes options to encode all three audio paradigms. The most common industry format is currently Dolby Atmos\texttrademark. Originally designed for cinemas and other such very large speaker arrays, there is now focus on rendering it in headphones for consumer users. Headphone rendering sometimes entails the use of head tracking to make it appear as though audio is always coming from a specific direction, although this is generally limited to specific hardware platforms where tracking data is available. Most recently, \gls{3gpp} have begun standardization of \gls{ivas} \cite{IVASCodecNG}, a telephony standard which again, includes all the aforementioned audio paradigms.
 
@@ -715,77 +817,77 @@ The combination of the exploratory work, objective experiment, and perceptual te
 % A common use case given in academia for calculating stereo features of individual tracks is music similarity detection and recommendation. However, the industry has generally not adopted these techniques, opting instead to use textural and contextual data for each track.
 
 
-\section{Paper details}
+\chapter{Paper details}
 \label{sec:paper_details}
 
 % refsection allows the full citations to be printed without appearing in the bibliography
 \begin{refsection} 
 
-\subsection*{Paper \ref{paper:auxtrument}}
+\section*{Paper \ref{paper:auxtrument}}
 
 \textbf{\citetitle{franklinDevelopmentWebBasedRealTime2025}}
 
-\subsubsection*{Status}
+\subsection*{Status}
 Published March 2025
 
-\subsubsection*{Research methods}
+\subsection*{Research methods}
 This paper presents a retrospective of a project to build a distributed audio performance over mobile networks. It follows the practice-based research methodology as defined by \citeauthorandnumber{candyPracticeBasedResearch2006}.
 
-\subsubsection*{Remaining work}
+\subsection*{Remaining work}
 None
 
-\subsubsection*{Results and conclusions}
+\subsection*{Results and conclusions}
 The paper documents a real use case where stereo field and reproduction thereof is of prime importance. One conclusion was that network reliability was a limiting factor of the audio performance, sometimes leading to a degraded spatial impression. Research question \ref{rq:usecase} is addressed -- Finding an adequate balance between audio spatial quality and network utilization would require tools to measure the stereo image.
 
 
-\subsection*{Paper \ref{paper:dafx}}
+\section*{Paper \ref{paper:dafx}}
 
 \textbf{\citetitle{miticObjectiveComparisonPanning2025}}
 
-\subsubsection*{Status}
+\subsection*{Status}
 Published September 2025
 
-\subsubsection*{Research methods}
+\subsection*{Research methods}
 Several \gls{dsp} techniques for determining audio spatial features were performed on a small dataset that had predictable musical characteristics. The different techniques were compared using a new objective metric.
 
-\subsubsection*{Remaining work}
+\subsection*{Remaining work}
 None
 
-\subsubsection*{Results and conclusions}
+\subsection*{Results and conclusions}
 The paper revealed that although there are several \gls{dsp} techniques specifically designed for the extraction of recording and panning features, they are all limited in their own ways. One particular technique (\gls{spf} from \cite{tzanetakisStereoPanningFeatures2007}) was particularly promising as a candidate for use later in the doctoral phase of studies, and the others could be used with some modifications. Overall it highlighted the importance of choosing both a panning feature \gls{dsp} technique and a distance metric that are appropriate to the overarching task, thereby addressing research question \ref{rq:methods}.
 
 
-\subsection*{Paper \ref{paper:bth}}
+\section*{Paper \ref{paper:bth}}
 \textbf{\citetitle{miticPerceptualEvaluationBinaurally2026}}
 
-\subsubsection*{Status}
+\subsection*{Status}
 \begin{itemize}
     \item Submitted to \href{https://dl.acm.org/journal/tomm}{ACM Transactions on Multimedia Computing Communications and Applications} October 2025. \textbf{Rejected - not good fit for journal}.
     \item Submitted to \href{https://acta-acustica.edpsciences.org/}{Acta Acustica} February 2025.
 \end{itemize}
 
-\subsubsection*{Research methods}
+\subsection*{Research methods}
 A perceptual test was used to determine listeners' reactions to carefully constructed audio stimuli. Standard statistical analysis was performed on the raw test results, and one particular \gls{dsp} technique assessed in paper \ref{paper:dafx} (\gls{ph} \cite{gomezMusicSimilaritySystems2008}) was used in an attempt to explain the perceptual results.
 
-\subsubsection*{Remaining Work}
+\subsection*{Remaining Work}
 Await peer review and address any comments that come up.
 
-\subsubsection*{Results and conclusions}
+\subsection*{Results and conclusions}
 The paper concluded that when listeners are presented with voice overlayed on top of music, the best panning position for the voice was not always in the default centre position. The reasons for this were unclear due to a shortage of data, but the paper did demonstrate a real-world use of \gls{sip} extraction (using a modified algorithm trialled in paper \ref{paper:dafx}). Most relevant to the research question \ref{rq:usecase}, it revealed that an objective measurement of panning can show detail that is not easily discernable by listening, such as very slight panning away from the centre.
 
 
-\subsection*{Paper \ref{paper:slr}}
+\section*{Paper \ref{paper:slr}}
 \textbf{\citetitle{miticSystematicLiteratureReview2026}}
-\subsubsection*{Status}
+\subsection*{Status}
 \begin{itemize}
 \item Submitted to \href{https://asmp-eurasipjournals.springeropen.com/}{EURASIP Journal on Audio, Speech, and Music Processing} on 2025-12-16.
 \item Feedback received 2026-02-02. Changes required -- see below.
 \end{itemize}
 
-\subsubsection*{Research methods}
+\subsection*{Research methods}
 Following on from the small selection of \gls{dsp} techniques assessed in paper \ref{paper:dafx}, a \gls{slr} following the \gls{prisma} standard was performed to gather all currently available methods for determining spatial features of stereophonic musical audio.
 
-\subsubsection*{Remaining work}
+\subsection*{Remaining work}
 Work through required changes. Deadline is 2026-04-03.
 \begin{itemize}
     \item Update search results for the period between original search and submission.
@@ -795,13 +897,13 @@ Work through required changes. Deadline is 2026-04-03.
     \item Minor clarifications and typos.
 \end{itemize}
 
-\subsubsection*{Preliminary results and conclusions}
+\subsection*{Preliminary results and conclusions}
 Addressing research question \ref{rq:methods}, the review revealed several more techniques that can be used to make spatial descriptions of stereo music. Despite the high number of studies that were assessed, there were relatively few \enquote{very relevant} ones. The \gls{slr} also revealed that while \gls{ml}/\gls{dl} have been used on spatial features in the past, both \textit{unsupervised} \gls{ml} and very large music corpora remain fairly unexplored. It also details a framework for how to create a \gls{sip} algorithm that is useful for any given dataset and use case.
 
 \end{refsection}
 
 
-\section{Remaining work for licentiate}
+\chapter{Remaining work for licentiate}
 The current timeline for 2026 is:
 \\\\
 \begin{tabular}{ll}
@@ -816,7 +918,7 @@ May & Write kappa.\\
 September & Defend thesis.\\
 \end{tabular}
 
-\section{Future work and continuation to doctoral studies}
+\chapter{Future work and continuation to doctoral studies}
 \label{sec:future_work}
 While the licentiate thesis gives the theoretical and practical basis for analysis of stereo image in music recordings, the doctoral section will concentrate on applying the knowledge gained to large musical datasets and real musical phenomena. In particular, the use of unsupervised and self-supervised learning on the spatial features of musical recordings will be investigated. Other unknowns that have arisen during the licentiate work could also be investigated. For example, it is unknown whether the public musical corpora are representative of professional music collections. It is also not known how much typical audio distortions like lossy compression affect the measurements of stereo field. In short, the doctoral thesis will solve real-world problems using techniques surfaced by the licentiate.
 
