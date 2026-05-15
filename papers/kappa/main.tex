@@ -238,6 +238,8 @@ The ear contains three major sections, loosely labelled the \q{outer}, \q{middle
 
 Along the length of the cochlea, the cilia have different \q{critical frequencies} that they respond to. The critical frequency increases logarithmically as one moves from the base to the apex of the cochlea. This is what gives humans their characteristic 20-20000Hz hearing range.
 
+\fxwarning{Draw a picture of the cochlea}
+
 \section{Directional hearing}
 Following from \cref{sec:hearing}, this section will discuss humans' ability to discern the direction or location of a sound source.
 
@@ -484,7 +486,7 @@ Another frequently used technique is \q{binaural panning}, which assigns combina
 
 In traditional recording studio setups, the recording engineer or producer will use one or more microphones to capture an original sound source. These singular sound sources are commonly called \q{stems}. During the production process, the stems may be panned to create a sense of space in the final mix. In the case that the stem was recorded using two microphones, the stem would be called a \q{stereo stem}, and the term \q{panning} is usually replaced by \q{balance}, and only amplitude panning (as opposed to time or binaural panning) would be applied.
 
-Amplitude panning is the most common panning technique is traditional music production \cite{shelvockHearingYourAudience2020}. It is associated with so-called \q{panning laws}, which govern how the amplitude is changed in each channel according the desired pan position \cite{izhakiPanning2023}. One example is the \q{energy-preserving pan law} (sometimes called the \mbox{\q{-3dB pan law}}) in which the squared sum of the channel gains always equals 1. In mathematical terms, this is defined by \cref{eq:equal_power_panning}, where $g_{L,R}$ represent the gains applied to left and right channels, and $a$ is the desired panning position in the range 0 (fully left) to 1 (fully right).
+Amplitude panning is the most common panning technique is traditional music production \cite{shelvockHearingYourAudience2020}. It is associated with so-called \q{panning laws}, which govern how the amplitude is changed in each channel according the desired pan position \cite{izhakiPanning2023}. One example is the \q{energy-preserving pan law} (sometimes called the \mbox{\q{-3dB pan law}}) in which the squared sum of the channel gains always equals 1. In mathematical terms, this is defined by \cref{eq:equal_power_panning}, where $g_{L,R}$ represent the gains applied to left and right channels, and $a$ is the desired panning position in the range 0 (fully left) to 1 (fully right). \fxwarning{Make the graph appear closer in the text}
 
 \begin{align}
 \label{eq:equal_power_panning}
@@ -607,7 +609,7 @@ When a sound wave is converted into an electrical signal by a microphone, it can
 
 Shannon's sampling theorem states that a signal can be perfectly recreated when sampled at twice the highest frequency contained in the signal. Conversely, the highest frequency the highest frequency that can be represented by sampling a signal at a given sampling frequency is half of that frequency. This limit is called the \q{Nyquist frequency} and is calculated by $f_N = \frac{f_s}{2}$ \cite{yaoNyquistFrequency1983}. 
 
-This is illustrated by \Cref{fig:nyquist}, which shows the sampling of three waveforms. The lower plot shows a signal at the Nyquist frequency ($f_N$), which can be perfectly reconstructed from the digital samples. The upper two waveforms have frequencies equidistant but in opposite directions from the Nyquist frequency ($f_N \pm f_{\delta}$). The digital samples shown in circles could represent either of the two waveforms. In practice, when the analogue waveform is reconstructed, the lower frequency will always take precedence.
+This is illustrated by \Cref{fig:nyquist}, which shows the sampling of three waveforms. The lower plot shows a signal at the Nyquist frequency ($f_N$), which can be perfectly reconstructed from the digital samples. The upper two waveforms have frequencies equidistant but in opposite directions from the Nyquist frequency ($f_N \pm f_{\delta}$). The digital samples shown in circles could represent either of the two waveforms. In practice, when the analogue waveform is reconstructed, the lower frequency will always take precedence. \fxerror{Correct the legend.}
 
 % When a signal is sampled, the value is defined only at the time of the sample and is undefined for the period in between samples. Therefore, the digital signal in \cref{fig:nyquist} marked by circles could represent either of the two underlying analogue signals $f(t) = \cos((f_N \pm \Delta) t)$. 
 
@@ -701,7 +703,7 @@ The important parameters of the \gls{stft} are
     \item Hop size - The number of sample between the start of subsequent frames. Sometimes expressed as a percentage of the frame size.
 \end{itemize}
 
-The frame size dictates the resolution of the spectrogram's frequency axis since the frequency bins will be spaced evenly between 0Hz and the Nyquist frequency. Importantly, a longer frame size will result in lower time accuracy within each frame; sharp transients in the time domain will appear as wideband energy in the frequency domain, but information about exactly where in the frame the transient occurred is lost. To counteract this inaccuracy, a smaller hop size can be used so that transients might be detected as sharp changes between \gls{stft} frames. \Cref{fig:stft_accuracy} shows this trade-off for a short vocal sample. Note that as the frame size increases there is a loss in time accuracy, with smaller hop sizes partially able to counteract. The appropriate values of frame and hop size should therefore be chosen based on knowledge of the signal being analysed.
+The frame size dictates the resolution of the spectrogram's frequency axis since the frequency bins will be spaced evenly between 0Hz and the Nyquist frequency. Importantly, a longer frame size will result in lower time accuracy within each frame; sharp transients in the time domain will appear as wideband energy in the frequency domain, but information about exactly where in the frame the transient occurred is lost. To counteract this inaccuracy, a smaller hop size can be used so that transients might be detected as sharp changes between \gls{stft} frames. \Cref{fig:stft_accuracy} shows this trade-off for a short vocal sample. Note that as the frame size increases there is a loss in time accuracy, with smaller hop sizes partially able to counteract. The appropriate values of frame and hop size should therefore be chosen based on knowledge of the signal being analysed. \fxwarning{Take another look at the stft diagram. Maybe there's a better way to display}
 
 A fundamental property of the \gls{fft} is that it assumes that the signal repeats outside the time frame that is being analysed. Since this is generally not the case for audio signals, it is standard practice to apply a time-domain windowing function to each frame so that large transients do not occur at the boundaries. Like the frame and hop sizes, the choice of windowing function should be based on the signal itself and the intended outcome of the analysis. For most audio applications, the \q{Hann} window can be used \cite{LibrosastftLibrosa0110}. 
 
@@ -715,7 +717,7 @@ A fundamental property of the \gls{fft} is that it assumes that the signal repea
 
 \subsection{Mel spectrogram}
 
-One major drawback of the \gls{stft} spectrogram is that the frequency bins are spaced linearly from 0Hz to the Nyquist frequency, whereas the human perception of pitch works on a logarithmic scale. The \gls{stft} therefore contains redundant information in higher frequencies. One solution is to divide the entire spectrum into frequency bands that are spaced logarithmically within the entire spectrum and calculate weighted averages of the frequency bins within each band. The standard method is to use a \q{Mel filter bank}, an example of which is shown in \cref{fig:mel_filters}. When the Mel filter bank is applied to an \gls{stft} spectrogram, the result is called a \q{Mel spectrogram}. An example is shown in \cref{fig:spect_comp}. Note that information in the higher frequencies has been condensed more-so that the lower frequencies.
+One major drawback of the \gls{stft} spectrogram is that the frequency bins are spaced linearly from 0Hz to the Nyquist frequency, whereas the human perception of pitch works on a logarithmic scale. The \gls{stft} therefore contains redundant information in higher frequencies. One solution is to divide the entire spectrum into frequency bands that are spaced logarithmically within the entire spectrum and calculate weighted averages of the frequency bins within each band. The standard method is to use a \q{Mel filter bank}, an example of which is shown in \cref{fig:mel_filters}. When the Mel filter bank is applied to an \gls{stft} spectrogram, the result is called a \q{Mel spectrogram}. An example is shown in \cref{fig:spect_comp}. Note that information in the higher frequencies has been condensed more-so that the lower frequencies. \fxerror{Draw the mel filters in tikz}
 
 \begin{figure}[htb]
     \centering
@@ -762,6 +764,8 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
 \section{Machine learning}
 The large scale of the vast music repositories being addressed by the research questions naturally implies that some sort of machine learning is necessary. Broadly speaking, machine learning techniques can be broken into two classes - supervised and unsupervised. The former requires the training dataset to be labelled, while the latter does not. In relation to research question 1, we assume that a music producer's \gls{daw} session is the only source of objective ground-truth data. Furthermore, we assume that \gls{daw} sessions are not publicly available, as was found in \cite{colonelReverseEngineeringRecording2021,rodriguezSpectralDynamicConstellations2024}; The only public-facing output of a recording session is the mixdown. It follows then that any spatial information derived from a mixdown will be unlabelled data and will therefore require unsupervised learning in order to make sense of it.
 
+\fxwarning{Is this it?}
+
 
 \chapter{Related works}
 
@@ -802,6 +806,7 @@ All the above use classical \gls{dsp} to create their spatial descriptors, but m
 Neural generation of spatial audio continues to be a hot topic up to the present day, with many attempts to generate high-quality binaural, ambisonic or multichannel audio from mono sources \cite{limEnhancingSpatialAudio2024,liCyclicLearningBinaural2024,liTASPersonalizedTextguided2024,chenCCStereoAudioVisualContextual2025,melechovskySonicMasterControllableAllinOne2025,santosLargeScaleSelfSupervisedLearning2025,wangSpatialV2AVisualGuidedHighfidelity2026}. In doing so, the networks must infer spatial information from a source other than audio (typically an accompanying video or text prompt), and in the process will learn the spatial qualities of their audio training data.
 
 \section{Analysis of large musical datasets}
+\fxerror{Papers about large datasets}. \cite{tzinisUnsupervisedDeepClustering2019, zhouBinauralSpeechSeparation2021, ziemerProducerVsRapper2025, barryBinaspectPythonLibrary2025, ziemerGoniometersArePowerful2023, zhouPredictingGeographicalOrigin2014, panteliComputationalStudyOutliers2017}
 
 \chapter{Research Methodology}
 
