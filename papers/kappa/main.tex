@@ -35,7 +35,8 @@
 %% References
 \usepackage[
     style=ieee,
-    backend=biber
+    backend=biber,
+    maxcitenames=2,
 ]{biblatex}
 \addbibresource{../library_biblatex.bib}
 
@@ -52,6 +53,50 @@
 % \newcommand{\rqb}{\gls{rq}\ref{rq:methods}}
 \newcommand{\rqa}{\hyperref[rq:usecase]{$RQ_1$}}
 \newcommand{\rqb}{\hyperref[rq:methods]{$RQ_2$}}
+
+%% Custom citation command to print all authors' full names.
+\makeatletter
+% 1. Create a custom name format that manually grabs the raw, full name strings
+\DeclareNameFormat{ieeefullname}{%
+  \usebibmacro{name:given-family}
+    {\namepartfamily}
+    {\namepartgiven} % Safely extracts the complete first name string
+    {\namepartprefix}
+    {\namepartsuffix}%
+  \usebibmacro{name:andothers}%
+}
+
+% 2. Link this custom format to your citation macro
+\DeclareCiteCommand{\citefullauthors}
+  {\usebibmacro{prenote}}
+  {%
+    % Forces a loop from author 1 to 99, passing them to our custom formatting macro
+    \printnames[ieeefullname][1-99]{author}%
+  }
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+\makeatother
+
+%% Custom ciation command to print the publication name
+\makeatletter
+% Define the citation command wrapper
+\DeclareCiteCommand{\citepublication}
+  {\usebibmacro{prenote}}
+  {%
+    % Check if the entry has a journal title (for articles)
+    \iffieldundef{journaltitle}
+      {% If no journal, check for a book/conference title
+       \iffieldundef{booktitle}
+         {% Fallback: use main title if it is a book entry
+          \printfield[title]{title}}
+         {\printfield[booktitle]{booktitle}}}
+      {\printfield[journaltitle]{journaltitle}}%
+  }
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+\makeatother
+
+
 
 % Numbering of headings down to the subsection level
 \numberingdepth{subsection}
@@ -859,8 +904,11 @@ The combination of the exploratory work, objective experiment, and perceptual te
 
 \textbf{\citetitle{franklinDevelopmentWebBasedRealTime2025}}
 
+\subsection*{Authors}
+\citefullauthors{franklinDevelopmentWebBasedRealTime2025}
+
 \subsection*{Status}
-Published in \textit{Journal of The Audio Engineering Society}, March 2025
+Published in \citepublication{franklinDevelopmentWebBasedRealTime2025}, \citedate{franklinDevelopmentWebBasedRealTime2025} \cite{franklinDevelopmentWebBasedRealTime2025}.
 
 \subsection*{Research methods}
 This paper presents a retrospective of a project to build a distributed audio performance over mobile networks. It follows the practice-based research methodology as defined by \citeauthorandnumber{candyPracticeBasedResearch2006}.
@@ -868,13 +916,20 @@ This paper presents a retrospective of a project to build a distributed audio pe
 \subsection*{Results and conclusions}
 The paper documents a real use case where stereo field and reproduction thereof is of prime importance. One conclusion was that network reliability was a limiting factor of the audio performance, sometimes leading to a degraded spatial impression. Research question \ref{rq:usecase} is addressed -- Finding an adequate balance between audio spatial quality and network utilization would require tools to measure the stereo image.
 
+\subsection*{My contribution}
+Member of the team that conceptualized the Auxtrument and made the initial survey and prototyping of existing audio transmission technologies. Responsible for post-prototyping of alternative approaches and custom audio software.
 
+
+\clearpage
 \section*{Paper \ref{paper:dafx}}
 
 \textbf{\citetitle{miticObjectiveComparisonPanning2025}}
 
+\subsection*{Authors}
+\citefullauthors{miticObjectiveComparisonPanning2025}
+
 \subsection*{Status}
-Presented at the \textit{28th International Conference for Digital Audio Effects}, September 2025
+Published in \citepublication{miticObjectiveComparisonPanning2025}, September 2025
 
 \subsection*{Research methods}
 Several \gls{dsp} techniques for determining audio spatial features were performed on a small dataset that had predictable musical characteristics. The different techniques were compared using a new objective metric.
@@ -882,12 +937,18 @@ Several \gls{dsp} techniques for determining audio spatial features were perform
 \subsection*{Results and conclusions}
 The paper revealed that although there are several \gls{dsp} techniques specifically designed for the extraction of recording and panning features, they are all limited in their own ways. One particular technique (\gls{spf} from \cite{tzanetakisStereoPanningFeatures2007}) was particularly promising as a candidate for use later in the doctoral phase of studies, and the others could be used with some modifications. Overall it highlighted the importance of choosing both a panning feature \gls{dsp} technique and a distance metric that are appropriate to the overarching task, thereby addressing research question \ref{rq:methods}.
 
+\subsection*{My contribution}
+Main author, responsible for all data collection, experimental design, and software implementation. Presented the paper at the 28th International Conference on Digital Audio Effects in Ancona, Italy.
 
+\clearpage
 \section*{Paper \ref{paper:bth}}
 \textbf{\citetitle{miticPerceptualEvaluationBinaurally2026}}
 
+\subsection*{Authors}
+\citefullauthors{miticPerceptualEvaluationBinaurally2026}
+
 \subsection*{Status}
-In review at \href{https://acta-acustica.edpsciences.org/}{\textit{Acta Acustica}}, March 2026. 
+In review at \citepublication{miticPerceptualEvaluationBinaurally2026}, March 2026. 
 
 \subsection*{Research methods}
 A perceptual test was used to determine listeners' reactions to carefully constructed audio stimuli. Standard statistical analysis was performed on the raw test results, and one particular \gls{dsp} technique assessed in paper \ref{paper:dafx} (\gls{ph} \cite{gomezMusicSimilaritySystems2008}) was used in an attempt to explain the perceptual results.
@@ -898,11 +959,19 @@ Await peer review and address any comments that come up.
 \subsection*{Results and conclusions}
 The paper concluded that when listeners are presented with voice overlayed on top of music, the best panning position for the voice was not always in the default centre position. The reasons for this were unclear due to a shortage of data, but the paper did demonstrate a real-world use of \gls{sip} extraction (using a modified algorithm trialled in paper \ref{paper:dafx}). Most relevant to the research question \ref{rq:usecase}, it revealed that an objective measurement of panning can show detail that is not easily discernable by listening, such as very slight panning away from the centre.
 
+\subsection*{My contribution}
+Joint main author alongside Majed Elwardy. Contributed to experiment design, data analysis, software implementation, and writing.
 
+
+\clearpage
 \section*{Paper \ref{paper:slr}}
 \textbf{\citetitle{miticSystematicLiteratureReview2026}}
+
+\subsection*{Authors}
+\citefullauthors{miticSystematicLiteratureReview2026}
+
 \subsection*{Status}
-Accepted to \href{https://asmp-eurasipjournals.springeropen.com/}{\textit{\glsxtrshort{eurasip} Journal on Audio, Speech, and Music Processing}}, May 2026.
+Accepted to \citepublication{miticSystematicLiteratureReview2026}, May 2026
 
 \subsection*{Research methods}
 Following on from the small selection of \gls{dsp} techniques assessed in paper \ref{paper:dafx}, a \gls{slr} following the \gls{prisma} standard was performed to gather all currently available methods for determining spatial features of stereophonic musical audio.
@@ -910,10 +979,17 @@ Following on from the small selection of \gls{dsp} techniques assessed in paper 
 \subsection*{Results and conclusions}
 Addressing research question \ref{rq:methods}, the review revealed several more techniques that can be used to make spatial descriptions of stereo music. Despite the high number of studies that were assessed, there were relatively few \enquote{very relevant} ones. The \gls{slr} also revealed that while \gls{ml}/\gls{dl} have been used on spatial features in the past, both \textit{unsupervised} \gls{ml} and very large music corpora remain fairly unexplored. It also details a framework for how to create a \gls{sip} algorithm that is useful for any given dataset and use case.
 
+\subsection*{My contribution}
+Main author, responsible for all data collection and processing, and writing.
+
 
 \chapter{Future work and continuation to doctoral studies}
 \label{sec:future_work}
-While the licentiate thesis gives the theoretical and practical basis for analysis of stereo image in music recordings, the doctoral section will concentrate on applying the knowledge gained to large musical datasets and real musical phenomena. In particular, the use of unsupervised and self-supervised learning on the spatial features of musical recordings will be investigated. Other unknowns that have arisen during the licentiate work could also be investigated. For example, it is unknown whether the public musical corpora are representative of professional music collections. It is also not known how much typical audio distortions like lossy compression affect the measurements of stereo field. In short, the doctoral thesis will solve real-world problems using techniques surfaced by the licentiate.
+The work documented in this licentiate thesis provides the theoretical and practical basis for analysis of stereo image in music recordings. The focus was on amassing the signal processing techniques that enable the analysis of stereo field, and testing their applicability to various types of stereo field that were known a-priori. The next stage of research will involve applying the knowledge from this thesis on much larger musical corpora. The signal processing techniques will be honed and run on vast musical datasets, secure in the knowledge that they will pick out the appropriate information to the experiment at hand.
+
+During the licentiate, several points arose that provoked further investigation. Firstly, the available public datasets of recorded music are generally encoded using lossy compression. While lossy compression algorithms undergo perceptual tests in their development, it is unclear how they affect spatial cues at the scale of said datasets (which encompass much musical variation). The spatial effects of lossy compression therefore warrant further investigation. Secondly, the public datasets are generally formed from web services where musicians have uploaded their own recordings for free. In contrast, professional recordings (which are much more numerous) are not included in any public datasets. Since professional recordings make up the vast majority of recorded music, it needs to assessed whether public datasets are representative of professional recordings.
+
+In short, the doctoral research will tackle a larger problem of assessing human musical creativity though the recorded output. The techniques surfaced by the licentiate will provide the foundation, and will be applied to real-world data.
 
 
 \printglossaries
