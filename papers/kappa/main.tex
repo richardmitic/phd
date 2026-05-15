@@ -115,9 +115,9 @@
     },
     mic/.pic={
         \filldraw[color=black, fill=white] (0,0) circle[radius=1];
-        \draw[color=black] (-1,1) -- (1, 1);
-        \draw[color=black] (-0.3,-0.8) -- (-0.3, -1.5);
-        \draw[color=black] (0.3,-0.8) -- (0.3, -1.5);
+        \draw[color=black, thick] (-1,1) -- (1, 1);
+        \draw[color=black] (250:1) -- (250:1 |- 0,-1.618);
+        \draw[color=black] (290:1) -- (290:1 |- 0,-1.618);
     },
     flow_input/.style={rounded rectangle, draw=black, minimum height=1cm, minimum width=3cm},
     flow_process/.style={rectangle, draw=black, minimum height=1cm, minimum width=3cm},
@@ -132,10 +132,6 @@ Spatial information is crucial to the listener's experience of music, and stereo
 \end{abstract}
 }
 
-% \title{Licentiate Proposal - Analysis of stereo image in vast repositories of recorded music}
-
-% \author{Richard Mitic}
-
 \begin{document}
 \frontmatter
 
@@ -144,7 +140,7 @@ Spatial information is crucial to the listener's experience of music, and stereo
 \listoffixmes
 \frontmatterCS
 
-\dedication{Dedicated blah to all hard-working \\doctoral students at Uppsala University}
+\dedication{Dedicated to the one guy at Uppsala University who made a latex template 14 year ago}
 
 
 
@@ -190,23 +186,24 @@ Historically, binaural audio (which is a subclass of stereo) has been of particu
 \label{sec:research_questions_and_contributions}
 
 The underlying purpose of the research documented in this thesis relates to \gls{mir}, and in particular to generating an understanding of the links between human musical creativity and musical output. While it might be possible for the creative people involved to explain how they make their music, it is far more objective to analyse their output as a representation of their musical ideas.
-% \\\\
+
 \section{Research Questions}
 \label{sec:research_questions}
 
 Given the aforementioned context, the overarching \gls{rq} can be formed as:
 
-\begin{quote}
-How do music producers use stereo field?
-\end{quote}
+\vspace{1em}
+\noindent \textit{How do music producers use stereo field?}
+\vspace{1em}
 
 \noindent ...which can be broken into several smaller problems:
 
+\vspace{1em}
 \begin{enumerate}
-\item[$RQ_1$:] How does the stereo image of a recording relate to real-world musical knowledge? \label{rq:usecase}
-\item[$RQ_2$:] What methods can be used to describe the stereo image of music recording? \label{rq:methods}
+\item[$RQ_1$:] \textit{How does the stereo image of a recording relate to real-world musical knowledge?} \label{rq:usecase}
+\item[$RQ_2$:] \textit{What methods can be used to describe the stereo image of music recording?} \label{rq:methods}
 \end{enumerate}
-
+\vspace{1em}
 One could argue that the overarching question might be answered by interviewing music producers, but this would quickly run into a problem of scale. The two smaller \glspl{rq} were therefore designed to allow the overarching question to be answered by objective analysis on musical recordings (which are abundant nowadays).
 
 \section{Research contributions}
@@ -443,12 +440,7 @@ Time panning (otherwise know as the Haas effect) exploits the phenomenon that th
 
 Another frequently used technique is \q{binaural panning}, which assigns combinations of amplitude and time difference to each stereo channel. This is typically achieved by applying a \gls{hrir} to the monophonic audio signal. An \gls{hrir} is a pair of impulse responses recorded with microphones placed in the ears of either a real person or a dummy head. To obtain an \gls{hrir}, a known excitation signal is played from a specific position in a room, and is recorded with said binaural microphones (see \cref{fig:phantom_binaural}). The \gls{hrir} can then be convolved with any other monophonic recording to make it appear as though the recording came from the position of the excitation source.
 
-% \begin{figure}[htb]
-%     \centering
-%     \includegraphics[width=0.5\textwidth]{figures/binaural_hrir.pdf}
-%     \caption{Illustration of a binaural \gls{hrir} being recorded.}
-%     \label{fig:phantom_binaural}
-% \end{figure}
+
 \begin{figure}[htb]
     \centering
 
@@ -467,20 +459,22 @@ Another frequently used technique is \q{binaural panning}, which assigns combina
         % Music producer
         \pic (producer) at (0,0) {head};
 
-        \begin{scope}[xshift=-2.2cm, yshift=-1cm, draw=black, xscale=0.02, yscale=\yscale]
+        \begin{scope}[xshift=-3cm, yshift=-1cm, draw=black, xscale=0.02, yscale=\yscale]
+            \node[minimum width=1.3cm, minimum height=1cm, anchor=west] (left_brir_box) {};
             \input{figures/brir_L.tex}
         \end{scope}
-        \begin{scope}[xshift=1.2cm, yshift=-1cm, draw=black, xscale=0.02, yscale=\yscale]
+        \begin{scope}[xshift=1.7cm, yshift=-1cm, draw=black, xscale=0.02, yscale=\yscale]
+            \node[minimum width=1.3cm, minimum height=1cm, anchor=west] (right_brir_box) {};
             \input{figures/brir_R.tex}
         \end{scope}
 
         \pic[transform shape, scale=0.1, rotate=90, local bounding box=left_mic] (left_mic) at (-1.2,0) {mic};
         \pic[transform shape, scale=0.1, rotate=-90, local bounding box=right_mic] (right_mic) at (1.2,0) {mic};
 
-        \draw[dashed] (left_mic.west) to[bend right=30] (left_brir.west);
-        \draw[dashed] (left_mic.west) to[bend left=5] (left_brir.east);
-        \draw[dashed] (right_mic.east) to[bend left=5] (right_brir.east);
-        \draw[dashed] (right_mic.east) to[bend right=30] (right_brir.west);
+        \draw[dashed] ([yshift=1pt]left_mic.west) to[out=180, in=60, looseness=1] (left_brir_box.west);
+        \draw[dashed] ([yshift=-1pt]left_mic.west) to[out=180, in=30, looseness=1] (left_brir_box.east);
+        \draw[dashed] ([yshift=1pt]right_mic.east) to[out=0, in=120, looseness=1] (right_brir_box.east);
+        \draw[dashed] ([yshift=-1pt]right_mic.east) to[out=0, in=150, looseness=1] (right_brir_box.west);
 
     \end{tikzpicture}
     \caption{Illustration of a binaural \gls{hrir} being recorded.}
@@ -981,6 +975,9 @@ Addressing research question \ref{rq:methods}, the review revealed several more 
 
 \subsection*{My contribution}
 Main author, responsible for all data collection and processing, and writing.
+
+
+\chapter{Discussion?}
 
 
 \chapter{Future work and continuation to doctoral studies}
