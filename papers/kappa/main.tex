@@ -852,34 +852,18 @@ Lastly, through the developement of Orkester it became apparent that the origina
 The combination of the exploratory work, objective experiment, and perceptual test provided a satisfactory answer for \rqa. The initial literature search plus the \gls{slr} provided an answer to \rqb.
 
 
-
-% \chapter{State of practice}
-
-% In industry, spatial analysis of music signals is most commonly used for audio coding, compression, and transmission/distribution. International standards for audio coding include MPEG-Surround \cite{iso/iec23003-1InformationTechnologyMPEG2007}, which encodes multichannel audio based on the spatial cues \gls{ild}, \gls{ipd}, and \gls{iacc}. However, there has recently been a shift away from channel-based audio (such as MPEG-Surround) to scene- and object-based paradigms. In fact, the subsequent \gls{mpeg} standard MPEG-H \cite{mpeg-h} includes options to encode all three audio paradigms. The most common industry format is currently Dolby Atmos\texttrademark. Originally designed for cinemas and other such very large speaker arrays, there is now focus on rendering it in headphones for consumer users. Headphone rendering sometimes entails the use of head tracking to make it appear as though audio is always coming from a specific direction, although this is generally limited to specific hardware platforms where tracking data is available. Most recently, \gls{3gpp} have begun standardization of \gls{ivas} \cite{IVASCodecNG}, a telephony standard which again, includes all the aforementioned audio paradigms.
-
-% Even though the newer audio formats are being heavily pushed by big industry players, adoption by consumers and music professionals is slow.  Adoption of MPEG-H and its branded version \enquote{Sony 360} is even lower. \enquote{DTS:X} is another proprietary spatial audio format, although its usage is generally limited to films released on physical media \cite{publishedDTSWhatIt2021}. Use of the industry formats is sometimes problematic due to patent licensing, and as a response the Alliance for Open Media has also specified a \enquote{royalty-free} standard for immersive audio named \gls{iamf} \cite{ImmersiveAudioModel}. Within the domain of spatial audio generation, \gls{vr} and \gls{ar} are the most common use cases given, although they are also yet to find mainstream adoption.
-
-% A common use case given in academia for calculating stereo features of individual tracks is music similarity detection and recommendation. However, the industry has generally not adopted these techniques, opting instead to use textural and contextual data for each track.
-
-
-\chapter{Paper details}
-\label{sec:paper_details}
-
-% refsection allows the full citations to be printed without appearing in the bibliography
-\begin{refsection} 
+\chapter{Paper summaries}
+\label{sec:paper_summaries}
 
 \section*{Paper \ref{paper:auxtrument}}
 
 \textbf{\citetitle{franklinDevelopmentWebBasedRealTime2025}}
 
 \subsection*{Status}
-Published March 2025
+Published in \textit{Journal of The Audio Engineering Society}, March 2025
 
 \subsection*{Research methods}
 This paper presents a retrospective of a project to build a distributed audio performance over mobile networks. It follows the practice-based research methodology as defined by \citeauthorandnumber{candyPracticeBasedResearch2006}.
-
-\subsection*{Remaining work}
-None
 
 \subsection*{Results and conclusions}
 The paper documents a real use case where stereo field and reproduction thereof is of prime importance. One conclusion was that network reliability was a limiting factor of the audio performance, sometimes leading to a degraded spatial impression. Research question \ref{rq:usecase} is addressed -- Finding an adequate balance between audio spatial quality and network utilization would require tools to measure the stereo image.
@@ -890,13 +874,10 @@ The paper documents a real use case where stereo field and reproduction thereof 
 \textbf{\citetitle{miticObjectiveComparisonPanning2025}}
 
 \subsection*{Status}
-Published September 2025
+Presented at the \textit{28th International Conference for Digital Audio Effects}, September 2025
 
 \subsection*{Research methods}
 Several \gls{dsp} techniques for determining audio spatial features were performed on a small dataset that had predictable musical characteristics. The different techniques were compared using a new objective metric.
-
-\subsection*{Remaining work}
-None
 
 \subsection*{Results and conclusions}
 The paper revealed that although there are several \gls{dsp} techniques specifically designed for the extraction of recording and panning features, they are all limited in their own ways. One particular technique (\gls{spf} from \cite{tzanetakisStereoPanningFeatures2007}) was particularly promising as a candidate for use later in the doctoral phase of studies, and the others could be used with some modifications. Overall it highlighted the importance of choosing both a panning feature \gls{dsp} technique and a distance metric that are appropriate to the overarching task, thereby addressing research question \ref{rq:methods}.
@@ -906,10 +887,7 @@ The paper revealed that although there are several \gls{dsp} techniques specific
 \textbf{\citetitle{miticPerceptualEvaluationBinaurally2026}}
 
 \subsection*{Status}
-\begin{itemize}
-    \item Submitted to \href{https://dl.acm.org/journal/tomm}{ACM Transactions on Multimedia Computing Communications and Applications} October 2025. \textbf{Rejected - not good fit for journal}.
-    \item Submitted to \href{https://acta-acustica.edpsciences.org/}{Acta Acustica} February 2025.
-\end{itemize}
+In review at \href{https://acta-acustica.edpsciences.org/}{\textit{Acta Acustica}}, March 2026. 
 
 \subsection*{Research methods}
 A perceptual test was used to determine listeners' reactions to carefully constructed audio stimuli. Standard statistical analysis was performed on the raw test results, and one particular \gls{dsp} technique assessed in paper \ref{paper:dafx} (\gls{ph} \cite{gomezMusicSimilaritySystems2008}) was used in an attempt to explain the perceptual results.
@@ -924,44 +902,14 @@ The paper concluded that when listeners are presented with voice overlayed on to
 \section*{Paper \ref{paper:slr}}
 \textbf{\citetitle{miticSystematicLiteratureReview2026}}
 \subsection*{Status}
-\begin{itemize}
-\item Submitted to \href{https://asmp-eurasipjournals.springeropen.com/}{EURASIP Journal on Audio, Speech, and Music Processing} on 2025-12-16.
-\item Feedback received 2026-02-02. Changes required -- see below.
-\end{itemize}
+Accepted to \href{https://asmp-eurasipjournals.springeropen.com/}{\textit{\glsxtrshort{eurasip} Journal on Audio, Speech, and Music Processing}}, May 2026.
 
 \subsection*{Research methods}
 Following on from the small selection of \gls{dsp} techniques assessed in paper \ref{paper:dafx}, a \gls{slr} following the \gls{prisma} standard was performed to gather all currently available methods for determining spatial features of stereophonic musical audio.
 
-\subsection*{Remaining work}
-Work through required changes. Deadline is 2026-04-03.
-\begin{itemize}
-    \item Update search results for the period between original search and submission.
-    \item Get a colleague to double-check a subset of the original screening.
-    \item Add more, smaller diagrams, and break up existing big diagrams.
-    \item Reorganize text to make relationship between discovered papers more obvious.
-    \item Minor clarifications and typos.
-\end{itemize}
-
-\subsection*{Preliminary results and conclusions}
+\subsection*{Results and conclusions}
 Addressing research question \ref{rq:methods}, the review revealed several more techniques that can be used to make spatial descriptions of stereo music. Despite the high number of studies that were assessed, there were relatively few \enquote{very relevant} ones. The \gls{slr} also revealed that while \gls{ml}/\gls{dl} have been used on spatial features in the past, both \textit{unsupervised} \gls{ml} and very large music corpora remain fairly unexplored. It also details a framework for how to create a \gls{sip} algorithm that is useful for any given dataset and use case.
 
-\end{refsection}
-
-
-\chapter{Remaining work for licentiate}
-The current timeline for 2026 is:
-\\\\
-\begin{tabular}{ll}
-25th March & Present licentiate proposal.\\
-31st March & Begin course \enquote{Research Ethics I}.\\
-3rd April & Submit version of paper \ref{paper:slr} with all comments addressed.\\
-April & Hopefully receive feedback for paper \ref{paper:bth}.\\
-1st May & Send application for licentiate.\\
-May & Write kappa.\\
-5th June & Finish course \enquote{Research Ethics I}.\\
-30th June & End licentiate studies.\\
-September & Defend thesis.\\
-\end{tabular}
 
 \chapter{Future work and continuation to doctoral studies}
 \label{sec:future_work}
