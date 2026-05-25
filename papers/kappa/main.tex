@@ -16,10 +16,11 @@
 % \usepackage[latin1]{inputenc}
 % \usepackage[T1]{fontenc}
 \usepackage{mathptmx}
+\usepackage{siunitx}
 \usepackage{subcaption}
-\captionsetup[subfigure]{skip=0.333\baselineskip}
 
 \fxsetup{draft,inline,nomargin,theme=color}
+\captionsetup[subfigure]{skip=0.333\baselineskip}
 
 % drawing figures
 \usepackage{tikz}
@@ -232,8 +233,9 @@ Paper \ref{paper:dafx} also presented a good opportunity to assess the computati
 
 
 \chapter{Background}
+\label{ch:background}
 
-This section provides the fundamental background knowledge that underpins the work included in the thesis. It covers human hearing, music creation processes, and digital audio signal theory.
+This chapter provides the fundamental background knowledge that underpins the work included in the thesis. It covers human hearing, music creation processes, and digital audio signal theory.
 
 \section{The mechanics of human hearing}
 \label{sec:hearing}
@@ -259,6 +261,7 @@ Following from \cref{sec:hearing}, this section will discuss humans' ability to 
 The psychoacoustic theory behind spatial hearing has been an active area of research since the mid 20th century, with early examples including the Jeffress model in which time differences between sound events at each ear contribute to a person's ability to locate sounds in space \cite{jeffressPlaceTheorySound1948}. The work of \citeauthor{lindemannEvaluationInterauralSignal1982} a few decades later expanded on this idea by translating the earlier theory to a \gls{dsp} context, and establishing the \gls{ild}, \gls{itd}, and \gls{iacc} as important measures to describe the spatial aspects of binaural signals in a quantifiable way \cite{lindemannEvaluationInterauralSignal1982}.
 
 Put simply, humans are able to perceive the incoming direction of a sound by observing both the amplitude difference and time difference of coincident sound waves arriving at the left and right ears. Figure \cref{fig:directional_hearing} shows how these two properties enable directional hearing. Firstly, the head itself creates a physical barrier that will attenuate sound waves at one ear more-so that at the other ear. Secondly, the difference in distance between the sound source and each ear will create a time delay between the received signals. Over time a person will learn to associate patterns in \gls{itd}/\gls{ild} with the physical location of the sound source.
+
 
 % \begin{figure}[htb]
 %     \centering
@@ -826,30 +829,6 @@ One major drawback of the \gls{stft} spectrogram is that the frequency bins are 
 
 As an alternative to the two spectrogram representations, a cochleagram aims to make a \gls{tf} representation that models the acoustic response of the human cochlea more closely. To that end, all processing is performed in the time domain and is sometimes referred to as a \q{peripheral ear model}. Several examples appear in the literature \cite{boddenBinauralModelingAuditory1995,choiObjectiveMeasurementPerceived2008,delgadoDesignChoicesBinaural2023}. In the classical method \cite{boddenBinauralModelingAuditory1995} the original signal is first processed by a bank of time-domain gammatone filters with their centre frequencies placed according to a perceptual scale and each sub-band is subsequently processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patterns of the cilia and basilar membrane. Each time-domain signal is then divided into overlapping time segments. The amplitude of each \gls{tf} segment can then be calculated as the mean of all values its values, forming one pixel in the cochleagram. \Cref{fig:spect_comp} shows a comparison of all spectrogram types. 
 
-% \begin{figure}[htb]
-%     \centering
-
-%     \begin{tikzpicture}[node distance=1.618cm]
- 
-%     \node (audio) [flow_input] {stereo audio};
-%     \node (filterbank) [flow_process, below of=audio] {filter bank};
-%     \node (rectify) [flow_process, below of=filterbank] {half-wave rectify};
-%     \node (sqrt) [flow_process, below of=rectify] {square root};
-%     \node (lpf) [flow_process, below of=sqrt] {low-pass filter};
-%     \node (chunk) [flow_process, below of=lpf] {time segmentation};
-%     \node (coch) [flow_output, below of=chunk] {cochleagram};
-
-%     \draw[arrow] (audio) -- (filterbank);
-%     \draw[arrow] (filterbank) -- (rectify);
-%     \draw[arrow] (rectify) -- (sqrt);
-%     \draw[arrow] (sqrt) -- (lpf);
-%     \draw[arrow] (lpf) -- (chunk);
-%     \draw[arrow] (chunk) -- (coch);
-
-%     \end{tikzpicture}
-%     \caption{Flow diagram of cochleagram creation}
-% \end{figure}
-
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.8\textwidth]{figures/spect_comp.pdf}
@@ -858,9 +837,16 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
 \end{figure}
 
 \section{Machine learning}
-The large scale of the vast music repositories being addressed by the research questions naturally implies that some sort of machine learning is necessary. Broadly speaking, machine learning techniques can be broken into two classes - supervised and unsupervised. The former requires the training dataset to be labelled, while the latter does not. In relation to research question 1, we assume that a music producer's \gls{daw} session is the only source of objective ground-truth data. Furthermore, we assume that \gls{daw} sessions are not publicly available, as was found in \cite{colonelReverseEngineeringRecording2021,rodriguezSpectralDynamicConstellations2024}; The only public-facing output of a recording session is the mixdown. It follows then that any spatial information derived from a mixdown will be unlabelled data and will therefore require unsupervised learning in order to make sense of it.
+The large scale of the vast music repositories being addressed by the research questions naturally implies that some sort of machine learning is necessary.
 
-\fxwarning{Is this it?}
+Broadly speaking, machine learning techniques can be classified as either supervised or unsupervised. When training a supervised  \gls{ml} model, the training dataset needs to include ground-truth labels such that the network can objectively discern via a loss function whether the predictions it is making are correct. Unsupervised \gls{ml} on the other hand does not require any labels. Instead, it seeks to form a representation of the underlying dataset via techniques such as clustering or dimensionality reduction, thereby learning the structures and patterns of data while retaining as much key information as possible.
+
+Striking a middle ground between the two is \q{self-supervised} learning, which addresses the issue of creating objective ground-truths from unlabelled data. Instead of relying on external labels, self-supervised learning generates pseudo-labels from the dataset itself, and then uses those as the input to a \q{pretext task}, which is tackled in much the same way as a supervised learning task.
+
+As an example we can consider the current largest musical dataset: \gls{fma} \cite{defferrardFMADatasetMusic2017}. The dataset contains the stereo audio of approximately \num{100000} tracks, along with metadata such as genre tags. An unsupervised task might involve predicting the genre using the audio signal as input. A self-supervised task might involve masking off a short period of audio and filling it back in using the surrounding audio as context. An unsupervised task might involve learning a high-order representation of the raw spatial cues present in the stereo signals.
+
+In relation to the \hyperref[sec:research_questions]{overarching \gls{rq}} in \cref{sec:research_questions}, we assume that a music producer's \gls{daw} session is the only source of objective ground-truth data regarding stereo field. Furthermore, we assume that \gls{daw} sessions are not publicly available, as was found in \cite{colonelReverseEngineeringRecording2021,rodriguezSpectralDynamicConstellations2024}; The only public-facing output of a recording session is the mixdown. It follows then that either unsupervised or self-supervised learning is necessary to draw any conclusions.
+
 
 
 \chapter{Related works}
