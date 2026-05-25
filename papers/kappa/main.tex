@@ -765,25 +765,12 @@ In order to perform many types of audio analysis, the audio signal can be conver
 
 \subsection{\gls{stft} spectrogram}
 
-The \gls{stft} spectrogram is one of the most popular \gls{tf} representions across all audio processing work due to its computational efficiency. The fundamental principle is that a time-domain signal is split into short (1 to 100ms) overlapping chunks, and the \gls{fft} is performed on each chunk, thereby converting that chunk into the frequency domain.  By arranging subsequent frames along a time axis it is possible to represent the original signal as a 2D image known as a spectrogram. When the time-domain signal is entirely real, (which is the case for monophonic audio signals), the result of the \gls{fft} will be a complex signal which is symmetrical around the Nyquist frequency and the upper half is therefore dropped. Furthermore, the complex numbers are usually converted into magnitude/phase representation to better match the human auditory system.
+The \gls{stft} spectrogram is one of the most popular \gls{tf} representions across all audio processing work due to its computational efficiency. The fundamental principle is that a time-domain signal is split into short (1 to 100ms) overlapping chunks, and the \gls{fft} is performed on each chunk, thereby converting that chunk into the frequency domain.  By arranging subsequent frames along a time axis it is possible to represent the original signal as a 2D image known as a spectrogram. When the time-domain signal is entirely real, (which is the case for monophonic audio signals), the result of the \gls{fft} will be a complex signal which is symmetrical around the Nyquist frequency and the upper half is therefore dropped. Furthermore, the complex spectrum is usually represented in magnitude/phase form to better match the human auditory response.
 
-The important parameters of the \gls{stft} are
-\begin{itemize}
-    \item Frame size - The number of samples in each audio chunk. This must be a power of 2 to gain maximal computational efficiency.
-    \item Hop size - The number of sample between the start of subsequent frames. Sometimes expressed as a percentage of the frame size.
-\end{itemize}
+A fundamental property of the \gls{fft} is that it assumes that the signal repeats outside the time frame that is being analysed. Since this is generally not the case for audio signals, it is standard practice to apply a time-domain windowing function to each frame so that large transients do not occur at the boundaries. Serveral standard windowing functions exist, each with their own nuances, but for most audio applications, the \q{Hann} window can be used \cite{LibrosastftLibrosa0110}. 
 
-The frame size dictates the resolution of the spectrogram's frequency axis since the frequency bins will be spaced evenly between 0Hz and the Nyquist frequency. Importantly, a longer frame size will result in lower time accuracy within each frame; sharp transients in the time domain will appear as wideband energy in the frequency domain, but information about exactly where in the frame the transient occurred is lost. To counteract this inaccuracy, a smaller hop size can be used so that transients might be detected as sharp changes between \gls{stft} frames. \Cref{fig:stft_accuracy} shows this trade-off for a short vocal sample. Note that as the frame size increases there is a loss in time accuracy, with smaller hop sizes partially able to counteract. The appropriate values of frame and hop size should therefore be chosen based on knowledge of the signal being analysed. \fxwarning{Take another look at the stft diagram. Maybe there's a better way to display}
+The nature of the spectrogram is affected by two parameters: the frame size and hop size. \q{Frame size} refers to the number of samples in each audio frame. To obtain maximal computational efficiency this must be a power of 2. \q{Hop size} refers to the number of samples between the start of subsequent frames and is sometimes expressed as a percentage of the frame size. The frame size dictates the resolution of the spectrogram's frequency axis since the frequency bins will be spaced evenly between 0Hz and the Nyquist frequency. Importantly, a longer frame size will result in lower time accuracy within each frame; sharp transients in the time domain will appear as wideband energy in the frequency domain, but information about exactly where in the frame the transient occurred is lost. To counteract this inaccuracy, a smaller hop size can be used so that transients might be detected as sharp changes between \gls{stft} frames.
 
-A fundamental property of the \gls{fft} is that it assumes that the signal repeats outside the time frame that is being analysed. Since this is generally not the case for audio signals, it is standard practice to apply a time-domain windowing function to each frame so that large transients do not occur at the boundaries. Like the frame and hop sizes, the choice of windowing function should be based on the signal itself and the intended outcome of the analysis. For most audio applications, the \q{Hann} window can be used \cite{LibrosastftLibrosa0110}. 
-
-% \afterpage{\clearpage}
-\begin{figure}[p]
-    \centering
-    \includegraphics[height=0.8\textheight]{figures/spectrogram_accuracy.pdf}
-    \caption{\gls{stft} spectrograms with differing frame and hop sizes.}
-    \label{fig:stft_accuracy}
-\end{figure}
 
 \subsection{Mel spectrogram}
 
