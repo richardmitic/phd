@@ -526,40 +526,35 @@ Another frequently used technique is \q{binaural panning}, which assigns combina
 
 In traditional recording studio setups, the recording engineer or producer will use one or more microphones to capture an original sound source. These singular sound sources are commonly called \q{stems}. During the production process, the stems may be panned to create a sense of space in the final mix. In the case that the stem was recorded using two microphones, the stem would be called a \q{stereo stem}, and the term \q{panning} is usually replaced by \q{balance}, and only amplitude panning (as opposed to time or binaural panning) would be applied.
 
-Amplitude panning is the most common panning technique is traditional music production \cite{shelvockHearingYourAudience2020}. It is associated with so-called \q{panning laws}, which govern how the amplitude is changed in each channel according the desired pan position \cite{izhakiPanning2023}. One example is the \q{energy-preserving pan law} (sometimes called the \mbox{\q{-3dB pan law}}) in which the squared sum of the channel gains always equals 1. In mathematical terms, this is defined by \cref{eq:equal_power_panning}, where $g_{L,R}$ represent the gains applied to left and right channels, and $a$ is the desired panning position in the range 0 (fully left) to 1 (fully right). \fxwarning{Make the graph appear closer in the text}
-
-\begin{align}
-\label{eq:equal_power_panning}
-    g_L &= \cos(\frac{\pi}{2} a) \\
-    g_R &= \sin(\frac{\pi}{2} a)
-\end{align}
+Amplitude panning is the most common panning technique is traditional music production \cite{shelvockHearingYourAudience2020}. It is associated with so-called \q{panning laws}, which govern how the amplitude is changed in each channel according the desired pan position \cite{izhakiPanning2023}. One example is the \q{energy-preserving pan law} (sometimes called the \mbox{\q{-3dB pan law}}) in which the squared sum of the channel gains always equals 1. The gains of the left and right channel are calculated by $g_L=\cos(\frac{\pi}{2}a)$ and $g_R=\sin(\frac{\pi}{2}a)$ respectively where $a$ is the panning position in the range $[0,1]$. \Cref{fig:equal_power_panning} shows how the channel gains relate to the panning position. The total perceived loudness will be equal at all panning positions.
 
 \begin{figure}[htb]
     \centering
     \begin{tikzpicture}[samples=200]
         \pgfmathsetmacro{\halfpi}{1.57079632679}
         \begin{axis}[
-            width=0.618\textwidth, height=5cm,
+            width=0.5\textwidth, height=4cm,
             axis x line=center,
             axis y line=center,
-            xtick={},
+            xtick={0, 0.5, 1},
+            ytick={0, 0.5, 1},
             xlabel={$a$},
             ylabel={$g$},
             xlabel style={below right},
             ylabel style={above left},
             ymax=1.1,
             xmax=1.1,
-            legend style={at={(1.2,0.7)}, anchor=north east}
+            legend style={at={(1.1,0.5)}, anchor=west}
         ]
-        \addplot [domain=0:1, restrict y to domain=0:1, no markers, smooth, dotted] {cos(deg(\halfpi)*x)}; 
-        \addlegendentry{\(g_L\)}
-        \addplot [domain=0:1, restrict y to domain=0:1, no markers, smooth, dashed] {sin(deg(\halfpi)*x)};
-        \addlegendentry{\(g_R\)}
-        \addplot [domain=0:1, restrict y to domain=0:1, no markers, smooth] {cos(deg(\halfpi)*x)^2 + sin(deg(\halfpi)*x)^2};
+        \addplot [domain=0:1, restrict y to domain=0:1, no markers, smooth] {cos(deg(\halfpi)*x)}; 
+        \addlegendentry{$g_L=\cos(\frac{\pi}{2}a)$}
+        \addplot [domain=0:1, restrict y to domain=0:1, no markers, smooth, densely dashed] {sin(deg(\halfpi)*x)};
+        \addlegendentry{$g_R=\sin(\frac{\pi}{2}a)$}
+        \addplot [domain=0:1, restrict y to domain=0:1, no markers, smooth, dotted] {cos(deg(\halfpi)*x)^2 + sin(deg(\halfpi)*x)^2};
         \addlegendentry{\(g_L^2 + g_R^2\)}
         \end{axis}
     \end{tikzpicture}
-    \caption{Equal power panning. $g$ is the gain applied to the channel and $a$ is the panning factor ranging from 0 (fully left) to 1 (fully right). The total perceived loudness will be equal at all panning positions.}
+    \caption{Equal power panning. $g$ is the gain applied to the channel and $a$ is the panning factor ranging from 0 (fully left) to 1 (fully right).}
     \label{fig:equal_power_panning}
 \end{figure}
 
