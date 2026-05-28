@@ -858,14 +858,15 @@ In relation to the \hyperref[sec:research_questions]{overarching \gls{rq}} in \c
 
 Early examples of the use of spatial cues for analysis of recorded music are the \enquote{\gls{pi}} and \enquote{ambience index} specified by \citeauthor{avendanoFrequencyDomainTechniques2002} \cite{avendanoFrequencyDomainTechniques2002}, which are loosely analogous to \gls{ild} and \gls{iacc} in the acoustics domain. To estimate the \gls{pi}, a signal model is assumed whereby a musical source is panned within the mix using the \enquote{energy preserving pan law}, in which amplitude differences are applied to each channel such that the sum of the squared amplitudes equals 1. While this panning technique does not affect the phase of either channel, existing phase differences between channels are measured using the \enquote{ambience index}, which is defined such that it is low when the stereo channels are correlated (indicating a direct sound source), and high when channels are uncorrelated (indicating an ambient or reverberant sound source). 
 
-As the panning and ambience indices are key to many subsequent works, \cref{fig:pi_ai} demonstrates them on an example music recording. The recording itself is a solo singer recorded in an anechoic chamber, amplitude panned from left to right over the course of the musical phrase. At the midway point, an artificial reverb effect (i.e. a source of ambience) is added and slowly faded in. One can observe firstly that the ambience is low while there is no reverb, then increases steadily in frequency bands where audio energy is present, until finally all frequency bands have high ambience. Secondly, the panning index starts hard left and moves steadily right, becoming more and more unclear as the reverb is faded in. 
-
-\begin{figure}[p!]
+\begin{figure}[htb]
     \centering
-    \includegraphics[height=0.9\textheight]{figures/waveforms.pdf}
-    \caption{Example panning and ambience index}
+    \includegraphics[width=\textwidth]{figures/waveforms.pdf}
+    \caption{Visualization of an example audio waveform (top), its ambience index (middle), and panning index (bottom).}
     \label{fig:pi_ai}
 \end{figure}
+
+As the panning and ambience indices are key to many subsequent works, \cref{fig:pi_ai} demonstrates them on an example music recording. The recording itself is a solo singer recorded in an anechoic chamber, amplitude panned from left to right over the course of the musical phrase. At the midway point, an artificial reverb effect (i.e. a source of ambience) is added and slowly faded in. One can observe firstly that the ambience is low while there is no reverb, then increases steadily in frequency bands where audio energy is present, until finally all frequency bands have high ambience. Secondly, the panning index starts hard left and moves steadily right, becoming more and more unclear as the reverb is faded in. 
+
 
 Importantly, both the panning and ambience index are calculated in the \gls{tf} domain and result in one value for each \gls{tf} bin, and hence enable use cases that require resynthesis or editing of audio after analysis. One such example is the oft-cited \gls{adress} algorithm \cite{barrySoundSourceSeparation2004} (and its subsequent downstream projects \cite{cooneyEnhancedImplementationADRess2006,sofianosEffectiveSingingVoice2010,defreinReformulatingBinaryMasking2020,defreinRemedyingSoundSource2020}) (which attempt to separate sound sources by locating them in the horizontal plane). For the purpose of description, it is arguable that a summary of such spatial cues is more useful.
 
@@ -875,7 +876,7 @@ Using the same signal model proposed by \citeauthor{avendanoFrequencyDomainTechn
 
 For a more detailed inspection of precisely where in the horizontal plane musical energy is located, one can instead utilize a \gls{ph} using the techniques described by \citeauthorandnumber{sarroffMeasurementsSpaciousnessStereophonic2008} or \citeauthorandnumber{gomezMusicSimilaritySystems2008}.
 
-While the aforementioned studies focus on descriptions of amplitude panning in stereo mixes, recording engineers can make use of other techniques such as to add spatial feeling to their mix. These techniques (described by \citeauthor{tardieuProductionEffectAudio2011} as \enquote{Phase Stereo}) can be quantified using their definition of the \gls{ssps} \cite{tardieuProductionEffectAudio2011}. In the same manuscript another method of quantifying amplitude panning is defined, which is based on the \gls{ild} of a cochleagram, and aims to contain more precision in the frequency axis than the azimuthal axis.
+While the aforementioned studies focus on descriptions of amplitude panning in stereo mixes, recording engineers can make use of other techniques to add spatial feeling to their mix. These techniques (described by \citeauthor{tardieuProductionEffectAudio2011} as \enquote{Phase Stereo}) can be quantified using their definition of the \gls{ssps} \cite{tardieuProductionEffectAudio2011}. In the same manuscript another method of quantifying amplitude panning is defined, which is based on the \gls{ild} of a cochleagram, and aims to contain more precision in the frequency axis than the azimuthal axis.
 
 An alternative signal model is proposed by \citeauthor{harmaClassificationTimefrequencyRegions2010} \cite{harmaClassificationTimefrequencyRegions2010,harmaClassificationTimefrequencyRegions2011,harmaStereoAudioClassification2011}, whereby a stereo mix is composed of combinations of centre, panned, and uncorrelated sources. Their subsequent classification of stereo field differentiates between different combinations of those source types.
 
