@@ -256,6 +256,7 @@ Along the length of the cochlea, the cilia have different \q{critical frequencie
 \end{figure}
 
 \section{Directional hearing}
+\label{sec:directional_hearing}
 Following from \cref{sec:hearing}, this section will discuss humans' ability to discern the direction or location of a sound source.
 
 The psychoacoustic theory behind spatial hearing has been an active area of research since the mid 20th century, with early examples including the Jeffress model in which time differences between sound events at each ear contribute to a person's ability to locate sounds in space \cite{jeffressPlaceTheorySound1948}. The work of \citeauthor{lindemannEvaluationInterauralSignal1982} a few decades later expanded on this idea by translating the earlier theory to a \gls{dsp} context, and establishing the \gls{ild}, \gls{itd}, and \gls{iacc} as important measures to describe the spatial aspects of binaural signals in a quantifiable way \cite{lindemannEvaluationInterauralSignal1982}.
@@ -851,12 +852,13 @@ In relation to the \hyperref[sec:research_questions]{overarching \gls{rq}} in \c
 
 \chapter{Related works}
 
-\section{Stereo image description}
-\label{sec:stereo_image_description}
+\section{Spatial cues for stereo image}
+\label{sec:spatial_cues}
 
 \fxerror{Binaural analysis, \cite{supperOnsetGuidedSpatialAnalyser2005,takanenBinauralAuditoryModel2012,antoniukBlindEstimationEnsemble2023}}
 
-Early examples of the use of spatial cues for analysis of recorded music are the \enquote{\gls{pi}} and \enquote{ambience index} specified by \citeauthor{avendanoFrequencyDomainTechniques2002} \cite{avendanoFrequencyDomainTechniques2002}, which are loosely analogous to \gls{ild} and \gls{iacc} in the acoustics domain. To estimate the \gls{pi}, a signal model is assumed whereby a musical source is panned within the mix using the \enquote{energy preserving pan law}, in which amplitude differences are applied to each channel such that the sum of the squared amplitudes equals 1. While this panning technique does not affect the phase of either channel, existing phase differences between channels are measured using the \enquote{ambience index}, which is defined such that it is low when the stereo channels are correlated (indicating a direct sound source), and high when channels are uncorrelated (indicating an ambient or reverberant sound source). 
+
+While the standard binaural cues mentioned in \cref{sec:directional_hearing} aim to anaylze binaural sound as perceived by humans, there are several examples of spatial cues taylored specifically to the analysis of recorded music. For example, the \enquote{\gls{pi}} and \enquote{ambience index} specified by \citeauthor{avendanoFrequencyDomainTechniques2002} \cite{avendanoFrequencyDomainTechniques2002}, which are loosely analogous to \gls{ild} and \gls{iacc} in the acoustics domain. To estimate the \gls{pi}, a signal model is assumed whereby a musical source is panned within the mix using the \enquote{energy preserving pan law}, in which amplitude differences are applied to each channel such that the sum of the squared amplitudes equals 1. While this panning technique does not affect the phase of either channel, existing phase differences between channels are measured using the \enquote{ambience index}, which is defined such that it is low when the stereo channels are correlated (indicating a direct sound source), and high when channels are uncorrelated (indicating an ambient or reverberant sound source). 
 
 \begin{figure}[htb]
     \centering
@@ -867,10 +869,12 @@ Early examples of the use of spatial cues for analysis of recorded music are the
 
 As the panning and ambience indices are key to many subsequent works, \cref{fig:pi_ai} demonstrates them on an example music recording. The recording itself is a solo singer recorded in an anechoic chamber, amplitude panned from left to right over the course of the musical phrase. At the midway point, an artificial reverb effect (i.e. a source of ambience) is added and slowly faded in. One can observe firstly that the ambience is low while there is no reverb, then increases steadily in frequency bands where audio energy is present, until finally all frequency bands have high ambience. Secondly, the panning index starts hard left and moves steadily right, becoming more and more unclear as the reverb is faded in. 
 
-
 Importantly, both the panning and ambience index are calculated in the \gls{tf} domain and result in one value for each \gls{tf} bin, and hence enable use cases that require resynthesis or editing of audio after analysis. One such example is the oft-cited \gls{adress} algorithm \cite{barrySoundSourceSeparation2004} (and its subsequent downstream projects \cite{cooneyEnhancedImplementationADRess2006,sofianosEffectiveSingingVoice2010,defreinReformulatingBinaryMasking2020,defreinRemedyingSoundSource2020}) (which attempt to separate sound sources by locating them in the horizontal plane). For the purpose of description, it is arguable that a summary of such spatial cues is more useful.
 
 An extension and re-contextualization of the same principles has been discussed by \citeauthor{prestiBivariateMixtureSpace2023} \cite{prestiVisualizationManipulationStereophonic2014,prestiBivariateMixtureSpace2023}, in which a \gls{tf} region is converted into a \gls{bms}. Using this technique one can analyse the panning position of individual frequency components, plus the clarity (or trustworthyness) of that measurement. It was shown using this technique, one can e.g. differentiate direct from ambient sound, allowing for several audio manipulations and visualizations.
+
+\section{Stereo image description}
+\label{sec:stereo_image_description}
 
 Using the same signal model proposed by \citeauthor{avendanoFrequencyDomainTechniques2002}, the spatial description of recorded music specifically has been attempted several times. Firstly by \citeauthor{tzanetakisStereoPanningFeatures2007} in \cite{tzanetakisStereoPanningFeatures2007,tzanetakisStereoPanningInformation2010}, who use the \gls{pi} to define a set of \gls{spf} used for genre classification and \gls{mir}. \gls{spf} firstly splits the mix into perpetually relevant frequency bands, secondly describes the \enquote{amount of panning} present in each band, and optionally estimates the number of sources present in the mix.
 
@@ -886,8 +890,16 @@ All the above use classical \gls{dsp} to create their spatial descriptors, but m
 
 Neural generation of spatial audio continues to be a hot topic up to the present day, with many attempts to generate high-quality binaural, ambisonic or multichannel audio from mono sources \cite{limEnhancingSpatialAudio2024,liCyclicLearningBinaural2024,liTASPersonalizedTextguided2024,chenCCStereoAudioVisualContextual2025,melechovskySonicMasterControllableAllinOne2025,santosLargeScaleSelfSupervisedLearning2025,wangSpatialV2AVisualGuidedHighfidelity2026}. In doing so, the networks must infer spatial information from a source other than audio (typically an accompanying video or text prompt), and in the process will learn the spatial qualities of their audio training data.
 
+\section{Prediction of perceptual scalars}
+\label{sec:prediction_of_perceptual_scalars}
+A perceptual scalar is a measurement that would usually be made via a perceptual listening test, e.g. \gls{asw} or \gls{lev}. Prediction of them via objective means is a particularly useful function as it allows researchers to sidestep the tests, which can be slow and costly \cite{rumseySpatialQualityEvaluation2002}.
+
+Acting purely on binaural signals the theses of \citeauthor{supperOnsetGuidedSpatialAnalyser2005} and \cite{dewhirstModellingPerceivedSpatial2008} (\cite{supperOnsetGuidedSpatialAnalyser2005,dewhirstModellingPerceivedSpatial2008}) details the construction of \q{binaural analysers} that estimate the \gls{doa} of incoming sound. Estimates of \gls{asw} is are derived downstream of \gls{doa} analysis, and involve taking standard measurements on \gls{doa} histograms. The analysis of stereo width more generally is a topic of interest and several mathematical formulas exists for its calculation \cite{kasbachAssessingModelingApparent2016,miethObjectiveEvaluationTechniques2017,antoniukBlindEstimationEnsemble2023}. It is not restricted to the binaural domain, also being calculated for generic stereo signals \cite{sarroffMeasurementsSpaciousnessStereophonic2008,wilsonPerceptionEvaluationAudio2013,mourgelaExploringTrendsAudio2024}. \gls{lev} on the other hand has been closely linked to the \gls{iacc} of a stereo signal, and the prediction of it is has been studies extensively \cite{soulodreNewObjectiveMeasures2004,dewhirstObjectiveAssessmentSpatial2005,sunishDevelopmentValidationUnintrusive2010,jacksonEstimatesPerceivedSpatial2010,powerInvestigationImpact3D2013,nowakPerceptionPredictionApparent2017}.
+
+
 \section{Spatial quality prediction}
-\fxerror{Something about quality prediction?}
+
+Following from the analyses described in \cref{sec:spatial_cues,sec:stereo_image_description,sec:prediction_of_perceptual_scalars}, the results are often used to assess the spatial degradation of a signal after some sort of distortion has been applied. A typical method is to calculate the same spatial descriptor on both a reference and degraded signal, then calculate the difference in those descriptors. Examples are \cite{youSpatialLocalizationEvaluation2012,wangObjectiveMeasurementSpatial2015,delgadoObjectiveMeasurementStereophonic2019,delgadoObjectiveAssessmentSpatial2019,watcharasupatQuantifyingSpatialAudio2024,barryBinaspectPythonLibrary2025}, which all attempt to predict the perceived spatial degradation in a recording that has been distorted by lossy compression.
 
 \section{Analysis of large musical datasets}
 
