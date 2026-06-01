@@ -22,3 +22,6 @@ dependencies = [
     "librosa",
     "python_auditory_toolbox",
 ]
+
+[tool.uv.sources]
+jupyter_tikz = { git = "https://github.com/lucaslrodri/jupyter-tikz", branch = "main" }

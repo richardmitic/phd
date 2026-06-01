@@ -1152,15 +1152,11 @@ wheels = [
 
 [[package]]
 name = "jupyter-tikz"
-version = "0.5.6"
-source = { registry = "https://pypi.org/simple" }
+version = "0.5.8"
+source = { git = "https://github.com/lucaslrodri/jupyter-tikz?branch=main#4e7b8d4dcefd0b276758976eeef88179e9c45912" }
 dependencies = [
     { name = "ipython" },
     { name = "jinja2" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/98/8b/98cd4473f0143dcbcba5e930a52e978440c3d890b4101d8fb9b2b38d0826/jupyter_tikz-0.5.6.tar.gz", hash = "sha256:47b7e91b62c4cf6e42a577166bfcd9a12c2d1d39ea7f8155e827df209b79d375", size = 17628, upload-time = "2024-10-10T01:09:46.751Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/fd/39/27836de53365629aa3a5b83766df93c81f0371be37f1868b0739d85ecf8c/jupyter_tikz-0.5.6-py3-none-any.whl", hash = "sha256:7af89d165a58c6ea7e8ff6384522919184b00e65e636eb7ec2d24af69c99f612", size = 14057, upload-time = "2024-10-10T01:09:45.103Z" },
 ]
 
 [[package]]
@@ -2184,7 +2180,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "jupyter-tikz" },
+    { name = "jupyter-tikz", git = "https://github.com/lucaslrodri/jupyter-tikz?branch=main" },
     { name = "jupyterlab" },
     { name = "librosa" },
     { name = "matplotlib" },
