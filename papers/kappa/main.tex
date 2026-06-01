@@ -39,7 +39,8 @@
 
 %% References
 \usepackage[
-    style=ieee,
+    bibstyle=ieee,
+    citestyle=numeric-comp,
     backend=biber,
     maxcitenames=2,
 ]{biblatex}
@@ -759,7 +760,7 @@ This is illustrated by \Cref{fig:nyquist}, which shows the sampling of three wav
         \node[anchor=north] at (bottom_240) {$\dots$};
         
     \end{tikzpicture}
-    \caption{Aliasing in sampled digital audio signals. Dotted vertical lines represent digital sampling points with a separation of $T_s$, and monotonically increasing index $n$. The upper plot shows two cosine waves with frequencies equidistant from the Nyquist frequency ($f_N$) in opposing directions. The lower plot is a cosine at exactly $f_N$. Sampled values are shown as marks on the plots. Note that the two upper signals can both be represented by same digital samples.}
+    \caption{Aliasing in sampled digital audio signals. Dotted vertical lines represent digital sampling points with a separation of $T_s$, and monotonically increasing index $n$. The upper plot shows two cosine waves with frequencies equidistant from the Nyquist frequency ($f_N$) in opposing directions. The lower plot is a cosine wave at exactly $f_N$. Sampled values are shown as marks on the plots. Note that the two upper signals can both be represented by same digital samples.}
     \label{fig:nyquist}
 \end{figure}
 
@@ -855,9 +856,6 @@ In relation to the \hyperref[sec:research_questions]{overarching \gls{rq}} in \c
 \section{Spatial cues for stereo image}
 \label{sec:spatial_cues}
 
-\fxerror{Binaural analysis, \cite{supperOnsetGuidedSpatialAnalyser2005,takanenBinauralAuditoryModel2012,antoniukBlindEstimationEnsemble2023}}
-
-
 While the standard binaural cues mentioned in \cref{sec:directional_hearing} aim to anaylze binaural sound as perceived by humans, there are several examples of spatial cues taylored specifically to the analysis of recorded music. For example, the \enquote{\gls{pi}} and \enquote{ambience index} specified by \citeauthor{avendanoFrequencyDomainTechniques2002} \cite{avendanoFrequencyDomainTechniques2002}, which are loosely analogous to \gls{ild} and \gls{iacc} in the acoustics domain. To estimate the \gls{pi}, a signal model is assumed whereby a musical source is panned within the mix using the \enquote{energy preserving pan law}, in which amplitude differences are applied to each channel such that the sum of the squared amplitudes equals 1. While this panning technique does not affect the phase of either channel, existing phase differences between channels are measured using the \enquote{ambience index}, which is defined such that it is low when the stereo channels are correlated (indicating a direct sound source), and high when channels are uncorrelated (indicating an ambient or reverberant sound source). 
 
 \begin{figure}[htb]
@@ -875,6 +873,8 @@ An extension and re-contextualization of the same principles has been discussed 
 
 \section{Stereo image description}
 \label{sec:stereo_image_description}
+
+\fxwarning{Would some examples of each existing SIP be useful?}
 
 Using the same signal model proposed by \citeauthor{avendanoFrequencyDomainTechniques2002}, the spatial description of recorded music specifically has been attempted several times. Firstly by \citeauthor{tzanetakisStereoPanningFeatures2007} in \cite{tzanetakisStereoPanningFeatures2007,tzanetakisStereoPanningInformation2010}, who use the \gls{pi} to define a set of \gls{spf} used for genre classification and \gls{mir}. \gls{spf} firstly splits the mix into perpetually relevant frequency bands, secondly describes the \enquote{amount of panning} present in each band, and optionally estimates the number of sources present in the mix.
 
@@ -894,18 +894,22 @@ Neural generation of spatial audio continues to be a hot topic up to the present
 \label{sec:prediction_of_perceptual_scalars}
 A perceptual scalar is a measurement that would usually be made via a perceptual listening test, e.g. \gls{asw} or \gls{lev}. Prediction of them via objective means is a particularly useful function as it allows researchers to sidestep the tests, which can be slow and costly \cite{rumseySpatialQualityEvaluation2002}.
 
-Acting purely on binaural signals the theses of \citeauthor{supperOnsetGuidedSpatialAnalyser2005} and \cite{dewhirstModellingPerceivedSpatial2008} (\cite{supperOnsetGuidedSpatialAnalyser2005,dewhirstModellingPerceivedSpatial2008}) details the construction of \q{binaural analysers} that estimate the \gls{doa} of incoming sound. Estimates of \gls{asw} is are derived downstream of \gls{doa} analysis, and involve taking standard measurements on \gls{doa} histograms. The analysis of stereo width more generally is a topic of interest and several mathematical formulas exists for its calculation \cite{kasbachAssessingModelingApparent2016,miethObjectiveEvaluationTechniques2017,antoniukBlindEstimationEnsemble2023}. It is not restricted to the binaural domain, also being calculated for generic stereo signals \cite{sarroffMeasurementsSpaciousnessStereophonic2008,wilsonPerceptionEvaluationAudio2013,mourgelaExploringTrendsAudio2024}. \gls{lev} on the other hand has been closely linked to the \gls{iacc} of a stereo signal, and the prediction of it is has been studies extensively \cite{soulodreNewObjectiveMeasures2004,dewhirstObjectiveAssessmentSpatial2005,sunishDevelopmentValidationUnintrusive2010,jacksonEstimatesPerceivedSpatial2010,powerInvestigationImpact3D2013,nowakPerceptionPredictionApparent2017}.
+Acting purely on binaural signals the theses of \citeauthor{supperOnsetGuidedSpatialAnalyser2005} and \citeauthor{dewhirstModellingPerceivedSpatial2008} (\cite{supperOnsetGuidedSpatialAnalyser2005,dewhirstModellingPerceivedSpatial2008}) details the construction of \q{binaural analysers} that estimate the \gls{doa} of incoming sound. Estimates of \gls{asw} is are derived downstream of \gls{doa} analysis, and involve taking standard measurements on \gls{doa} histograms. The analysis of stereo width more generally is a topic of interest and several mathematical formulas exists for its calculation \cite{kasbachAssessingModelingApparent2016,miethObjectiveEvaluationTechniques2017,antoniukBlindEstimationEnsemble2023}. It is not restricted to the binaural domain, also being calculated for generic stereo signals \cite{sarroffMeasurementsSpaciousnessStereophonic2008,wilsonPerceptionEvaluationAudio2013,mourgelaExploringTrendsAudio2024}. \gls{lev} on the other hand has been closely linked to the \gls{iacc} of a stereo signal, and the prediction of it has been studied extensively in \cite{soulodreNewObjectiveMeasures2004,dewhirstObjectiveAssessmentSpatial2005,sunishDevelopmentValidationUnintrusive2010,jacksonEstimatesPerceivedSpatial2010,powerInvestigationImpact3D2013,nowakPerceptionPredictionApparent2017}.
+
+\fxwarning{Anything else about perceptual scalars? Maybe depth?}
 
 
 \section{Spatial quality prediction}
 
 Following from the analyses described in \cref{sec:spatial_cues,sec:stereo_image_description,sec:prediction_of_perceptual_scalars}, the results are often used to assess the spatial degradation of a signal after some sort of distortion has been applied. A typical method is to calculate the same spatial descriptor on both a reference and degraded signal, then calculate the difference in those descriptors. Examples are \cite{youSpatialLocalizationEvaluation2012,wangObjectiveMeasurementSpatial2015,delgadoObjectiveMeasurementStereophonic2019,delgadoObjectiveAssessmentSpatial2019,watcharasupatQuantifyingSpatialAudio2024,barryBinaspectPythonLibrary2025}, which all attempt to predict the perceived spatial degradation in a recording that has been distorted by lossy compression.
 
+\fxwarning{Very short. Is there anything more interesting to say?}
+
 \section{Analysis of large musical datasets}
 
-Many of the studies cited in \cref{sec:stereo_image_description} use a large dataset of recorded music to demonstrate the effectiveness of their stereo image profiles. For example, \cite{tzanetakisStereoPanningFeatures2007,tzanetakisStereoPanningInformation2010,tardieuProductionEffectAudio2011} tackle genre recognition, \cite{ziemerAcousticFeaturesRecording2021} predicts artist/\glsxtrshort{dj}, and \cite{tardieuProductionEffectAudio2011} determines the decade of the recordings. Similar studies such as \cite{zhouPredictingGeographicalOrigin2014,kedyteGeographicalOriginPrediction2017} show that the geographic origin of a recording can be determined from audio features. 
+Many of the studies cited in \cref{sec:stereo_image_description} use a large dataset of recorded music to demonstrate the effectiveness of their \glspl{sip}. For example, \cite{tzanetakisStereoPanningFeatures2007,tzanetakisStereoPanningInformation2010,tardieuProductionEffectAudio2011} tackle genre recognition, \cite{ziemerAcousticFeaturesRecording2021} predicts artist/\glsxtrshort{dj}, and \cite{tardieuProductionEffectAudio2011} determines the decade of the recordings. Similar studies such as \cite{zhouPredictingGeographicalOrigin2014,kedyteGeographicalOriginPrediction2017} show that the geographic origin of a recording can be determined from audio features, although they include any spatial features. 
 
-In \citeauthor{panteliCharacterizationSingingStyles2017}'s work on the classification of singing style, the classes -- instead of being determined by an a-priori known label -- are learned by first extracting low-level audio cues, then finding common features within those cues. The features are then used as the input to unsupervised clustering algorithms to determine the relationships of the recordings to each other. This work was continued in \cite{panteliComputationalStudyOutliers2017} where outliers in the global dataset where found using similar techniques and links between different musical cultures were drawn. On a cautionary note, \cite{chauhanCrossCulturalBiasMelScale2026} recently showed that the choice of audio frontend (i.e. the choice of \gls{tf} representation) implicitly encodes bias towards/against datasets of musical recordings that originated from different cultures.
+In \citeauthor{panteliCharacterizationSingingStyles2017}'s work on the classification of singing style, the classes -- instead of being determined by an a-priori known label -- are learned by first extracting low-level audio cues, then finding common features within those cues. The features are then used as the input to unsupervised clustering algorithms to determine the relationships of the recordings to each other. This work was continued in \cite{panteliComputationalStudyOutliers2017} where outliers in the global dataset where found using similar techniques and links between different musical cultures were drawn. On a cautionary note, \cite{chauhanCrossCulturalBiasMelScale2026} recently showed that the choice of audio frontend (i.e. the choice of \gls{tf} representation) implicitly encodes bias towards/against musical recordings that originate from different cultures.
 
 What all these studies have in common is an interest in the dataset itself regarding both the relationships between individual recordings, plus the relationship of the entire corpus to the wider world. Much less emphasis is given to low-level audio features.
 
@@ -1085,13 +1089,11 @@ Addressing research question \ref{rq:methods}, the review revealed several more 
 Main author, responsible for all data collection and processing, and writing.
 
 
-\chapter{Discussion}
-\fxerror{discussion?}
-
-
-\chapter{Future work and continuation to doctoral studies}
+\chapter{Discussion and future work}
 \label{sec:future_work}
-The work documented in this licentiate thesis provides the theoretical and practical basis for analysis of stereo image in music recordings. The focus was on amassing the signal processing techniques that enable the analysis of stereo field, and testing their applicability to various types of stereo field that were known a-priori. The next stage of research will involve applying the knowledge from this thesis on much larger musical corpora. The signal processing techniques will be honed and run on vast musical datasets, secure in the knowledge that they will pick out the appropriate information to the experiment at hand.
+The work documented in this licentiate thesis provides the theoretical and practical basis for analysis of stereo image in music recordings. The focus was on amassing the signal processing techniques that enable the analysis of stereo field, and testing their applicability to various types of recordings that were known a-priori. The next stage of research will involve applying the knowledge from this thesis on much larger musical corpora. The signal processing techniques will be honed and run on vast musical datasets, secure in the knowledge that they will pick out the appropriate information to the experiment at hand.
+
+In particular, it is theorized that examining the \glspl{sip} of extremely large musical corpora will reveal patterns in production and recording techniques that were otherwise unobservable. It will also reveal the scale and variation of stereo techniques that musicians are able to employ in their work. Given the basic knowledge gained from the work in this thesis, it might then be possible to reason about how musicians and producers sculpt their stereo fields, relating it both to the musical content and the wider context in which it was created.
 
 During the licentiate, several points arose that provoked further investigation. Firstly, the available public datasets of recorded music are generally encoded using lossy compression. While lossy compression algorithms undergo perceptual tests in their development, it is unclear how they affect spatial cues at the scale of said datasets (which encompass much musical variation). The spatial effects of lossy compression therefore warrant further investigation. Secondly, the public datasets are generally formed from web services where musicians have uploaded their own recordings for free. In contrast, professional recordings (which are much more numerous) are not included in any public datasets. Since professional recordings make up the vast majority of recorded music, it needs to assessed whether public datasets are representative of professional recordings.
 
