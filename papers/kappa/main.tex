@@ -141,30 +141,18 @@ Spatial information is crucial to the listener's experience of music, and stereo
 \begin{document}
 \frontmatter
 
-% \maketitle
-
 \listoffixmes
 \frontmatterCS
 
 \dedication{Dedicated to the one guy at Uppsala University who made a latex template 14 year ago}
 
-
-
-
-% \chapter*{Papers included in the thesis}
-% \label{sec:papers_basic}
-
-% refsection allows the full citations to be printed without appearing in the bibliography
-% \begin{refsection}
-% \begin{enumerate}[label=\textbf{\Alph*}]
 \begin{listofpapers}
     \item \fullcite{franklinDevelopmentWebBasedRealTime2025} \label{paper:auxtrument}
     \item \fullcite{miticObjectiveComparisonPanning2025}\label{paper:dafx}
     \item \fullcite{miticPerceptualEvaluationBinaurally2026}\label{paper:bth}
     \item \fullcite{miticSystematicLiteratureReview2026}\label{paper:slr}
 \end{listofpapers}
-% \end{enumerate}
-% \end{refsection}
+
     
 \begingroup
     % To adjust the indentation in your table of contents, uncomment and enter the widest numbers for each level
@@ -264,15 +252,6 @@ The psychoacoustic theory behind spatial hearing has been an active area of rese
 
 Put simply, humans are able to perceive the incoming direction of a sound by observing both the amplitude difference and time difference of coincident sound waves arriving at the left and right ears. Figure \cref{fig:directional_hearing} shows how these two properties enable directional hearing. Firstly, the head itself creates a physical barrier that will attenuate sound waves at one ear more-so that at the other ear. Secondly, the difference in distance between the sound source and each ear will create a time delay between the received signals. Over time a person will learn to associate patterns in \gls{itd}/\gls{ild} with the physical location of the sound source.
 
-
-% \begin{figure}[htb]
-%     \centering
-%     \includegraphics[height=0.3\textheight]{figures/directional_hearing.pdf}
-%     \caption{Illustration of how humans perceive the direction of an incoming sound.}
-%     \label{fig:directional_hearing}
-% \end{figure}
-
-
 \begin{figure}[htb]
     \centering
     \resizebox{\textwidth}{!}{
@@ -295,14 +274,6 @@ Put simply, humans are able to perceive the incoming direction of a sound by obs
             \fill[lightgray] plot [smooth, tension=1.618] coordinates {(shadow_top) (shadow_middle) (shadow_bottom)};
             \pic[transform shape] (itd_head) at (0,0) {head};
             \node[section_label, minimum width=5.5cm] (itd_label) at (-3, 0) {\glsxtrshort{ild}};
-            
-            % Small waveforms at each ear
-            % \begin{scope}[xshift=1.2cm, scale=0.2]
-            % \draw[fill=black] (0,0) -- (1,1) -- (2,0.5) -- (3, 0.25) -- (4,0.125) -- (4,-0.125) -- (3,-0.25) -- (2,-0.5) -- (1,-1) -- cycle;
-            % \end{scope}
-            % \begin{scope}[xshift=-2cm, xscale=0.2, yscale=0.1]
-            % \draw[fill=black] (0,0) -- (1,1) -- (2,0.5) -- (3, 0.25) -- (4,0.125) -- (4,-0.125) -- (3,-0.25) -- (2,-0.5) -- (1,-1) -- cycle;
-            % \end{scope}
 
             \begin{scope}[xshift=6cm, yshift=-2cm]
                 \begin{axis}[
@@ -675,80 +646,31 @@ This is illustrated by \Cref{fig:nyquist}, which shows the sampling of three wav
             xtick=\empty,
         ]
             \nextgroupplot[
-                % xlabel=time, 
-                % axis x line = center,
-                % xlabel style={below right},
                 ylabel={$f_n \pm f_\delta$},
             ]
-            % \begin{axis}[
-            %     width=10cm, height=8cm,
-            %     axis x line=center,
-            %     axis y line=center,
-            %     % hide x axis,
-            %     enlarge x limits=true,
-            %     enlarge y limits=true,
-            %     xtick={0},
-            %     % axis lines*=middle,
-            %     % hide y axis,
-            %     xlabel={time},
-            %     % ylabel={$g$},
-            %     xlabel style={below right},
-            %     % ylabel style={above left},
-            %     % ymax=1.1,
-            %     % xmax=1.1,
-            %     legend style={at={(1,1)}, anchor=north west}
-            % ]
             \addplot [domain=0:360, smooth, forget plot] {cos(0.5*x)};
             \addplot [domain=0:360, smooth, forget plot] {cos(5.5*x)};
             \addplot [domain=0:360, only marks, samples at={0,60,120,180,240,300,360}, mark=o] {cos(0.5*x)};
-            % \addlegendentry{$f_N \pm f_{\delta}$};
-            % \coordinate (top) at (axis cs:1,\pgfkeysvalueof{/pgfplots/ymax}); 
             \pgfplotsinvokeforeach 
                 {60, 120, 180, 240, 300, 360} 
                 {\coordinate (top_#1) at (axis cs:#1,\pgfkeysvalueof{/pgfplots/ymax});}
 
             \nextgroupplot[
-                % xlabel=time, 
-                % axis x line = center,
-                % xlabel style={below right},
                 ylabel={$f_N$},
             ]
             \addplot [domain=0:360, smooth, forget plot] {cos(3*x)};
             \addplot [domain=0:360, only marks, samples at={0,60,120,180,240,300,360}, mark=square] {cos(3*x)};
-            % \addlegendentry{$f_N$};
-            % \coordinate (bottom) at (axis cs:1,\pgfkeysvalueof{/pgfplots/ymin});
 
             \pgfplotsinvokeforeach 
                 {60, 120, 180, 240, 300, 360} 
                 {\coordinate (bottom_#1) at (axis cs:#1,\pgfkeysvalueof{/pgfplots/ymin});}
 
-            % \pgfplotsinvokeforeach 
-            %     {60, 120, 180, 240, 300, 360} 
-            %     {\addplot [domain=0:360, smooth, dotted, forget plot] coordinates {(#1, -2.2) (#1, 2.2)};}
-            
-            % \begin{scope}[font=\footnotesize]
-            % \node (t0) at (axis cs: 60,  2.4) {$t$};
-            % \node (t1) at (axis cs: 120, 2.4) {$t + T_s$};
-            % \node (t2) at (axis cs: 180, 2.4) {$t + 2T_s$};
-            % \node (t3) at (axis cs: 240, 2.4) {$\dots$};
-
-            % \node (t0) at (axis cs: 60,  -2.4) {$n=0$};
-            % \node (t1) at (axis cs: 120, -2.4) {$n=1$};
-            % \node (t2) at (axis cs: 180, -2.4) {$n=2$};
-            % \node (t3) at (axis cs: 240, -2.4) {$\dots$};
-            % \end{scope}
-
-            % \end{axis}
         \end{groupplot}
 
         \pgfplotsinvokeforeach
             {60, 120, 180, 240, 300, 360} 
             {\draw [dotted] (top_#1) -- (bottom_#1);}
         
-        % \pgfplotsinvokeforeach
-        %     {60, 120, 180} 
-        %     {\node at ([yshift=8pt]top_#1) {$t$};}
-
         \node[anchor=south] at (top_60) {$n=0$};
         \node[anchor=south] at (top_120) {$n=1$};
         \node[anchor=south] at (top_180) {$n=2$};
