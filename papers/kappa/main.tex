@@ -823,9 +823,14 @@ Acting purely on binaural signals the theses of \citeauthor{supperOnsetGuidedSpa
 
 \section{Spatial quality prediction}
 
-Following from the analyses described in \cref{sec:spatial_cues,sec:stereo_image_description,sec:prediction_of_perceptual_scalars}, the results are often used to assess the spatial degradation of a signal after some sort of distortion has been applied. A typical method is to calculate the same spatial descriptor on both a reference and degraded signal, then calculate the difference in those descriptors. Examples are \cite{youSpatialLocalizationEvaluation2012,wangObjectiveMeasurementSpatial2015,delgadoObjectiveMeasurementStereophonic2019,delgadoObjectiveAssessmentSpatial2019,watcharasupatQuantifyingSpatialAudio2024,barryBinaspectPythonLibrary2025}, which all attempt to predict the perceived spatial degradation in a recording that has been distorted by lossy compression.
+Following from the analyses described in \cref{sec:spatial_cues,sec:stereo_image_description,sec:prediction_of_perceptual_scalars}, the results are often used to assess the spatial degradation of a signal after some sort of distortion has been applied. A typical method is to calculate the same spatial descriptor on both a reference and degraded signal, then calculate the difference in those descriptors. Examples are \cite{youSpatialLocalizationEvaluation2012,wangObjectiveMeasurementSpatial2015,delgadoObjectiveMeasurementStereophonic2019,delgadoObjectiveAssessmentSpatial2019}, which all attempt to predict the perceived spatial degradation in a recording that has been distorted by lossy compression. 
 
-\fxwarning{Very short. Is there anything more interesting to say?}
+Recent work by \citeauthorandnumber{watcharasupatQuantifyingSpatialAudio2024} demonstrates a new metric for assessing spatial quality and demonstrates it using several common, but artificial distortions. Furthermore, the work of \citeauthorandnumber{barryBinaspectPythonLibrary2025} presents (alongside analysis of lossy codecs) the comparison of binaural rendering and downmix algorithms, showing that minute differences in binaural cues can be easily detected using their methods.
+
+In all the above studies, the detail and implementation of the spatial descriptors vary. Some studies (e.g. \cite{delgadoObjectiveAssessmentSpatial2019,barryBinaspectPythonLibrary2025}) opt to use high-level \glspl{sip} such as \q{directional loudness maps} or \gls{ild} histograms, while others (e.g. \cite{wangObjectiveMeasurementSpatial2015}) use low-level spatial cues such as \gls{ild} and \gls{itd}. In short, both approaches are valid and relevant to the \glspl{rq} presented in this thesis. 
+
+Following from this establishment of objective measurements for spatial quality, it is common practice to use them as terms in \gls{dl} loss functions, thereby allowing the networks to learn spatial features \cite{zhuAmbisonicBinaural2022,erruzBinauralSourceSeparation2017,limEnhancingSpatialAudio2024,giampiccoloModelingImpulseResponse2025}.
+
 
 \section{Analysis of large musical datasets}
 
