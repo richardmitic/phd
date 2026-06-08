@@ -1,0 +1,23 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        width=0.618\textwidth,
+        height=6cm,
+        xmode=log,
+        xlabel={Frequency (Hz)},
+        ylabel={Filter response (dB)},
+        ymax=0,
+        ymin=-60,
+        xmin=20,
+        xmax=24000,
+    ]
+    \addplot[black] table {gammatone_0.dat}; 
+    \addplot[black] table {gammatone_1.dat};
+    \addplot[black] table {gammatone_2.dat};
+    \addplot[black] table {gammatone_3.dat};
+    \addplot[black] table {gammatone_4.dat};
+    \addplot[black] table {gammatone_5.dat};
+    \addplot[black] table {gammatone_6.dat};
+    \addplot[black] table {gammatone_7.dat};
+    
+    \end{axis}
+\end{tikzpicture}

@@ -21,6 +21,7 @@ dependencies = [
     "pyfar",
     "librosa",
     "python_auditory_toolbox",
+    "matplot2tikz",
 ]
 
 [tool.uv.sources]

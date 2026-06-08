@@ -34,7 +34,10 @@
 \usetikzlibrary{intersections} % name path
 \usetikzlibrary{decorations.markings}
 \usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
+\pgfplotsset{
+    compat=1.18,
+    table/search path={figures}
+}
 \usepgfplotslibrary{groupplots,units}
 
 %% References
@@ -361,7 +364,7 @@ Put simply, humans are able to perceive the incoming direction of a sound by obs
     \label{fig:directional_hearing}
 \end{figure}
 
-The relative importance of \gls{ild} and \gls{itd} differ depending on the frequency of the incoming sound. The reasons for this are twofold. Firstly, a person's inter-aural distance (the physical distance between their ears) must be longer than the wavelength of the incoming sound wave in order for them to detect the phase difference between wave peaks. In this case, it is often refered to as \gls{ipd}, which accounts for the centre frequency of the critical band. Secondly the cilia that line the basilar membrane inside the cochlea can only detect the fine structure of a sound wave up until roughly 1.6kHz \cite{lindemannEvaluationInterauralSignal1982}. \citeauthor{lindemannEvaluationInterauralSignal1982} gives a rule of thumb that time differences of less than 7.5ms are heard as a single auditory event (for which direction could be inferred), and delays above 21ms are heard as uncorrelated events. Hence, at 1.6kHz and below \gls{itd} is more important, whereas above 1.6kHz \gls{ild} is more important. Furthermore, \citeauthor{blauertSpatialHearingOne1996}'s subsequent work found firstly that both \gls{ild} and \gls{itd} are relevant within the frequency band surrounding 1.6kHz, and secondly that the angle of incidence of the sound wave plays a role in how the cues are perceived \cite{blauertSpatialHearingOne1996}. Despite this, Lindemann's rules of thumb are still broadly accepted, even being encoded into international standards such as \cite{iso-11172-3:mpeg_audio}. As an example, \cref{fig:example_pan} shows two recordings (a low-frequency kick drum and high-frequency hi-hat) that originate from the right-hand side of a listener. The high-frequency hi-hat has a large \gls{ild} and ambiguous \gls{ipd}, whereas the low-frequency kick drum has negligible \gls{ild}, but an interpretable \gls{ipd}.
+The relative importance of \gls{ild} and \gls{itd} differ depending on the frequency of the incoming sound. The reasons for this are twofold. Firstly, a person's inter-aural distance (the physical distance between their ears) must be longer than the wavelength of the incoming sound wave in order for them to detect the phase difference between wave peaks. In this case, it is often refered to as \gls{ipd}, which accounts for the centre frequency of the critical band. Secondly the cilia that line the basilar membrane inside the cochlea can only detect the fine structure of a sound wave up until roughly 1.6kHz \cite{lindemannEvaluationInterauralSignal1982}. \citeauthor{lindemannEvaluationInterauralSignal1982} gives a rule of thumb that time differences of less than 7.5ms are heard as a single auditory event (for which direction could be inferred), and delays above 21ms are heard as uncorrelated events. Hence, at 1.6kHz and below \gls{itd} is more important, whereas above 1.6kHz \gls{ild} is more important. Furthermore, \citeauthor{blauertSpatialHearingOne1996}'s subsequent work found firstly that both \gls{ild} and \gls{itd} are relevant within the frequency band surrounding 1.6kHz, and secondly that the angle of incidence of the sound wave plays a role in how the cues are perceived \cite{blauertSpatialHearingOne1996}. Despite this, Lindemann's rules of thumb are still broadly accepted, even being encoded into international standards such as \cite{iso-11172-3:mpeg_audio}. As an example, \cref{fig:example_pan} shows two recordings (a high-frequency hi-hat and a low-frequency kick drum) that originate from the right-hand side of a listener. The high-frequency hi-hat has a large \gls{ild} and ambiguous \gls{ipd}, whereas the low-frequency kick drum has negligible \gls{ild}, but an interpretable \gls{ipd}.
 
 % \begin{figure}[htb]
 %     \centering
@@ -371,29 +374,48 @@ The relative importance of \gls{ild} and \gls{itd} differ depending on the frequ
 % \end{figure}
 
 \begin{figure}[htb]
-    \begin{tikzpicture}
-        \begin{axis}[ymin=-2, ymax=2, xlabel={time (ms)}, ylabel={hi-hat}, width=\textwidth, height=4cm]
-            \addplot[black] table {figures/hihat_L.dat};
-            \addplot[black] table {figures/hihat_R.dat};
-            % \addplot[black, densely dotted] coordinates {(2.10884354, 2) (2.10884354, -2)};
-            % \addplot[black, densely dotted] coordinates {(2.60770975, 2) (2.60770975, -2)};
-            % \addplot[black, densely dashed] coordinates {(0, 1.08935796) (30, 1.08935796)};
-            % \addplot[black, densely dashed] coordinates {(0, 0.02603853) (30, 0.02603853)};
-            % \addplot[black, densely dashed] coordinates {(0, 0.91115176) (30, 0.91115176)};
-            % \addplot[black, densely dashed] coordinates {(0, -1.89440977) (30, -1.89440977)};
-        \end{axis}
+    \input{figures/hihat_kick.tikz}
+    % \begin{tikzpicture}
+    %     \begin{axis}[
+    %         ymin=-2, 
+    %         ymax=2, 
+    %         xlabel={Time (ms)}, 
+    %         ylabel={Hi-hat}, 
+    %         width=\textwidth, 
+    %         height=4cm,
+    %         ytick={-1, 1},
+    %         yticklabels={R,L},
+    %     ]
+    %         \addplot[black] table {figures/hihat_L.dat};
+    %         \addplot[black] table {figures/hihat_R.dat};
+    %         % \addplot[black, densely dotted] coordinates {(2.10884354, 2) (2.10884354, -2)};
+    %         % \addplot[black, densely dotted] coordinates {(2.60770975, 2) (2.60770975, -2)};
+    %         % \addplot[black, densely dashed] coordinates {(0, 1.08935796) (30, 1.08935796)};
+    %         % \addplot[black, densely dashed] coordinates {(0, 0.02603853) (30, 0.02603853)};
+    %         % \addplot[black, densely dashed] coordinates {(0, 0.91115176) (30, 0.91115176)};
+    %         % \addplot[black, densely dashed] coordinates {(0, -1.89440977) (30, -1.89440977)};
+    %     \end{axis}
 
-        \begin{axis}[ymin=-2, ymax=2, xlabel={time (ms)}, ylabel={kick drum}, width=\textwidth, height=4cm, yshift=-4cm]
-            \addplot[black] table {figures/kick_L.dat};
-            \addplot[black] table {figures/kick_R.dat};
-            % \addplot[black, densely dotted] coordinates {(12.10884354, 2) (12.10884354, -2)};
-            % \addplot[black, densely dotted] coordinates {(12.87981859, 2) (12.87981859, -2)};
-            % \addplot[black, densely dashed] coordinates {(0, 1.57802927) (30, 1.57802927)};
-            % \addplot[black, densely dashed] coordinates {(0, -0.35063866) (30, -0.35063866)};
-            % \addplot[black, densely dashed] coordinates {(0, 0.59612922) (30, 0.59612922)};
-            % \addplot[black, densely dashed] coordinates {(0, -1.45286396) (30, -1.45286396)};
-        \end{axis}
-    \end{tikzpicture}
+    %     \begin{axis}[
+    %         ymin=-2, ymax=2, 
+    %         xlabel={Time (ms)}, 
+    %         ylabel={Kick drum}, 
+    %         width=\textwidth, 
+    %         height=4cm, 
+    %         yshift=-4cm,
+    %         ytick={-1, 1},
+    %         yticklabels={R,L},
+    %     ]
+    %         \addplot[black] table {figures/kick_L.dat};
+    %         \addplot[black] table {figures/kick_R.dat};
+    %         % \addplot[black, densely dotted] coordinates {(12.10884354, 2) (12.10884354, -2)};
+    %         % \addplot[black, densely dotted] coordinates {(12.87981859, 2) (12.87981859, -2)};
+    %         % \addplot[black, densely dashed] coordinates {(0, 1.57802927) (30, 1.57802927)};
+    %         % \addplot[black, densely dashed] coordinates {(0, -0.35063866) (30, -0.35063866)};
+    %         % \addplot[black, densely dashed] coordinates {(0, 0.59612922) (30, 0.59612922)};
+    %         % \addplot[black, densely dashed] coordinates {(0, -1.45286396) (30, -1.45286396)};
+    %     \end{axis}
+    % \end{tikzpicture}
     \caption{Example sounds coming from the right-hand side, recorded binaurally. High-frequency content (above) has a large \gls{ild} and ambiguous \gls{ipd}, whereas low-frequency content (below) has negligible \gls{ild}, but an interpretable \gls{ipd}.}
     \label{fig:example_pan}
 \end{figure}
@@ -502,7 +524,7 @@ Another frequently used technique is \q{binaural panning}, which assigns combina
 
 In traditional recording studio setups, the recording engineer or producer will use one or more microphones to capture an original sound source. These singular sound sources are commonly called \q{stems}. During the production process, the stems may be panned to create a sense of space in the final mix. In the case that the stem was recorded using two microphones, the stem would be called a \q{stereo stem}, and the term \q{panning} is usually replaced by \q{balance}, and only amplitude panning (as opposed to time or binaural panning) would be applied.
 
-Amplitude panning is the most common panning technique is traditional music production \cite{shelvockHearingYourAudience2020}. It is associated with so-called \q{panning laws}, which govern how the amplitude is changed in each channel according the desired pan position \cite{izhakiPanning2023}. One example is the \q{energy-preserving pan law} (sometimes called the \mbox{\q{-3dB pan law}}) in which the squared sum of the channel gains always equals 1. The gains of the left and right channel are calculated by $g_L=\cos(\frac{\pi}{2}a)$ and $g_R=\sin(\frac{\pi}{2}a)$ respectively where $a$ is the panning position in the range $[0,1]$. \Cref{fig:equal_power_panning} shows how the channel gains relate to the panning position. The total perceived loudness will be equal at all panning positions.
+Amplitude panning is the most common panning technique in traditional music production \cite{shelvockHearingYourAudience2020}. It is associated with so-called \q{panning laws}, which govern how the amplitude is changed in each channel according the desired pan position \cite{izhakiPanning2023}. One example is the \q{energy-preserving pan law} (sometimes called the \mbox{\q{-3dB pan law}}) in which the squared sum of the channel gains always equals 1. The gains of the left and right channel are calculated by $g_L=\cos(\frac{\pi}{2}a)$ and $g_R=\sin(\frac{\pi}{2}a)$ respectively where $a$ is the panning position in the range $[0,1]$. \Cref{fig:equal_power_panning} shows how the channel gains relate to the panning position. The total perceived loudness will be equal at all panning positions.
 
 \begin{figure}[htb]
     \centering
@@ -688,7 +710,7 @@ This is illustrated by \Cref{fig:nyquist}, which shows the sampling of three wav
 
 \section{Time-Frequency representation of audio}
 
-In order to perform many types of audio analysis, the audio signal can be converted from the time domain into the \gls{tf} domain. In perceptual acoustics research there are several common forms of \gls{tf} representation, each with its own nuances. This section provides those details.
+In order to perform many types of audio analysis, the audio signal can be converted from the time domain into the \gls{tf} domain. In perceptual acoustics research there are several common forms of \gls{tf} representation, each with its own nuances. This section provides those details and \Cref{fig:spect_comp} shows a visual comparison of all spectrogram types.
 
 \subsection{\gls{stft} spectrogram}
 
@@ -706,7 +728,7 @@ One major drawback of the \gls{stft} spectrogram is that the frequency bins are 
 \begin{figure}[htb]
     \centering
     \begin{tikzpicture}
-        \begin{groupplot}[group style = {group size=2 by 1, horizontal sep=6pt},width=0.5\textwidth, height=4cm]
+        \begin{groupplot}[group style = {group size=2 by 1, horizontal sep=6pt},width=0.5\textwidth, height=5cm]
             \nextgroupplot[
                 xmode=linear,
                 scaled x ticks=false,
@@ -751,12 +773,19 @@ One major drawback of the \gls{stft} spectrogram is that the frequency bins are 
 
 \subsection{Cochleagram}
 
-As an alternative to the two spectrogram representations, a cochleagram aims to make a \gls{tf} representation that models the acoustic response of the human cochlea more closely. To that end, all processing is performed in the time domain and is sometimes referred to as a \q{peripheral ear model}. Several examples appear in the literature \cite{boddenBinauralModelingAuditory1995,choiObjectiveMeasurementPerceived2008,delgadoDesignChoicesBinaural2023}. In the classical method \cite{boddenBinauralModelingAuditory1995} the original signal is first processed by a bank of time-domain gammatone filters with their centre frequencies placed according to a perceptual scale and each sub-band is subsequently processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patterns of the cilia and basilar membrane. Each time-domain signal is then divided into overlapping time segments. The amplitude of each \gls{tf} segment can then be calculated as the mean of all values its values, forming one pixel in the cochleagram. \Cref{fig:spect_comp} shows a comparison of all spectrogram types. 
+As an alternative to the two spectrogram representations, a cochleagram aims to make a \gls{tf} representation that models the acoustic response of the human cochlea more closely. To that end, all processing is performed in the time domain and is sometimes referred to as a \q{peripheral ear model}. Several examples appear in the literature \cite{boddenBinauralModelingAuditory1995,choiObjectiveMeasurementPerceived2008,delgadoDesignChoicesBinaural2023}. In the classical method \cite{boddenBinauralModelingAuditory1995} the original signal is first processed by a bank of time-domain gammatone filters with their centre frequencies placed according to a perceptual scale (such as the \gls{erb} scale \cite{smithiiiEquivalentRectangularBandwidth2020}), as shown in \cref{fig:gammatone_filters}. Each sub-band is subsequently processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patterns of the cilia and basilar membrane. Each time-domain signal is then divided into overlapping time segments. The amplitude of each \gls{tf} segment can then be calculated as the mean of all its values, forming one pixel in the cochleagram.
+
+\begin{figure}[htb]
+    \centering
+    \input{figures/gammatone.tikz}
+    \caption{Example gammatone filterbank with individual filters spaced equally on the \gls{erb} scale. The filters are \gls{iir} and are applied to audio signals in the time domain.}
+    \label{fig:gammatone_filters}
+\end{figure}
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.8\textwidth]{figures/spect_comp.pdf}
-    \caption{An example audio signal displayed as \gls{stft} spectrogram (above), Mel spectrogram (mid), and cochleagram (below).}
+    \caption{An example audio signal displayed as \gls{stft} spectrogram (above), Mel spectrogram (mid), and cochleagram (below). The spectrogram frequency bands are spaced linearly between 0Hz and the Nyquist frequency, which is not coherent with human perception. The Mel spectrogram is created from the original spectrogram based on linear combinations of its frequency bands and has more detail in lower frequencies than higher frequencies. The Cochleagram is created directly from time domain audio by mimicking the physical response of the human ear. In all cases the pixel colour represent the sound intensity of the given \gls{tf} bin in decibels.}
     \label{fig:spect_comp}
 \end{figure}
 

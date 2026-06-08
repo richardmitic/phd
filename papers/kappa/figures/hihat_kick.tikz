@@ -1,0 +1,41 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        ymin=-2, 
+        ymax=2, 
+        xlabel={Time (ms)}, 
+        ylabel={Hi-hat}, 
+        width=\textwidth, 
+        height=4cm,
+        ytick={-1, 1},
+        yticklabels={R,L},
+    ]
+        \addplot[black] table {hihat_L.dat};
+        \addplot[black] table {hihat_R.dat};
+        % \addplot[black, densely dotted] coordinates {(2.10884354, 2) (2.10884354, -2)};
+        % \addplot[black, densely dotted] coordinates {(2.60770975, 2) (2.60770975, -2)};
+        % \addplot[black, densely dashed] coordinates {(0, 1.08935796) (30, 1.08935796)};
+        % \addplot[black, densely dashed] coordinates {(0, 0.02603853) (30, 0.02603853)};
+        % \addplot[black, densely dashed] coordinates {(0, 0.91115176) (30, 0.91115176)};
+        % \addplot[black, densely dashed] coordinates {(0, -1.89440977) (30, -1.89440977)};
+    \end{axis}
+
+    \begin{axis}[
+        ymin=-2, ymax=2, 
+        xlabel={Time (ms)}, 
+        ylabel={Kick drum}, 
+        width=\textwidth, 
+        height=4cm, 
+        yshift=-4cm,
+        ytick={-1, 1},
+        yticklabels={R,L},
+    ]
+        \addplot[black] table {kick_L.dat};
+        \addplot[black] table {kick_R.dat};
+        % \addplot[black, densely dotted] coordinates {(12.10884354, 2) (12.10884354, -2)};
+        % \addplot[black, densely dotted] coordinates {(12.87981859, 2) (12.87981859, -2)};
+        % \addplot[black, densely dashed] coordinates {(0, 1.57802927) (30, 1.57802927)};
+        % \addplot[black, densely dashed] coordinates {(0, -0.35063866) (30, -0.35063866)};
+        % \addplot[black, densely dashed] coordinates {(0, 0.59612922) (30, 0.59612922)};
+        % \addplot[black, densely dashed] coordinates {(0, -1.45286396) (30, -1.45286396)};
+    \end{axis}
+\end{tikzpicture}
