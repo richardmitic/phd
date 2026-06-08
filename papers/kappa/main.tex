@@ -168,6 +168,7 @@ Spatial information is crucial to the listener's experience of music, and stereo
 \mainmatter
 
 \chapter{Introduction}
+\label{sec:intro}
 
 It is a widely accepted truth in the world of music production and recording that spatial information in audio is crucial to  listeners' sense of immersion and connection with the music. To capture that spatiality, stereophonic recording and reproduction has been the standard format since it gained popularity in the 1950s \cite{lanierHIFITWOCHANNELCOMMOTION1957}. The spatial analysis of subsequent decades worth of stereo recordings presents a unique opportunity to study human musicality, as each recording reflects and encodes the creative choices made by the musicians and recordists involved.
 
@@ -190,21 +191,25 @@ The underlying purpose of the research documented in this thesis relates to \gls
 Given the aforementioned context, the overarching \gls{rq} can be formed as:
 
 \vspace{1em}
-\noindent \textit{How do music producers use stereo field?}
+\noindent \hspace{4em} \textit{How do music producers use stereo field?}
 \vspace{1em}
 
-\noindent ...which can be broken into several smaller problems:
+The basis of the research is the modern datasets and computing techniques mentioned in \cref{sec:intro} since the number and variety of tracks available for analysis makes them a decent representation of music producers in general. The spatial aspects of each track can be analysed individually using traditional \gls{dsp} techniques and a population-level analysis can be performed on the spatial features of all tracks together. Thus, I have broken down the main \gls{rq} into two smaller ones:
 
 \vspace{1em}
-\begin{enumerate}
+\begin{enumerate}[
+    leftmargin=4em,
+    rightmargin=4em,
+    itemsep=0.618em
+]
 \item[$RQ_1$:] \textit{How does the stereo image of a recording relate to real-world musical knowledge?} \label{rq:usecase}
-\item[$RQ_2$:] \textit{What methods can be used to describe the stereo image of music recording?} \label{rq:methods}
+\item[$RQ_2$:] \textit{What methods can be used to describe the stereo image of a music recording?} \label{rq:methods}
 \end{enumerate}
 \vspace{1em}
-One could argue that the overarching question might be answered by interviewing music producers, but this would quickly run into a problem of scale. The two smaller \glspl{rq} were therefore designed to allow the overarching question to be answered by objective analysis on musical recordings (which are abundant nowadays).
+
 
 \section{Research contributions}
-This section presents a summary of the research contributions achieved by the 4 included papers, and explains their relationship to the \glspl{rq}.
+This section presents a summary of the research contributions achieved by the 4 included papers and explains their relationship to the \glspl{rq}.
 
 \subsection{An understanding of the musical uses of stereo field}
 The design and execution of the Auxtrument led to a direct understanding of how a musical can use stereo field to convey a message that would otherwise be difficult to communicate. With respect to the overarching research question, the act of creating musical output gives a small window into how a music producer might use stereo field. Paper \ref{paper:auxtrument} was a retrospective account of the process of building the Auxtrument, which additionally provides a technical contribution to any musicians wishing to make a similar performance in the future. The paper also provided suggestions for future iterations of Auxtrument-style instruments and the standardized \glspl{api} which are built into web browsers, providing a basis for future work.
