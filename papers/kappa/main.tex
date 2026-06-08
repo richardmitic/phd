@@ -366,56 +366,9 @@ Put simply, humans are able to perceive the incoming direction of a sound by obs
 
 The relative importance of \gls{ild} and \gls{itd} differ depending on the frequency of the incoming sound. The reasons for this are twofold. Firstly, a person's inter-aural distance (the physical distance between their ears) must be longer than the wavelength of the incoming sound wave in order for them to detect the phase difference between wave peaks. In this case, it is often refered to as \gls{ipd}, which accounts for the centre frequency of the critical band. Secondly the cilia that line the basilar membrane inside the cochlea can only detect the fine structure of a sound wave up until roughly 1.6kHz \cite{lindemannEvaluationInterauralSignal1982}. \citeauthor{lindemannEvaluationInterauralSignal1982} gives a rule of thumb that time differences of less than 7.5ms are heard as a single auditory event (for which direction could be inferred), and delays above 21ms are heard as uncorrelated events. Hence, at 1.6kHz and below \gls{itd} is more important, whereas above 1.6kHz \gls{ild} is more important. Furthermore, \citeauthor{blauertSpatialHearingOne1996}'s subsequent work found firstly that both \gls{ild} and \gls{itd} are relevant within the frequency band surrounding 1.6kHz, and secondly that the angle of incidence of the sound wave plays a role in how the cues are perceived \cite{blauertSpatialHearingOne1996}. Despite this, Lindemann's rules of thumb are still broadly accepted, even being encoded into international standards such as \cite{iso-11172-3:mpeg_audio}. As an example, \cref{fig:example_pan} shows two recordings (a high-frequency hi-hat and a low-frequency kick drum) that originate from the right-hand side of a listener. The high-frequency hi-hat has a large \gls{ild} and ambiguous \gls{ipd}, whereas the low-frequency kick drum has negligible \gls{ild}, but an interpretable \gls{ipd}.
 
-% \begin{figure}[htb]
-%     \centering
-%     \includegraphics[height=0.3\textheight]{figures/example_pan.png}
-%     \caption{Example sounds that come the right-hand side.}
-%     \label{fig:example_pan}
-% \end{figure}
 
 \begin{figure}[htb]
     \input{figures/hihat_kick.tikz}
-    % \begin{tikzpicture}
-    %     \begin{axis}[
-    %         ymin=-2, 
-    %         ymax=2, 
-    %         xlabel={Time (ms)}, 
-    %         ylabel={Hi-hat}, 
-    %         width=\textwidth, 
-    %         height=4cm,
-    %         ytick={-1, 1},
-    %         yticklabels={R,L},
-    %     ]
-    %         \addplot[black] table {figures/hihat_L.dat};
-    %         \addplot[black] table {figures/hihat_R.dat};
-    %         % \addplot[black, densely dotted] coordinates {(2.10884354, 2) (2.10884354, -2)};
-    %         % \addplot[black, densely dotted] coordinates {(2.60770975, 2) (2.60770975, -2)};
-    %         % \addplot[black, densely dashed] coordinates {(0, 1.08935796) (30, 1.08935796)};
-    %         % \addplot[black, densely dashed] coordinates {(0, 0.02603853) (30, 0.02603853)};
-    %         % \addplot[black, densely dashed] coordinates {(0, 0.91115176) (30, 0.91115176)};
-    %         % \addplot[black, densely dashed] coordinates {(0, -1.89440977) (30, -1.89440977)};
-    %     \end{axis}
-
-    %     \begin{axis}[
-    %         ymin=-2, ymax=2, 
-    %         xlabel={Time (ms)}, 
-    %         ylabel={Kick drum}, 
-    %         width=\textwidth, 
-    %         height=4cm, 
-    %         yshift=-4cm,
-    %         ytick={-1, 1},
-    %         yticklabels={R,L},
-    %     ]
-    %         \addplot[black] table {figures/kick_L.dat};
-    %         \addplot[black] table {figures/kick_R.dat};
-    %         % \addplot[black, densely dotted] coordinates {(12.10884354, 2) (12.10884354, -2)};
-    %         % \addplot[black, densely dotted] coordinates {(12.87981859, 2) (12.87981859, -2)};
-    %         % \addplot[black, densely dashed] coordinates {(0, 1.57802927) (30, 1.57802927)};
-    %         % \addplot[black, densely dashed] coordinates {(0, -0.35063866) (30, -0.35063866)};
-    %         % \addplot[black, densely dashed] coordinates {(0, 0.59612922) (30, 0.59612922)};
-    %         % \addplot[black, densely dashed] coordinates {(0, -1.45286396) (30, -1.45286396)};
-    %     \end{axis}
-    % \end{tikzpicture}
     \caption{Example sounds coming from the right-hand side, recorded binaurally. High-frequency content (above) has a large \gls{ild} and ambiguous \gls{ipd}, whereas low-frequency content (below) has negligible \gls{ild}, but an interpretable \gls{ipd}.}
     \label{fig:example_pan}
 \end{figure}
@@ -784,7 +737,7 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/spect_comp.pdf}
+    \includegraphics[width=\textwidth]{figures/spect_comp.pdf}
     \caption{An example audio signal displayed as \gls{stft} spectrogram (above), Mel spectrogram (mid), and cochleagram (below). The spectrogram frequency bands are spaced linearly between 0Hz and the Nyquist frequency, which is not coherent with human perception. The Mel spectrogram is created from the original spectrogram based on linear combinations of its frequency bands and has more detail in lower frequencies than higher frequencies. The Cochleagram is created directly from time domain audio by mimicking the physical response of the human ear. In all cases the pixel colour represent the sound intensity of the given \gls{tf} bin in decibels.}
     \label{fig:spect_comp}
 \end{figure}
