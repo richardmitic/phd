@@ -1,8 +1,8 @@
 \documentclass{UUThesisTemplate}
 
-\usepackage{csquotes}
-\usepackage{hyperref}
 \usepackage[british]{babel}
+\usepackage{hyperref}
+\usepackage[autostyle]{csquotes}
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{subfiles}
@@ -58,8 +58,6 @@
 %% Macros
 \newcommand{\citeauthorandnumber}[1]{\citeauthor{#1} \cite{#1}}
 \newcommand{\q}[1]{\enquote{#1}}
-% \newcommand{\rqa}{\gls{rq}\ref{rq:usecase}}
-% \newcommand{\rqb}{\gls{rq}\ref{rq:methods}}
 \newcommand{\rqa}{\hyperref[rq:usecase]{$RQ_1$}}
 \newcommand{\rqb}{\hyperref[rq:methods]{$RQ_2$}}
 
@@ -211,12 +209,12 @@ These concrete questions are addressed through the four papers included in this 
 
 
 \section{Research contributions}
-This section presents a summary of the research contributions achieved by the 4 included papers and explains their relationship to the \glspl{rq}.
+This section presents a summary of the research contributions achieved by the 4 included papers and explains their relationship to the \glspl{rq}. Many parts of the research required spatial descriptors to be extracted from raw audio signals. We implemented a software tool named \textit{\q{Orkester}} to facilitate this, allowing all the research tracks to be linked by a common mathematical framework.
 
 \subsection{An understanding of the musical uses of stereo field}
-The design and execution of the Auxtrument led to a direct understanding of how a musical can use stereo field to convey a message that would otherwise be difficult to communicate. With respect to the overarching research question, the act of creating musical output gives a small window into how a music producer might use stereo field. Paper \ref{paper:auxtrument} was a retrospective account of the process of building the Auxtrument, which additionally provides a technical contribution to any musicians wishing to make a similar performance in the future. The paper also provided suggestions for future iterations of Auxtrument-style instruments and the standardized \glspl{api} which are built into web browsers, providing a basis for future work.
+With respect to the overarching research question, the act of personally creating musical output gives an insight into how music producers in general might use stereo field. We initially embarked on such a project, using audio from a remotely-located stereo microphone as the primary sonic material in a set of musical performances. Paper \ref{paper:auxtrument} was a retrospective account of the process, providing technical information to any musicians wishing to make a similar performance in the future. The paper also provided suggestions for future iterations of similar instruments and the standardized \glspl{api} which are built into web browsers, giving a basis for future work.
 
-The Orkester framework and software library presented the opportunity to apply a more technical approach to \rqa. The exploration of stereo field in existing recordings furthered the knowledge gained from an individual musical project by allowing us to analytically compare stereo fields created by many producers. This allowed us to establish an understanding of the range and variation that stereo field can embody.
+The Orkester software library presented the opportunity to apply a more technical approach to \rqa. The exploration of stereo field in existing recordings furthered the knowledge gained from an individual musical project by allowing us to analytically compare stereo fields created by many producers. This allowed us to establish an understanding of the range and variation that stereo field can embody.
 
 \subsection{Signal processing techniques relating to stereo field}
 The work on Orkester and the resulting paper \ref{paper:dafx} contribute an understanding of how some established techniques for measuring stereo field react to existing recorded music. Moreover, the understanding is not limited to the techniques specified in paper \ref{paper:dafx} since the development of Orkester involved a small-scale literature search and subsequent implementation of many other techniques, not just those that were eventually included in the paper. 
