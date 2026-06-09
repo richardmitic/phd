@@ -3,9 +3,6 @@ from numpy.typing import NDArray
 
 TFRegion = NDArray[np.complex128] # shape (channels, time, frequency)
 
-def expectation(x: NDArray) -> NDArray:
-    return x
-
 def cross_correlation(Xi: TFRegion, Xj: TFRegion, lamb: float) -> TFRegion:
     assert Xi.dtype == Xj.dtype == np.complex128
     sigma_ij = np.zeros_like(Xi)
@@ -32,5 +29,5 @@ def panning_index(X: TFRegion) -> TFRegion:
     psi_1 = np.abs(psi_12) / psi_11
     psi_2 = np.abs(psi_12) / psi_22
     delta_hat = np.sign(psi_1 - psi_2)
-    print(psi_12.dtype, psi.dtype, psi_1.dtype, psi_2.dtype)
+    # print(psi_12.dtype, psi.dtype, psi_1.dtype, psi_2.dtype)
     return (1 - psi) * delta_hat

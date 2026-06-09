@@ -1,0 +1,12 @@
+import numpy as np
+from numpy.typing import NDArray
+import pyfar as pf
+
+AudioRegion = NDArray[np.float64] # shape (channel, time)
+AudioChunks = NDArray[np.float64] # shape (channel, chunk, time)
+
+def chunked(audio: pf.Signal | AudioRegion, chunk_size: int, hop_size: int) -> AudioChunks:
+    # numpy black magic :)
+    if isinstance(audio, pf.Signal):
+        audio = audio.time
+    return np.lib.stride_tricks.sliding_window_view(audio, chunk_size, axis=1)[:, ::hop_size, :]
