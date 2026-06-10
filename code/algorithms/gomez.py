@@ -1,14 +1,15 @@
 import numpy as np
 from numpy.typing import NDArray, ArrayLike
 
-TFRegion = NDArray[np.complex128] # shape (channels, time, frequency)
+from .common import TFRegion
+
 SPSRegion = NDArray[np.complex128] # shape (time, frequency)
 HistogramRegion = NDArray[np.float64] # shape (azimuth, time)
 Histogram = NDArray[np.float64] # shape (azimuth)
 
 def panning_spectrum(S: TFRegion) -> SPSRegion:
     Sl, Sr = S[0], S[1]
-    return (2 / np.pi) * np.arctan(np.abs(Sl / Sr))
+    return (2 / np.pi) * np.arctan(np.abs(Sr / Sl))
 
 def perceptual_warp(x: ArrayLike) -> ArrayLike:
     return np.piecewise(

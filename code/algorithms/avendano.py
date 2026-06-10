@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.typing import NDArray
 
-TFRegion = NDArray[np.complex128] # shape (channels, time, frequency)
+from common import TFRegion
 
 def cross_correlation(Xi: TFRegion, Xj: TFRegion, lamb: float) -> TFRegion:
     assert Xi.dtype == Xj.dtype == np.complex128
