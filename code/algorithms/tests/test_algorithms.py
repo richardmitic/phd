@@ -31,8 +31,9 @@ def _debug_ph(ph):
 def _debug_img(img):
     import matplotlib.pyplot as plt
     fig, ax = plt.subplots(2,1)
-    ax[0].imshow(img[0], aspect='auto')
-    ax[1].imshow(img[1], aspect='auto')
+    vmin, vmax = np.min(img), np.max(img)
+    ax[0].imshow(img[0], aspect='auto', vmin=vmin, vmax=vmax)
+    ax[1].imshow(img[1], aspect='auto', vmin=vmin, vmax=vmax)
     plt.show()
 
 def test_gomez_ph(test_spectrogram: TFRegion):
@@ -49,9 +50,19 @@ def test_sarroff_ph(test_spectrogram: TFRegion):
     # Peak panning is somewhere near the middle, but not necessarily the centre bin
     assert 14 <= np.argmax(ph) <= 16
 
-def test_cochleagram(test_audio: pf.Signal):
-    coch = tardieu.cochleagram(test_audio, 0.02, 0.01, 32)
-    _debug_img(coch)
+def test_cochleagram():
+    left = pf.signals.sine(100., 44100 * 5)
+    right = pf.signals.sine(1000., 44100 * 5)
+    signal = pf.Signal(np.stack([left.time[0], right.time[0] * 0.5]), sampling_rate=left.sampling_rate)
+    coch = tardieu.cochleagram(signal, 0.02, 0.01, 32)
+    # _debug_img(coch)
+    assert coch.shape[:2] == (2,32)
+    # lowest frequency band in the left channel should be the highest amplitude
+    assert (np.argmax(coch, axis=1)[0] == 31).all()
+    # A different frequency band in the right channel should be the highest amplitude
+    assert (np.argmax(coch, axis=1)[1] == 21).all()
+    # Left should be louder than right
+    assert np.max(coch[0]) > np.max(coch[1])
 
 def test_chunks_stereo():
     audio = np.arange(12).reshape(2,-1)
