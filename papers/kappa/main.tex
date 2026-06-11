@@ -391,24 +391,26 @@ The relative importance of \gls{ild} and \gls{itd} differ depending on the frequ
     \label{fig:example_pan}
 \end{figure}
 
-\section{Loudness perception}
-Humans perceive the loudness of sound, not in terms of the absolute amplitude of the sound wave, but the \textit{power} of the sound wave. Mathematically speaking, perceived loudness is proportional to the \gls{rms} \gls{spl} raised to an exponent \cite{mooreIntroductionPsychologyHearing2013}. Observing that the calculation of \gls{rms} naturally involves taking the square of the original time function (see \cref{eq:rms_cont,eq:rms_disc} for the continuous and discrete forms respectively), it follows multiplication of a signal by $\sqrt{2}$ will result in double perceived loudness. Conversely, multiplying a signal by $\frac{1}{\sqrt{2}}$ will halve the perceived loudness.
+\subsection{Loudness perception}
+While we have established that the \gls{ild} is a key factor of directional hearing, a more detailed understanding of the link between perceived loudness and sound wave intensity is necessary for musical applications.
+
+We perceive the loudness of sound, not in terms of the absolute amplitude of the sound wave, but the \textit{power} of the sound wave. Mathematically speaking, perceived loudness is proportional to the \gls{rms} \gls{spl} raised to an exponent \cite{mooreIntroductionPsychologyHearing2013}. Observing that the calculation of \gls{rms} naturally involves taking the square of the original time function (see \cref{eq:rms_cont,eq:rms_disc} for the continuous and discrete forms respectively), it follows multiplication of a signal by $\sqrt{2}$ will result in double perceived loudness. Conversely, multiplying a signal by $\frac{1}{\sqrt{2}}$ will halve the perceived loudness.
 
 \begin{align}
     f_{RMS}(t) &= \sqrt{\frac{1}{T_2 - T_1} \int_{T_1}^{T_2}[f(t)^2]dt} \label{eq:rms_cont}\\
     f_{RMS}[n] &= \sqrt{\frac{1}{N}\sum_{n=0}^{N}f[n]} \label{eq:rms_disc}
 \end{align}
 
+This basic rule is relevant when two sounds are mixed in music production. It defines a precise, mathematical relationship between perceived loudness and the amplification applied by the production equipment or software.
 
-\section{Panning}
+\section{Music production}
+\label{sec:music_production}
+
+The principles of our auditory perception can be exploited for creative use, and audio practitioners have done so since the 1930s. Early stereophony came from the world of cinema, with sound technicians adding multiple speakers to enable spatial effects\footnote{A typical use case was to match the origin of a voice with the actor's location on the screen.}. Eventually migrating into the music industry, stereophonic recording became the norm in the 1950s \cite{izhakiPanning2023,AbbeyRoadOurStory}. While both cinema and music practitioners have long known that using two speakers for reproduction enabled spatial effects, knowledge of how to \textit{control} those effects came with the psychoacoustic understanding mentioned in \cref{sec:hearing}. 
+
+\subsection{Panning}
+\label{sec:panning}
 The concepts of directional hearing are applied in music production to make sound sources appear as though they originate from a specific direction or position, often referred to as the \q{phantom position}. In recording studio vernacular, this is call \q{panning}. In accordance with the two signal differences a that humans are able to detect, there are also two basic types of panning -- amplitude panning and time panning. By way of example, \cref{fig:phantom_amplitude} shows how the phantom position can be moved anywhere in between the speakers that are reproducing the sound by applying different amplitude gains to the left and right channel of a stereo recording.
-
-% \begin{figure}[htb]
-%     \centering
-%     \includegraphics[width=0.5\textwidth]{figures/phantom_position_amplitude.pdf}
-%     \caption{Illustration of a phantom position created by amplitude panning.}
-%     \label{fig:phantom_amplitude}
-% \end{figure}
 
 \begin{figure}[htb]
     \centering
@@ -527,7 +529,7 @@ Amplitude panning is the most common panning technique in traditional music prod
     \label{fig:equal_power_panning}
 \end{figure}
 
-\section{Stereo image}
+\subsection{Stereo image}
 The term \q{stereo image} is used to describe the overall distribution of sound across the horizontal plane after panning and any other production techniques have been applied. One may also use terms like \q{stereo field}, \q{soundstage}, or \q{panorama}, which all refer to the same thing.  They are usually used in qualitative descriptions such as \q{big}, \q{wide}, and \q{ambient} rather than quantitative measures \cite{owsinskiMixingEngineersHandbook2006}. When mixing a musical recording, a producer will pan individual stems to their desired position within the stereo image. Those stems which are recorded in stereo in fact have their own stereo image, which can also be controlled by the producer. The combination of all stems into a final stereo mix, constitutes the overall stereo image. 
 
 \Cref{fig:stereo_image} shows a simple example stereo image, as perceived by the producer. It contains two mono stems -- vocals and violin, and one stereo stem -- piano. There are some common tropes seen throughout many productions, some of which are shown in the diagram. Firstly, vocals are recorded in mono and panned to the centre. Secondly, since the piano is panned slightly left, the violin is panned roughly the same amount to the right in order to achieve a balanced mix. Thirdly, all stems are placed in the stereo image in a way that emulates a natural performance on a stage, and to avoid separate instruments masking each other. Note that while these practices are typical, they are purely an artistic choice on behalf of the producer \cite{owsinskiMixingEngineersHandbook2006}; Recordings breaking the trend are not difficult to find.
@@ -583,7 +585,7 @@ The term \q{stereo image} is used to describe the overall distribution of sound 
 
 Describing the stereo image of a recording has its roots in the acoustics domain, in which typical use cases are the analysis of concert halls and music reproduction systems. In these cases, the previously mentioned low-level spatial cues typically form the basis of the analysis. \Citeauthor{bergSystematicEvaluationPerceived2003} \cite{bergSystematicEvaluationPerceived2003} give a long list of typical perceptual measures that can be derived from the low-level cues, although later literature has focused on the measures of \gls{asw} and \gls{lev}. However, as stated by \citeauthor{sarroffComputationalModelPerceived2011} \cite{sarroffComputationalModelPerceived2011}, the task of describing the spatial aspects of recorded music is inherently different to that of acoustical signals since said recordings may exhibit spatial aspects that cannot occur in physical acoustic space.
 
-\section{Music production}
+\subsection{Production software}
 A typical setup for a music producer is to use a \gls{daw} - graphical software that allows them to record and edit audio. There are many different \glspl{daw} available, but one such example (Reaper) is shown in \cref{fig:daw}. In particular, it shows a single recorded audio track which has it's panning automated. It also contains a single effects track which applies a stereo reverb effect to the recorded audio. This effects track has its \q{dry/wet} mix parameter automated, which controls the ratio of non-processed to processed sound. In a more complete recording session, the \gls{daw} would contain many more audio and effects tracks, each with their own panning control.
 
 The assessment of how the two stereo channels interact is of prime importance when producing music, and quality issues that occur when the stereophonic recordings are mixed down into a monophonic signal for reproduction have been documented well before the advent of digital recording \cite{harveyCompatibilityProblemsTwochannel1962}. In more modern production, \gls{daw} plugins are generally used to visualize and assess the stereo qualities of the final mix \cite{bitzerSpatialDistributionMeter2007,ziemerGoniometersArePowerful2023}. \Cref{fig:goniometer} shows one example - the ToneBoosters Goniometer plugin \cite{ToneBoostersAudioPlugins}. It is designed to replicate an analogue goniometer, which, taking two voltage signals as input, displays them on a 2D axis such that a music producer might be able to discern the correlation between the signals.
@@ -606,6 +608,8 @@ In a large \gls{daw} session containing many tracks, the producer will make arti
     \end{subfigure}
     \caption{Screenshots of example music production tools}
 \end{figure}
+
+
 
 \section{Digital audio signals}
 When a sound wave is converted into an electrical signal by a microphone, it can be considered to be operating in continuous time. To convert the analogue signal into a digital one, it is sampled at regular intervals. The sampling frequency ($f_s$) is related to the sampling interval ($\Delta$) by the relationship $\Delta = \frac{1}{f_s}$.
