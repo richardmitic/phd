@@ -232,16 +232,29 @@ Paper \ref{paper:dafx} also presented a good opportunity to assess the computati
 \chapter{Background}
 \label{ch:background}
 
-This chapter provides the fundamental background knowledge that underpins the work included in the thesis. It covers human hearing, music creation processes, and digital audio signal theory.
+This chapter provides the fundamental background knowledge that underpins the work included in the thesis. 
 
-\section{The mechanics of human hearing}
+Music production techniques related to stereo field are thoroughly rooted in the human perception of sounds, exploiting well-understood auditory phenomena for creative means. However, that understanding is a fairly recent development. In fact, musical practice involving stereophonic sound predated the scientific knowledge of perception by several decades, with one of the earliest known examples dating back the late 19th century \cite{munnTelephoneParisOpera1881}. It wasn't until mid 20th century that the work of \citeauthorandnumber{fletcherLoudnessItsDefinition1933} and \citeauthorandnumber{jeffressPlaceTheorySound1948} outlined the psychoacoustic principles that music production would eventually exploit. In this chapter we draw a line from the basic human physiology of the auditory system, through psychoacoustics, \gls{dsp} theory, and music production, eventually linking them all to the modern computing techniques used as the basis for the work detailed in this thesis. 
+
+\section{The mechanics of hearing and auditory perception}
 \label{sec:hearing}
 
-\citeauthor{lindsayHumanInformationProcessing1972}'s book \citetitle{lindsayHumanInformationProcessing1972} \cite{lindsayHumanInformationProcessing1972} gives a detailed description of how the human ear is constructed and how it enables us to hear. The relevant parts are summarized below.
+The physical characteristics of the human auditory system govern what we as humans are able to perceive. In particular, our perception of frequency, loudness, and directionality are key when assessing stereo field. 
 
-The ear contains three major sections, loosely labelled the \q{outer}, \q{middle}, and \q{inner} ear. When air vibrations (i.e. sound waves) flow into the outer ear, mechanical coupling in the middle ear transmits vibrations to the cochlea -- the major organ of the inner ear. The cochlea is a conical tube which is coiled up into a spiral, filled with an incompressible fluid, and covered on either end by a membrane. Through the centre of the tube runs the basilar membrane, which is a covered in hairs named cilia. When vibrations are mechanically transmitted to the base of the cochlea, the internal fluid responds by transmitting those vibrations to the basilar membrane, and the cilia will bend and twist accordingly. The cilia are linked to nerve fibres, and will initiate electrical pulses when manipulated. These electrical pulses are sent to the brain and interpreted as sounds.
+% \citeauthor{lindsayHumanInformationProcessing1972}'s book \citetitle{lindsayHumanInformationProcessing1972} \cite{lindsayHumanInformationProcessing1972} gives a detailed description of how the human ear is constructed and how it enables us to hear. The relevant parts are summarized below.
 
-Along the length of the cochlea, the cilia have different \q{critical frequencies} that they respond to. The critical frequency increases logarithmically as one moves from the base (the widest section) to the apex (the narrowest section) of the cochlea. The cochlea therefore acts to convert time-domain sound waves into time- and frequency-dependent electrical excitations, thereby allowing humans to perceive different frequencies simultaneously. \Cref{fig:cochlea} shows a tonotopic diagram of the cochlea.
+\subsection{Physiology of the inner ear}
+\label{sec:inner_ear}
+
+The ear contains three major sections, loosely labelled the \q{outer}, \q{middle}, and \q{inner} ear. When air vibrations (i.e. sound waves) flow into the outer ear, mechanical coupling in the middle ear transmits vibrations to the cochlea -- the major organ of the inner ear. The cochlea is a conical tube which is coiled up into a spiral, filled with an incompressible fluid, and covered on either end by a membrane. Through the centre of the tube runs the basilar membrane, which is a covered in hairs named cilia. When vibrations are mechanically transmitted to the base of the cochlea, the internal fluid responds by transmitting those vibrations to the basilar membrane, and the cilia will bend and twist accordingly. The cilia are linked to nerve fibres, and will initiate electrical pulses when manipulated. These electrical pulses are sent to the brain and interpreted as sounds \cite{lindsayHumanInformationProcessing1972}.
+
+\fxwarning{Might be good to have a picture of the whole ear showing the three sections}
+
+The basilar membrane reacts to a pressure wave from an incoming sound in an elastic way, with a buldge travelling from the base (the widest section) to the apex (the narrowest section). That buldge will change amplitude as it travels due to the basilar membrane's non-uniform width and stiffness, and the distance at which is reaches its maximum amplitude depends on the frequency of the incoming sound. Thus, the cilia at different positions along the cochlea have different \q{critical frequencies} that they respond to. The critical frequency increases logarithmically as one moves from the base to the apex. The cochlea therefore acts to convert time-domain sound waves into time- and frequency-dependent electrical excitations, thereby allowing us to perceive different frequencies simultaneously. 
+
+\Cref{fig:cochlea} shows a tonotopic diagram of the cochlea.
+
+\fxwarning{This cochlea diagram would probably make more sense if it was unfurled.}
 
 \begin{figure}[htb]
     \centering
@@ -252,13 +265,13 @@ Along the length of the cochlea, the cilia have different \q{critical frequencie
     \label{fig:cochlea}
 \end{figure}
 
-\section{Directional hearing}
+\subsection{Directional hearing}
 \label{sec:directional_hearing}
-Following from \cref{sec:hearing}, this section will discuss humans' ability to discern the direction or location of a sound source.
+\Cref{sec:inner_ear} explains how sound waves are translated in to electrical impulses inside a single ear. When this mechanism is expanded to both ears, combinations of the two sets of electrical impulses can be combined to determine the direction of an incoming sound. 
 
-The psychoacoustic theory behind spatial hearing has been an active area of research since the mid 20th century, with early examples including the Jeffress model in which time differences between sound events at each ear contribute to a person's ability to locate sounds in space \cite{jeffressPlaceTheorySound1948}. The work of \citeauthor{lindemannEvaluationInterauralSignal1982} a few decades later expanded on this idea by translating the earlier theory to a \gls{dsp} context, and establishing the \gls{ild}, \gls{itd}, and \gls{iacc} as important measures to describe the spatial aspects of binaural signals in a quantifiable way \cite{lindemannEvaluationInterauralSignal1982}.
+The psychoacoustic study of spatial hearing has been an active area of research since the mid 20th century, with early examples including the Jeffress model in which time differences between sound events at each ear contribute to a person's ability to locate sounds in space \cite{jeffressPlaceTheorySound1948}. The work of \citeauthor{lindemannEvaluationInterauralSignal1982} a few decades later expanded on this idea by translating the earlier theory to a \gls{dsp} context, and establishing the \gls{ild}, \gls{itd}, and \gls{iacc} as important measures to describe the spatial aspects of binaural signals in a quantifiable way \cite{lindemannEvaluationInterauralSignal1982}.
 
-Put simply, humans are able to perceive the incoming direction of a sound by observing both the amplitude difference and time difference of coincident sound waves arriving at the left and right ears. Figure \cref{fig:directional_hearing} shows how these two properties enable directional hearing. Firstly, the head itself creates a physical barrier that will attenuate sound waves at one ear more-so that at the other ear. Secondly, the difference in distance between the sound source and each ear will create a time delay between the received signals. Over time a person will learn to associate patterns in \gls{itd}/\gls{ild} with the physical location of the sound source.
+Put simply, we are able to perceive the incoming direction of a sound by observing both the amplitude difference and time difference of coincident sound waves arriving at the left and right ears. Figure \cref{fig:directional_hearing} shows how these two properties enable directional hearing. Firstly, the head itself creates a physical barrier that attenuates sound waves at one ear more-so that at the other ear. Secondly, the difference in distance between the sound source and each ear will create a time delay between the received signals. Over time a person will learn to associate patterns in \gls{itd}/\gls{ild} with the physical location of the sound source.
 
 \begin{figure}[htb]
     \centering
