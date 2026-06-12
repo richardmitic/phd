@@ -402,7 +402,8 @@ This basic rule is relevant when two sounds are mixed in music production. It de
 \section{Music production}
 \label{sec:music_production}
 
-The principles of our auditory perception can be exploited for creative use, and audio practitioners have done so since the 1930s. Early stereophony came from the world of cinema, with sound technicians adding multiple speakers to enable spatial effects\footnote{A typical use case was to match the origin of a voice with the actor's location on the screen.}. Eventually migrating into the music industry, stereophonic recording became the norm in the 1950s \cite{izhakiPanning2023,AbbeyRoadOurStory}. While both cinema and music practitioners have long known that using two speakers for reproduction enabled spatial effects, knowledge of how to \textit{control} those effects came with the psychoacoustic understanding mentioned in \cref{sec:hearing}. 
+The principles of our auditory perception have been exploited for creative use since the turn of the 20th century. Early stereophony came from the world of cinema, with sound technicians adding multiple speakers to enable spatial effects\footnote{A typical use case was to match the origin of a voice with the actor's location on the screen.}. Eventually migrating into the music industry, stereophonic recording became the norm in the 1950s \cite{izhakiPanning2023,AbbeyRoadOurStory}. While both cinema and music practitioners have long known that using two speakers for reproduction enabled spatial effects, knowledge of how to \textit{control} those effects came with the psychoacoustic understanding detailed in \cref{sec:hearing}. 
+
 
 \subsection{Panning}
 \label{sec:panning}
@@ -535,17 +536,13 @@ Amplitude panning is the most common panning technique in traditional music prod
     \label{fig:equal_power_panning}
 \end{figure}
 
+Panning techniques are applied to single stems only. A typical recording session will contain multiple stems, each with its own panning.
+
 \subsection{Stereo image}
-The term \q{stereo image} is used to describe the overall distribution of sound across the horizontal plane after panning and any other production techniques have been applied. One may also use terms like \q{stereo field}, \q{soundstage}, or \q{panorama}, which all refer to the same thing.  They are usually used in qualitative descriptions such as \q{big}, \q{wide}, and \q{ambient} rather than quantitative measures \cite{owsinskiMixingEngineersHandbook2006}. When mixing a musical recording, a producer will pan individual stems to their desired position within the stereo image. Those stems which are recorded in stereo in fact have their own stereo image, which can also be controlled by the producer. The combination of all stems into a final stereo mix, constitutes the overall stereo image. 
+The term \q{stereo image} is used to describe the overall distribution of sound across the horizontal plane after panning and any other production techniques have been applied on all stems. One may also use terms like \q{stereo field}, \q{soundstage}, or \q{panorama}, which all refer to the same thing. They are usually described in qualitative terms such as \q{big}, \q{wide}, and \q{ambient} rather than quantitative measures \cite{owsinskiMixingEngineersHandbook2006}. When mixing a musical recording, a producer will pan individual stems to their desired position within the stereo image. Those stems which are recorded in stereo in fact have their own stereo image, which can also be controlled by the producer. The combination of all stems into a final stereo mix, constitutes the overall stereo image. 
 
 \Cref{fig:stereo_image} shows a simple example stereo image, as perceived by the producer. It contains two mono stems -- vocals and violin, and one stereo stem -- piano. There are some common tropes seen throughout many productions, some of which are shown in the diagram. Firstly, vocals are recorded in mono and panned to the centre. Secondly, since the piano is panned slightly left, the violin is panned roughly the same amount to the right in order to achieve a balanced mix. Thirdly, all stems are placed in the stereo image in a way that emulates a natural performance on a stage, and to avoid separate instruments masking each other. Note that while these practices are typical, they are purely an artistic choice on behalf of the producer \cite{owsinskiMixingEngineersHandbook2006}; Recordings breaking the trend are not difficult to find.
 
-% \begin{figure}[htb]
-%     \centering
-%     \includegraphics[width=0.5\textwidth]{figures/stereo_image.pdf}
-%     \caption{Example stereo image perceived by a music producer}
-%     \label{fig:stereo_image}
-% \end{figure}
 
 \begin{figure}[htb]
     \centering
@@ -592,11 +589,6 @@ The term \q{stereo image} is used to describe the overall distribution of sound 
 Describing the stereo image of a recording has its roots in the acoustics domain, in which typical use cases are the analysis of concert halls and music reproduction systems. In these cases, the previously mentioned low-level spatial cues typically form the basis of the analysis. \Citeauthor{bergSystematicEvaluationPerceived2003} \cite{bergSystematicEvaluationPerceived2003} give a long list of typical perceptual measures that can be derived from the low-level cues, although later literature has focused on the measures of \gls{asw} and \gls{lev}. However, as stated by \citeauthor{sarroffComputationalModelPerceived2011} \cite{sarroffComputationalModelPerceived2011}, the task of describing the spatial aspects of recorded music is inherently different to that of acoustical signals since said recordings may exhibit spatial aspects that cannot occur in physical acoustic space.
 
 \subsection{Production software}
-A typical setup for a music producer is to use a \gls{daw} - graphical software that allows them to record and edit audio. There are many different \glspl{daw} available, but one such example (Reaper) is shown in \cref{fig:daw}. In particular, it shows a single recorded audio track which has it's panning automated. It also contains a single effects track which applies a stereo reverb effect to the recorded audio. This effects track has its \q{dry/wet} mix parameter automated, which controls the ratio of non-processed to processed sound. In a more complete recording session, the \gls{daw} would contain many more audio and effects tracks, each with their own panning control.
-
-The assessment of how the two stereo channels interact is of prime importance when producing music, and quality issues that occur when the stereophonic recordings are mixed down into a monophonic signal for reproduction have been documented well before the advent of digital recording \cite{harveyCompatibilityProblemsTwochannel1962}. In more modern production, \gls{daw} plugins are generally used to visualize and assess the stereo qualities of the final mix \cite{bitzerSpatialDistributionMeter2007,ziemerGoniometersArePowerful2023}. \Cref{fig:goniometer} shows one example - the ToneBoosters Goniometer plugin \cite{ToneBoostersAudioPlugins}. It is designed to replicate an analogue goniometer, which, taking two voltage signals as input, displays them on a 2D axis such that a music producer might be able to discern the correlation between the signals.
-
-In a large \gls{daw} session containing many tracks, the producer will make artistic choices about where in the stereo field to pan each track. While there are some typical practices in the industry, it must be emphasized that panning and creation of stereo field more generally is an artistic process \cite{izhakiPanning2023}, and the plugins that display stereo information usually serve as visual aides to notify the producer if their mix might exhibit a deterioration of the stereo field when played back in non-ideal reproduction settings.
 
 \begin{figure}[p!]
     \centering
@@ -614,6 +606,12 @@ In a large \gls{daw} session containing many tracks, the producer will make arti
     \end{subfigure}
     \caption{Screenshots of example music production tools}
 \end{figure}
+
+A typical setup for a music producer is to use a \gls{daw} - graphical software that allows them to record and edit audio. There are many \glspl{daw} available, but one such example (Reaper) is shown in \cref{fig:daw}. In particular, it shows a single recorded audio track which has its \q{Pan} control automated. It also contains a single effects track which applies a stereo reverb effect to the recorded audio. This effects track has its \q{dry/wet} mix parameter automated, which controls the ratio of non-processed to processed sound. In a more complete recording session, the \gls{daw} would contain many more audio and effects tracks, each with their own pan control.
+
+The assessment of how the two stereo channels interact is of prime importance when producing music, and quality issues that occur when the stereophonic recordings are mixed down into a monophonic signal for reproduction have been documented well before the advent of digital recording \cite{harveyCompatibilityProblemsTwochannel1962}. In more modern production, \gls{daw} plugins are generally used to visualize and assess the stereo qualities of the final mix \cite{bitzerSpatialDistributionMeter2007,ziemerGoniometersArePowerful2023}. \Cref{fig:goniometer} shows one example - the ToneBoosters Goniometer plugin \cite{ToneBoostersAudioPlugins}. It is designed to replicate an analogue goniometer, which, taking two voltage signals as input, displays them on a 2D axis such that a music producer might be able to discern the correlation between the signals.
+
+In a large \gls{daw} session containing many tracks, the producer will make artistic choices about where in the stereo field to pan each track. While there are some typical practices in the industry, it must be emphasized that panning and creation of stereo field more generally is an artistic process \cite{izhakiPanning2023}, and the plugins that display stereo information usually serve as visual aides to notify the producer if their mix might exhibit a deterioration of the stereo field when played back in non-ideal reproduction settings.
 
 
 
