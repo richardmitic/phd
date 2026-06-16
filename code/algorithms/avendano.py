@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.typing import NDArray
 
-from common import TFRegion
+from .common import TFRegion
 
 def cross_correlation(Xi: TFRegion, Xj: TFRegion, lamb: float) -> TFRegion:
     assert Xi.dtype == Xj.dtype == np.complex128

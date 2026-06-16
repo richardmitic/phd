@@ -713,59 +713,35 @@ The \gls{stft} spectrogram is one of the most popular \gls{tf} representions acr
 
 A fundamental property of the \gls{fft} is that it assumes that the signal repeats outside the time frame that is being analysed. Since this is generally not the case for audio signals, it is standard practice to apply a time-domain windowing function to each frame so that large transients do not occur at the boundaries. Serveral standard windowing functions exist, each with their own nuances, but for most audio applications, the \q{Hann} window can be used \cite{LibrosastftLibrosa0110}. 
 
-The nature of the spectrogram is affected by two parameters: the frame size and hop size. \q{Frame size} refers to the number of samples in each audio frame. To obtain maximal computational efficiency this must be a power of 2. \q{Hop size} refers to the number of samples between the start of subsequent frames and is sometimes expressed as a percentage of the frame size. The frame size dictates the resolution of the spectrogram's frequency axis since the frequency bins will be spaced evenly between \SI{0}{\hertz} and the Nyquist frequency. Importantly, a longer frame size will result in lower time accuracy within each frame; sharp transients in the time domain will appear as wideband energy in the frequency domain, but information about exactly where in the frame the transient occurred is lost. To counteract this inaccuracy, a smaller hop size can be used so that transients might be detected as sharp changes between \gls{stft} frames.
-
+The nature of the spectrogram is affected by two parameters: the frame size and hop size. \q{Frame size} refers to the number of samples in each audio frame. To obtain maximal computational efficiency this must be a power of 2. \q{Hop size} refers to the number of samples between the start of subsequent frames and is sometimes expressed as a percentage of the frame size. The frame size dictates the resolution of the spectrogram's frequency axis since the frequency bins will be spaced evenly between \SI{0}{\hertz} and the Nyquist frequency. Importantly, a longer frame size will result in lower time accuracy within each frame; sharp transients in the time domain will appear as wideband energy in the frequency domain, but information about exactly where in the frame the transient occurred is lost. To counteract this inaccuracy, a smaller hop size can be used so that transients might be detected as sharp changes between \gls{stft} frames. One major drawback of the \gls{stft} spectrogram is that the frequency bins are spaced linearly from \SI{0}{\hertz} to the Nyquist frequency, whereas the human perception of frequency works on a logarithmic scale. The \gls{stft} therefore contains redundant information in higher frequencies. Several common alternatives exist to account for this.
 
 \subsubsection{Mel spectrogram}
 
-One major drawback of the \gls{stft} spectrogram is that the frequency bins are spaced linearly from \SI{0}{\hertz} to the Nyquist frequency, whereas the human perception of frequency works on a logarithmic scale. The \gls{stft} therefore contains redundant information in higher frequencies. One solution is to divide the spectrum into frequency bands that are spaced logarithmically and calculate weighted averages of the frequency bins within each band. A common method is to use a \q{Mel filter bank}, an example of which is shown in \cref{fig:mel_filters}. When the Mel filter bank is applied to an \gls{stft} spectrogram, the result is called a \q{Mel spectrogram}. An example is shown in \cref{fig:spect_comp}. Note that information in the higher frequencies has been condensed more-so than the lower frequencies. 
+The \q{Mel scale} is a quasi-logarithmic frequency scale designed to mimic human perception. Several definitions exist in the literature, but popular implementations like that of librosa \cite{Librosamel_frequenciesLibrosa0110} and \gls{amt} \cite{majdak_amt_2022} tend to underpin most audio experimentation.
 
+A \q{Mel filter bank} is a set of band-pass filters that are spaced equally on the Mel scale. Practically, they are implemented as sets of weights that are applied to an \gls{stft} spectrum with the relationship $M_n = \sum_{k=0}^{N} S_k W_{k,n}$ where $M_n$ is the $n$th Mel coefficient, $S_k$ is the $k$th \gls{stft} bin, $N$ is the number of \gls{stft} bins,  and $W_{k,n}$ is the $k$th weight of the $n$th Mel filter. An example Mel filter bank with 8 filters is shown in \cref{fig:mel_filters}. While 8 filters are shown for demonstration purposes, audio analysis typically requires in the order of 128 filters.
+
+When this filterbank is applied to each time step of an \gls{stft} spectrogram, the result is a \q{Mel spectrogram}, an example of which can be seen in \cref{fig:spect_comp}. Notice that the higher frequencies have been condensed into fewer frequency bins compared to the \gls{stft} spectrogram.
 
 \begin{figure}[htb]
     \centering
-    \begin{tikzpicture}
-        \begin{groupplot}[group style = {group size=2 by 1, horizontal sep=6pt},width=0.5\textwidth, height=5cm]
-            \nextgroupplot[
-                xmode=linear,
-                scaled x ticks=false,
-                xtick={0,12000,24000},
-                xticklabels={0, 12k, 24k},
-                xlabel={Frequency (Hz)},
-                scaled y ticks=false,
-                ytick=\empty,
-                ylabel=Amplitude,
-            ]
-            \addplot[black] table {figures/mel_0.dat};
-            \addplot[black] table {figures/mel_1.dat};
-            \addplot[black] table {figures/mel_2.dat};
-            \addplot[black] table {figures/mel_3.dat};
-            \addplot[black] table {figures/mel_4.dat};
-            \addplot[black] table {figures/mel_5.dat};
-            \addplot[black] table {figures/mel_6.dat};
-            \addplot[black] table {figures/mel_7.dat};
-            
-            \nextgroupplot[
-                xmode=log,
-                scaled x ticks=false,
-                xtick={10,100,1000,10000},
-                xticklabels={10, 100, 1k, 10k},
-                xlabel={Frequency (Hz)},
-                scaled y ticks=false,
-                ytick=\empty,
-            ]
-            \addplot[black] table {figures/mel_0.dat};
-            \addplot[black] table {figures/mel_1.dat};
-            \addplot[black] table {figures/mel_2.dat};
-            \addplot[black] table {figures/mel_3.dat};
-            \addplot[black] table {figures/mel_4.dat};
-            \addplot[black] table {figures/mel_5.dat};
-            \addplot[black] table {figures/mel_6.dat};
-            \addplot[black] table {figures/mel_7.dat};
-        \end{groupplot}
-    \end{tikzpicture}
-    \caption{Example Mel filter bank containing 8 filters. Note that the bandwidth of each filter is roughly equal in logarithmic space. Since each filter is designed to give a weighted average of linearly spaced \gls{fft} bins, the amplitudes are scaled so that the sum of the weights in each band is equal.}
+    \resizebox{\linewidth}{!}{
+        \input{figures/mel_filterbank.tikz}
+    }
+    \caption{Example Mel filter bank containing 8 filters, shown with linear (left) and logarithmic (right) frequency scales. Note that the bandwidth of each filter is roughly equal in logarithmic space. Since each filter is designed to give a weighted average of linearly spaced \gls{fft} bins, the amplitudes are scaled so that the sum of the weights in each band is equal. The filters are calculated using librosa \cite{LibrosafiltersmelLibrosa0110} using a sample rate of \SI{44100}{\hertz} and an \gls{fft} size of 4096. Filter weights equal to zero are removed for clarity.}
     \label{fig:mel_filters}
 \end{figure}
+
+
+% \begin{figure}
+%     \centering
+%     \begin{tikzpicture}
+%         \node[flow_input] (audio_in) {Time-domain audio};
+%         \node[flow_process] (stft) [right of=audio_in] {STFT spectrogram};
+
+%     \end{tikzpicture}
+% \end{figure}
+
 
 \subsubsection{Cochleagram}
 
