@@ -14,22 +14,31 @@ def modulate_envelope(x: NDArray[np.float64]) -> NDArray[np.float64]:
     envelope = np.power(np.abs(hilbert(x)), 0.23)
     return x * envelope
 
-def cochleagram(audio: pf.Signal, chunk_time: float, hop_time: float, num_bands: int) -> Cochleagram:
-    coefs = pat.MakeErbFilters(audio.sampling_rate, num_bands, low_freq=100)
-
-    y = np.stack([pat.ErbFilterBank(chan, coefs) for chan in audio.time])
-    y = modulate_envelope(y)
-    y *= np.sign(y) # half wave rectify
-    y = np.sqrt(y) # square root
+def extract_envelope(x: NDArray[np.float64], sampling_rate: float) -> NDArray[np.float64]:
+    x = modulate_envelope(x)
+    x *= np.sign(x) # half wave rectify
+    x = np.sqrt(x) # square root
     
     # lowpass
     fc = 800
-    b, a = butter(4, fc/audio.sampling_rate, btype='low', analog=False)
-    y = filtfilt(b, a, y)
+    b, a = butter(4, fc/sampling_rate, btype='low', analog=False)
+    return filtfilt(b, a, x)
+
+def make_subbands(audio: pf.Signal, num_bands: int) -> NDArray[np.float64]:
+    coefs = pat.MakeErbFilters(audio.sampling_rate, num_bands, low_freq=100)
+    return np.stack([pat.ErbFilterBank(chan, coefs) for chan in audio.time])
+
+
+def make_cochleagram(envelope:NDArray[np.float64], chunk_size: int, hop_size: int) -> NDArray[np.float64]:
+    chunks = np.stack([chunked(chan, chunk_size, hop_size) for chan in envelope]) # shape (channel, freq_band, chunk, sample)
+    cochleagram = chunks.mean(axis=-1)
+    return cochleagram
+
+
+def cochleagram(audio: pf.Signal, chunk_time: float, hop_time: float, num_bands: int) -> Cochleagram:
+    x = make_subbands(audio, num_bands)
+    envelope = extract_envelope(x)
     
     chunk_size = int(chunk_time * audio.sampling_rate)
     hop_size = int(hop_time * audio.sampling_rate)
-    chunks = np.stack([chunked(chan, chunk_size, hop_size) for chan in y]) # shape (channel, freq_band, chunk, sample)
-    cochleagram = chunks.mean(axis=-1)
-
-    return cochleagram
+    return make_cochleagram(envelope, chunk_size, hop_size)
