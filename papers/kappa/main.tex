@@ -22,6 +22,13 @@
 \fxsetup{draft,inline,nomargin,theme=color}
 \captionsetup[subfigure]{skip=0.333\baselineskip}
 
+%% Acronyms
+\usepackage[automake=immediate]{glossaries-extra}
+\setabbreviationstyle[acronym]{long-short}
+\makeglossaries{}
+\input{../acronyms.tex}
+
+
 % drawing figures
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric}
@@ -38,7 +45,13 @@
     compat=1.18,
     table/search path={figures}
 }
-\usepgfplotslibrary{groupplots,units}
+\usepgfplotslibrary{groupplots}
+
+% Make every plot render to a separate pdf which is included in later runs.
+\usepgfplotslibrary{external} 
+\tikzexternalize
+
+% \pgfrealjobname{main}
 
 %% References
 \usepackage[
@@ -49,11 +62,7 @@
 ]{biblatex}
 \addbibresource{../library_biblatex.bib}
 
-%% Acronyms
-\usepackage[automake]{glossaries-extra}
-\setabbreviationstyle[acronym]{long-short}
-\makeglossaries
-\input{../acronyms.tex}
+
 
 %% Macros
 \newcommand{\citeauthorandnumber}[1]{\citeauthor{#1} \cite{#1}}
@@ -596,7 +605,7 @@ To create a stereo image, a music producer will use the equipment available in a
 \begin{figure}[htb]
     \centering
     \includegraphics[width=0.618\linewidth] {figures/console.jpg}
-    \caption{Photograph of the mixing console and stereo speakers in a recording studio. \fixme{Get a better photo and anotate level/panning controls and speakers.} \href{https://commons.wikimedia.org/w/index.php?curid=8944303}{\q{Lang's Recording Studio console}} by \href{https://www.flickr.com/photos/28396605@N00}{christina rutz} is licensed under \href{https://creativecommons.org/licenses/by/2.0/}{CC BY 2.0.}}
+    \caption{Photograph of the mixing console and stereo speakers in a recording studio. \fxwarning{Get a better photo and anotate level/panning controls and speakers.} \href{https://commons.wikimedia.org/w/index.php?curid=8944303}{\q{Lang's Recording Studio console}} by \href{https://www.flickr.com/photos/28396605@N00}{christina rutz} is licensed under \href{https://creativecommons.org/licenses/by/2.0/}{CC BY 2.0.}}
     \label{fig:recording_studio}
 \end{figure}
 
@@ -726,7 +735,9 @@ When this filterbank is applied to each time step of an \gls{stft} spectrogram, 
 \begin{figure}[htb]
     \centering
     \resizebox{\linewidth}{!}{
+        \beginpgfgraphicnamed{mel-filterbanks}
         \input{figures/mel_filterbank.tikz}
+        \endpgfgraphicnamed
     }
     \caption{Example Mel filter bank containing 8 filters, shown with linear (left) and logarithmic (right) frequency scales. Note that the bandwidth of each filter is roughly equal in logarithmic space. Since each filter is designed to give a weighted average of linearly spaced \gls{fft} bins, the amplitudes are scaled so that the sum of the weights in each band is equal. The filters are calculated using librosa \cite{LibrosafiltersmelLibrosa0110} using a sample rate of \SI{44100}{\hertz} and an \gls{fft} size of 4096. Filter weights equal to zero are removed for clarity.}
     \label{fig:mel_filters}
@@ -747,16 +758,24 @@ When this filterbank is applied to each time step of an \gls{stft} spectrogram, 
 
 As an alternative to the two spectrogram representations, a cochleagram aims to make a \gls{tf} representation that models the acoustic response of the human cochlea more closely. To that end, all processing is performed in the time domain and is sometimes referred to as a \q{peripheral ear model}. Several examples appear in the literature \cite{boddenBinauralModelingAuditory1995,choiObjectiveMeasurementPerceived2008,delgadoDesignChoicesBinaural2023}. In the classical method \cite{boddenBinauralModelingAuditory1995} the original signal is first processed by a bank of gammatone filters with their centre frequencies placed according to a perceptual scale (such as the \gls{erb} scale \cite{smithiiiEquivalentRectangularBandwidth2020}), as shown in \cref{fig:gammatone_filters}. As with Mel filters, several definitions of gammatone filters existing the literature, but the popular implementations (e.g. scipy \cite{virtanenSciPy10Fundamental2020} and \gls{amt} \cite{majdakAMT1xToolbox2022}) preside.
 
-Each sub-band is subsequently processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patterns of the cilia and basilar membrane. The result is a representation of the envelope of the time-domain signal for each sub-band. Those envelopes are then segmented into overlapping chunks. The amplitude of each \gls{tf} segment can then be calculated as the mean of all its values, forming one pixel in the cochleagram.
-
-\begin{figure}[htb]
+\begin{figure}[p!]
     \centering
     \input{figures/gammatone.tikz}
     \caption{Example gammatone filterbank with individual filters spaced equally on the \gls{erb} scale. The filters are \glsxtrfull{iir} and are applied to audio signals in the time domain.}
     \label{fig:gammatone_filters}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[p!]
+    \centering
+    \includegraphics[width=\linewidth]{figures/cochleagram_steps.pdf}
+    \caption{Steps of an example decomposition from time-domain audio to a cochleagram. The audio is a frequency sweep from 100 to 20000 Hz. First it is processed by a gammatone filterbank, generating 8 sub-band signals which are spaced equally on the \gls{erb} scale. Each sub-band has its envelope extracted. The envelope is then split into overlapping time chunks, which are averaged to form the cochleagram.}
+    \label{fig:cochleagram_steps}
+\end{figure}
+
+\Cref{fig:cochleagram_steps} shows the intermediate steps to generate a cochleagram. Each sub-band signal is processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patterns of the cilia and basilar membrane. The result is a signal representing the envelope of each sub-band. Those envelopes are then segmented into overlapping time chunks. The amplitude of each chunk is then calculated as the mean of all its values, forming one pixel in the cochleagram.
+
+
+\begin{figure}[p!]
     \centering
     \includegraphics[width=\textwidth]{figures/spect_comp.pdf}
     \caption{An example audio signal displayed as \gls{stft} spectrogram (above), Mel spectrogram (mid), and cochleagram (below). The spectrogram frequency bands are spaced linearly between 0Hz and the Nyquist frequency, which is not coherent with human perception. The Mel spectrogram is created from the original spectrogram based on linear combinations of its frequency bands and has more detail in lower frequencies than higher frequencies. The Cochleagram is created directly from time domain audio by mimicking the physical response of the human ear. In all cases the pixel colour represent the sound intensity of the given \gls{tf} bin in decibels.}
