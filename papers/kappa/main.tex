@@ -796,6 +796,7 @@ In relation to the \hyperref[sec:research_questions]{overarching \gls{rq}} in \c
 
 
 \chapter{Related works}
+\label{sec:related_works}
 
 \section{Spatial cues for stereo image}
 \label{sec:spatial_cues}
@@ -865,91 +866,26 @@ What all these studies have in common is an interest in the dataset itself regar
 
 
 \chapter{Research Methodology}
+% How do music producers use stereo field?
 
-\Cref{fig:research_methodology} shows a diagram of the research methodology for each paper included in this thesis and shows how each research track fed into subsequent tracks.
+% RQ1: How does the stereo image of a recording relate to real-
+% world musical knowledge?
 
-\begin{figure}[h!]
-    \centering
+% RQ2: What methods can be used to describe the stereo image of
+% a music recording?
 
-    \tikzset{
-        begin/.style={draw, inner sep=0pt, minimum width=0.3pt, minimum height=6pt},
-        end/.style={circle, draw, fill=white, minimum size=1pt},
-        % arrow/.style = {->, >=Latex}
-    }
+The overarching \gls{rq} -- \q{How to music producers use stereo field} -- could be approached in many ways. However, the work in this thesis is steeped in the context of large audio datasets. Indeed, the reason for performing the research at the current point in time is the ease of access to said datasets along with the availability of computer processing power to analyse them. From an ontological standpoint this most closely fits the Parmenidean viewpoint of \textit{being}. According to \citeauthorandnumber{grayDoingResearchReal2008}, Parmenidean ontology posits that reality is composed of clearly formed entities with identifiable properties. If the producers' collective musical output is \q{reality}, then the recordings in the datasets certainly fit that description.
 
-    \definecolor{bgcolorA}{HTML}{E0EAEB}  % Pale, cool blue-grey
-    \definecolor{bgcolorB}{HTML}{E9EBE0}  % Pale, neutral sage green
-    \definecolor{bgcolorC}{HTML}{E0D7E6}  % Pale lavender/mauve
-    \definecolor{bgcolorD}{HTML}{EAD8C0}  % Pale sandy beige/peach
+The two smaller \glspl{rq} represent different epistemological perspectives on the overarching one. \rqa{} is based in constructivism, where the meaning of the stereo field is imposed on the recordings by the listener. Conversely, \rqb{} is firmly in the objectivism camp, where the properties of a recording's stereo field are an objective truth that can be measured. Not only that, but generalizations about the use of stereo field across the entire population of recordings are also objective and measurable. While the two epistemologies are somewhat adverse to each other, they both fall under the ontology of \textit{being} \cite{chiaProductionManagementKnowledge2002}.
 
-    \resizebox{\textwidth}{!}{
-        \begin{tikzpicture}[node distance=2cm]
-            
-            \node (aux_begin) [begin, label={[name=aux_label] left:Auxtrument}]  {};
-            \node (ork_begin) [begin, below of=aux_begin, label={[name=ork_label] left:Orkester}]  {};
-            \node (dafx_begin) [begin, below of=ork_begin, xshift=4cm]  {};
-            \node (bth_begin) [begin, below of=dafx_begin] {};
-            \node (slr_begin) [begin, below of=bth_begin, xshift=4cm] {};
+Under constructivism, one valid research methodology is \q{heuristic inquiry} -- the act of totally immersing oneself in the phenomenon being researched and allowing intuition to guide the understanding of the \gls{rq}. This was an inherent part of the work described in this thesis. For example, paper \ref{paper:auxtrument} is a retrospective account of building a new musical instrument where the primary sonic material was the signal from a remote stereo microphone. The act of building the instrument, listening to its output, and forming ideas about which sonic phenomena were interesting was a direct way to relate the stereo field with musical knowledge, addressing \rqa. While this provides a basis for other research, critics of heuristic inquiry will point out that it is deeply personal and therefore not particularly generalizable \cite{grayDoingResearchReal2008}.
 
-            \node (aux_end) [end, right of=aux_begin, xshift=4cm, label={[name=A_label] right:Paper A}] {};
-            \draw (aux_begin) -- (aux_end);
+To complement the constructive approach and form more robust conclusions about an entire population of music producers, I concurrently embarked on a more objective research path. The epistemology of \q{operationalism} is defined by the principle that in order to understand something, it must be measurable \cite{changOperationalism2021}. Thus, to understand stereo field, a set of operations to measure it is necessary. In practice, that means a software library capable of analysing music recordings and extracting information about their stereo field. The benefits of creating this software are threefold. Firstly, it enables comparative measurements of disparate music recordings, allowing one to validate and challenge the existing research described in \cref{sec:related_works}. Secondly, the methods used for any experimental research must be controllable and repeatable. A software library is a fantastic way to achieve this. Thirdly, the act of writing the library can be seen as a similar act of immersion to that previously described in the constructive research. By breaking down the measurement of stereo field into simple instructions, one is forced to think about quantifiable relationships between audio phenomena. \citeauthorandnumber{wiltschkoLanguageThoughtCommunication2022} argues that language is a tool for both thought and communication in equal measure. It follows that computer code (which is a written language like any other) acts as both a representation of the creator's thought process, and the communication of those thoughts to any readers.
 
-            \coordinate (ork_end) at ([xshift=7cm] ork_begin);
-            \node (paperB) [end, right of=dafx_begin, xshift=4cm, label={[name=B_label] right:Paper B}] {};
-            \draw (ork_begin) -- (ork_end);
-            \draw (dafx_begin) -- (paperB);
-            \node (ork_to_dafx_begin) [right of=ork_begin] {};
-            \draw[arrow] (ork_to_dafx_begin) to [in=180, out=0] (dafx_begin);
-            
-            \node (bth_end) [end, right of=bth_begin, xshift=8cm, label={[name=C_label] right:Paper C}] {};
-            \draw (bth_begin) -- (bth_end);
-            
-            \node (slr_end) [end, right of=slr_begin, xshift=10cm, label={[name=D_label] right:Paper D}] {};
-            \draw (slr_begin) -- (slr_end);
+\fxwarning{Something to tie all that theory to the actual work?}
+\fxwarning{Something about individual papers?}
 
-            \coordinate (ork_to_bth_begin) at (ork_end);
-            \coordinate (ork_to_bth_end) at ([xshift=3cm]ork_end |- bth_begin);
-            \draw[arrow] (ork_end) to [in=180, out=0] (ork_to_bth_end);
-        
-            \node (ork_to_slr_begin) [right of=ork_begin, xshift=2cm] {};
-            \draw[arrow] (ork_to_slr_begin) to [in=180, out=0] (slr_begin);
-
-            \coordinate (slightly_above) at ([yshift=1cm]aux_begin);
-            \coordinate (slightly_below) at ([yshift=-1cm]slr_begin);
-
-            \node (rq1_done) at (bth_end |- slightly_above) {RQ \ref{rq:usecase} answered};
-            \node (rq2_done) at (slr_end |- slightly_above) {RQ \ref{rq:methods} answered};
-            \draw[dotted, thick] (rq1_done) -- (bth_end |- slightly_below);
-            \draw[dotted, thick] (rq2_done) -- (slr_end |- slightly_below);
-
-            \begin{scope}[on background layer, inner sep=15pt, rounded corners]
-                \node (exploratory) [fill=bgcolorA, fit=(aux_begin) (aux_label) (ork_end) (ork_label) (A_label), label={[align=right] left:{Exploratory\\RQ1,RQ2}}] {};
-                \node (objective) [fill=bgcolorD, fit=(dafx_begin) (B_label), label={[align=right] left:{Objective experiment\\RQ1}}] {};
-                \node (perceptual) [fill=bgcolorB, fit=(bth_begin) (bth_end) (C_label), label={[align=right] left:{Perceputal test\\RQ1}}] {};
-                \node (litrev) [fill=bgcolorC, fit=(slr_begin) (slr_end) (D_label), label={[align=right] left:{\gls{slr}\\RQ2}}] {};
-                % \draw[help lines,step=1] (0,0) grid (18,-10);
-            \end{scope}
-
-            \node (all) [fit=(exploratory) (litrev)] {}; 
-            \draw[arrow] ([yshift=-0.618cm]all.south west) -- ([yshift=-0.618cm]all.south east) node [midway, below] {Time};
-
-        \end{tikzpicture}
-    }
-    \caption{Diagram of research methodologies and their relation to published papers and research questions.}
-    \label{fig:research_methodology}
-\end{figure}
-
-The research was initiated with a period of exploration and refinement of the research questions. Two work streams (named Auxtrument and Orkester) were established early on as frameworks to explore the importance of spatial information in musical audio, firstly from a musical performance perspective, and secondly from a signal processing perspective. 
-
-The Auxtrument initiative consisted of a joint project with many other researchers to make a musical performance that explored the use of space and merged realities. A custom instrument (the Auxtrument) was designed and built, the purpose of which was to generate a networked artificial reverberation chamber, embodying local sound sources with new spatial qualities \cite{franklinMergingPlacesRealTime2024,franklinComposingNetworkedReverberation2025}. This resulted in the retrospective paper \ref{paper:auxtrument} \cite{franklinDevelopmentWebBasedRealTime2025}.
-
-Running concurrently to Auxtrument, the \q{Orkester} initiative was an exploration of the more technical side of stereo field description. It involved a limited literature search to find methods of describing stereo field, followed by a period of software development to implement the discovered methods. Once the implementation was reliable, a period of musical exploration commenced, testing the various algorithms on recordings that were known to contain interesting spatial features. This had several outcomes. The most direct consequence was the inception of an objective experiment to determine how the various stereo field description techniques reacted to different musical recordings, which culminated in paper \ref{paper:dafx} \cite{miticObjectiveComparisonPanning2025}. 
-
-Concurrently to the objective experiment, a perceptual listening test was planned and executed to determine how listeners react to the panning position of speech overlayed on top of music. The software developed for Orkester was subsequently used to analyse  the audio stimuli from the perceptual test in order to draw conclusions in paper \ref{paper:bth}, which described the results and analysis of the perceptual test \cite{miticPerceptualEvaluationBinaurally2026}.
-
-Lastly, through the developement of Orkester it became apparent that the original literature search was far from comprehensive. This spurred paper D, which was a systematic literature review designed to find all existing techniques that could be used to create a \gls{sip} \cite{miticSystematicLiteratureReview2026}.  
-
-The combination of the exploratory work, objective experiment, and perceptual test provided a satisfactory answer for \rqa. The initial literature search plus the \gls{slr} provided an answer to \rqb.
+One potential criticism of this combinatorial approach is that an answer to the overarching \gls{rq} could instead be gained through subjective means, e.g. interviews with music producers. This would quickly run into several problems, however. The first is that of scale. Subjective research is a time-consuming process and the resulting data is deep, but with few examples. The end research results might then not be generalizable to the entire population of music producers. Secondly, the music community holds an inherent understanding that music is a form of language \cite{agawuMusicDiscourseSemiotic2014}. Adding a layer of indirection (interviews conducted in spoken language) to the research process only serves to muddy the data. Indeed, \citeauthorandnumber{hospersConceptArtisticExpression1954} argues that an artist's expression is inherently intertwined with the creation the original art form, noting that the intentions are sometimes so complex and multifaceted as to defy explanation even to the artist themselves. In short, it makes most sense to analyse musical output directly.
 
 
 \chapter{Paper summaries}
