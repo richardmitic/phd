@@ -22,6 +22,7 @@ dependencies = [
     "librosa",
     "python_auditory_toolbox",
     "matplot2tikz",
+    "rdp",
 ]
 
 [tool.uv.sources]
