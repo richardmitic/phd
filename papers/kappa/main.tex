@@ -158,9 +158,9 @@ Spatial information is crucial to the listener's experience of music, and stereo
 
 \begin{listofpapers}
     \item \fullcite{franklinDevelopmentWebBasedRealTime2025} \label{paper:auxtrument}
+    \item \fullcite{miticSystematicLiteratureReview2026}\label{paper:slr}
     \item \fullcite{miticObjectiveComparisonPanning2025}\label{paper:dafx}
     \item \fullcite{miticPerceptualEvaluationBinaurally2026}\label{paper:bth}
-    \item \fullcite{miticSystematicLiteratureReview2026}\label{paper:slr}
 \end{listofpapers}
 
     
@@ -888,88 +888,13 @@ One potential criticism of this combinatorial approach is that an answer to the 
 \chapter{Paper summaries}
 \label{sec:paper_summaries}
 
-\section*{Paper \ref{paper:auxtrument}}
-
-\textbf{\citetitle{franklinDevelopmentWebBasedRealTime2025}}
-
-\subsection*{Authors}
-\citefullauthors{franklinDevelopmentWebBasedRealTime2025}
-
-\subsection*{Status}
-Published in \citepublication{franklinDevelopmentWebBasedRealTime2025}, \citedate{franklinDevelopmentWebBasedRealTime2025} \cite{franklinDevelopmentWebBasedRealTime2025}.
-
-\subsection*{Research methods}
-This paper presents a retrospective of a project to build a distributed audio performance over mobile networks. It follows the practice-based research methodology as defined by \citeauthorandnumber{candyPracticeBasedResearch2006}.
-
-\subsection*{Results and conclusions}
-The paper documents a real use case where stereo field and reproduction thereof is of prime importance. One conclusion was that network reliability was a limiting factor of the audio performance, sometimes leading to a degraded spatial impression. Research question \ref{rq:usecase} is addressed -- Finding an adequate balance between audio spatial quality and network utilization would require tools to measure the stereo image.
-
-\subsection*{My contribution}
-Member of the team that conceptualized the Auxtrument and made the initial survey and prototyping of existing audio transmission technologies. Responsible for post-prototyping of alternative approaches and custom audio software.
-
-
+\input{sections/paper_auxtrument.tex}
 \clearpage
-\section*{Paper \ref{paper:dafx}}
-
-\textbf{\citetitle{miticObjectiveComparisonPanning2025}}
-
-\subsection*{Authors}
-\citefullauthors{miticObjectiveComparisonPanning2025}
-
-\subsection*{Status}
-Published in \citepublication{miticObjectiveComparisonPanning2025}, September 2025
-
-\subsection*{Research methods}
-Several \gls{dsp} techniques for determining audio spatial features were performed on a small dataset that had predictable musical characteristics. The different techniques were compared using a new objective metric.
-
-\subsection*{Results and conclusions}
-The paper revealed that although there are several \gls{dsp} techniques specifically designed for the extraction of recording and panning features, they are all limited in their own ways. One particular technique (\gls{spf} from \cite{tzanetakisStereoPanningFeatures2007}) was particularly promising as a candidate for use later in the doctoral phase of studies, and the others could be used with some modifications. Overall it highlighted the importance of choosing both a panning feature \gls{dsp} technique and a distance metric that are appropriate to the overarching task, thereby addressing research question \ref{rq:methods}.
-
-\subsection*{My contribution}
-Main author, responsible for all data collection, experimental design, and software implementation. Presented the paper at the 28th International Conference on Digital Audio Effects in Ancona, Italy.
-
+\input{sections/paper_slr.tex}
 \clearpage
-\section*{Paper \ref{paper:bth}}
-\textbf{\citetitle{miticPerceptualEvaluationBinaurally2026}}
-
-\subsection*{Authors}
-\citefullauthors{miticPerceptualEvaluationBinaurally2026}
-
-\subsection*{Status}
-In review at \citepublication{miticPerceptualEvaluationBinaurally2026}, March 2026. 
-
-\subsection*{Research methods}
-A perceptual test was used to determine listeners' reactions to carefully constructed audio stimuli. Standard statistical analysis was performed on the raw test results, and one particular \gls{dsp} technique assessed in paper \ref{paper:dafx} (\gls{ph} \cite{gomezMusicSimilaritySystems2008}) was used in an attempt to explain the perceptual results.
-
-\subsection*{Remaining Work}
-Await peer review and address any comments that come up.
-
-\subsection*{Results and conclusions}
-The paper concluded that when listeners are presented with voice overlayed on top of music, the best panning position for the voice was not always in the default centre position. The reasons for this were unclear due to a shortage of data, but the paper did demonstrate a real-world use of \gls{sip} extraction (using a modified algorithm trialled in paper \ref{paper:dafx}). Most relevant to the research question \ref{rq:usecase}, it revealed that an objective measurement of panning can show detail that is not easily discernable by listening, such as very slight panning away from the centre.
-
-\subsection*{My contribution}
-Joint main author alongside Majed Elwardy. Contributed to experiment design, data analysis, software implementation, and writing.
-
-
+\input{sections/paper_bth.tex}
 \clearpage
-\section*{Paper \ref{paper:slr}}
-\textbf{\citetitle{miticSystematicLiteratureReview2026}}
-
-\subsection*{Authors}
-\citefullauthors{miticSystematicLiteratureReview2026}
-
-\subsection*{Status}
-Accepted to \citepublication{miticSystematicLiteratureReview2026}, May 2026
-
-\subsection*{Research methods}
-Following on from the small selection of \gls{dsp} techniques assessed in paper \ref{paper:dafx}, a \gls{slr} following the \gls{prisma} standard was performed to gather all currently available methods for determining spatial features of stereophonic musical audio.
-
-\subsection*{Results and conclusions}
-Addressing research question \ref{rq:methods}, the review revealed several more techniques that can be used to make spatial descriptions of stereo music. Despite the high number of studies that were assessed, there were relatively few \enquote{very relevant} ones. The \gls{slr} also revealed that while \gls{ml}/\gls{dl} have been used on spatial features in the past, both \textit{unsupervised} \gls{ml} and very large music corpora remain fairly unexplored. It also details a framework for how to create a \gls{sip} algorithm that is useful for any given dataset and use case.
-
-\subsection*{My contribution}
-Main author, responsible for all data collection and processing, and writing.
-
+\include{sections/paper_dafx.tex}
 
 \chapter{Discussion and future work}
 \label{sec:future_work}
