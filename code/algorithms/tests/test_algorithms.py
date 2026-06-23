@@ -1,9 +1,10 @@
 from pathlib import Path
 import pyfar as pf
 import numpy as np
+import matplotlib.pyplot as plt
 
-from algorithms.common import chunked, TFRegion
-from algorithms import gomez, sarroff, tardieu, ziemer
+from algorithms.common import chunked, map_signal, TFRegion
+from algorithms import gomez, sarroff, tardieu, ziemer, tzanetakis
 
 import pytest
 
@@ -27,9 +28,12 @@ def test_audio(test_audio_file_path: Path) -> pf.Signal:
     # signal.time[0] *= 0.5
     return signal
 
+def _make_spect(sig: pf.Signal) -> TFRegion:
+    return np.fft.rfft(chunked(sig, 1024, 512))
+
 @pytest.fixture
 def test_spectrogram(test_audio: pf.Signal) -> TFRegion:
-    return np.fft.rfft(chunked(test_audio, 1024, 512))
+    return _make_spect(test_audio)
 
 
 def _debug_ph(ph):
@@ -140,3 +144,42 @@ def test_goniometer_feature_vectors():
     # The right channel flips polarity half way, so correlation should start positive and end negative
     assert 0.9 < corr[5] < 1
     assert -1 < corr[-5] < -0.9
+
+def _triangle(time, freq: float, phase: float):
+    phasor = ((time * freq) + phase) % 1.
+    flip = phasor > 0.5
+    phasor[flip] = 1 - phasor[flip]
+    phasor *= 2
+    return phasor
+    
+
+def _make_spf_signal(panning_speed: float, panning_amount: float) -> pf.Signal:
+    N = 44100 * 4
+    time = np.linspace(0,4,N)
+    beep = np.sin(time * 2 * np.pi * 100)
+    tri = _triangle(time, panning_speed, 0.)
+    tri = ((tri - 0.5) * panning_amount) + 0.5
+    left_amp = np.cos(0.5 * np.pi * tri)
+    right_amp = np.sin(0.5 * np.pi * tri)
+    panned_beep = pf.Signal(np.stack([beep * left_amp, beep * right_amp]), sampling_rate=44100)
+    return panned_beep
+
+
+def test_spf():
+    signal1 = _make_spf_signal(2., 1)
+    signal2 = _make_spf_signal(2., 0.2)
+    signal3 = _make_spf_signal(10., 0.2)
+    spect1 = _make_spect(signal1)
+    spect2 = _make_spect(signal2)
+    spect3 = _make_spect(signal3)
+    spf1 = tzanetakis.stereo_panning_features(spect1, signal1.sampling_rate, 40)
+    spf2 = tzanetakis.stereo_panning_features(spect2, signal2.sampling_rate, 40)
+    spf3 = tzanetakis.stereo_panning_features(spect3, signal3.sampling_rate, 40)
+
+    # check that the signal with more panning added has a higher average panning
+    idx = 0 # full band, running mean, mean
+    assert spf1[idx] > spf2[idx]
+    
+    # check that the signal with fast panning has a higher short-term panning
+    idx = 4 # full band, running std, mean
+    assert spf3[idx] > spf2[idx]
