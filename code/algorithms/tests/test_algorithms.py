@@ -3,7 +3,7 @@ import pyfar as pf
 import numpy as np
 
 from algorithms.common import chunked, TFRegion
-from algorithms import gomez, sarroff, tardieu
+from algorithms import gomez, sarroff, tardieu, ziemer
 
 import pytest
 
@@ -14,7 +14,16 @@ def test_audio_file_path() -> Path:
 
 @pytest.fixture
 def test_audio(test_audio_file_path: Path) -> pf.Signal:
-    signal = pf.dsp.time_crop(pf.io.read_audio(test_audio_file_path), [0,5], unit='s')
+    signal = pf.dsp.normalize(
+        pf.dsp.time_crop(
+            pf.io.read_audio(test_audio_file_path), 
+            [0,5], 
+            unit='s'
+        ),
+        domain = 'time',
+        target=1.,
+        reference_method='max'
+    )
     # signal.time[0] *= 0.5
     return signal
 
@@ -107,5 +116,27 @@ def test_chunks_mono():
 #         ax.plot(x,y,z, color='k')
 #     plt.show()
 
+def test_goniometer_box_counting(test_audio: pf.Signal):
+    assert 0.5 < ziemer.box_counting(test_audio) < 1
 
-    
+def test_goniometer_correlation(test_audio: pf.Signal):
+    assert -0.5 < ziemer.correlation(test_audio) < 0.5
+
+def test_goniometer_feature_vectors():
+    left = pf.signals.sine(100, 44100)
+    right = pf.signals.sine(100, 44100)
+    lfo = pf.signals.sine(1, 44100)
+    right = pf.multiply((right, lfo), domain='time')
+    test_audio = pf.utils.concatenate_channels([left, right])
+
+    box, corr = ziemer.feature_vectors(test_audio, 0.02, 0.02)
+
+    # All box counts and correlations should be within the proper ranges
+    assert all(box >= 0)
+    assert all(box <= 1)
+    assert all(corr >= -1)
+    assert all(corr <= 1)
+
+    # The right channel flips polarity half way, so correlation should start positive and end negative
+    assert 0.9 < corr[5] < 1
+    assert -1 < corr[-5] < -0.9
