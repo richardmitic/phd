@@ -634,6 +634,9 @@ The process of creating a stereo image is largely a subjective one. The producer
 In some cases the producer consults monitoring equipment such a level meter or goniometer to fine tune their mix \cite{ziemerAcousticFeaturesRecording2021,ziemerGoniometersArePowerful2023}. They also look for potential quality issues that can occur when the stereophonic recordings are mixed down into a monophonic signal for reproduction, which have been documented well before the advent of digital recording \cite{harveyCompatibilityProblemsTwochannel1962}. In more modern production, \gls{daw} plugins are generally used to visualize and assess the stereo qualities of the final mix \cite{bitzerSpatialDistributionMeter2007,ziemerGoniometersArePowerful2023}. \Cref{fig:goniometer} shows one example - the ToneBoosters Goniometer plugin \cite{ToneBoostersAudioPlugins}. It is designed to replicate an analogue goniometer, which, taking two voltage signals as input, displays them on a 2D axis such that a music producer might be able to discern the correlation between the signals.
 
 
+\subsection{Audio signal models}
+\fxerror{Write descriptions of all the different channel/object formats}
+
 \section{Analysis of digital recordings}
 
 The output of a recording session is usually only the stereo mix. Stems and \gls{daw} sessions are generally kept private, with precious few being available under licensing terms that are conducive to academic research \cite{bittnerMedleyDBMultitrackDataset2014}. Thus, we assume that all analysis can only be performed on the final output files that are distributed for playback. The most common distribution format is a digital audio file, and there are some fundamental analysis techniques that can be applied to a digital audio signal.
@@ -764,7 +767,7 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
     \caption{Example gammatone filterbank with individual filters spaced equally on the \gls{erb} scale. The filters are \glsxtrfull{iir} and are applied to audio signals in the time domain.}
     \label{fig:gammatone_filters}
 \end{figure}
-
+\fxwarning{These could be two subfigures since they're both talking about the same filterbank}
 \begin{figure}[p!]
     \centering
     \includegraphics[width=\linewidth]{figures/cochleagram_steps.pdf}
@@ -782,7 +785,10 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
     \label{fig:spect_comp}
 \end{figure}
 
+
 \subsection{Machine learning}
+\fxwarning{Go over this entire section again}
+\fxwarning{Not sure about this opening sentence. It seems too assumption-y}
 The large scale of the vast music repositories being addressed by the research questions naturally implies that some sort of machine learning is necessary.
 
 Broadly speaking, machine learning techniques can be classified as either supervised or unsupervised. When training a supervised  \gls{ml} model, the training dataset needs to include ground-truth labels such that the network can objectively discern via a loss function whether the predictions it is making are correct. Unsupervised \gls{ml} on the other hand does not require any labels. Instead, it seeks to form a representation of the underlying dataset via techniques such as clustering or dimensionality reduction, thereby learning the structures and patterns of data while retaining as much key information as possible.
@@ -797,6 +803,16 @@ In relation to the \hyperref[sec:research_questions]{overarching \gls{rq}} in \c
 
 \chapter{Related works}
 \label{sec:related_works}
+
+In this chapter I break down the details of existing algorithms for stereo field analysis, as well as demonstrating those techniques on example audio recordings. To provide additional context, I also present several high-level initiatives within the audio industry, showing how stereo field analysis has been used up until the present day.
+
+\section{A brief history of stereo field in industry}
+\label{sec:history}
+Research into the stereo field of recorded music specifically (as opposed to generic spatial properties of audio signals) has its roots in the early 2000s. At the time, stereo recording was a well-established norm and audio distribution was handled by the early lossless encoding formats such as \gls{mp3} \cite{iso-11172-3:mpeg_audio,ISOIEC13818-7:2006-AAC}. Research focused partly on ways to improve existing encoding formats, such as \gls{ps} coding \cite{fallerParametricCodingSpatial2004,breebaartHighqualityParametricSpatial2004,breebaartParametricCodingStereo2005}. In parallel, new audio encoding schemes such as \gls{bcc} (later ratified as \q{\glsxtrshort{mpeg} Surround} \cite{iso/iec23003-1InformationTechnologyMPEG2007}) were developed based on the work of \citeauthorandnumber{baumgarteEstimationAuditorySpatial2002}. 
+
+The standardization of multi-channel audio presented an opportunity: new reproduction equipment needed to remain compatible with the existing back-catalogue of stereo recordings, and vendors could compete on sound quality. There was therefore a need to invent algorithms that converted between audio signal models, and analysis of the stereo field was seen as one effective way to achieve this \cite{goodwinPrimaryAmbientSignalDecomposition2007}. In the prevailing years there have been more iterations on distribution formats for music, e.g. Dolby Atmos \cite{DolbyAtmosNextGenerationAudioforCinema} and MPEG-H \cite{mpeg-h}, and the early research into stereo field analysis is still relevant.
+
+With access to these efficient distribution formats, large digital music collections emerged and brought new problems to solve: collectors needed ways organize and categorize their music. Stereo field analysis was just one of the mechanisms used to facilitate this, paving the way for research into e.g. \gls{agr} and \gls{mir} \cite{guausAudioContentProcessing2009,harmaClassificationTimefrequencyRegions2010,defferrardFMADatasetMusic2017}.
 
 \section{Spatial cues for stereo image}
 \label{sec:spatial_cues}
@@ -873,6 +889,8 @@ What all these studies have in common is an interest in the dataset itself regar
 
 % RQ2: What methods can be used to describe the stereo image of
 % a music recording?
+
+\fxwarning{Intro and outro?}
 
 The overarching \gls{rq} -- \q{How to music producers use stereo field} -- could be approached in many ways. However, the work in this thesis is steeped in the context of large audio datasets. Indeed, the reason for performing the research at the current point in time is the ease of access to said datasets along with the availability of computer processing power to analyse them. From an ontological standpoint this most closely fits the Parmenidean viewpoint of \textit{being}. According to \citeauthorandnumber{grayDoingResearchReal2008}, Parmenidean ontology posits that reality is composed of clearly formed entities with identifiable properties. If the producers' collective musical output is \q{reality}, then the recordings in the datasets certainly fit that description.
 
