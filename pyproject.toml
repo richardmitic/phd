@@ -23,6 +23,8 @@ dependencies = [
     "python_auditory_toolbox",
     "matplot2tikz",
     "rdp",
+    "celery",
+    "redis",
 ]
 
 [tool.uv.sources]

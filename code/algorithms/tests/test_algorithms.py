@@ -63,6 +63,10 @@ def test_sarroff_ph(test_spectrogram: TFRegion):
     # Peak panning is somewhere near the middle, but not necessarily the centre bin
     assert 14 <= np.argmax(ph) <= 16
 
+def test_sarroff_ph_width(test_spectrogram: TFRegion):
+    ph = sarroff.panning_histogram(np.abs(test_spectrogram), 65)
+
+
 def test_cochleagram():
     left = pf.signals.sine(100., 44100 * 5)
     right = pf.signals.sine(1000., 44100 * 5)
@@ -183,3 +187,30 @@ def test_spf():
     # check that the signal with fast panning has a higher short-term panning
     idx = 4 # full band, running std, mean
     assert spf3[idx] > spf2[idx]
+
+
+def _display_spf(spf):
+    mm = spf[0:4]
+    sm = spf[4:8]
+    ms = spf[8:12]
+    ss = spf[12:16]
+    x = np.arange(4)
+    plt.errorbar(x, mm, yerr=ms, fmt='o')
+    plt.errorbar(x + 0.3, sm, yerr=ss, fmt='x')
+    plt.ylim(bottom=-0.1)
+    plt.show()
+
+def test_cli():
+    guitar = pf.signals.files.guitar()
+    audio = pf.utils.concatenate_channels((guitar, pf.dsp.time_shift(guitar, 2)))
+    pf.io.write_audio(audio, "guitar.wav")
+    pf.plot.time(audio)
+    plt.show()
+    spect = _make_spect(audio)
+    spf = tzanetakis.stereo_panning_features(spect, audio.sampling_rate, 40)
+    _display_spf(spf)
+    ph = gomez.panning_histogram(spect, 64)
+    plt.plot(ph)
+    plt.show()
+
+    

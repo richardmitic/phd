@@ -1,6 +1,7 @@
 import numpy as np
+from collections import namedtuple
 from numpy.typing import NDArray
-from typing import Tuple
+from typing import NamedTuple
 
 FrequencyAzimuthPlane = NDArray[np.float64] # shape (frequency, azimuth)
 FrequencyAzimuthAnalysisSignal = NDArray[np.float64] # shape (time, frequency, azimuth)
@@ -80,3 +81,11 @@ def panning_histogram(X: MagnitudeSpectrogram, beta: int) -> NDArray[np.float64]
 def panning_histogram_region(X: MagnitudeSpectrogram, beta: int) -> NDArray[np.float64]:
     analysis_signal = frequency_azimuth_analysis_signal(X, beta)
     return analysis_signal.sum(axis=1) # sum over frequency
+
+
+def stereo_width_stats(ph: NDArray[np.float64]) -> NamedTuple:
+    bin_midpoints = np.linspace(-1, 1, len(ph))
+    mean = np.sum(ph * bin_midpoints)
+    stddev = np.sqrt(np.sum(ph * (bin_midpoints - mean) ** 2))
+    full_width_half_maximum = 2 * np.sqrt(2 & np.log(2)) * stddev
+    return namedtuple("StereoWidthStats", ["mean", "std", "fwhm"], mean, stddev, full_width_half_maximum)
