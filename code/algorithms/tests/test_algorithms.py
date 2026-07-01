@@ -3,8 +3,8 @@ import pyfar as pf
 import numpy as np
 import matplotlib.pyplot as plt
 
-from algorithms.common import chunked, map_signal, TFRegion
-from algorithms import gomez, sarroff, tardieu, ziemer, tzanetakis
+from algorithms.common import chunked, make_spectrogram, split_spectrogram_bands, TFRegion
+from algorithms import gomez, sarroff, tardieu, ziemer, tzanetakis, sip
 
 import pytest
 
@@ -28,12 +28,10 @@ def test_audio(test_audio_file_path: Path) -> pf.Signal:
     # signal.time[0] *= 0.5
     return signal
 
-def _make_spect(sig: pf.Signal) -> TFRegion:
-    return np.fft.rfft(chunked(sig, 1024, 512))
 
 @pytest.fixture
 def test_spectrogram(test_audio: pf.Signal) -> TFRegion:
-    return _make_spect(test_audio)
+    return make_spectrogram(test_audio)
 
 
 def _debug_ph(ph):
@@ -173,9 +171,9 @@ def test_spf():
     signal1 = _make_spf_signal(2., 1)
     signal2 = _make_spf_signal(2., 0.2)
     signal3 = _make_spf_signal(10., 0.2)
-    spect1 = _make_spect(signal1)
-    spect2 = _make_spect(signal2)
-    spect3 = _make_spect(signal3)
+    spect1 = make_spectrogram(signal1)
+    spect2 = make_spectrogram(signal2)
+    spect3 = make_spectrogram(signal3)
     spf1 = tzanetakis.stereo_panning_features(spect1, signal1.sampling_rate, 40)
     spf2 = tzanetakis.stereo_panning_features(spect2, signal2.sampling_rate, 40)
     spf3 = tzanetakis.stereo_panning_features(spect3, signal3.sampling_rate, 40)
@@ -189,28 +187,65 @@ def test_spf():
     assert spf3[idx] > spf2[idx]
 
 
-def _display_spf(spf):
-    mm = spf[0:4]
-    sm = spf[4:8]
-    ms = spf[8:12]
-    ss = spf[12:16]
-    x = np.arange(4)
-    plt.errorbar(x, mm, yerr=ms, fmt='o')
-    plt.errorbar(x + 0.3, sm, yerr=ss, fmt='x')
-    plt.ylim(bottom=-0.1)
+# @pytest.mark.skip
+def test_cli(test_audio: pf.Signal):
+    from python_auditory_toolbox import auditory_toolbox as pat
+    fc = pat.ErbSpace(low_freq=20, high_freq=test_audio.sampling_rate/2, n=24)
+    bands = np.flipud(np.stack([fc[1:], fc[:-1]]).T)
+    print(bands)
+    # bands = [[0,200],[200,400],[400,800],[800,1600],[1600,3200],[3200,6400],[6400,12800]]
+    s = sip.sip(
+        test_audio, 
+        1024, 
+        512, 
+        33, 
+        bands,
+    )
+    plt.imshow(np.flipud(s), aspect='auto', interpolation='gaussian')
     plt.show()
 
-def test_cli():
-    guitar = pf.signals.files.guitar()
-    audio = pf.utils.concatenate_channels((guitar, pf.dsp.time_shift(guitar, 2)))
-    pf.io.write_audio(audio, "guitar.wav")
-    pf.plot.time(audio)
-    plt.show()
-    spect = _make_spect(audio)
-    spf = tzanetakis.stereo_panning_features(spect, audio.sampling_rate, 40)
-    _display_spf(spf)
-    ph = gomez.panning_histogram(spect, 64)
-    plt.plot(ph)
-    plt.show()
+def test_spect_subbands(test_spectrogram: TFRegion):
+    bands = np.array([
+        [0,250],
+        [250,2500],
+        [2500,20000]
+    ])
+    assert test_spectrogram.shape == (2, 429, 513)
+    subs = split_spectrogram_bands(test_spectrogram, bands, 1024, 44100)
+    assert subs[0].shape == (2, 429, 6)
+    assert subs[1].shape == (2, 429, 53)
+    assert subs[2].shape == (2, 429, 406)
+    
+def test_sip(test_audio: pf.Signal):
+    bands = np.array([
+        [0,250],
+        [250,2500],
+        [2500,20000]
+    ])
+    s_gomez = sip.sip(test_audio, 1024, 512, 33, bands, algorithm='gomez')
+    s_sarroff = sip.sip(test_audio, 1024, 512, 33, bands, algorithm='sarroff')
+    assert s_gomez.shape == (3,33)
+    assert s_sarroff.shape == (3,33)
 
+
+def test_asf(test_audio: pf.Signal):
+    coch = tardieu.cochleagram(test_audio, 0.04, 0.02, 70)
+    asf = tardieu.amplitude_stereo_features(coch)
+    assert asf.global_amount_of_panning > 0
+    assert asf.global_amount_of_panning_variation > 0
+    assert asf.mean_over_time.shape == (70,)
+    assert asf.mean_over_time_absolute.shape == (70,)
+    assert asf.std_over_time.shape == (70,)
+
+def test_ssps(test_spectrogram: TFRegion):
+    # left = pf.signals.files.speech()
+    # right = pf.dsp.time_shift(left, 0.01, unit='s')
+    # stereo = pf.utils.concatenate_channels([left, right])
+    # set_samples = int(stereo.sampling_rate * 2)
+    # stereo.time[1, :set_samples] = stereo.time[0, 20:set_samples+20] # begin in phase and then go out of phase
+    # pf.io.write_audio(stereo, "ssps.wav")
+    # ssps = tardieu.ssps(stereo, 0.04, 0.02, 70)
+    # plt.imshow(ssps, aspect='auto')
+    # plt.show()
+    ssps = tardieu.ssps_stft(test_spectrogram, 1024, 44100)
     

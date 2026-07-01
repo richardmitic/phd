@@ -1,4 +1,4 @@
-from typing import Dict, Any, Tuple
+from typing import Dict, Any, Tuple, List
 from collections.abc import Callable
 import numpy as np
 from numpy.typing import NDArray
@@ -27,6 +27,21 @@ def map_signal(sig: pf.Signal, func: Callable[[NDArray[np.float64]], NDArray[np.
 
 def make_spectrogram(sig: pf.Signal, fft_size: int = 1024, hop_size: int = 512) -> TFRegion:
     return np.fft.rfft(chunked(sig, fft_size, hop_size))
+
+
+def split_spectrogram_bands(
+    spect: TFRegion,
+    bands: NDArray[np.float64], # shape (band, (low,high))
+    fft_size: int,
+    sample_rate: float,
+) -> List[TFRegion]:
+    freqs = np.fft.rfftfreq(fft_size, d=1/sample_rate)
+    regions = []
+    for low, high in bands:
+        mask = (freqs >= low) & (freqs <= high)
+        regions.append(spect[..., mask])
+    return regions
+
 
 def draw_panning_histogram(
     hist: PanningHistogram,
