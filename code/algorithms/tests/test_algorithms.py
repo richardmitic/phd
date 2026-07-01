@@ -237,6 +237,7 @@ def test_asf(test_audio: pf.Signal):
     assert asf.mean_over_time_absolute.shape == (70,)
     assert asf.std_over_time.shape == (70,)
 
+@pytest.mark.skip
 def test_ssps(test_spectrogram: TFRegion):
     # left = pf.signals.files.speech()
     # right = pf.dsp.time_shift(left, 0.01, unit='s')

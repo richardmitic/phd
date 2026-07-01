@@ -12,6 +12,18 @@ MagnitudeSpectrogram = NDArray[np.float64] # shape (channels, time, frequency)
 PanningHistogram = NDArray[np.float64] # shape (azimuth)
 
 
+def polar_to_cartesian(r, phi):
+    x = r * np.cos(phi)
+    y = r * np.sin(phi)
+    return x, y
+
+
+def cartesian_to_polar(x, y):
+    r = np.sqrt(x**2 + y**2)
+    phi = np.arctan2(x, y)
+    return r, phi
+
+
 def chunked(audio: pf.Signal | AudioRegion, chunk_size: int, hop_size: int) -> AudioChunks:
     if isinstance(audio, pf.Signal):
         audio = audio.time
