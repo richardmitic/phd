@@ -752,16 +752,6 @@ When this filterbank is applied to each time step of an \gls{stft} spectrogram, 
 \end{figure}
 
 
-% \begin{figure}
-%     \centering
-%     \begin{tikzpicture}
-%         \node[flow_input] (audio_in) {Time-domain audio};
-%         \node[flow_process] (stft) [right of=audio_in] {STFT spectrogram};
-
-%     \end{tikzpicture}
-% \end{figure}
-
-
 \subsubsection{Cochleagram}
 
 As an alternative to the two spectrogram representations, a cochleagram aims to make a \gls{tf} representation that models the acoustic response of the human cochlea more closely. To that end, all processing is performed in the time domain and is sometimes referred to as a \q{peripheral ear model}. Several examples appear in the literature \cite{boddenBinauralModelingAuditory1995,choiObjectiveMeasurementPerceived2008,delgadoDesignChoicesBinaural2023}. In the classical method \cite{boddenBinauralModelingAuditory1995} the original signal is first processed by a bank of gammatone filters with their centre frequencies placed according to a perceptual scale (such as the \gls{erb} scale \cite{smithiiiEquivalentRectangularBandwidth2020}), as shown in \cref{fig:gammatone_filters}. As with Mel filters, several definitions of gammatone filters existing the literature, but the popular implementations (e.g. scipy \cite{virtanenSciPy10Fundamental2020} and \gls{amt} \cite{majdakAMT1xToolbox2022}) preside.
