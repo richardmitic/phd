@@ -18,6 +18,7 @@
 \usepackage{mathptmx}
 \usepackage{siunitx}
 \usepackage{subcaption}
+\usepackage[titletoc]{appendix}
 
 \fxsetup{draft,inline,nomargin,theme=color}
 \captionsetup[subfigure]{skip=0.333\baselineskip}
@@ -141,8 +142,8 @@
         \draw[color=black] (290:1) -- (290:1 |- 0,-1.618);
     },
     flow_input/.style={rounded rectangle, draw=black, minimum height=1cm, minimum width=3cm},
-    flow_process/.style={rectangle, draw=black, minimum height=1cm, minimum width=3cm},
-    flow_output/.style={rectangle, rounded corners, draw=black, minimum height=1cm, minimum width=3cm},
+    flow_process/.style={rectangle, draw=black, minimum height=1cm, minimum width=3cm, align=center},
+    flow_output/.style={rectangle, rounded corners, draw=black, minimum height=1cm, minimum width=3cm, align=center},
     arrow/.style={->, >=Latex},
     section_label/.style={rectangle, rounded corners, draw=darkgray, fill=lightgray, rotate=90, minimum height=0.618cm, minimum width=4cm},
 }
@@ -799,7 +800,7 @@ In relation to the \hyperref[sec:research_questions]{overarching \gls{rq}} in \c
 \chapter{Related works}
 \label{sec:related_works}
 
-In this chapter I break down the details of existing algorithms for stereo field analysis, as well as demonstrating those techniques on example audio recordings. To provide additional context, I also present several high-level initiatives within the audio industry, showing how stereo field analysis has been used up until the present day.
+In this chapter I break down the details of existing algorithms for stereo field analysis, as well as demonstrating those techniques on example audio recordings. To provide additional context, I also present several high-level initiatives within the audio industry, showing how stereo field analysis has been used up until the present day. Throughout the chapter I use 3 recordings as examples. They all come from the \gls{fma} dataset \cite{defferrardFMADatasetMusic2017}, and each one presents a different use of stereo image. In the text they are referred to simply as track \q{A}, \q{B}, and \q{C}. Full details for all tracks can be found in appendix \ref{app:demo_tracks}.
 
 \section{A brief history of stereo field in industry}
 \label{sec:history}
@@ -917,7 +918,39 @@ While all the aforementioned studies focus on descriptions of amplitude panning 
 \end{figure}
 
 
-All the above use classical \gls{dsp} to create their spatial descriptors, but more recently there have been efforts to use \gls{dl} to disentangle spatial information from audio content. One such example was demonstrated by \citeauthorandnumber{yangUpmixingStyleTransfer2022}. While the original aim was to upmix stereo music to multichannel, a necessary component of the resulting neural network was a latent space that represents the spatial information of the multichannel signal. \gls{dl} has also been used outside the music domain to e.g. learn spatial relationships between individual microphones in an array \cite{yangSelfSupervisedLearningSpatial2024}. While such tasks do not directly address the research questions for this thesis, they demonstrate that learning spatial features on large amounts of unlabelled audio data is possible given appropriate methods and pretext task.
+All the previously mentioned algorithms use classical \gls{dsp} to create their spatial descriptors, but more recently there have been efforts to use \gls{dl} to disentangle spatial information from audio content. \citeauthor{yangUpmixingStyleTransfer2022} presents one such example in \cite{yangUpmixingStyleTransfer2022}. While the original aim was to upmix stereo music to multichannel, a necessary component of the resulting neural network was a latent space that represents the spatial information of the multichannel signal. A simplified architecture diagram of \citeauthor{yangUpmixingStyleTransfer2022}'s method is shown in \cref{fig:dl_upmix}.
+
+\begin{figure}[htb]
+    \centering
+    \resizebox{\textwidth}{!}{
+        \begin{tikzpicture}[>=latex, node distance=4cm]
+
+        \node[flow_input] (stems) {Audio stems};
+        \node[flow_process] (audio5r) [right of=stems,yshift=1cm] {5-channel\\spectrogram A};
+        \node[flow_process] (audio5a) [below of=audio5r,yshift=2cm] {5-channel\\spectrogram B};
+        \node[flow_process] (bottleneck) [right of=audio5r] {Bottleneck\\neural network};
+        \node[flow_process] (downmix) [right of=audio5a] {Downmix to stereo};
+        \node[flow_process] (upmix) [right of=downmix] {Upmix\\neural network};
+        \node[flow_output,ultra thick] (latentvec) [right of=bottleneck,xshift=4cm] {Spatial description\\in latent space};
+        \node[flow_output] (recon) [right of=upmix] {Reconstructed\\5-channel audio};
+
+        \draw[arrow] (stems) to [out=0,in=180] (audio5r);
+        \draw[arrow] (stems) to [out=0,in=180] (audio5a);
+        \draw[arrow] (audio5r) to [out=0,in=180] (bottleneck);
+        \draw[arrow] (audio5a) to [out=0,in=180] (downmix);
+
+        \draw[arrow] (downmix) to [out=0,in=180] (upmix);
+        \draw[arrow] (bottleneck) to [out=0,in=180] ([yshift=0.25cm]upmix.west);
+        \draw[arrow] (upmix) to [out=0,in=180] (recon);
+        \draw[arrow] (bottleneck) to [out=0,in=180] (latentvec);
+        
+        \end{tikzpicture}
+    }
+    \caption{Architecture digram of \citeauthor{yangUpmixingStyleTransfer2022}'s neural network that learns a spatial representation of its audio training data. The latent vector (shown in a thick outline) can be used as a description of the spatial image. Recreated from \cite{yangUpmixingStyleTransfer2022}.}
+    \label{fig:dl_upmix}
+\end{figure}
+
+\gls{dl} has also been used outside the music domain to e.g. learn spatial relationships between individual microphones in an array \cite{yangSelfSupervisedLearningSpatial2024}. While such tasks do not directly address the research questions in this thesis, they demonstrate that learning spatial features on large amounts of unlabelled audio data is possible given appropriate methods and pretext task.
 
 Neural generation of spatial audio continues to be a hot topic up to the present day, with many attempts to generate high-quality binaural, ambisonic or multichannel audio from mono sources \cite{limEnhancingSpatialAudio2024,liCyclicLearningBinaural2024,liTASPersonalizedTextguided2024,chenCCStereoAudioVisualContextual2025,melechovskySonicMasterControllableAllinOne2025,santosLargeScaleSelfSupervisedLearning2025,wangSpatialV2AVisualGuidedHighfidelity2026}. In doing so, the networks must infer spatial information from a source other than audio (typically an accompanying video or text prompt), and in the process will learn the spatial qualities of their audio training data.
 
@@ -994,6 +1027,17 @@ During the licentiate, several points arose that provoked further investigation.
 
 In short, the doctoral research will tackle a larger problem of assessing human musical creativity though the recorded output. The techniques surfaced by the licentiate will provide the foundation, and will be applied to real-world data.
 
+
+\begin{appendices}
+% \appendixpage
+% \noappendicestocpagenum
+% \addappheadtotoc
+
+\chapter{Demonstration tracks}
+\label{app:demo_tracks}
+
+Some text
+\end{appendices}
 
 \printglossaries
 
