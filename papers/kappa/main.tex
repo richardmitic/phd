@@ -20,6 +20,10 @@
 \usepackage{subcaption}
 \usepackage[titletoc]{appendix}
 
+% Vector notation should be bold and italic
+\usepackage{bm}
+\renewcommand{\vec}{\bm}
+
 \fxsetup{draft,inline,nomargin,theme=color}
 \captionsetup[subfigure]{skip=0.333\baselineskip}
 
@@ -870,7 +874,13 @@ While \gls{spf} shows production style at a high level, other descriptors contai
     \label{fig:panning_histograms}
 \end{figure}
 
-\fxerror{Gomez also has the quantization step}
+\citeauthor{gomezMusicSimilaritySystems2008} present a continuation of their \gls{ph} algorithm. They note that the histogram itself can be quite large, and that standard distance metrics may not correlate with perceptual differences. To avoid this, they propose converting the \gls{ph} to a vector of \q{\gls{pc}} in a non-perceptual domain and truncating it. \Cref{eq:cepst_ph} shows this conversion where $\vec{C}$ is the vector of coefficients, $\mathcal{F}^{-1}$ is the inverse \gls{fft}, $L$ is the truncation length, and $\vec{H}\vec{H}^{\leftarrow}$ is a concatenation of the panning histogram and its reverse. The efficacy of this technique remains under-tested, and my work in paper \ref{paper:dafx} showed that \gls{pc} was unable to accurately represent \glspl{ph} with sharp peaks.
+
+\begin{equation}
+    \vec{C} = \left\{\mathcal{F}^{-1} \left\{ \log (\vec{H}\vec{H}^{\leftarrow})\right\} \right\}_{1:L}
+    \label{eq:cepst_ph}
+\end{equation}
+
 
 \citeauthor{tardieuProductionEffectAudio2011} present another assessment of amplitude panning named \gls{asf} \cite{tardieuProductionEffectAudio2011}. Differing from the previously mentioned techniques, \citeauthor{tardieuProductionEffectAudio2011}'s method focuses on providing measurements of the amount and variation of panning in many frequency bands. The basis of the algorithm is the \gls{ild} of a stereo cochleagram, as opposed to an \gls{stft} spectrogram. \citeauthor{tardieuProductionEffectAudio2011} use 70 frequency bands equidistant on the \gls{erb} scale, each of which produce multiple features. Thus, the resulting \gls{sip} vector is an order of magnitude larger than \gls{spf} or \gls{ph}. As \cref{fig:asf} shows, \gls{asf}'s large size allows for a very detailed assessment of panning across the frequency dimension, although it runs the risk of including noise and redundant information.
 
@@ -883,7 +893,7 @@ While \gls{spf} shows production style at a high level, other descriptors contai
     \label{fig:asf}
 \end{figure}
 
-While all the aforementioned studies focus on descriptions of amplitude panning in stereo mixes, recording engineers can make use of phase-based techniques to add spatial feeling to their mix. \citeauthor{tardieuProductionEffectAudio2011} also define a measurement for these named \gls{psf} \cite{tardieuProductionEffectAudio2011}. To enable this, they also define an \gls{stft} spectrogram derivative named \gls{ssps}. Unfortunately I cannot demonstrate it in this thesis as \citeauthor{tardieuProductionEffectAudio2011}'s method produced spurious results.
+While all the aforementioned studies focus on descriptions of amplitude panning in stereo mixes, recording engineers can make use of phase-based techniques to add spatial feeling to their mix. \citeauthor{tardieuProductionEffectAudio2011} also define a measurement for these named \gls{psf} \cite{tardieuProductionEffectAudio2011}. To enable this, they also define an \gls{stft} spectrogram derivative named \gls{ssps}. \fxnote{Unfortunately I cannot demonstrate it in this thesis as \citeauthor{tardieuProductionEffectAudio2011}'s method produced spurious results}.
 
 
 
@@ -1020,7 +1030,7 @@ Many of the studies cited in \cref{sec:stereo_image_description} use a large dat
 
 In \citeauthor{panteliCharacterizationSingingStyles2017}'s work on the classification of singing style, the classes -- instead of being determined by an a-priori known label -- are learned by first extracting low-level audio cues, then finding common features within those cues. The features are then used as the input to unsupervised clustering algorithms to determine the relationships of the recordings to each other. \citeauthor{panteliComputationalStudyOutliers2017} continued the work in \cite{panteliComputationalStudyOutliers2017} where outliers in the global dataset where found using similar techniques and links between different musical cultures were drawn. On a cautionary note, \citeauthor{chauhanCrossCulturalBiasMelScale2026} recently showed that \gls{ml}-based tasks taking audio input from multiple cultures are biased towards Western sources if they use the Mel spectrogram as the audio frontend \cite{chauhanCrossCulturalBiasMelScale2026}. The authors recommend using alternative frontends, such as \gls{erb}.
 
-\citeauthor{collinsNewCuratedCorpus2018} recently introduced a dataset of historical electronic music \cite{collinsNewCuratedCorpus2018}. As part of that work, they extracted two spatial metrics: \q{channel loudness difference} and \q{stereo spatial ebb}. The example experiment given to demonstrate the dataset showed that \q{stereo spatial ebb} changes according to the year of the recording, thus indicating a trend in artistic output over time. \q{Channel  loudness difference}, on the other hand, showed no trend.
+\citeauthor{collinsNewCuratedCorpus2018} collated a dataset of historical electronic music \cite{collinsNewCuratedCorpus2018}. As part of that work, they extracted two spatial metrics: \q{channel loudness difference} and \q{stereo spatial ebb}. The example experiment given to demonstrate the dataset showed that \q{stereo spatial ebb} changes according to the year of the recording, thus indicating an artistic trend over time. \q{Channel  loudness difference}, on the other hand, remained static.
 
 What all these studies have in common is an interest in the dataset itself regarding both the relationships between individual recordings, plus the relationship of the entire corpus to the wider world. Low-level audio features are of lesser importance, other than to construct the high-level metrics that enable comparison between recordings.
 
