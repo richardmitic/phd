@@ -643,6 +643,10 @@ In some cases the producer consults monitoring equipment such a level meter or g
 \subsection{Audio signal models}
 \fxerror{Write descriptions of all the different channel/object formats}
 
+
+\subsection{Codecs}
+\fxerror{Write explanation of lossy/losslessx codecs}
+
 \section{Analysis of digital recordings}
 
 The output of a recording session is usually only the stereo mix. Stems and \gls{daw} sessions are generally kept private, with precious few being available under licensing terms that are conducive to academic research \cite{bittnerMedleyDBMultitrackDataset2014}. Thus, we assume that all analysis can only be performed on the final output files that are distributed for playback. The most common distribution format is a digital audio file, and there are some fundamental analysis techniques that can be applied to a digital audio signal.
@@ -958,23 +962,54 @@ A perceptual scalar is a measurement that would usually be made via a perceptual
 
 \gls{asw} is one of the more common values that has been addressed in the literature. The early work of \citeauthorandnumber{supperOnsetGuidedSpatialAnalyser2005}, \citeauthorandnumber{masonImplementationApplicationBinaural2006}, and \citeauthorandnumber{dewhirstModellingPerceivedSpatial2008} detail the construction of \q{binaural analysers} that are able to estimate \gls{asw}. \citeauthor{dewhirstModellingPerceivedSpatial2008} compares several methods to estimate \gls{asw} given \gls{ild}, \gls{itd}, and \gls{iacc} cues from binaural audio signals. The prediction results were promising, but mixed. \citeauthor{dewhirstModellingPerceivedSpatial2008} even notes that the original values of \gls{asw} given by test participants were somewhat varied, concluding that the test itself was a difficult task.
 
-Since these early experiments the analysis of \gls{asw} has remained a topic of interest, with \citeauthorandnumber{kasbachAssessingModelingApparent2016}, \citeauthorandnumber{miethObjectiveEvaluationTechniques2017}, and \citeauthorandnumber{antoniukBlindEstimationEnsemble2023} all proposing different mathematical formulas to calculate it. It is not restricted to the binaural domain, with \citeauthorandnumber{sarroffMeasurementsSpaciousnessStereophonic2008}, \citeauthorandnumber{wilsonPerceptionEvaluationAudio2013}, and \citeauthorandnumber{mourgelaExploringTrendsAudio2024} also proposing formulas for generic stereo signals. 
+Since these early experiments the analysis of \gls{asw} has remained a topic of interest, with \citeauthorandnumber{kasbachAssessingModelingApparent2016}, \citeauthorandnumber{miethObjectiveEvaluationTechniques2017}, and \citeauthorandnumber{antoniukBlindEstimationEnsemble2023} all proposing ways to calculate it. It is not restricted to the binaural domain, with \citeauthorandnumber{sarroffMeasurementsSpaciousnessStereophonic2008}, \citeauthorandnumber{wilsonPerceptionEvaluationAudio2013}, and \citeauthorandnumber{mourgelaExploringTrendsAudio2024} also proposing formulas for generic stereo signals. 
 
 \fxerror{Expand LEV section}
 \gls{lev} on the other hand has been closely linked to the \gls{iacc} of a stereo signal, and the prediction of it has been studied extensively in \cite{soulodreNewObjectiveMeasures2004,dewhirstObjectiveAssessmentSpatial2005,sunishDevelopmentValidationUnintrusive2010,jacksonEstimatesPerceivedSpatial2010,powerInvestigationImpact3D2013,nowakPerceptionPredictionApparent2017}.
 
-Within the context of this thesis, the absolute accuracy of any perceptual scalar prediction is not necessarily of primary importance. Rather, it matters that the value calculated for each recording in a corpus provides suitable comparisons to the other recordings. \citeauthor{mourgelaExploringTrendsAudio2024}'s work on trends in music production \cite{mourgelaExploringTrendsAudio2024} is one example of such a study. The study groups raw stereo width calculations into 4 buckets, thereby showing that finding recordings with similar stereo width is of more interest than the absolute value.
+Within the context of this thesis, the absolute accuracy of any prediction is not necessarily of primary importance. Rather, it matters that the value calculated for each recording in a corpus provides suitable comparisons to the other recordings. \citeauthor{mourgelaExploringTrendsAudio2024}'s work on trends in music production \cite{mourgelaExploringTrendsAudio2024} is one example of such a study. The study groups raw stereo width calculations into 4 buckets, thereby showing that finding recordings with similar stereo width is of more interest than the absolute value.
 
 
-\section{Spatial quality prediction}
+\section{Spatial quality measurement}
 
-Following from the analyses described in \cref{sec:spatial_cues,sec:stereo_image_description,sec:prediction_of_perceptual_scalars}, the results are often used to assess the spatial degradation of a signal after some sort of distortion has been applied. A typical method is to calculate the same spatial descriptor on both a reference and degraded signal, then calculate the difference in those descriptors. Examples are \cite{youSpatialLocalizationEvaluation2012,wangObjectiveMeasurementSpatial2015,delgadoObjectiveMeasurementStereophonic2019,delgadoObjectiveAssessmentSpatial2019}, which all attempt to predict the perceived spatial degradation in a recording that has been distorted by lossy compression. 
+The \glspl{sip} described in \cref{sec:spatial_cues,sec:stereo_image_description,sec:prediction_of_perceptual_scalars} are often used to assess the spatial degradation of a signal after some sort of distortion has been applied. The industry term for this is \q{spatial quality}, where we are referring to the quality of the distorted signal. A typical method is to calculate the same spatial descriptor on both a reference and degraded signal, then calculate the difference in those descriptors. 
 
-Recent work by \citeauthorandnumber{watcharasupatQuantifyingSpatialAudio2024} demonstrates a new metric for assessing spatial quality and demonstrates it using several common, but artificial distortions. Furthermore, the work of \citeauthorandnumber{barryBinaspectPythonLibrary2025} presents (alongside analysis of lossy codecs) the comparison of binaural rendering and downmix algorithms, showing that minute differences in binaural cues can be easily detected using their methods.
+The types of distortion introduced vary, although a major industrial use is in the development of lossy codecs. The work of \citeauthorandnumber{youSpatialLocalizationEvaluation2012}, \citeauthorandnumber{wangObjectiveMeasurementSpatial2015}, \citeauthorandnumber{delgadoObjectiveMeasurementStereophonic2019}, and \citeauthorandnumber{delgadoObjectiveAssessmentSpatial2019} do exactly this. \Cref{fig:spatial_distortion} shows a typical workflow for the measurements of spatial distortion used in all these studies.
+
+\begin{figure}[htb]
+    \centering
+    \resizebox{\textwidth}{!}{
+        \begin{tikzpicture}[>=latex, node distance=4cm]
+
+        \node[flow_input] (audio) {Audio};
+        \node[flow_process] (coder) [right of=audio,yshift=1cm] {Lossy coder};
+        \node[flow_process] (decoder) [right of=coder] {Decoder};
+        \node[flow_process] (sip1) [right of=decoder] {\gls{sip}};
+        \node[flow_process] (sip2) [below of=sip1, yshift=2cm] {\gls{sip}};
+        \node[draw=black,circle,minimum width=1cm,xshift=-1cm] (diff) [right of=sip1, yshift=-1cm] {$\Delta$};
+        \node[flow_output] (dist) [right of=diff,xshift=-1cm] {Spatial quality};
+        
+        \draw[arrow] (audio) to [out=0,in=180] (coder);
+        \draw[arrow] (coder) to [out=0,in=180] (decoder);
+        \draw[arrow] (decoder) to [out=0,in=180] (sip1);
+        \coordinate (lineguide) at ([yshift=-2cm]coder.west);
+        \draw[-] (audio) to [out=0,in=180] (lineguide);
+        \draw[arrow] (lineguide) to [out=0,in=180] (sip2);
+        \draw[arrow] (sip1) to [out=0,in=135] (diff);
+        \draw[arrow] (sip2) to [out=0,in=225] (diff);
+        \draw[arrow] (diff) -- (dist);
+
+        \end{tikzpicture}
+    }
+    \caption{Example architecture to measure the spatial quality of a lossy audio codec. The two \gls{sip} blocks must use exactly the same method, although the choice of method is application-specific.}
+    \label{fig:spatial_distortion}
+\end{figure}
+
+Other spatial distortions have also received attention in more recent years. For example, \citeauthor{barryBinaspectPythonLibrary2025} present a comparison of binaural rendering and downmix algorithms (as well as lossy codecs), showing that minute differences in binaural cues can be easily detected using their methods \cite{barryBinaspectPythonLibrary2025}. Taking the opposite approach, \citeauthor{watcharasupatQuantifyingSpatialAudio2024} demonstrates a new metric for assessing spatial quality and demonstrates it using several common, but artificial distortions \cite{watcharasupatQuantifyingSpatialAudio2024}.
 
 In all the above studies, the detail and implementation of the spatial descriptors vary. Some studies (e.g. \cite{delgadoObjectiveAssessmentSpatial2019,barryBinaspectPythonLibrary2025}) opt to use high-level \glspl{sip} such as \q{directional loudness maps} or \gls{ild} histograms, while others (e.g. \cite{wangObjectiveMeasurementSpatial2015}) use low-level spatial cues such as \gls{ild} and \gls{itd}. In short, both approaches are valid and relevant to the \glspl{rq} presented in this thesis. 
 
-Following from this establishment of objective measurements for spatial quality, it is common practice to use them as terms in \gls{dl} loss functions, thereby allowing the networks to learn spatial features \cite{zhuAmbisonicBinaural2022,erruzBinauralSourceSeparation2017,limEnhancingSpatialAudio2024,giampiccoloModelingImpulseResponse2025}.
+Following from this establishment of objective measurements for spatial quality, it is increasingly common practice to use them as additional terms in \gls{dl} loss functions, thereby allowing the networks to learn spatial features. \citeauthorandnumber{erruzBinauralSourceSeparation2017} demonstrates a loss term based on the \gls{ild} of binaural audio, whereas both \citeauthorandnumber{limEnhancingSpatialAudio2024} and \citeauthorandnumber{giampiccoloModelingImpulseResponse2025} implement an \gls{icld} loss term for various combinations of ambisonic channels.
 
 
 \section{Analysis of large musical datasets}
