@@ -982,57 +982,58 @@ Within the context of this thesis, the absolute accuracy of any prediction is no
 
 \section{Spatial quality measurement}
 
-The \glspl{sip} described in \cref{sec:spatial_cues,sec:stereo_image_description,sec:prediction_of_perceptual_scalars} are often used to assess the spatial degradation of a signal after some sort of distortion has been applied. The industry term for this is \q{spatial quality}, where we are referring to the quality of the distorted signal. A typical method is to calculate the same spatial descriptor on both a reference and degraded signal, then calculate the difference in those descriptors. 
+The \glspl{sip} described in \cref{sec:spatial_cues,sec:stereo_image_description,sec:prediction_of_perceptual_scalars} are often used to assess the spatial degradation of an audio signal after some sort of distortion has been applied. The industry term for this is \q{spatial quality}, where we are referring to the quality of the distorted signal. A typical method is to calculate the same spatial descriptor on both a reference and degraded signal, then calculate the difference in those descriptors. There is usually an additional aggregation step to reduce the multidimensional descriptor down to a scalar.
 
 The types of distortion introduced vary, although a major industrial use is in the development of lossy codecs. The work of \citeauthorandnumber{youSpatialLocalizationEvaluation2012}, \citeauthorandnumber{wangObjectiveMeasurementSpatial2015}, \citeauthorandnumber{delgadoObjectiveMeasurementStereophonic2019}, and \citeauthorandnumber{delgadoObjectiveAssessmentSpatial2019} do exactly this. \Cref{fig:spatial_distortion} shows a typical workflow for the measurements of spatial distortion used in all these studies.
 
 \begin{figure}[htb]
     \centering
-    \resizebox{\textwidth}{!}{
-        \begin{tikzpicture}[>=latex, node distance=4cm]
+    \resizebox{0.618\textwidth}{!}{
+        \begin{tikzpicture}[>=latex, node distance=2cm]
+            \node[flow_input] (audio) {Audio};
+            \node[flow_process] (coder) [right of=audio, xshift=2cm] {Lossy coder};
+            \node[flow_process] (decoder) [right of=coder, xshift=2cm] {Decoder};
+            \node[flow_process] (sip1) [below of=decoder] {\gls{sip}};
+            \node[flow_process] (sip2) [below of=audio] {\gls{sip}};
+            \node[draw=black,circle,minimum width=1cm] (diff) [below of=coder] {$\Delta$};
+            \node[flow_process] (agg) [below of=diff] {Aggregation};
+            \node[flow_output] (dist) [below of=agg] {Spatial quality};
 
-        \node[flow_input] (audio) {Audio};
-        \node[flow_process] (coder) [right of=audio,yshift=1cm] {Lossy coder};
-        \node[flow_process] (decoder) [right of=coder] {Decoder};
-        \node[flow_process] (sip1) [right of=decoder] {\gls{sip}};
-        \node[flow_process] (sip2) [below of=sip1, yshift=2cm] {\gls{sip}};
-        \node[draw=black,circle,minimum width=1cm,xshift=-1cm] (diff) [right of=sip1, yshift=-1cm] {$\Delta$};
-        \node[flow_output] (dist) [right of=diff,xshift=-1cm] {Spatial quality};
-        
-        \draw[arrow] (audio) to [out=0,in=180] (coder);
-        \draw[arrow] (coder) to [out=0,in=180] (decoder);
-        \draw[arrow] (decoder) to [out=0,in=180] (sip1);
-        \coordinate (lineguide) at ([yshift=-2cm]coder.west);
-        \draw[-] (audio) to [out=0,in=180] (lineguide);
-        \draw[arrow] (lineguide) to [out=0,in=180] (sip2);
-        \draw[arrow] (sip1) to [out=0,in=135] (diff);
-        \draw[arrow] (sip2) to [out=0,in=225] (diff);
-        \draw[arrow] (diff) -- (dist);
+            \node[anchor=west] (dist_label) at ([yshift=1cm]coder.west) {Distortion};
+            \node[draw=black,dashed,inner sep=5pt, rounded corners] (distortions) [fit=(coder) (decoder) (dist_label)] {};
 
+            \draw[arrow] (audio) -- (coder);
+            \draw[arrow] (audio) -- (sip2);
+            \draw[arrow] (coder) -- (decoder);
+            \draw[arrow] (decoder) -- (sip1);
+            \draw[arrow] (sip1) -- (diff);
+            \draw[arrow] (sip2) -- (diff);
+            \draw[arrow] (diff) -- (agg);
+            \draw[arrow] (agg) -- (dist);
         \end{tikzpicture}
     }
-    \caption{Example architecture to measure the spatial quality of a lossy audio codec. The two \gls{sip} blocks must use exactly the same method, although the choice of method is application-specific.}
+    \caption{Example architecture to measure the spatial quality of a lossy audio codec. The two \gls{sip} blocks must use exactly the same method, although the choice of method is application-specific. The \q{Distortion} block may be replaced when using the workflow for other tasks.}
     \label{fig:spatial_distortion}
 \end{figure}
 
-Other spatial distortions have also received attention in more recent years. For example, \citeauthor{barryBinaspectPythonLibrary2025} present a comparison of binaural rendering and downmix algorithms (as well as lossy codecs), showing that minute differences in binaural cues can be easily detected using their methods \cite{barryBinaspectPythonLibrary2025}. Taking the opposite approach, \citeauthor{watcharasupatQuantifyingSpatialAudio2024} demonstrates a new metric for assessing spatial quality and demonstrates it using several common, but artificial distortions \cite{watcharasupatQuantifyingSpatialAudio2024}.
+Spatial distortions other than lossy coding have also received attention in more recent years. For example, \citeauthor{barryBinaspectPythonLibrary2025} present a comparison of binaural rendering and downmix algorithms (as well as lossy codecs), showing that minute differences in binaural cues can be easily detected using their methods \cite{barryBinaspectPythonLibrary2025}. Taking the opposite approach, \citeauthor{watcharasupatQuantifyingSpatialAudio2024} demonstrates a new metric for assessing spatial quality and demonstrate it using several common, but artificial distortions \cite{watcharasupatQuantifyingSpatialAudio2024}.
 
 In all the above studies, the detail and implementation of the spatial descriptors vary. Some studies (e.g. \cite{delgadoObjectiveAssessmentSpatial2019,barryBinaspectPythonLibrary2025}) opt to use high-level \glspl{sip} such as \q{directional loudness maps} or \gls{ild} histograms, while others (e.g. \cite{wangObjectiveMeasurementSpatial2015}) use low-level spatial cues such as \gls{ild} and \gls{itd}. In short, both approaches are valid and relevant to the \glspl{rq} presented in this thesis. 
 
-Following from this establishment of objective measurements for spatial quality, it is increasingly common practice to use them as additional terms in \gls{dl} loss functions, thereby allowing the networks to learn spatial features. \citeauthorandnumber{erruzBinauralSourceSeparation2017} demonstrates a loss term based on the \gls{ild} of binaural audio, whereas both \citeauthorandnumber{limEnhancingSpatialAudio2024} and \citeauthorandnumber{giampiccoloModelingImpulseResponse2025} implement an \gls{icld} loss term for various combinations of ambisonic channels.
+Following from this establishment of objective measurements for spatial quality, it is increasingly common practice to use them as additional terms in \gls{dl} loss functions, thereby allowing the networks to learn spatial features. \citeauthorandnumber{erruzBinauralSourceSeparation2017} demonstrates a loss term based on the \gls{ild} of binaural audio, whereas both \citeauthorandnumber{limEnhancingSpatialAudio2024} and \citeauthorandnumber{giampiccoloModelingImpulseResponse2025} implement an \gls{icld} loss term for various combinations of ambisonic channels. In all these studies, the underlying industry motivation was the generation and rendering of new spatial audio formats, similar to the upmixing research mentioned in \cref{sec:history}.
 
 
 \section{Analysis of large musical datasets}
 
 Many of the studies cited in \cref{sec:stereo_image_description} use a large dataset of recorded music to demonstrate the effectiveness of their \glspl{sip}. For example, \cite{tzanetakisStereoPanningFeatures2007,tzanetakisStereoPanningInformation2010,tardieuProductionEffectAudio2011} tackle genre recognition, \cite{ziemerAcousticFeaturesRecording2021} predicts artist/\glsxtrshort{dj}, and \cite{tardieuProductionEffectAudio2011} determines the decade of the recordings. Similar studies such as \cite{zhouPredictingGeographicalOrigin2014,kedyteGeographicalOriginPrediction2017} show that the geographic origin of a recording can be determined from audio features, although they don't  include any spatial features. 
 
-\citeauthor{ziemerProducerVsRapper2025}'s continuation of the work on goniometer features (see \cref{sec:stereo_image_description}) uses a dataset comprising songs that were either produced or rapped by specific artists \cite{ziemerProducerVsRapper2025}. They train a \gls{som} on the goniometer features of the dataset. The result firstly show that specific artists have specific sonic profiles. Furthermore, they show that when those artists collaborate, the sound profile of the resulting track is dominated by the producer.
+\citeauthor{ziemerProducerVsRapper2025}'s continuation of their work on goniometer features (see \cref{sec:stereo_image_description}) uses a dataset comprising songs that were either produced or rapped by specific artists \cite{ziemerProducerVsRapper2025}. They train a \gls{som} on the goniometer features of the dataset. The results firstly show that specific artists have specific sonic profiles. Furthermore, they show that when those artists collaborate, the sound profile of the resulting track is dominated by the producer.
 
 In \citeauthor{panteliCharacterizationSingingStyles2017}'s work on the classification of singing style, the classes -- instead of being determined by an a-priori known label -- are learned by first extracting low-level audio cues, then finding common features within those cues. The features are then used as the input to unsupervised clustering algorithms to determine the relationships of the recordings to each other. \citeauthor{panteliComputationalStudyOutliers2017} continued the work in \cite{panteliComputationalStudyOutliers2017} where outliers in the global dataset where found using similar techniques and links between different musical cultures were drawn. On a cautionary note, \citeauthor{chauhanCrossCulturalBiasMelScale2026} recently showed that \gls{ml}-based tasks taking audio input from multiple cultures are biased towards Western sources if they use the Mel spectrogram as the audio frontend \cite{chauhanCrossCulturalBiasMelScale2026}. The authors recommend using alternative frontends, such as \gls{erb}.
 
 \citeauthor{collinsNewCuratedCorpus2018} collated a dataset of historical electronic music \cite{collinsNewCuratedCorpus2018}. As part of that work, they extracted two spatial metrics: \q{channel loudness difference} and \q{stereo spatial ebb}. The example experiment given to demonstrate the dataset showed that \q{stereo spatial ebb} changes according to the year of the recording, thus indicating an artistic trend over time. \q{Channel  loudness difference}, on the other hand, remained static.
 
-What all these studies have in common is an interest in the dataset itself regarding both the relationships between individual recordings, plus the relationship of the entire corpus to the wider world. Low-level audio features are of lesser importance, other than to construct the high-level metrics that enable comparison between recordings.
+What all these studies have in common is an interest in the dataset itself regarding both the relationships between individual recordings, and the relationship of the entire corpus to the wider world. Low-level audio features are of lesser importance, other than to construct the high-level metrics that enable comparison between recordings.
 
 
 
