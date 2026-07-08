@@ -16,6 +16,7 @@
 % \usepackage[latin1]{inputenc}
 % \usepackage[T1]{fontenc}
 \usepackage{mathptmx}
+\usepackage{amssymb}
 \usepackage{siunitx}
 \usepackage{subcaption}
 \usepackage[titletoc]{appendix}
@@ -788,32 +789,36 @@ When this filterbank is applied to each time step of an \gls{stft} spectrogram, 
 
 \begin{figure}[htb]
     \centering
-    \resizebox{\linewidth}{!}{
-        \beginpgfgraphicnamed{mel-filterbanks}
-        \input{figures/mel_filterbank.tikz}
-        \endpgfgraphicnamed
-    }
-    \caption{Example Mel filter bank containing 8 filters, shown with linear (left) and logarithmic (right) frequency scales. Note that the bandwidth of each filter is roughly equal in logarithmic space. Since each filter is designed to give a weighted average of linearly spaced \gls{fft} bins, the amplitudes are scaled so that the sum of the weights in each band is equal. The filters are calculated using librosa \cite{LibrosafiltersmelLibrosa0110} using a sample rate of \SI{44100}{\hertz} and an \gls{fft} size of 4096. Filter weights equal to zero are removed for clarity.}
+    \includegraphics[width=\linewidth]{figures/mel_filterbank.pdf}
+    \caption{Example Mel filter bank containing 8 filters, shown with linear (left) and logarithmic (right) frequency scales. Note that the bandwidth of each filter is roughly equal in logarithmic space. Since each filter is designed to give a weighted average of linearly spaced \gls{fft} bins, the amplitudes are scaled so that the sum of the weights in each band is equal. The filters are calculated using librosa \cite{LibrosafiltersmelLibrosa0110} using a sample rate of \SI{48000}{\hertz} and an \gls{fft} size of 4096. Filter weights equal to zero are removed for clarity.}
     \label{fig:mel_filters}
 \end{figure}
 
 
 \subsubsection{Cochleagram}
 
-As an alternative to the two spectrogram representations, a cochleagram aims to make a \gls{tf} representation that models the acoustic response of the human cochlea more closely. To that end, all processing is performed in the time domain and is sometimes referred to as a \q{peripheral ear model}. Several examples appear in the literature \cite{boddenBinauralModelingAuditory1995,choiObjectiveMeasurementPerceived2008,delgadoDesignChoicesBinaural2023}. In the classical method \cite{boddenBinauralModelingAuditory1995} the original signal is first processed by a bank of gammatone filters with their centre frequencies placed according to a perceptual scale (such as the \gls{erb} scale \cite{smithiiiEquivalentRectangularBandwidth2020}), as shown in \cref{fig:gammatone_filters}. As with Mel filters, several definitions of gammatone filters existing the literature, but the popular implementations (e.g. scipy \cite{virtanenSciPy10Fundamental2020} and \gls{amt} \cite{majdakAMT1xToolbox2022}) preside.
+As an alternative to the two spectrogram representations, a cochleagram aims to make a \gls{tf} representation that models the acoustic response of the human cochlea more closely. To that end, all processing is performed in the time domain and is sometimes referred to as a \q{peripheral ear model}. Several examples appear in the literature \cite{boddenBinauralModelingAuditory1995,choiObjectiveMeasurementPerceived2008,delgadoDesignChoicesBinaural2023}. In the classical method \cite{boddenBinauralModelingAuditory1995} the original signal is first processed by a bank of gammatone filters with their centre frequencies placed according to a perceptual scale (such as the \gls{erb} scale \cite{smithiiiEquivalentRectangularBandwidth2020}), as shown in \cref{fig:gammatone_filters}. As with Mel filters, several definitions of gammatone filters exist in the literature, but the popular implementations (e.g. scipy \cite{virtanenSciPy10Fundamental2020} and \gls{amt} \cite{majdakAMT1xToolbox2022}) preside.
+
+
 
 \begin{figure}[p!]
     \centering
-    \input{figures/gammatone.tikz}
-    \caption{Example gammatone filterbank with individual filters spaced equally on the \gls{erb} scale. The filters are \glsxtrfull{iir} and are applied to audio signals in the time domain.}
-    \label{fig:gammatone_filters}
-\end{figure}
-\fxwarning{These could be two subfigures since they're both talking about the same filterbank}
-\begin{figure}[p!]
-    \centering
-    \includegraphics[width=\linewidth]{figures/cochleagram_steps.pdf}
-    \caption{Steps of an example decomposition from time-domain audio to a cochleagram. The audio is a frequency sweep from 100 to 20000 Hz. First it is processed by a gammatone filterbank, generating 8 sub-band signals which are spaced equally on the \gls{erb} scale. Each sub-band has its envelope extracted. The envelope is then split into overlapping time chunks, which are averaged to form the cochleagram.}
-    \label{fig:cochleagram_steps}
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=0.618\linewidth]{figures/gammatone_filterbank.pdf}
+        \caption{Example gammatone filterbank with individual filters spaced equally on the \gls{erb} scale. The filters are \glsxtrfull{iir} and are applied to audio signals in the time domain.}
+        \label{fig:gammatone_filters}
+    \end{subfigure}
+    
+    \bigskip
+    \bigskip
+    
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\linewidth]{figures/cochleagram_steps.pdf}
+        \caption{Steps of an example decomposition from time-domain audio to a cochleagram. The audio is a frequency sweep from 100 to 20000 Hz. First it is processed by a gammatone filterbank, generating 8 sub-band signals which are spaced equally on the \gls{erb} scale. Each sub-band has its envelope extracted. The envelope is then split into overlapping time chunks, which are averaged to form the cochleagram.}
+        \label{fig:cochleagram_steps}
+    \end{subfigure}
+    \caption{Gammatone filterbank}
 \end{figure}
 
 \Cref{fig:cochleagram_steps} shows the intermediate steps to generate a cochleagram. Each sub-band signal is processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patterns of the cilia and basilar membrane. The result is a signal representing the envelope of each sub-band. Those envelopes are then segmented into overlapping time chunks. The amplitude of each chunk is then calculated as the mean of all its values, forming one pixel in the cochleagram.
