@@ -21,6 +21,13 @@
 \usepackage{subcaption}
 \usepackage[titletoc]{appendix}
 
+%% Use this to print the dimensions of the text
+%% so it can be copied for matplotlib diagrams.
+% \usepackage{layouts}
+% linewidth in inches: \printinunitsof{in}\prntlen{\linewidth}
+% linewdith in cm: \printinunitsof{cm}\prntlen{\linewidth}
+
+
 % Vector notation should be bold and italic
 \usepackage{bm}
 \renewcommand{\vec}{\bm}
@@ -556,31 +563,8 @@ Amplitude panning is the most common panning technique in traditional music prod
 
 \begin{figure}[htb]
     \centering
-    \begin{tikzpicture}[samples=200]
-        \pgfmathsetmacro{\halfpi}{1.57079632679}
-        \begin{axis}[
-            width=0.5\textwidth, height=4cm,
-            axis x line=center,
-            axis y line=center,
-            xtick={0, 0.5, 1},
-            ytick={0, 0.5, 1},
-            xlabel={$a$},
-            ylabel={$g$},
-            xlabel style={below right},
-            ylabel style={above left},
-            ymax=1.1,
-            xmax=1.1,
-            legend style={at={(1.1,0.5)}, anchor=west}
-        ]
-        \addplot [domain=0:1, restrict y to domain=0:1, no markers, smooth] {cos(deg(\halfpi)*x)}; 
-        \addlegendentry{$g_L=\cos(\frac{\pi}{2}a)$}
-        \addplot [domain=0:1, restrict y to domain=0:1, no markers, smooth, densely dashed] {sin(deg(\halfpi)*x)};
-        \addlegendentry{$g_R=\sin(\frac{\pi}{2}a)$}
-        \addplot [domain=0:1, restrict y to domain=0:1, no markers, smooth, dotted] {cos(deg(\halfpi)*x)^2 + sin(deg(\halfpi)*x)^2};
-        \addlegendentry{\(g_L^2 + g_R^2\)}
-        \end{axis}
-    \end{tikzpicture}
-    \caption{Equal power panning. $g$ is the gain applied to the channel and $a$ is the panning factor ranging from 0 (fully left) to 1 (fully right).}
+    \includegraphics{figures/equal_power_panning.pdf}
+    \caption{Channel gains for equal power panning. When both channel gains are $\frac{1}{\sqrt{2}}$, the sound will be centre-panned. The perceived loudness is equal at all panning positions. }
     \label{fig:equal_power_panning}
 \end{figure}
 
@@ -707,79 +691,16 @@ The output of a recording session is usually only the stereo mix. Stems and \gls
 \subsection{Digital audio signals}
 When a sound wave interacts with a microphone, it generates an electrical signal in continuous time. To convert that analogue signal into a digital one, it is sampled at regular intervals. The sampling frequency ($f_s$) is related to the sampling interval ($\Delta$) by the relationship $\Delta = \frac{1}{f_s}$.
 
-Shannon's sampling theorem states that a signal can be perfectly recreated when sampled at twice the highest frequency contained in the signal. Conversely, the highest frequency the highest frequency that can be represented by sampling a signal at a given sampling frequency is half of that frequency. This limit is called the \q{Nyquist frequency} and is calculated by $f_N = \frac{f_s}{2}$ \cite{yaoNyquistFrequency1983}. 
-
-This is illustrated by \Cref{fig:nyquist}, which shows the sampling of three waveforms. The lower plot shows a signal at the Nyquist frequency ($f_N$), which can be perfectly reconstructed from the digital samples. The upper two waveforms have frequencies equidistant but in opposite directions from the Nyquist frequency ($f_N \pm f_{\delta}$). The digital samples shown in circles could represent either of the two waveforms. In practice, when the analogue waveform is reconstructed, the lower frequency will always take precedence. 
+Shannon's sampling theorem states that a signal can be perfectly recreated when sampled at twice the highest frequency contained in the signal. Conversely, the highest frequency that can be represented by sampling a signal at a given $f_s$ is half of that frequency. This limit is called the \q{Nyquist frequency} and is calculated by $f_N = \frac{f_s}{2}$ \cite{yaoNyquistFrequency1983}. This is illustrated by \Cref{fig:nyquist}, which shows the sampling of three waveforms. The lower plot shows a signal at the Nyquist frequency ($f_N$), which can be perfectly reconstructed from the digital samples. The upper two waveforms have frequencies equidistant but in opposite directions from the Nyquist frequency ($f_N \pm f_{\delta}$). The digital samples shown in circles could represent either of the two waveforms. In practice, when the analogue waveform is reconstructed, the lower frequency will always take precedence. 
 
 \begin{figure}[htb]
     \centering
-    \begin{tikzpicture}[samples=200, node distance=2cm]
-        \pgfmathsetmacro{\halfpi}{1.57079632679}
-        \def\sep{8pt}
-        \begin{groupplot}[
-            group style = {group size=1 by 2, x descriptions at=edge bottom, vertical sep=16pt},
-            width=\textwidth, 
-            height=4cm,
-            %
-            ytick=\empty, 
-            ymin=-1, 
-            ymax=1, 
-            ylabel style={rotate=-90},
-            enlarge y limits=true,
-            %
-            axis y line=left,
-            xlabel=time, 
-            axis x line = center,
-            xlabel style={right},
-            xmin=0,
-            xmax=360,
-            xtick=\empty,
-        ]
-            \nextgroupplot[
-                ylabel={$f_n \pm f_\delta$},
-                xlabel={time},
-            ]
-            \addplot [domain=0:360, smooth] {cos(0.5*x)};
-            \addplot [domain=0:360, smooth] {cos(5.5*x)};
-            \addplot [domain=0:360, only marks, samples at={0,60,120,180,240,300,360}, mark=o] {cos(0.5*x)};
-            \pgfplotsinvokeforeach 
-                {60, 120, 180, 240, 300, 360} 
-                {\coordinate (top_#1) at (axis cs:#1,\pgfkeysvalueof{/pgfplots/ymax});}
-
-            \nextgroupplot[
-                ylabel={$f_N$},
-                xlabel={time},
-            ]
-            \addplot [domain=0:360, smooth] {cos(3*x)};
-            \addplot [domain=0:360, only marks, samples at={0,60,120,180,240,300,360}, mark=square] {cos(3*x)};
-
-            \pgfplotsinvokeforeach 
-                {60, 120, 180, 240, 300, 360} 
-                {\coordinate (bottom_#1) at (axis cs:#1,\pgfkeysvalueof{/pgfplots/ymin});}
-
-        \end{groupplot}
-
-        \pgfplotsinvokeforeach
-            {60, 120, 180, 240, 300, 360} 
-            {\draw [dotted] (top_#1) -- (bottom_#1);}
-        
-        \node[anchor=south] at (top_60) {$n=0$};
-        \node[anchor=south] at (top_120) {$n=1$};
-        \node[anchor=south] at (top_180) {$n=2$};
-        \node[anchor=south] at (top_240) {$\dots$};
-        
-        \node[anchor=north] at (bottom_60) {$t$};
-        \node[anchor=north] at (bottom_120) {$t+T_s$};
-        \node[anchor=north] at (bottom_180) {$t+2T_s$};
-        \node[anchor=north] at (bottom_240) {$\dots$};
-        
-    \end{tikzpicture}
-    \caption{Aliasing in sampled digital audio signals. Dotted vertical lines represent digital sampling points with a separation of $T_s$, and monotonically increasing index $n$. The upper plot shows two cosine waves with frequencies equidistant from the Nyquist frequency ($f_N$) in opposing directions. The lower plot is a cosine wave at exactly $f_N$. Sampled values are shown as marks on the plots. Note that the two upper signals can both be represented by same digital samples.}
+    \includegraphics{figures/nyquist.pdf}
+    \caption{Aliasing in sampled digital audio signals. Dotted vertical lines represent digital sampling points with a separation of $T_s$, and monotonically increasing index $n$. The upper plot shows two cosine waves with frequencies equidistant from the Nyquist frequency ($f_N$) in opposing directions. The lower plot is a cosine wave at exactly $f_N$. Sampled values are shown as circle marks on the plots. The two upper signals can both be represented by same digital samples.}
     \label{fig:nyquist}
-    \fxwarning{Maybe remake this graph in python}
 \end{figure}
 
-A typical sampling frequency for music is \SI{44100}{\hertz}, with a resulting Nyquist frequency of \SI{22050}{\hertz}. The prevalence of this particular number is due to the popularity of \glspl{cd} as a distribution medium\footnote{\SI{44100}{\hertz} was chosen by a consortium of \gls{cd} manufacturing companies as a trade-off between technical requirements and the limits of human perception \cite{baertDigitalAudioCompact2013}.}. While higher frequencies may be used in the recording and production process, an exceedingly large proportion of recorded music has been distributed at \SI{44100}{\hertz}.
+A typical $f_s$ for music is \qty{44.1}{\kHz}, with a resulting $f_N$ of \qty{22.05}{\kHz}. The prevalence of this particular number is due to the popularity of \glspl{cd} as a distribution medium\footnote{\qty{44.1}{\kHz} was chosen by a consortium of \gls{cd} manufacturing companies as a trade-off between technical requirements and the limits of human perception \cite{baertDigitalAudioCompact2013}.}. While higher frequencies may be used in the recording and production process, an exceedingly large proportion of recorded music has been distributed at \qty{44.1}{\kHz}.
 
 \subsection{Time-Frequency representation of audio}
 
@@ -789,17 +710,17 @@ In order to perform many types of audio analysis, the audio signal can be conver
 
 The \gls{stft} spectrogram is one of the most popular \gls{tf} representions across all audio processing work due to its computational efficiency. The fundamental principle is that a time-domain signal is split into short (1 to 100ms) overlapping chunks, and the \gls{fft} is performed on each chunk, thereby converting that chunk into the frequency domain.  By arranging subsequent frames along a time axis it is possible to represent the original signal as a 2D image known as a spectrogram. When the time-domain signal is entirely real, (which is the case for monophonic audio signals), the result of the \gls{fft} will be a complex signal which is symmetrical around the Nyquist frequency and the upper half is therefore dropped. Furthermore, the complex spectrum is usually represented in magnitude/phase form to better match the human auditory response.
 
-A fundamental property of the \gls{fft} is that it assumes that the signal repeats outside the time frame that is being analysed. Since this is generally not the case for audio signals, it is standard practice to apply a time-domain windowing function to each frame so that large transients do not occur at the boundaries. Serveral standard windowing functions exist, each with their own nuances, but for most audio applications, the \q{Hann} window can be used \cite{LibrosastftLibrosa0110}. 
+A fundamental property of the \gls{fft} is that it assumes that the signal repeats outside the time frame that is being analysed. Since this is generally not the case for audio signals, it is standard practice to apply a time-domain windowing function to each frame so that large transients do not occur at the boundaries. Serveral standard windowing functions exist, each with their own nuances, but for most audio applications the \q{Hann} window can be used \cite{LibrosastftLibrosa0110}. 
 
-The nature of the spectrogram is affected by two parameters: the frame size and hop size. \q{Frame size} refers to the number of samples in each audio frame. To obtain maximal computational efficiency this must be a power of 2. \q{Hop size} refers to the number of samples between the start of subsequent frames and is sometimes expressed as a percentage of the frame size. The frame size dictates the resolution of the spectrogram's frequency axis since the frequency bins will be spaced evenly between \SI{0}{\hertz} and the Nyquist frequency. Importantly, a longer frame size will result in lower time accuracy within each frame; sharp transients in the time domain will appear as wideband energy in the frequency domain, but information about exactly where in the frame the transient occurred is lost. To counteract this inaccuracy, a smaller hop size can be used so that transients might be detected as sharp changes between \gls{stft} frames. One major drawback of the \gls{stft} spectrogram is that the frequency bins are spaced linearly from \SI{0}{\hertz} to the Nyquist frequency, whereas the human perception of frequency works on a logarithmic scale. The \gls{stft} therefore contains redundant information in higher frequencies. Several common alternatives exist to account for this.
+The nature of the spectrogram is affected by two parameters: the frame size and hop size. \q{Frame size} refers to the number of samples in each analysis frame. To obtain maximal computational efficiency this must be a power of 2. \q{Hop size} refers to the number of samples between the start of subsequent frames and is sometimes expressed as a percentage of the frame size. The frame size dictates the resolution of the spectrogram's frequency axis since the frequency bins will be spaced evenly between \SI{0}{\hertz} and the Nyquist frequency. Importantly, a longer frame size will result in lower time accuracy within each frame; sharp transients in the time domain will appear as wideband energy in the frequency domain, but information about exactly where the transient occurred within the frame is lost. To counteract this inaccuracy, a smaller hop size can be used so that transients might be detected as sharp changes between \gls{stft} frames. One major drawback of the \gls{stft} spectrogram is that the linearly-spaced frequency bins do not align well with the human perception of frequency, which is logarithmic. The \gls{stft} therefore contains redundant information in higher frequencies. Several common alternatives exist to account for this.
 
 \subsubsection{Mel spectrogram}
 
 The \q{Mel scale} is a quasi-logarithmic frequency scale derived from perceptual experiments. Several definitions exist in the literature \cite{umeshFittingMelScale1999}, but popular implementations like that of librosa \cite{mcfeeLibrosaAudioMusic2015} and \gls{amt} \cite{majdakAMT1xToolbox2022} tend to underpin most audio experimentation.
 
-A \q{Mel filter bank} is a set of band-pass filters that are spaced equally on the Mel scale. Practically, they are implemented as sets of weights that are applied to an \gls{stft} spectrum with the relationship $M_n = \sum_{k=0}^{N} S_k W_{k,n}$ where $M_n$ is the $n$th Mel coefficient, $S_k$ is the $k$th \gls{stft} bin, $N$ is the number of \gls{stft} bins,  and $W_{k,n}$ is the $k$th weight of the $n$th Mel filter. An example Mel filter bank with 8 filters is shown in \cref{fig:mel_filters}. While 8 filters are shown for demonstration purposes, audio analysis typically requires in the order of 128 filters.
+A \q{Mel filter bank} is a set of band-pass filters that are spaced equally on the Mel scale. Practically, they are implemented as sets of weights that are applied to an \gls{stft} spectrum with the relationship $M_n = \sum_{k=0}^{N} S_k W_{k,n}$ where $M_n$ is the $n$th Mel coefficient, $S_k$ is the $k$th \gls{stft} bin, $N$ is the number of \gls{stft} bins,  and $W_{k,n}$ is the $k$th weight of the $n$th Mel filter. An example Mel filter bank with 8 filters is shown in \cref{fig:mel_filters}. While 8 filters are shown for demonstration purposes, audio analysis typically requires over 100. 
 
-When this filterbank is applied to each time step of an \gls{stft} spectrogram, the result is a \q{Mel spectrogram}, an example of which can be seen in \cref{fig:spect_comp}. Notice that the higher frequencies have been condensed into fewer frequency bins compared to the \gls{stft} spectrogram.
+When this filterbank is applied to each time step of an \gls{stft} spectrogram, the result is a \q{Mel spectrogram}, an example of which can be seen in \cref{fig:spect_comp}. Observe that the higher frequencies have been condensed into fewer frequency bins compared to the \gls{stft} spectrogram.
 
 \begin{figure}[htb]
     \centering
