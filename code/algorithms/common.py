@@ -73,3 +73,15 @@ def draw_panning_histogram(
     ax.set_xlabel("Azimuth")
     ax.set_ylabel("Normalized histogram value")
     ax.legend(loc='upper left')
+
+
+def debug_spectograms(
+    spects: List[TFRegion],
+):
+    import matplotlib.pyplot as plt
+    fig, axes = plt.subplots(len(spects), 2, sharex=True)
+    for ax_row, ss in zip(axes, spects):
+        ax_row[0].imshow(np.rot90(np.abs(ss[0])), aspect='auto')
+        ax_row[1].imshow(np.rot90(np.abs(ss[1])), aspect='auto')
+    plt.show()
+

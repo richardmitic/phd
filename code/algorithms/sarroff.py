@@ -9,7 +9,7 @@ FrequencyAzimuthAnalysisSignal = NDArray[np.float64] # shape (time, frequency, a
 "Type for the magnitude spectrum of a single time slice"
 MagnitudeSpectrum = NDArray[np.float64] # shape (channel, frequency)
 
-from .common import MagnitudeSpectrogram  # shape (channel, time, frequency)
+from .common import MagnitudeSpectrogram, TFRegion  # shape (channel, time, frequency)
 
 
 def frequency_azimuth_plane_slow(X: MagnitudeSpectrum, beta: int) -> FrequencyAzimuthPlane:
@@ -72,14 +72,14 @@ def frequency_azimuth_analysis_signal(X: MagnitudeSpectrogram, beta: int) -> Fre
     return np.stack(planes)
 
 
-def panning_histogram(X: MagnitudeSpectrogram, beta: int) -> NDArray[np.float64]:
+def panning_histogram(X: MagnitudeSpectrogram, beta: int = 20) -> NDArray[np.float64]:
     analysis_signal = frequency_azimuth_analysis_signal(X, beta)
     hist = analysis_signal.sum(axis=(0,1)) # sum over time and frequency
     # hists = analysis_signal.sum(axis=1)
     return hist
 
-def panning_histogram_region(X: MagnitudeSpectrogram, beta: int) -> NDArray[np.float64]:
-    analysis_signal = frequency_azimuth_analysis_signal(X, beta)
+def panning_histogram_region(X: MagnitudeSpectrogram, beta: int = 20) -> NDArray[np.float64]:
+    analysis_signal = frequency_azimuth_analysis_signal(X, beta=beta)
     return analysis_signal.sum(axis=1) # sum over frequency
 
 

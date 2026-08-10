@@ -25,6 +25,7 @@ dependencies = [
     "rdp",
     "celery",
     "redis",
+    "tqdm",
 ]
 
 [tool.uv.sources]

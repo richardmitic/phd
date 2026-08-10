@@ -32,7 +32,7 @@ def energy_weighted_histogram(Rw: SPSRegion, S: TFRegion, M: int) -> HistogramRe
         out.append(hist)
     return np.stack(out)
 
-def panning_histogram(S: TFRegion, M: int) -> Histogram:
+def panning_histogram(S: TFRegion, M: int = 100) -> Histogram:
     R = panning_spectrum(S)
     Rw = perceptual_warp(R)
     hists = energy_weighted_histogram(Rw, S, M)
@@ -40,4 +40,15 @@ def panning_histogram(S: TFRegion, M: int) -> Histogram:
     norm = np.sum(Hw)
     return Hw / norm
 
-    
+def panning_coefficients(ph: Histogram, L: int = 20) -> NDArray[np.float64]:
+    pseudospect = np.concat([ph, ph[::-1]])
+    return np.fft.ifft(np.log(pseudospect))[:L]
+
+def cepstral_quantize(ph: Histogram, L: int = 20) -> Histogram:
+    M = len(ph)
+    pc = panning_coefficients(ph, L)
+    x = np.concat([pc, np.zeros(2*M-L)])
+    x = np.exp(np.fft.fft(x).real)
+    x = x[:len(x) // 2]
+    x = x / np.sum(x)
+    return x
