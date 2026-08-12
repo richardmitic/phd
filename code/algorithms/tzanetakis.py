@@ -4,6 +4,8 @@ from numpy.typing import NDArray
 from algorithms.avendano import panning_index
 from algorithms.common import TFRegion
 
+StereoPanningFeatures = NDArray[np.float64]
+
 
 def panning_rms(sps: NDArray[np.float64]) -> NDArray[np.float64]:
     num_bands = sps.shape[1]
@@ -11,7 +13,7 @@ def panning_rms(sps: NDArray[np.float64]) -> NDArray[np.float64]:
     return prms
 
 
-def stereo_panning_features(spect: TFRegion,  samplerate: float, M: int):
+def stereo_panning_features(spect: TFRegion,  samplerate: float, M: int) -> StereoPanningFeatures:
     sps = panning_index(spect)
 
     freqs = np.fft.rfftfreq((sps.shape[1] - 1) * 2, d=1/samplerate)

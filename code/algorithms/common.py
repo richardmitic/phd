@@ -55,33 +55,3 @@ def split_spectrogram_bands(
     return regions
 
 
-def draw_panning_histogram(
-    hist: PanningHistogram,
-    ax: Axes,
-    title: str,
-    ylim: Tuple[float, float],
-    **plot_kwargs: Dict[Any, Any], 
-):
-    ax.plot(hist, **plot_kwargs)
-    ax.set_yticks([])
-    ax.set_title(title)
-    ax.set_ylim(ylim)
-    l = 0
-    r = hist.shape[0] - 1
-    c = r / 2
-    ax.set_xticks([l,c,r], labels=['L', 'C', 'R'])
-    ax.set_xlabel("Azimuth")
-    ax.set_ylabel("Normalized histogram value")
-    ax.legend(loc='upper left')
-
-
-def debug_spectograms(
-    spects: List[TFRegion],
-):
-    import matplotlib.pyplot as plt
-    fig, axes = plt.subplots(len(spects), 2, sharex=True)
-    for ax_row, ss in zip(axes, spects):
-        ax_row[0].imshow(np.rot90(np.abs(ss[0])), aspect='auto')
-        ax_row[1].imshow(np.rot90(np.abs(ss[1])), aspect='auto')
-    plt.show()
-

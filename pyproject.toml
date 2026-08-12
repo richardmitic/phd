@@ -26,6 +26,7 @@ dependencies = [
     "celery",
     "redis",
     "tqdm",
+    "cache_to_disk",
 ]
 
 [tool.uv.sources]

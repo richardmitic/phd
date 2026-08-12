@@ -270,6 +270,15 @@ css = [
 ]
 
 [[package]]
+name = "cache-to-disk"
+version = "2.0.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/22/df/9712d98cadf4dfab259b09ea2972f5585f4a6909d19fe60be2b7adb8823d/cache_to_disk-2.0.0.tar.gz", hash = "sha256:79e19ea9b72eedc5cec83bb8aa55374afc671493e7d13d541f3b63eb3a13fb32", size = 6362, upload-time = "2021-12-07T00:10:08.389Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/87/4f/bd5da67f8f509c8e34cab16f6cc88a843d9b15b3631381a09d98f4f1d70f/cache_to_disk-2.0.0-py3-none-any.whl", hash = "sha256:ea5afe13d4284cb4a06169b0807fbc60547cbe19c54563bf90e1d44f24029481", size = 8718, upload-time = "2021-12-07T00:10:05.899Z" },
+]
+
+[[package]]
 name = "cattrs"
 version = "25.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -2287,6 +2296,7 @@ name = "phd"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "cache-to-disk" },
     { name = "celery" },
     { name = "jupyter-tikz" },
     { name = "jupyterlab" },
@@ -2317,6 +2327,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "cache-to-disk" },
     { name = "celery" },
     { name = "jupyter-tikz", git = "https://github.com/lucaslrodri/jupyter-tikz?branch=main" },
     { name = "jupyterlab" },
