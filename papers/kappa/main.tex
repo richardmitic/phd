@@ -23,9 +23,10 @@
 
 %% Use this to print the dimensions of the text
 %% so it can be copied for matplotlib diagrams.
-% \usepackage{layouts}
-% linewidth in inches: \printinunitsof{in}\prntlen{\linewidth}
-% linewdith in cm: \printinunitsof{cm}\prntlen{\linewidth}
+\usepackage{layouts}
+
+%% Use this to show margins
+% \usepackage{showframe}
 
 
 % Vector notation should be bold and italic
@@ -66,6 +67,8 @@
 % Make every plot render to a separate pdf which is included in later runs.
 \usepgfplotslibrary{external} 
 \tikzexternalize
+
+\graphicspath{{./images_test/}}
 
 % \pgfrealjobname{main}
 
@@ -168,6 +171,10 @@ Spatial information is crucial to the listener's experience of music, and stereo
 
 \begin{document}
 \frontmatter
+
+linewidth in inches: \printinunitsof{in}\prntlen{\linewidth}
+
+linewdith in cm: \printinunitsof{cm}\prntlen{\linewidth}
 
 \listoffixmes
 \frontmatterCS
@@ -298,7 +305,7 @@ The ear contains three major sections, loosely labelled the \q{outer}, \q{middle
     \begin{flushleft}{\scriptsize\textsuperscript{*}\href{https://commons.wikimedia.org/w/index.php?curid=34334173}{Original image} by Cancer Research UK is licensed under \href{https://creativecommons.org/licenses/by-sa/4.0/}{CC BY-SA 4.0}. Annotations have been edited.}\end{flushleft}
 \end{figure}
 
-The basilar membrane reacts to a pressure wave from an incoming sound in an elastic way, with a buldge travelling from the base (the widest section) to the apex (the narrowest section). That buldge will change amplitude as it travels due to the basilar membrane's non-uniform width and stiffness, and the distance at which is reaches its maximum amplitude depends on the frequency of the incoming sound. Thus, the cilia at different positions along the cochlea have different \q{critical frequencies} that they respond to. The critical frequency increases logarithmically as one moves from the base to the apex, as shown in \cref{fig:cochlea}. The cochlea therefore acts to convert time-domain sound waves into time- and frequency-dependent electrical excitations, enabling us to perceive different frequencies simultaneously. 
+The basilar membrane reacts to a pressure wave from an incoming sound in an elastic way, with a bulge travelling from the base (the widest section) to the apex (the narrowest section). That budge will change amplitude as it travels due to the basilar membrane's non-uniform width and stiffness, and the distance at which is reaches its maximum amplitude depends on the frequency of the incoming sound. Thus, the cilia at different positions along the cochlea have different \q{critical frequencies} that they respond to. The critical frequency increases logarithmically as one moves from the base to the apex, as shown in \cref{fig:cochlea}. The cochlea therefore acts to convert time-domain sound waves into time- and frequency-dependent electrical excitations, enabling us to perceive different frequencies simultaneously. 
 
 \begin{figure}[htb]
     \centering
@@ -430,8 +437,7 @@ The relative importance of \gls{ild} and \gls{itd} differ depending on the frequ
 
 
 \begin{figure}[htb]
-    % \input{figures/hihat_kick.tikz}
-    \includegraphics[width=\linewidth]{figures/hihat_kick.pdf}
+    \includegraphics{hihat_kick.pdf}
     \caption{Example sounds coming from the right-hand side, recorded binaurally. High-frequency content (above) has a large \gls{ild} and ambiguous \gls{ipd}, whereas low-frequency content (below) has negligible \gls{ild}, but an interpretable \gls{ipd}.}
     \label{fig:example_pan}
 \end{figure}
@@ -563,7 +569,7 @@ Amplitude panning is the most common panning technique in traditional music prod
 
 \begin{figure}[htb]
     \centering
-    \includegraphics{figures/equal_power_panning.pdf}
+    \includegraphics{equal_power_panning.pdf}
     \caption{Channel gains for equal power panning. When both channel gains are $\frac{1}{\sqrt{2}}$, the sound will be centre-panned. The perceived loudness is equal at all panning positions. }
     \label{fig:equal_power_panning}
 \end{figure}
@@ -696,7 +702,7 @@ Shannon's sampling theorem states that a signal can be perfectly recreated when 
 
 \begin{figure}[htb]
     \centering
-    \includegraphics{figures/nyquist.pdf}
+    \includegraphics{nyquist.pdf}
     \caption{Illustration of the Nyquist Frequency in digital audio signals. Dotted vertical lines represent sampling points with a separation of $T_s$, and monotonically increasing index $n$. The upper plot shows a cosine wave at exactly $f_N$. The lower plot shows two cosine waves with frequencies equidistant above and below the Nyquist frequency ($f_N$). Sampled values are shown as circle marks on the plots. The two upper signals can both be represented by same digital samples.}
     \label{fig:nyquist}
 \end{figure}
@@ -725,7 +731,7 @@ When this filterbank is applied to each time step of an \gls{stft} spectrogram, 
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=\linewidth]{figures/mel_filterbank.pdf}
+    \includegraphics{mel_filterbank.pdf}
     \caption{Example Mel filter bank containing 8 filters, shown with linear (left) and logarithmic (right) frequency scales. Note that the bandwidth of each filter is roughly equal in logarithmic space. Since each filter is designed to give a weighted average of linearly spaced \gls{fft} bins, the amplitudes are scaled so that the sum of the weights in each band is equal. The filters are calculated using librosa \cite{LibrosafiltersmelLibrosa0110} using a sample rate of \SI{48000}{\hertz} and an \gls{fft} size of 4096. Filter weights equal to zero are removed for clarity.}
     \label{fig:mel_filters}
 \end{figure}
@@ -741,7 +747,7 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
     \centering
     \begin{subfigure}[b]{\textwidth}
         \centering
-        \includegraphics[width=0.618\linewidth]{figures/gammatone_filterbank.pdf}
+        \includegraphics{gammatone_filterbank.pdf}
         \caption{Example gammatone filterbank with individual filters spaced equally on the \gls{erb} scale. The filters are \glsxtrfull{iir} and are applied to an audio signal in the time domain.}
         \label{fig:gammatone_filters}
     \end{subfigure}
@@ -750,7 +756,7 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
     \bigskip
     
     \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\linewidth]{figures/cochleagram_steps.pdf}
+        \includegraphics{cochleagram_steps.pdf}
         \caption{Steps of an example decomposition from time-domain audio to a cochleagram. The audio is a frequency sweep from 100 to 20000 Hz. First it is processed by a gammatone filterbank, generating 8 sub-band signals which are spaced equally on the \gls{erb} scale. Each sub-band has its envelope extracted. The envelope is then split into overlapping time chunks, which are averaged to form the cochleagram.}
         \label{fig:cochleagram_steps}
     \end{subfigure}
@@ -762,7 +768,7 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
 
 \begin{figure}[p!]
     \centering
-    \includegraphics[width=\textwidth]{figures/spect_comp.pdf}
+    \includegraphics{spect_comp.pdf}
     \caption{An example audio signal displayed as \gls{stft} spectrogram (above), Mel spectrogram (mid), and cochleagram (below). The spectrogram frequency bands are spaced linearly between 0Hz and the Nyquist frequency, which is not coherent with human perception. The Mel spectrogram is created from the original spectrogram based on linear combinations of its frequency bands and retains more detail in lower frequencies than higher frequencies. The Cochleagram is created directly from time domain audio by mimicking the physical response of the human ear. In all cases the pixel colour represent the sound intensity of the given \gls{tf} bin in decibels.}
     \label{fig:spect_comp}
 \end{figure}
@@ -803,7 +809,7 @@ The \enquote{\gls{pi}} and \enquote{ambience index} specified by \citeauthor{ave
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=\textwidth]{figures/pi_ai.pdf}
+    \includegraphics{pi_ai.pdf}
     \caption{Demonstration of \q{panning index} and \q{ambience index} on Track C. Several panned sources are visible as red or blue bands in the \pani, and at roughly 20s most sources fade out leaving a single one on the right. The \ambi~plot shows that the track starts off with no single dominant direct sound source. At 20s when most sources fade out, the \ambi~drops to 0 across the lower half of the spectrum, indicating that the remaining source is direct. In the upper half of the spectrum, the source remains slightly ambient. }
     \label{fig:pi_ai}
 \end{figure}
@@ -814,7 +820,7 @@ The \enquote{\gls{pi}} and \enquote{ambience index} specified by \citeauthor{ave
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.618\textwidth]{figures/adress.pdf}
+    \includegraphics{adress.pdf}
     \caption{\glsxtrlong{fa} plane for a signal comprising 8 sinusoids at differing frequencies. Half are panned left and half are panned right.}
     \label{fig:adress}
 \end{figure}
@@ -830,7 +836,7 @@ Stereo image description refers to the generation of a numerical vector that rep
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=\textwidth]{figures/spf.pdf}
+    \includegraphics{spf.pdf}
     \caption{
         \glsxtrlong{spf} for three tracks from the \gls{fma} dataset \cite{defferrardFMADatasetMusic2017}. All tracks clearly show different panning and production styles. 
     }
@@ -841,7 +847,7 @@ While \gls{spf} shows production style at a high level, other descriptors contai
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=\textwidth]{figures/panning_histograms.pdf}
+    \includegraphics{panning_histograms.pdf}
     \caption{
         \glsxtrlongpl{ph} for three tracks from the \gls{fma} dataset \cite{defferrardFMADatasetMusic2017}. All tracks clearly show different shapes of stereo field. The two different algorithms (\citeauthorandnumber{gomezMusicSimilaritySystems2008} and \citeauthorandnumber{sarroffMeasurementsSpaciousnessStereophonic2008}) produce slightly different fine detail, but they agree on the general azimuthal distribution.
     }
@@ -860,7 +866,7 @@ While \gls{spf} shows production style at a high level, other descriptors contai
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=\textwidth]{figures/asf.pdf}
+    \includegraphics{asf.pdf}
     \caption{
         Visualization of \gls{asf} for three tracks from the \gls{fma} dataset \cite{defferrardFMADatasetMusic2017}. For demonstration purposes, only a subset of the calculated features are shown. The amount and variation of panning is visible in fine detail across the frequency spectrum.
     }
@@ -875,16 +881,16 @@ While all the aforementioned studies focus on descriptions of amplitude panning 
 
 \begin{figure}[p!]
     \centering
-    \begin{subfigure}[b]{0.9\textwidth}
-        \includegraphics[width=\linewidth]{figures/goniometer.pdf}
+    \begin{subfigure}[b]{\columnwidth}
+        \includegraphics{goniometer.pdf}
         \caption{Example goniometer reading for a 40ms segment of recorded audio. The left plot shows an original goniometer as the producer would see in their \gls{daw}. The right plot shows the boxes that the signal passes through as defined by \citeauthorandnumber{ziemerGoniometersArePowerful2023}.}
         \label{fig:goniometer_steps}
     \end{subfigure}
     
     \vspace{1em}
 
-    \begin{subfigure}[b]{0.9\textwidth}
-        \includegraphics[width=\linewidth]{figures/goniometer_features.pdf}
+    \begin{subfigure}[b]{\columnwidth}
+        \includegraphics{goniometer_features.pdf}
         \caption{Goniometer features as defined by \citeauthorandnumber{ziemerGoniometersArePowerful2023} for the three example tracks. Each track clearly shows a unique profile in how the features vary over time.}
         \label{fig:goinometer_features}
     \end{subfigure}
@@ -896,7 +902,7 @@ While all the aforementioned studies focus on descriptions of amplitude panning 
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=\textwidth]{figures/harma.pdf}
+    \includegraphics{harma.pdf}
     \caption{
         Visualization of 6 stereo mixture classes, recreated from \cite{harmaClassificationTimefrequencyRegions2010}. The axes $\sigma_s$ and $\sigma_p$ represent the variances of the centre source and panned source, whereas $\sigma_{uv}$ represents the covariance of the left and right uncorrelated sources. Classes are indicated as Roman numerals on the sphere's surface and separated by red dividing lines. Class 0 is silence and is hence trivial to detect. Class VII is cannot be detected by \citeauthor{harmaClassificationTimefrequencyRegions2010}'s method.
     }
@@ -1073,8 +1079,7 @@ These tracks from the \gls{fma} dataset \cite{defferrardFMADatasetMusic2017} wer
 
 \bigskip
 
-{
-\footnotesize
+\resizebox{0.94\columnwidth}{!}{
 \input{figures/demo_tracks.tex}
 }
 
