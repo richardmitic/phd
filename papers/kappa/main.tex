@@ -760,7 +760,7 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
         \caption{Steps of an example decomposition from time-domain audio to a cochleagram. The audio is a frequency sweep from 100 to 20000 Hz. First it is processed by a gammatone filterbank, generating 8 sub-band signals which are spaced equally on the \gls{erb} scale. Each sub-band has its envelope extracted. The envelope is then split into overlapping time chunks, which are averaged to form the cochleagram.}
         \label{fig:cochleagram_steps}
     \end{subfigure}
-    \caption{Gammatone filterbank}
+    \caption{\fxerror{Why is this text so big?} Gammatone filterbank}
 \end{figure}
 
 \Cref{fig:cochleagram_steps} shows the intermediate steps to generate a cochleagram. Each sub-band signal is processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patterns of the cilia and basilar membrane. The result is a signal representing the envelope of each sub-band. Those envelopes are then segmented into overlapping time chunks. The amplitude of each chunk is then calculated as the mean of all its values, forming one pixel in the cochleagram.
