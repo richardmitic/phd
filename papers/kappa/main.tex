@@ -642,16 +642,18 @@ To create a stereo image, a music producer will use the equipment available in a
     \begin{flushleft}{\scriptsize\textsuperscript{*}\href{https://www.pexels.com/photo/a-person-in-green-crew-neck-t-shirt-sitting-infront-of-computer-and-audio-mixer-5657660/}{Original} \href{https://www.pexels.com/photo/person-using-audio-mixer-5657676/}{images} by cottonbro studio are licensed under \href{https://www.pexels.com/license/}{Pexels}. Annotations have been added.}\end{flushleft}
 \end{figure}
 
-In modern recording scenarios a music producer typically uses a \gls{daw} - graphical software that allows them to record and edit audio. There are many \glspl{daw} available, but one such example (Reaper) is shown in \cref{fig:daw}. In particular, it shows a single recorded audio track which has its \q{Pan} control automated. It also contains a single effects track which applies a stereo reverb effect to the recorded audio. This effects track has its \q{dry/wet} mix parameter automated, which controls the ratio of non-processed to processed sound. In a more complete recording session, the \gls{daw} would contain many more audio and effects tracks, each with their own pan control. \fxwarning{Do we need to show the effects track?}
+In modern recording scenarios a music producer typically uses a \gls{daw} - graphical software that allows them to record and edit audio. There are many \glspl{daw} available, but one such example (Reaper) is shown in \cref{fig:daw}. In particular, it shows a single recorded audio track which has its \q{Pan} control automated. In a more complete recording session, the \gls{daw} would contain many more tracks, each with their own pan control.
 
 \begin{figure}[p!]
     \centering
     \begin{subfigure}[b]{\textwidth}
-        \includegraphics[width=\linewidth]{figures/daw_small_rect.png}
+        \includegraphics[width=\linewidth]{figures/daw.png}
         \caption{Recording project in the Reaper \gls{daw} \cite{REAPERAudioProduction}}
         \label{fig:daw}
     \end{subfigure}
+
     \bigskip
+    
     \begin{subfigure}[b]{\textwidth}
         % \centering
         \includegraphics[width=\linewidth]{figures/goniometer_plugin.png}
@@ -752,8 +754,7 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
         \caption{Example gammatone filterbank with individual filters spaced equally on the \gls{erb} scale. The filters are \glsxtrfull{iir} and are applied to an audio signal in the time domain.}
         \label{fig:gammatone_filters}
     \end{subfigure}
-    
-    \bigskip
+
     \bigskip
     
     \begin{subfigure}[b]{\textwidth}
@@ -761,7 +762,7 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
         \caption{Steps of an example decomposition from time-domain audio to a cochleagram. The audio being filtered is a frequency sweep from 100 to 20000 Hz. First it is processed by a gammatone filterbank, generating 8 sub-band signals which are spaced equally on the \gls{erb} scale. Each sub-band has its envelope extracted. The envelope is then split into overlapping time chunks, which are averaged to form the cochleagram.}
         \label{fig:cochleagram_steps}
     \end{subfigure}
-    \caption{\fxerror{Why is this text so big?} Gammatone filterbank}
+    \caption{Using a gammatone filterbank to make a cochleagram.}
 \end{figure}
 
 \Cref{fig:cochleagram_steps} shows the intermediate steps to generate a cochleagram. Each sub-band signal is processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patterns of the cilia and basilar membrane. The result is a signal representing the envelope of each sub-band. Those envelopes are then segmented into overlapping time chunks. The amplitude of each chunk is then calculated as the mean of all its values, forming one pixel in the cochleagram.
