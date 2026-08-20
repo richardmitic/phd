@@ -91,6 +91,16 @@
 \newcommand{\pani}{\enquote{panning index}}
 \newcommand{\ambi}{\enquote{ambience index}}
 
+% Edited from UUThesisTemplate.cls
+\newcommand{\dedicationLeft}[1]{%
+    \cleardoublepage%
+    \vspace*{\stretch{3}}%
+    \begin{flushleft}%
+    {\@dedicationfont\Large\selectfont\emph{#1}}%
+    \end{flushleft}%
+    \vspace*{\stretch{1}}%
+}
+
 %% Custom citation command to print all authors' full names.
 \makeatletter
 % 1. Create a custom name format that manually grabs the raw, full name strings
@@ -178,12 +188,12 @@ linewidth in inches: \printinunitsof{in}\prntlen{\linewidth}
 
 linewdith in cm: \printinunitsof{cm}\prntlen{\linewidth}
 
-\fxerror{Something about funding. Not necessarily here.}
-
 \listoffixmes
 \frontmatterCS
 
-\dedication{Dedicated to the one guy at Uppsala University who made a latex template 14 year ago.}
+\dedicationLeft{\footnotesize
+This thesis is part of the \glsxtrshort{iresap} project - a collaboration between \glsxtrshort{mdu}, \glsxtrshort{kmh}, Spotify, Ericsson, and Teenage Engineering. It was funded by Spotify and \glsxtrshort{kks}.\\Special thanks to Rikard Lindell, Andreas Rossholm, and Elaine Åstrand for their advice and support, and to Wolmar Nyberg Åkerström for donating his \LaTeX~template.
+}
 
 \begin{listofpapers}
     \item \fullcite{franklinDevelopmentWebBasedRealTime2025} \label{paper:auxtrument}
