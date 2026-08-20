@@ -726,7 +726,7 @@ A typical $f_s$ for music is \qty{44.1}{\kHz}, with a resulting $f_N$ of \qty{22
 
 \subsection{Time-Frequency representation of audio}
 
-In order to perform many types of audio analysis, the audio signal can be converted from the time domain into the \gls{tf} domain. In perceptual acoustics research there are several common forms of \gls{tf} representation, each with its own nuances. This section provides those details and \Cref{fig:spect_comp} shows a visual comparison of all spectrogram types. \fxerror{Make smaller diagrams for each section}
+In order to perform many types of audio analysis, the audio signal can be converted from the time domain into the \gls{tf} domain. In perceptual acoustics research there are several common forms of \gls{tf} representation, each with its own nuances. This section provides those details and \Cref{fig:spect_comp} shows a visual comparison of all spectrogram types.
 
 \subsubsection{\gls{stft} spectrogram}
 
@@ -735,6 +735,13 @@ The \gls{stft} spectrogram is one of the most popular \gls{tf} representions acr
 A fundamental property of the \gls{fft} is that it assumes that the signal repeats outside the time frame that is being analysed. Since this is generally not the case for audio signals, it is standard practice to apply a time-domain windowing function to each frame so that large transients do not occur at the boundaries. Serveral standard windowing functions exist, each with their own nuances, but for most audio applications the \q{Hann} window can be used \cite{LibrosastftLibrosa0110}. 
 
 The nature of the spectrogram is affected by two parameters: the frame size and hop size. \q{Frame size} refers to the number of samples in each analysis frame. To obtain maximal computational efficiency this must be a power of 2. \q{Hop size} refers to the number of samples between the start of subsequent frames and is sometimes expressed as a percentage of the frame size. The frame size dictates the resolution of the spectrogram's frequency axis since the frequency bins will be spaced evenly between \SI{0}{\hertz} and the Nyquist frequency. Importantly, a longer frame size will result in lower time accuracy within each frame; sharp transients in the time domain will appear as wideband energy in the frequency domain, but information about exactly where the transient occurred within the frame is lost. To counteract this inaccuracy, a smaller hop size can be used so that transients might be detected as sharp changes between \gls{stft} frames. One major drawback of the \gls{stft} spectrogram is that the linearly-spaced frequency bins do not align well with the human perception of frequency, which is logarithmic. The \gls{stft} therefore contains redundant information in higher frequencies. Several common alternatives exist to account for this.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics{stft_spect.pdf}
+    \caption{\gls{stft} spectrogram}
+    \label{fig:stft_spect}
+\end{figure}
 
 \subsubsection{Mel spectrogram}
 
@@ -751,6 +758,12 @@ When this filterbank is applied to each time step of an \gls{stft} spectrogram, 
     \label{fig:mel_filters}
 \end{figure}
 
+\begin{figure}[htb]
+    \centering
+    \includegraphics{mel_spect.pdf}
+    \caption{Mel spectrogram}
+    \label{fig:mel_spect}
+\end{figure}
 
 \subsubsection{Cochleagram}
 
@@ -779,6 +792,15 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
 
 \Cref{fig:cochleagram_steps} shows the intermediate steps to generate a cochleagram. Each sub-band signal is processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patterns of the cilia and basilar membrane. The result is a signal representing the envelope of each sub-band. Those envelopes are then segmented into overlapping time chunks. The amplitude of each chunk is then calculated as the mean of all its values, forming one pixel in the cochleagram.
 
+\begin{figure}[htb]
+    \centering
+    \includegraphics{cochleagram.pdf}
+    \caption{Cochleagram}
+    \label{fig:cochleagram}
+\end{figure}
+
+
+\Cref{fig:spect_comp} shows all three side by side for comparisson.
 
 \begin{figure}[p!]
     \centering

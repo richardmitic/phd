@@ -205,6 +205,7 @@ def draw_equal_power_panning(output_dir: Path, figsize: Tuple[float, float]):
 def draw_spectrogram_comparison(
     output_dir: Path, 
     figsize: Tuple[float, float],
+    single_plot_figsize: Tuple[float, float],
     annotation_bbox_props: Dict[Any, Any],
 ):
     fig, ax = plt.subplots(3,1, figsize=figsize, sharex=True)
@@ -219,7 +220,7 @@ def draw_spectrogram_comparison(
     stft_bands = 2048
     num_bands = 32
 
-    def kilo_formatter(x):
+    def _kilo_formatter(x):
         if x < 1000:
             return str(int(x))
         else:
@@ -244,31 +245,44 @@ def draw_spectrogram_comparison(
     hop_size = int(0.5 * chunk_size)
     chunks = np.lib.stride_tricks.sliding_window_view(y, chunk_size, axis=1)[:, ::hop_size, :]
     # coch = np.sqrt(np.sum(np.pow(chunks, 2), axis=(2,))) # RMS
-    coch = np.mean(chunks, axis=2)
+    coch = librosa.amplitude_to_db(np.mean(chunks, axis=2))
 
-    D = librosa.amplitude_to_db(np.abs(librosa.stft(audio, n_fft=stft_bands)), ref=np.max)
+    D = np.abs(librosa.stft(audio, n_fft=stft_bands))**2
     S = librosa.feature.melspectrogram(S=D, sr=sr, n_mels=num_bands)
+    D = np.flipud(D)
+    S = np.flipud(S)
     mel_freqs = librosa.mel_frequencies(n_mels=num_bands, fmax=sr/2)
 
     images = []
 
-    images.append(ax[0].imshow(np.flipud(D), aspect='auto', cmap='magma', extent=(0, duration, 0, linear_freqs[-1])))
-    images.append(ax[1].imshow(np.flipud(S), aspect='auto', cmap='magma', extent=(0, duration, 0, num_bands)))
-    images.append(ax[2].imshow(librosa.amplitude_to_db(coch), aspect='auto', cmap='magma', extent=(0, duration, 0, num_bands)))
-
-
-    ax[0].set_ylabel("Frequency (Hz)")
-    ax[0].set_yticks([0,5000,10000,15000,20000], labels=["0", "5k", "10k", "15k", "20k"])
-
     desired_ticks = [100, 500, 1000, 2000, 5000, 10000, 20000]
 
-    ax[1].set_ylabel("Frequency (Hz)")
-    yticks = np.interp(desired_ticks, mel_freqs, np.arange(num_bands))
-    ax[1].set_yticks(yticks, labels=[kilo_formatter(x) for x in desired_ticks])
+    def _draw_stft_spect(ax, spect):
+        img = ax.imshow(librosa.power_to_db(spect, ref=np.max), aspect='auto', cmap='magma', extent=(0, duration, 0, linear_freqs[-1]))
+        ax.set_yticks([0,5000,10000,15000,20000], labels=["0", "5k", "10k", "15k", "20k"])
+        return img
 
+    def _draw_mel_spect(ax, spect):
+        img = ax.imshow(librosa.power_to_db(spect, ref=np.max), aspect='auto', cmap='magma', extent=(0, duration, 0, num_bands))
+        yticks = np.interp(desired_ticks, mel_freqs, np.arange(num_bands))
+        yticklabels = [_kilo_formatter(x) for x in desired_ticks]
+        ax.set_yticks(yticks, labels=yticklabels)
+        return img
+    
+    def _draw_coch_spect(ax, spect):
+        img = ax.imshow(spect, aspect='auto', cmap='magma', extent=(0, duration, 0, num_bands))
+        yticks = np.interp(desired_ticks, erb_freqs, np.arange(num_bands))
+        yticklabels = [_kilo_formatter(x) for x in desired_ticks]
+        ax.set_yticks(yticks, labels=yticklabels)
+        return img
+
+    images.append(_draw_stft_spect(ax[0], D))
+    images.append(_draw_mel_spect(ax[1], S))
+    images.append(_draw_coch_spect(ax[2], coch))
+
+    ax[0].set_ylabel("Frequency (Hz)")
+    ax[1].set_ylabel("Frequency (Hz)")
     ax[2].set_ylabel("Frequency (Hz)")
-    yticks = np.interp(desired_ticks, erb_freqs, np.arange(num_bands))
-    ax[2].set_yticks(yticks, labels=[kilo_formatter(x) for x in desired_ticks])
     ax[2].set_xlabel("Time (s)")
 
     x = 0.02
@@ -277,9 +291,20 @@ def draw_spectrogram_comparison(
     ax[1].text(x, y, "Mel Spectrogram", transform=ax[1].transAxes, verticalalignment='top', bbox=annotation_bbox_props)
     ax[2].text(x, y, "Cochleagram", transform=ax[2].transAxes, verticalalignment='top', bbox=annotation_bbox_props)
 
-
-    fig.colorbar(images[0], ax=ax, label="Sound intensity (dB)")
+    fig.colorbar(images[0], ax=ax, label="Normalized sound intensity", ticks=[])
     fig.savefig(output_dir / "spect_comp.pdf")
+
+    for draw_func, spect, filename in zip(
+        [_draw_stft_spect, _draw_mel_spect, _draw_coch_spect],
+        [D, S, coch], 
+        ["stft_spect.pdf", "mel_spect.pdf", "cochleagram.pdf"]
+    ):
+        fig, ax = plt.subplots(1, 1, figsize=single_plot_figsize, layout='constrained')
+        img = draw_func(ax, spect)
+        fig.colorbar(img, ax=ax, label="Sound intensity (dB)")
+        ax.set_ylabel("Frequency (Hz)")
+        ax.set_xlabel("Time (s)")
+        fig.savefig(output_dir / filename)
 
 
 def draw_gammatone_filters(
@@ -995,7 +1020,7 @@ make_freesound_appendix_table(freesound_clips, OUTPUT_DIR)
 draw_panned_drums(OUTPUT_DIR, WIDE_RECT, ANNOTATION_BBOX_PROPS)
 draw_nyquist(OUTPUT_DIR, WIDE_SKINNY_RECT)
 draw_equal_power_panning(OUTPUT_DIR, MID_WIDE_RECT)
-draw_spectrogram_comparison(OUTPUT_DIR, WIDE_SQUARE, ANNOTATION_BBOX_PROPS)
+draw_spectrogram_comparison(OUTPUT_DIR, WIDE_SQUARE, WIDE_SKINNY_RECT, ANNOTATION_BBOX_PROPS)
 draw_gammatone_filters(OUTPUT_DIR, MID_RECT)
 draw_mel_filters(OUTPUT_DIR, MID_WIDE_RECT)
 draw_cochleagram_steps(OUTPUT_DIR, WIDE_SKINNY_RECT)
