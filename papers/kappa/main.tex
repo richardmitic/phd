@@ -175,9 +175,7 @@
 
 \abstractdummy{
 \begin{abstract}
-Spatial information is crucial to the listener's experience of music, and stereophonic recordings have long been the standard for capturing this spatiality. Recent advancements in computing, coupled with the availability of new, very large musical corpora, have created opportunities for large-scale quantitative analysis of the stereo image of recorded music. In this licentiate thesis I address a key gap in current research: direct analysis of raw music recordings to describe the stereo image. I explore existing methods, assess their effectiveness, and demonstrate potential use cases for spatial analysis within audio reproduction, transmission and musical performance.
-\fxerror{Expand the last sentence}
-% This sentence needs to be expanded so that the abstract reveals a little more about your thesis. As with individual papers, the abstract for your thesis should reveal enough that it is possible to cite your thesis simply by reading the abstract. Med andra ord, beskriv vilka metoder, avslöja om vilka metoder som var effekticast, skriv ett par meningar om vilka use case som du har demonstrerat
+Spatial information is crucial to the listener's experience of music, and stereophonic recordings have long been the standard for capturing this spatiality. Recent advancements in computing, coupled with the availability of new, very large musical corpora, have created opportunities for large-scale quantitative analysis of the stereo image of recorded music. In this licentiate thesis I address a key gap in current research: direct analysis of raw music recordings to describe the stereo image. The work comprises practice-led research, objective experiments, perceptual listening tests, and an extensive literature review. A combination of immersion in the creative aspects of stereo field and thorough mathematical evaluation of the recorded signals created a strong foundation for future research. The studies together revealed that the while there are many existing stereo descriptors, the musical features visible to each one vary considerably and therefore have differing use cases. Moreover, they don't always align with human perception. The combination of research methods was hence a highly effective way to critique the strengths and weakness of objective measurements. Future work should focus on applying and adapting the discovered methods to modern music datasets.
 \end{abstract}
 }
 
@@ -739,7 +737,7 @@ The nature of the spectrogram is affected by two parameters: the frame size and 
 \begin{figure}[htb]
     \centering
     \includegraphics{stft_spect.pdf}
-    \caption{\gls{stft} spectrogram}
+    \caption{\gls{stft} spectrogram of a speech recording.}
     \label{fig:stft_spect}
 \end{figure}
 
@@ -761,7 +759,7 @@ When this filterbank is applied to each time step of an \gls{stft} spectrogram, 
 \begin{figure}[htb]
     \centering
     \includegraphics{mel_spect.pdf}
-    \caption{Mel spectrogram}
+    \caption{Mel spectrogram of a speech recording.}
     \label{fig:mel_spect}
 \end{figure}
 
@@ -795,12 +793,12 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
 \begin{figure}[htb]
     \centering
     \includegraphics{cochleagram.pdf}
-    \caption{Cochleagram}
+    \caption{Cochleagram of a speech recording.}
     \label{fig:cochleagram}
 \end{figure}
 
 
-\Cref{fig:spect_comp} shows all three side by side for comparisson.
+\Cref{fig:spect_comp} shows all three side by side for comparison.
 
 \begin{figure}[p!]
     \centering
@@ -911,7 +909,7 @@ While \gls{spf} shows production style at a high level, other descriptors contai
 
 While all the aforementioned studies focus on descriptions of amplitude panning in stereo mixes, recording engineers can make use of phase-based techniques to add spatial feeling to their mix. \citeauthor{tardieuProductionEffectAudio2011} also suggest a measurement for these named \gls{psf} \cite{tardieuProductionEffectAudio2011}, underpinned by an \gls{stft} spectrogram derivative named \gls{ssps}. While the idea of measuring these common production effects has merit, I unfortunately could not confirm that it worked in practice because the method to calculate \gls{ssps} as defined by \citeauthor{tardieuProductionEffectAudio2011} produced spurious results for all recording that I tested.
 
-\citeauthor{ziemerAcousticFeaturesRecording2021} argue the case in \cite{ziemerNovelRecordingStudio2020,ziemerAcousticFeaturesRecording2021,ziemerGoniometersArePowerful2023} that analyses based on a recording studio goniometer can aid in describing the stereo properties of music, particularly in differentiating between the artistic intentions of different recording sessions. The underlying logic is that since producers consult goniometers in their creative process, their readings must have inherent descriptive value. To perform the analyses, a virtual goniometer readout consisting of a lissajous figure and channel correlation measurement is constructed for non-overlapping time frames of an audio recording. The lissajous figure is quantized and reduced to a single number by counting the unique X/Y positions. Channel correlation is defined as the Pearson correlation coefficient \cite{howell2013statistical} between the left and right channel signals. \Cref{fig:goniometer_main} shows how an audio signal can be converted to goniometer features.
+\citeauthor{ziemerAcousticFeaturesRecording2021} argue the case in \cite{ziemerNovelRecordingStudio2020,ziemerAcousticFeaturesRecording2021,ziemerGoniometersArePowerful2023} that analyses based on a recording studio goniometer can aid in describing the stereo properties of music, particularly in differentiating between the artistic intentions of different recording sessions. The underlying logic is that since producers consult goniometers in their creative process, their readings must have inherent descriptive value. To perform the analyses, a virtual goniometer readout consisting of a lissajous figure and channel correlation measurement is constructed for non-overlapping time frames of an audio recording. The lissajous figure is quantized and reduced to a single number by counting the unique X/Y positions. Channel correlation is defined as the Pearson correlation coefficient \cite{howellStatisticalMethodsPsychology2010} between the left and right channel signals. \Cref{fig:goniometer_main} shows how an audio signal can be converted to goniometer features.
 
 \begin{figure}[p!]
     \centering
