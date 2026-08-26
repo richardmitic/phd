@@ -20,6 +20,7 @@
 \usepackage{siunitx}
 \usepackage{subcaption}
 \usepackage[titletoc]{appendix}
+\usepackage{placeins}
 
 %% Use this to print the dimensions of the text
 %% so it can be copied for matplotlib diagrams.
@@ -282,7 +283,7 @@ Paper \ref{paper:dafx} also presented a good opportunity to assess the computati
 \chapter{Background}
 \label{ch:background}
 
-This chapter provides the fundamental background knowledge that underpins the work included in the thesis. 
+% This chapter provides the fundamental background knowledge that underpins the work included in the thesis. 
 
 Music production techniques related to stereo field are thoroughly rooted in the human perception of sounds, exploiting well-understood auditory phenomena for creative means. However, that understanding is a fairly recent development. In fact, musical practice involving stereophonic sound predated the scientific knowledge of perception by several decades, with one of the earliest known examples dating back the late 19th century \cite{munnTelephoneParisOpera1881}. It wasn't until mid 20th century that the work of \citeauthorandnumber{fletcherLoudnessItsDefinition1933} and \citeauthorandnumber{jeffressPlaceTheorySound1948} outlined the psychoacoustic principles that music production would eventually exploit. In this chapter we draw a line from the basic human physiology of the auditory system, through psychoacoustics, \gls{dsp} theory, and music production, eventually linking them all to the modern computing techniques used as the basis for the work detailed in this thesis. 
 
@@ -336,7 +337,6 @@ The basilar membrane reacts to a pressure wave from an incoming sound in an elas
 
 The psychoacoustic study of spatial hearing has been an active area of research since the mid 20th century, with early examples including the Jeffress model in which time differences between sound events at each ear contribute to a person's ability to locate sounds in space \cite{jeffressPlaceTheorySound1948}. The work of \citeauthor{lindemannEvaluationInterauralSignal1982} a few decades later expanded on this idea by translating the earlier theory to a \gls{dsp} context, and establishing the \gls{ild}, \gls{itd}, and \gls{iacc} as important measures to describe the spatial aspects of binaural signals in a quantifiable way \cite{lindemannEvaluationInterauralSignal1982}.
 
-Put simply, we are able to perceive the incoming direction of a sound by observing both the amplitude difference and time difference of coincident sound waves arriving at the left and right ears. Figure \cref{fig:directional_hearing} shows how these two properties enable directional hearing. Firstly, the head itself creates a physical barrier that attenuates sound waves at one ear more-so that at the other ear. Secondly, the difference in distance between the sound source and each ear will create a time delay between the received signals. Over time we learn to associate patterns in \gls{itd}/\gls{ild} with the physical location of the sound source.
 
 \begin{figure}[htb]
     \centering
@@ -443,15 +443,18 @@ Put simply, we are able to perceive the incoming direction of a sound by observi
 
         \end{tikzpicture}
     }
-    \caption{Illustration of how humans perceive the direction of an incoming sound. The physical barrier of the head causes an \glsxtrfull{ild} between sound waves received at the two ears ($a_R-a_L$). The difference in distance from the source to the ears ($d_R - d_L$) causes an \glsxtrfull{itd} between the two ear ($t_2-t_1$).}
+    \caption{Illustration of how humans perceive the direction of an incoming sound. The physical barrier of the head causes an \glsxtrfull{ild} between sound waves received at the two ears ($a_R-a_L$). The difference in distance from the source to the ears ($d_R - d_L$) causes an \glsxtrfull{itd} between the two ears ($t_2-t_1$).}
     \label{fig:directional_hearing}
 \end{figure}
+
+Put simply, we are able to perceive the incoming direction of a sound by observing both the amplitude difference and time difference of coincident sound waves arriving at the left and right ears. Figure \cref{fig:directional_hearing} shows how these two properties enable directional hearing. Firstly, the head itself creates a physical barrier that attenuates sound waves at one ear more-so that at the other ear. Secondly, the difference in distance between the sound source and each ear will create a time delay between the received signals. Over time we learn to associate patterns in \gls{itd}/\gls{ild} with the physical location of the sound source.
 
 The relative importance of \gls{ild} and \gls{itd} differ depending on the frequency of the incoming sound. The reasons for this are twofold. Firstly, a person's inter-aural distance (the physical distance between their ears) must be longer than the wavelength of the incoming sound wave in order for them to detect the phase difference between wave peaks. In this case, it is often referred to as \gls{ipd}, which accounts for the centre frequency of the critical band. Secondly the cilia that line the basilar membrane inside the cochlea can only detect the fine structure of a sound wave up until roughly \qty{1.6}{\kHz} \cite{lindemannEvaluationInterauralSignal1982}. \citeauthor{lindemannEvaluationInterauralSignal1982} gives a rule of thumb that time differences of less than \qty{7.5}{\ms} are heard as a single auditory event (for which direction could be inferred), and differences above \qty{21}{\ms} are heard as uncorrelated events \cite{lindemannEvaluationInterauralSignal1982}. Hence, at \qty{1.6}{\kHz} and below \gls{itd} is more important, whereas above \qty{1.6}{\kHz} \gls{ild} is more important. Furthermore, \citeauthor{blauertSpatialHearingOne1996}'s subsequent work found firstly that both \gls{ild} and \gls{itd} are relevant within the frequency band surrounding \qty{1.6}{\kHz}, and secondly that the angle of incidence of the sound wave plays a role in how the cues are perceived \cite{blauertSpatialHearingOne1996}. Despite this, Lindemann's rules of thumb are still broadly accepted, even being encoded into international standards such as \citetitle{iso-11172-3:mpeg_audio} \cite{iso-11172-3:mpeg_audio}. As an example, \cref{fig:example_pan} shows two recordings (a high-frequency hi-hat and a low-frequency kick drum) that originate from the right-hand side of a listener. The high-frequency hi-hat has a large \gls{ild} and ambiguous \gls{ipd}, whereas the low-frequency kick drum has negligible \gls{ild}, but an interpretable \gls{ipd}.
 
 
 \begin{figure}[htb]
-    \includegraphics{hihat_kick.pdf}
+    \centering
+    \includegraphics[scale=0.96]{hihat_kick.pdf}
     \caption{Example sounds coming from the right-hand side, recorded binaurally. High-frequency content (above) has a large \gls{ild} and ambiguous \gls{ipd}, whereas low-frequency content (below) has negligible \gls{ild}, but an interpretable \gls{ipd}.}
     \label{fig:example_pan}
 \end{figure}
@@ -545,7 +548,6 @@ Another frequently used technique is \q{binaural panning}, which assigns combina
         \pic (producer) at (0,0) {head};
 
         % delta function
-
         \begin{scope}[xshift=2.2cm, yshift=1.5cm, draw=black]
             \draw[black] (0,0)--(1.26,0);
             \draw[black] (0.05,0)--(0.05,0.7);
@@ -646,7 +648,7 @@ Describing the stereo image of a recording has its roots in the acoustics domain
 
 To create a stereo image, a music producer will use the equipment available in a typical recording studio. Before the advent of digital recording, said equipment usually comprised a mixing console where each stem was assigned to one \q{track}. Each track had individual controls for (amongst others) level and panning that were directly linked to the internal electronics. The producers might also use the term \q{fader} for the level control and \q{pan-pot} for the panning control\footnote{The term \q{pan-pot} is a shortening of \q{panoramic potentiometer}.}. All tracks would be mixed by the console and the combined output fed to stereo speakers for playback. In a digital recording studio, the equipment is largely the same except that the mixing console will be connected to a computer that controls the session and stores the recorded audio. \Cref{fig:recording_studio} shows photographs of a small recording studio where the faders and pan-pots for each track are visible. The music producer will manipulate the physical controls for each track to create a stereo mix.
 
-\begin{figure}[htb]
+\begin{figure}[hbt]
     \centering
     \includegraphics[width=\linewidth] {figures/studio_photos_small.pdf}
     \caption{Photographs of a small recording studio\textsuperscript{*}. The left photo shows all studio equipment, while the right photo shows a close-up of the mixing console. Faders are highlighted pink, pan-pots are highlighted blue, stereo speakers are highlighted green, and the computer running a \glsfmtfull{daw} is highlighted red. One track is highlighted yellow.}
@@ -841,7 +843,7 @@ With access to these efficient distribution formats, large digital music collect
 
 A \q{spatial cue} is a low-level analysis of spatial information in a short (1-100ms) audio snippet. While those mentioned in \cref{sec:directional_hearing} aim to analyse binaural sound as perceived by humans, there are several examples of spatial cues tailored specifically to the analysis of recorded music.
 
-The \enquote{\gls{pi}} and \enquote{ambience index} specified by \citeauthor{avendanoFrequencyDomainTechniques2002} \cite{avendanoFrequencyDomainTechniques2002} are loosely analogous to \gls{ild} and \gls{iacc} in the acoustics domain. To estimate the \gls{pi}, a signal model is assumed whereby a musical source is panned within the mix using the \enquote{energy preserving pan law}, in which amplitude differences are applied to each channel such that the sum of the squared amplitudes equals 1 (see \cref{sec:stereo_image}). While this panning technique does not affect the phase of either channel, existing phase differences between channels are measured using the \enquote{ambience index}, which is defined such that it is low when the stereo channels are correlated (indicating a direct sound source), and high when channels are uncorrelated (indicating an ambient or reverberant sound source). 
+The \q{panning index} and \enquote{ambience index} specified by \citeauthor{avendanoFrequencyDomainTechniques2002} \cite{avendanoFrequencyDomainTechniques2002} are loosely analogous to \gls{ild} and \gls{iacc} in the acoustics domain. To estimate the \q{panning index}, a signal model is assumed whereby a musical source is panned within the mix using the \enquote{energy preserving pan law}, in which amplitude differences are applied to each channel such that the sum of the squared amplitudes equals 1 (see \cref{sec:stereo_image}). While this panning technique does not affect the phase of either channel, existing phase differences between channels are measured using the \q{ambience index}, which is defined such that it is low when the stereo channels are correlated (indicating a direct sound source), and high when channels are uncorrelated (indicating an ambient or reverberant sound source). 
 
 \begin{figure}[htb]
     \centering
@@ -857,7 +859,7 @@ The \enquote{\gls{pi}} and \enquote{ambience index} specified by \citeauthor{ave
 \begin{figure}[htb]
     \centering
     \includegraphics{adress.pdf}
-    \caption{\glsxtrlong{fa} plane for a signal comprising 8 sinusoids at differing frequencies. Half are panned left and half are panned right.}
+    \caption{\glsxtrfull{fa} plane for a signal comprising 8 sinusoids at differing frequencies. Half are panned left and half are panned right. Red dashed lines show the panning positions detected by looking for nulls in the \gls{fa} plane.}
     \label{fig:adress}
 \end{figure}
 
@@ -867,6 +869,8 @@ Importantly, all the previously mentioned analyses are performed in the \gls{tf}
 \label{sec:stereo_image_description}
 
 Stereo image description refers to the generation of a numerical vector that represents the stereo image in an arbitrary feature space. Recordings with similar stereo image should be close within the space, although the distance metric is application-specific. A typical technique is to construct the vector from statistical summaries of low-level spatial cues. Throughout this section, these vectors are referred to as \glspl{sip}, and examples of each one are given on the three example tracks.
+
+\subsection{\gls{dsp}-based \glspl{sip}}
 
 \citeauthor{tzanetakisStereoPanningFeatures2007} provide the earliest example of a technique specifically designed to interpret the use of panning in recorded music: \gls{spf} \cite{tzanetakisStereoPanningFeatures2007}. It targets amplitude panning only, using \citeauthor{avendanoFrequencyDomainTechniques2002}'s \pani{} as the basis. Additionally, it separates the frequency spectrum into 3 sub-bands -- lows, mids, and highs -- following the common practice of music producers. While not specifically stated by \citeauthor{tzanetakisStereoPanningFeatures2007}, I interpret the vector to represent the amount and variance of \q{fast panning} and \q{slow panning} in each frequency band. \citeauthor{tzanetakisStereoPanningInformation2010} later expanded the features by adding an estimation of the number of individual sources in the recording \cite{tzanetakisStereoPanningInformation2010}. The resulting \gls{sip} can be used to compare the recording and production styles of different music tracks, as shown in \cref{fig:spf}.
 
@@ -890,7 +894,7 @@ While \gls{spf} shows production style at a high level, other descriptors contai
     \label{fig:panning_histograms}
 \end{figure}
 
-\citeauthor{gomezMusicSimilaritySystems2008} present a continuation of their \gls{ph} algorithm. They note that the histogram itself can be quite large, and that standard distance metrics may not correlate with perceptual differences. To avoid this, they propose converting the \gls{ph} to a vector of \q{\gls{pc}} in a non-perceptual domain and truncating it. \Cref{eq:cepst_ph} shows this conversion where $\vec{C}$ is the vector of coefficients, $\mathcal{F}^{-1}$ is the inverse \gls{fft}, $L$ is the truncation length, and $\vec{H}\vec{H}^{\leftarrow}$ is a concatenation of the panning histogram and its reverse. The efficacy of this technique remains under-tested, and my work in paper \ref{paper:dafx} showed that \gls{pc} was unable to accurately represent \glspl{ph} with sharp peaks.
+\citeauthor{gomezMusicSimilaritySystems2008} present a continuation of their \gls{ph} algorithm. They note that the histogram itself can be quite large, and that standard distance metrics may not correlate with perceptual differences. To avoid this, they propose converting the \gls{ph} to a vector of \q{\gls{pc}} in a non-perceptual domain and truncating it. \Cref{eq:cepst_ph} shows this conversion where $\vec{C}$ is the vector of coefficients, $\mathcal{F}^{-1}$ is the inverse \gls{fft}, $L$ is the truncation length, and $\vec{H}\vec{H}^{\leftarrow}$ is a concatenation of the panning histogram and its reverse. The efficacy of this technique remains under-tested, and my work in paper \ref{paper:dafx} showed that \gls{pc} were unable to accurately represent \glspl{ph} with sharp peaks.
 
 \begin{equation}
     \vec{C} = \left\{\mathcal{F}^{-1} \left\{ \log (\vec{H}\vec{H}^{\leftarrow})\right\} \right\}_{1:L}
@@ -934,7 +938,7 @@ While all the aforementioned studies focus on descriptions of amplitude panning 
 
 \citeauthor{harmaClassificationTimefrequencyRegions2010}'s work on the classification of stereo audio in \cite{harmaClassificationTimefrequencyRegions2010,harmaClassificationTimefrequencyRegions2011,harmaStereoAudioClassification2011} presents a slightly different take on the problem. He proposes a signal model where the stereo mix is formed from a combination of a single centre source, a significant amplitude-panned source, plus left and right uncorrelated sources. He subsequently presents a list of 8 pre-defined classes representing various combinations of those sources. Furthermore, he shows that stereo recordings can be classified into 6 out of 8 of those classes by estimating the variances of the underlying source signals. The classes are visualized as areas on the surface of a unit sphere, with each dimension representing the variance of the 3 source types, as shown in \cref{fig:harma}. It should be noted that \citeauthor{harmaClassificationTimefrequencyRegions2010} does not give a method for the classification of the final class -- a mixture of all three source types -- deeming it too complex to detect. In the context of stereo image description, \citeauthor{harmaClassificationTimefrequencyRegions2010}'s work is somewhat different from the others since the descriptions (i.e. the 8 classes) are pre-defined; The main innovation is the method to assign an audio signal to a class.
 
-\begin{figure}[htb]
+\begin{figure}[h!]
     \centering
     \includegraphics{harma.pdf}
     \caption{
@@ -943,6 +947,9 @@ While all the aforementioned studies focus on descriptions of amplitude panning 
     \label{fig:harma}
 \end{figure}
 
+% \FloatBarrier
+
+\subsection{\gls{ml}-based \glspl{sip}}
 
 All the previously mentioned algorithms use classical \gls{dsp} to create their spatial descriptors, but more recently there have been efforts to use \glsxtrfull{dl} to disentangle spatial information from audio content. \citeauthor{yangUpmixingStyleTransfer2022} presents one such example in \cite{yangUpmixingStyleTransfer2022}. While the original aim was to upmix stereo music to multichannel, a necessary component of the resulting neural network was a latent space that represents the spatial information of the multichannel signal. A simplified architecture diagram of \citeauthor{yangUpmixingStyleTransfer2022}'s method is shown in \cref{fig:dl_upmix}.
 

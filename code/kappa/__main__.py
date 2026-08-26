@@ -418,25 +418,50 @@ def draw_adress(
     a = sum([pf.signals.sine(f, sr, sampling_rate=sr, amplitude=gain) for f in partials_a])
     b = sum([pf.signals.sine(f, sr, sampling_rate=sr, amplitude=gain) for f in partials_b])
 
-    a = a * [1,0.2]
-    b = b * [0.2,1]
+    a = a * [1,0.4]
+    b = b * [0.4,1]
     mix = a + b
 
     spect = np.abs(common.make_spectrogram(mix, fft_size=fft_size, hop_size=hop_size))
-    faas = sarroff.frequency_azimuth_analysis_signal(spect, 100)
-    fap = faas[20]
-    xx, yy = np.meshgrid(np.fft.rfftfreq(fft_size, d=1/sr), np.arange(fap.shape[1]))
+    faas = sarroff.frequency_azimuth_analysis_signal(spect, 100, inverted=False)
+    fap = np.mean(faas, axis=0)
+    nulls_x = [np.argmin(fap[41]), np.argmin(fap[45])]
+    freqs = np.fft.rfftfreq(fft_size, d=1/sr)
+    nulls_y = [freqs[41], freqs[45]]
 
-    fig = plt.figure(figsize=figsize)
-    ax = fig.add_subplot(projection='3d')
-    ax.plot_wireframe(xx, yy, fap.T, color='k', linewidth=0.5, rstride=10, cstride=4)
-    ax.tick_params(axis='both', which='major', tick1On=False, tick2On=False, pad=-3)
-    ax.set_xlabel("Frequency (Hz)", labelpad=-2)
-    ax.set_ylabel("Azimuth", labelpad=-4)
-    ax.set_zlabel("Peak Magnitude", labelpad=-5)
-    ax.xaxis.set_inverted(True)
-    ax.set_xticks([0, 5000, 10000, 15000, 20000], labels=['0', '5k', '10k', '15k', '20k'])
-    ax.set_yticks([0, 100, 200], labels=["L", "C", "R"])
+    fig, ax = plt.subplots(1,1, figsize=figsize, layout='constrained')
+    img = ax.imshow(np.flipud(fap), aspect='auto', cmap='gray_r', extent=(0, fap.shape[1], 0, sr/2))
+    ax.set_yticks([0, 5000, 10000, 15000, 20000], labels=['0', '5k', '10k', '15k', '20k'])
+    ax.vlines(nulls_x, ymin=0, ymax=sr/2, color='red', linestyle='dashed')
+    ax.set_ylabel("Frequency (Hz)")
+    ax.set_xlabel("Azimuth")
+    ax.set_xticks([0,100,200], ["L", "C", "R"])
+
+    freqs = np.fft.rfftfreq(fft_size, d=1/sr)
+    arrowprops = dict(arrowstyle="->")
+    for i in [11,21,31,41]:
+        null_y = freqs[i]
+        ax.annotate("nulls", (nulls_x[0], null_y), (100, 18000), xycoords='data', arrowprops=arrowprops, ha='center')
+    for i in [15,25,35,45]:
+        null_y = freqs[i]
+        ax.annotate("nulls", (nulls_x[1], null_y), (100, 18000), xycoords='data', arrowprops=arrowprops, ha='center')
+    # ax.annotate("nulls", (nulls_x[1], nulls_y[1]), (100, 18000), xycoords='data', arrowprops=arrowprops, ha='center')
+    # fig.colorbar(mappable=img)
+
+    # plt.show()
+
+    # xx, yy = np.meshgrid(np.fft.rfftfreq(fft_size, d=1/sr), np.arange(fap.shape[1]))
+
+    # fig = plt.figure(figsize=figsize)
+    # ax = fig.add_subplot(projection='3d')
+    # ax.plot_wireframe(xx, yy, fap.T, color='k', linewidth=0.5, rstride=10, cstride=4)
+    # ax.tick_params(axis='both', which='major', tick1On=False, tick2On=False, pad=-3)
+    # ax.set_xlabel("Frequency (Hz)", labelpad=-2)
+    # ax.set_ylabel("Azimuth", labelpad=-4)
+    # ax.set_zlabel("Peak Magnitude", labelpad=-5)
+    # ax.xaxis.set_inverted(True)
+    # ax.set_xticks([0, 5000, 10000, 15000, 20000], labels=['0', '5k', '10k', '15k', '20k'])
+    # ax.set_yticks([0, 100, 200], labels=["L", "C", "R"])
     fig.savefig(output_dir / "adress.pdf")
 
 
@@ -989,6 +1014,10 @@ def make_page(img_dir: Path):
 
     subprocess.run(['tectonic', '-'], input=ltx.encode())
 
+import typer
+
+app = typer.Typer()
+
 plt.rcParams['font.family'] = "Times"
 plt.rcParams['font.size'] = 9
 
@@ -1015,36 +1044,46 @@ tracks = get_demo_tracks()
 print(tracks)
 freesound_clips = get_freesound_clips()
 print(freesound_clips)
-make_freesound_appendix_table(freesound_clips, OUTPUT_DIR)
 
-draw_panned_drums(OUTPUT_DIR, WIDE_RECT, ANNOTATION_BBOX_PROPS)
-draw_nyquist(OUTPUT_DIR, WIDE_SKINNY_RECT)
-draw_equal_power_panning(OUTPUT_DIR, MID_WIDE_RECT)
-draw_spectrogram_comparison(OUTPUT_DIR, WIDE_SQUARE, WIDE_SKINNY_RECT, ANNOTATION_BBOX_PROPS)
-draw_gammatone_filters(OUTPUT_DIR, MID_RECT)
-draw_mel_filters(OUTPUT_DIR, MID_WIDE_RECT)
-draw_cochleagram_steps(OUTPUT_DIR, WIDE_SKINNY_RECT)
-draw_adress(OUTPUT_DIR, MID_WIDE_SQUARE)
+@app.command()
+def all():
+    make_freesound_appendix_table(freesound_clips, OUTPUT_DIR)
 
-make_demo_tracks_appendix_table(tracks, OUTPUT_DIR)
-draw_demo_tracks_spf(tracks, OUTPUT_DIR, WIDE_RECT)
-draw_demo_tracks_ph(tracks, OUTPUT_DIR, WIDE_RECT)
-draw_demo_tracks_asf(tracks, OUTPUT_DIR, WIDE_RECT)
-draw_demo_tracks_goniometer(tracks, OUTPUT_DIR, WIDE_RECT)
+    draw_panned_drums(OUTPUT_DIR, WIDE_RECT, ANNOTATION_BBOX_PROPS)
+    draw_nyquist(OUTPUT_DIR, WIDE_SKINNY_RECT)
+    draw_equal_power_panning(OUTPUT_DIR, MID_WIDE_RECT)
+    draw_spectrogram_comparison(OUTPUT_DIR, WIDE_SQUARE, WIDE_SKINNY_RECT, ANNOTATION_BBOX_PROPS)
+    draw_gammatone_filters(OUTPUT_DIR, MID_RECT)
+    draw_mel_filters(OUTPUT_DIR, MID_WIDE_RECT)
+    draw_cochleagram_steps(OUTPUT_DIR, WIDE_SKINNY_RECT)
+    draw_adress(OUTPUT_DIR, WIDE_RECT)
 
-draw_pi_and_ai(tracks.iloc[2].local.filepath, OUTPUT_DIR, WIDE_RECT, ANNOTATION_BBOX_PROPS)
+    make_demo_tracks_appendix_table(tracks, OUTPUT_DIR)
+    draw_demo_tracks_spf(tracks, OUTPUT_DIR, WIDE_RECT)
+    draw_demo_tracks_ph(tracks, OUTPUT_DIR, WIDE_RECT)
+    draw_demo_tracks_asf(tracks, OUTPUT_DIR, WIDE_RECT)
+    draw_demo_tracks_goniometer(tracks, OUTPUT_DIR, WIDE_RECT)
 
-# It's important that the two graphs in this figure end up being square, so use a custom figsize.
-draw_example_goniometer(
-    tracks.iloc[1].local.filepath, 
-    19.48, 0.04, 
-    OUTPUT_DIR, 
-    (LATEX_LINEWIDTH, LATEX_LINEWIDTH * 0.47)
-)
+    draw_pi_and_ai(tracks.iloc[2].local.filepath, OUTPUT_DIR, WIDE_RECT, ANNOTATION_BBOX_PROPS)
 
-# Use TeX to get nice sigma symbols
-with plt.rc_context(plt.rcParams | {"text.usetex": True}):
-    draw_harma(OUTPUT_DIR, WIDE_SQUARE)
+    # It's important that the two graphs in this figure end up being square, so use a custom figsize.
+    draw_example_goniometer(
+        tracks.iloc[1].local.filepath, 
+        19.48, 0.04, 
+        OUTPUT_DIR, 
+        (LATEX_LINEWIDTH, LATEX_LINEWIDTH * 0.47)
+    )
 
-make_page(OUTPUT_DIR)
+    # Use TeX to get nice sigma symbols
+    with plt.rc_context(plt.rcParams | {"text.usetex": True}):
+        draw_harma(OUTPUT_DIR, WIDE_SQUARE)
 
+    make_page(OUTPUT_DIR)
+
+
+@app.command()
+def adress():
+    draw_adress(OUTPUT_DIR, WIDE_RECT)
+
+if __name__ == "__main__":
+    app()

@@ -32,7 +32,7 @@ def frequency_azimuth_plane_slow(X: MagnitudeSpectrum, beta: int) -> FrequencyAz
     
     return Az
 
-def frequency_azimuth_plane(X: MagnitudeSpectrum, beta: int) -> FrequencyAzimuthPlane:
+def frequency_azimuth_plane(X: MagnitudeSpectrum, beta: int, inverted=True) -> FrequencyAzimuthPlane:
     """
     Calculate the frequency-azimuth plane for a stereo magnitude spectrogram.
     This version is much faster since it uses numpy's vectorized functions, 
@@ -48,7 +48,8 @@ def frequency_azimuth_plane(X: MagnitudeSpectrum, beta: int) -> FrequencyAzimuth
     Azr = np.abs(Xl[k] - g[i] * Xr[k]).reshape((num_bins, beta + 1))
 
     Az = np.hstack([Azl, np.fliplr(Azr[:, :-1])])
-    Az = convert_nulls_to_peaks(Az)
+    if inverted:
+        Az = convert_nulls_to_peaks(Az)
 
     return Az
 
@@ -62,11 +63,11 @@ def convert_nulls_to_peaks(Az: NDArray[np.float64]) -> NDArray[np.float64]:
     return Az_inv
 
 
-def frequency_azimuth_analysis_signal(X: MagnitudeSpectrogram, beta: int) -> FrequencyAzimuthAnalysisSignal:
+def frequency_azimuth_analysis_signal(X: MagnitudeSpectrogram, beta: int, inverted=True) -> FrequencyAzimuthAnalysisSignal:
     planes = []
     for m in np.arange(X.shape[1]):
         # print(m)
-        Az = frequency_azimuth_plane(X[:, m, :], beta)
+        Az = frequency_azimuth_plane(X[:, m, :], beta, inverted=inverted)
         planes.append(Az)
     
     return np.stack(planes)
