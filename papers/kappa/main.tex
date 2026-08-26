@@ -79,8 +79,10 @@
     backend=biber,
     maxcitenames=2,
 ]{biblatex}
+\setcounter{biburlnumpenalty}{9000}
+\setcounter{biburlucpenalty}{9000}
+\setcounter{biburllcpenalty}{9000}
 \addbibresource{../library_biblatex.bib}
-
 
 
 %% Macros
@@ -984,7 +986,7 @@ A perceptual scalar is a measurement that would usually be made via a perceptual
 
 \gls{asw} is one of the more common values that has been addressed in the literature. The early work of \citeauthorandnumber{supperOnsetGuidedSpatialAnalyser2005}, \citeauthorandnumber{masonImplementationApplicationBinaural2006}, and \citeauthorandnumber{dewhirstModellingPerceivedSpatial2008} detail the construction of \q{binaural analysers} that are able to estimate \gls{asw}. \citeauthor{dewhirstModellingPerceivedSpatial2008} compares several methods to estimate \gls{asw} given \gls{ild}, \gls{itd}, and \gls{iacc} cues from binaural audio signals. The prediction results were promising, but mixed. \citeauthor{dewhirstModellingPerceivedSpatial2008} even notes that the original values of \gls{asw} given by test participants were somewhat varied, concluding that the test itself was a difficult task.
 
-Since these early experiments the analysis of \gls{asw} has remained a topic of interest, with \citeauthorandnumber{kasbachAssessingModelingApparent2016}, \citeauthorandnumber{miethObjectiveEvaluationTechniques2017}, and \citeauthorandnumber{antoniukBlindEstimationEnsemble2023} all proposing ways to calculate it. It is not restricted to the binaural domain, with \citeauthorandnumber{sarroffMeasurementsSpaciousnessStereophonic2008}, \citeauthorandnumber{wilsonPerceptionEvaluationAudio2013}, and \citeauthorandnumber{mourgelaExploringTrendsAudio2024} also proposing formulas for generic stereo signals. 
+Since these early experiments the analysis of \gls{asw} has remained a topic of interest, with \citeauthorandnumber{kasbachAssessingContributionBinaural2016}, \citeauthorandnumber{miethObjectiveEvaluationTechniques2017}, and \citeauthorandnumber{antoniukBlindEstimationEnsemble2023} all proposing ways to calculate it. It is not restricted to the binaural domain, with \citeauthorandnumber{sarroffMeasurementsSpaciousnessStereophonic2008}, \citeauthorandnumber{wilsonPerceptionEvaluationAudio2013}, and \citeauthorandnumber{mourgelaExploringTrendsAudio2024} also proposing formulas for generic stereo signals. 
 
 \gls{lev} on the other hand has prompted slightly more varied discussion over the years. An early study by \citeauthorandnumber{soulodreNewObjectiveMeasures2004} compared several objective measures for it. The methodology was to fit a correlational model that predicted the output of perceptual test from objective audio measures. The objective measures were based on either the \gls{iacc} or \gls{lef} of the audio signal. \citeauthor{soulodreNewObjectiveMeasures2004} notes that the late-arriving sound ($>80$ms after the sound's onset) are most relevant to \gls{lev}, regardless of which objective measure is used. \citeauthorandnumber{sunishDevelopmentValidationUnintrusive2010}, \citeauthorandnumber{powerInvestigationImpact3D2013}, \citeauthorandnumber{jacksonEstimatesPerceivedSpatial2010}, and \citeauthorandnumber{nowakPerceptionPredictionApparent2017} later expanded the same concept by fitting models on different objective audio measures. 
 
