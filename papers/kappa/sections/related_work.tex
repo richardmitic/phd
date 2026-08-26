@@ -1,0 +1,237 @@
+\chapter{Related works}
+\label{sec:related_works}
+
+In this chapter I break down the details of existing algorithms for stereo field analysis, as well as demonstrating those techniques on example audio recordings. To provide additional context, I also present several high-level initiatives within the audio industry, showing how stereo field analysis has been used up until the present day. Throughout the chapter I use 3 recordings as examples. They all come from the \gls{fma} dataset \cite{defferrardFMADatasetMusic2017}, and each one presents a different use of stereo image. In the text they are referred to simply as track \q{A}, \q{B}, and \q{C}. Full details for all tracks can be found in appendix \ref{app:demo_tracks}. Note that in order to discuss and demonstrate the algorithms in this chapter, I implemented them from scratch in a monolithic software library. Thus, I was able to draw links between them since they often share underlying \gls{dsp} techniques.
+
+\section{A brief history of stereo field in industry}
+\label{sec:history}
+Research into the stereo field of recorded music specifically (as opposed to generic spatial properties of audio signals) has its roots in the early 2000s. At the time, stereo recording was a well-established norm and audio distribution was handled by the early lossy encoding formats such as \gls{mp3} and \gls{aac} \cite{iso-11172-3:mpeg_audio,ISOIEC13818-7:2006-AAC}. Analysis and description of stereo field was used to increase the coding efficiency of these codecs, for example by e.g. \gls{ps} coding \cite{fallerParametricCodingSpatial2004,breebaartHighqualityParametricSpatial2004,breebaartParametricCodingStereo2005}. In parallel, new audio encoding schemes such as \gls{bcc} (later ratified as \q{\glsxtrshort{mpeg} Surround} \cite{iso/iec23003-1InformationTechnologyMPEG2007}) were developed based on the work of \citeauthorandnumber{baumgarteEstimationAuditorySpatial2002}. 
+
+The standardization of multi-channel audio presented an opportunity: new reproduction equipment needed to remain compatible with the existing back-catalogue of stereo recordings, and vendors could compete on sound quality. There was therefore a need to invent algorithms that upmixed stereo audio to multi-channel. Analysis of the stereo field, source separation, and primary/ambient extraction were seen as an effective way to achieve this \cite{goodwinPrimaryAmbientSignalDecomposition2007}. In fact, such research is still ongoing today \cite{shiFastNonuniformSearching2022}.
+
+In the prevailing years, object-based audio has been developed and standardized as e.g. Dolby Atmos \cite{DolbyAtmosNextGenerationAudioforCinema} and MPEG-H \cite{mpeg-h}, and the same early research into stereo field analysis is still relevant to these new formats for all the same reasons. Nowadays, it is commonplace to use \gls{ml}/\gls{dl} to perform the same tasks, although the results only outperform the \gls{dsp}-based predecessors in specific cases \cite{cobosOverviewMachineLearning2022}.
+
+With access to these efficient distribution formats, large digital music collections emerged and brought new problems to solve: collectors needed ways organize and categorize their music. Stereo field analysis was just one of the mechanisms used to facilitate this, paving the way for research into e.g. \gls{agr}, \gls{mir}, and music recommendation \cite{guausAudioContentProcessing2009,harmaClassificationTimefrequencyRegions2010,defferrardFMADatasetMusic2017}.
+
+\section{Spatial cues for stereo image}
+\label{sec:spatial_cues}
+
+A \q{spatial cue} is a low-level analysis of spatial information in a short (1-100ms) audio snippet. While those mentioned in \cref{sec:directional_hearing} aim to analyse binaural sound as perceived by humans, there are several examples of spatial cues tailored specifically to the analysis of recorded music.
+
+The \q{panning index} and \enquote{ambience index} specified by \citeauthor{avendanoFrequencyDomainTechniques2002} \cite{avendanoFrequencyDomainTechniques2002} are loosely analogous to \gls{ild} and \gls{iacc} in the acoustics domain. To estimate the \q{panning index}, a signal model is assumed whereby a musical source is panned within the mix using the \enquote{energy preserving pan law}, in which amplitude differences are applied to each channel such that the sum of the squared amplitudes equals 1 (see \cref{sec:stereo_image}). While this panning technique does not affect the phase of either channel, existing phase differences between channels are measured using the \q{ambience index}, which is defined such that it is low when the stereo channels are correlated (indicating a direct sound source), and high when channels are uncorrelated (indicating an ambient or reverberant sound source). 
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics{pi_ai.pdf}
+    \caption{Demonstration of \q{panning index} and \q{ambience index} on Track C. Several panned sources are visible as red or blue bands in the \pani, and at roughly 20s most sources fade out leaving a single one on the right. The \ambi~plot shows that the track starts off with no single dominant direct sound source. At 20s when most sources fade out, the \ambi~drops to 0 across the lower half of the spectrum, indicating that the remaining source is direct. In the upper half of the spectrum, the source remains slightly ambient. }
+    \label{fig:pi_ai}
+\end{figure}
+
+\citeauthor{prestiBivariateMixtureSpace2023} provides a re-contextualization of the panning and ambience indices in his work on \glspl{bms} \cite{prestiVisualizationManipulationStereophonic2014,prestiBivariateMixtureSpace2023}. He demonstrates that it can be used to analyse the panning position of individual \gls{tf} bins, plus the clarity (or trustworthyness) of that measurement. Thus, it is useful for tasks such as primary/ambient decomposition, stereo field manipulation, and visualization.
+
+\citeauthor{barrySoundSourceSeparation2004} present another seminal technique in their paper defining the \gls{adress} algorithm \cite{barrySoundSourceSeparation2004}. The fundamental principle is to estimate the panning position of frequency bins in a stereo spectrogram by scaling one channel, inverting it, and mixing the channels back to mono. The resulting phase cancellation will determine the scaling factor that was applied to the original audio source during amplitude panning, and hence will show where the source was panned in the stereo field. To demonstrate, \cref{fig:adress} shows an example \gls{fa} plane for a combination of panned sine waves. While this was technique was originally intended to be used for audio source separation, it has been repurposed many times since.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics{adress.pdf}
+    \caption{\glsxtrfull{fa} plane for a signal comprising 8 sinusoids at differing frequencies. Half are panned left and half are panned right. Red dashed lines show the panning positions detected by looking for nulls in the \gls{fa} plane.}
+    \label{fig:adress}
+\end{figure}
+
+Importantly, all the previously mentioned analyses are performed in the \gls{tf} domain and result in one value per \gls{tf} bin. Their use cases typically involve reconstruction or editing of the original audio source as opposed to \textit{description} of it since they inherently entangle semantic content with spatial information. They have, however, become the basis of other algorithms that are designed specifically for description.
+
+\section{Stereo image description}
+\label{sec:stereo_image_description}
+
+Stereo image description refers to the generation of a numerical vector that represents the stereo image in an arbitrary feature space. Recordings with similar stereo image should be close within the space, although the distance metric is application-specific. A typical technique is to construct the vector from statistical summaries of low-level spatial cues. Throughout this section, these vectors are referred to as \glspl{sip}, and examples of each one are given on the three example tracks.
+
+\subsection{\gls{dsp}-based \glspl{sip}}
+
+\citeauthor{tzanetakisStereoPanningFeatures2007} provide the earliest example of a technique specifically designed to interpret the use of panning in recorded music: \gls{spf} \cite{tzanetakisStereoPanningFeatures2007}. It targets amplitude panning only, using \citeauthor{avendanoFrequencyDomainTechniques2002}'s \pani{} as the basis. Additionally, it separates the frequency spectrum into 3 sub-bands -- lows, mids, and highs -- following the common practice of music producers. While not specifically stated by \citeauthor{tzanetakisStereoPanningFeatures2007}, I interpret the vector to represent the amount and variance of \q{fast panning} and \q{slow panning} in each frequency band. \citeauthor{tzanetakisStereoPanningInformation2010} later expanded the features by adding an estimation of the number of individual sources in the recording \cite{tzanetakisStereoPanningInformation2010}. The resulting \gls{sip} can be used to compare the recording and production styles of different music tracks, as shown in \cref{fig:spf}.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics{spf.pdf}
+    \caption{
+        \glsxtrlong{spf} for three tracks from the \gls{fma} dataset \cite{defferrardFMADatasetMusic2017}. All tracks clearly show different panning and production styles. 
+    }
+    \label{fig:spf}
+\end{figure}
+
+While \gls{spf} shows production style at a high level, other descriptors contain more detail. \citeauthorandnumber{gomezMusicSimilaritySystems2008} and \citeauthorandnumber{sarroffMeasurementsSpaciousnessStereophonic2008} both present separate methods to form a \gls{ph}, which displays the likelihood of a sound source being panned to a specific azimuth. \Cref{fig:panning_histograms} shows examples of both methods for the same three example tracks. As \citeauthor{sarroffMeasurementsSpaciousnessStereophonic2008} state, the \q{azimuth} value should not be interpreted as a true angular position relative to the listener, but rather as a loose placement of a sound source within the stereo field. Note that compared to \gls{spf}, \gls{ph} visualizes the exact location of sound energy in the stereo field rather than just the \q{amount of panning}. On the other hand, \gls{ph} looses information about the \textit{dynamics} of the panning, which \gls{spf} does not. \citeauthor{sarroffMeasurementsSpaciousnessStereophonic2008} subsequently use the \gls{ph} to calculate an estimate of stereo width \cite{sarroffMeasurementsSpaciousnessStereophonic2008}, which is an important perceptual measure (see \cref{sec:prediction_of_perceptual_scalars}).
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics{panning_histograms.pdf}
+    \caption{
+        \glsxtrlongpl{ph} for three tracks from the \gls{fma} dataset \cite{defferrardFMADatasetMusic2017}. All tracks clearly show different shapes of stereo field. The two different algorithms (\citeauthorandnumber{gomezMusicSimilaritySystems2008} and \citeauthorandnumber{sarroffMeasurementsSpaciousnessStereophonic2008}) produce slightly different fine detail, but they agree on the general azimuthal distribution.
+    }
+    \label{fig:panning_histograms}
+\end{figure}
+
+\citeauthor{gomezMusicSimilaritySystems2008} present a continuation of their \gls{ph} algorithm. They note that the histogram itself can be quite large, and that standard distance metrics may not correlate with perceptual differences. To avoid this, they propose converting the \gls{ph} to a vector of \q{\gls{pc}} in a non-perceptual domain and truncating it. \Cref{eq:cepst_ph} shows this conversion where $\vec{C}$ is the vector of coefficients, $\mathcal{F}^{-1}$ is the inverse \gls{fft}, $L$ is the truncation length, and $\vec{H}\vec{H}^{\leftarrow}$ is a concatenation of the panning histogram and its reverse. The efficacy of this technique remains under-tested, and my work in paper \ref{paper:dafx} showed that \gls{pc} were unable to accurately represent \glspl{ph} with sharp peaks.
+
+\begin{equation}
+    \vec{C} = \left\{\mathcal{F}^{-1} \left\{ \log (\vec{H}\vec{H}^{\leftarrow})\right\} \right\}_{1:L}
+    \label{eq:cepst_ph}
+\end{equation}
+
+
+\citeauthor{tardieuProductionEffectAudio2011} present another assessment of amplitude panning named \gls{asf} \cite{tardieuProductionEffectAudio2011}. Differing from the previously mentioned techniques, \citeauthor{tardieuProductionEffectAudio2011}'s method focuses on providing measurements of the amount and variation of panning in many frequency bands. The basis of the algorithm is the \gls{ild} of a stereo cochleagram, as opposed to an \gls{stft} spectrogram. \citeauthor{tardieuProductionEffectAudio2011} use 70 frequency bands equidistant on the \gls{erb} scale, each of which produce multiple features. Thus, the resulting \gls{sip} vector is an order of magnitude larger than \gls{spf} or \gls{ph}. As \cref{fig:asf} shows, \gls{asf}'s large size allows for a very detailed assessment of panning across the frequency dimension, although it runs the risk of including noise and redundant information.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics{asf.pdf}
+    \caption{
+        Visualization of \gls{asf} for three tracks from the \gls{fma} dataset \cite{defferrardFMADatasetMusic2017}. For demonstration purposes, only a subset of the calculated features are shown. The amount and variation of panning is visible in fine detail across the frequency spectrum.
+    }
+    \label{fig:asf}
+\end{figure}
+
+While all the aforementioned studies focus on descriptions of amplitude panning in stereo mixes, recording engineers can make use of phase-based techniques to add spatial feeling to their mix. \citeauthor{tardieuProductionEffectAudio2011} also suggest a measurement for these named \gls{psf} \cite{tardieuProductionEffectAudio2011}, underpinned by an \gls{stft} spectrogram derivative named \gls{ssps}. While the idea of measuring these common production effects has merit, I unfortunately could not confirm that it worked in practice because the method to calculate \gls{ssps} as defined by \citeauthor{tardieuProductionEffectAudio2011} produced spurious results for all recording that I tested.
+
+\citeauthor{ziemerAcousticFeaturesRecording2021} argue the case in \cite{ziemerNovelRecordingStudio2020,ziemerAcousticFeaturesRecording2021,ziemerGoniometersArePowerful2023} that analyses based on a recording studio goniometer can aid in describing the stereo properties of music, particularly in differentiating between the artistic intentions of different recording sessions. The underlying logic is that since producers consult goniometers in their creative process, their readings must have inherent descriptive value. To perform the analyses, a virtual goniometer readout consisting of a lissajous figure and channel correlation measurement is constructed for non-overlapping time frames of an audio recording. The lissajous figure is quantized and reduced to a single number by counting the unique X/Y positions. Channel correlation is defined as the Pearson correlation coefficient \cite{howellStatisticalMethodsPsychology2010} between the left and right channel signals. \Cref{fig:goniometer_main} shows how an audio signal can be converted to goniometer features.
+
+\begin{figure}[p!]
+    \centering
+    \begin{subfigure}[b]{\columnwidth}
+        \includegraphics{goniometer.pdf}
+        \caption{Example goniometer reading for a 40ms segment of recorded audio. The left plot shows an original goniometer as the producer would see in their \gls{daw}. The right plot shows the boxes that the signal passes through as defined by \citeauthorandnumber{ziemerGoniometersArePowerful2023}.}
+        \label{fig:goniometer_steps}
+    \end{subfigure}
+    
+    \vspace{1em}
+
+    \begin{subfigure}[b]{\columnwidth}
+        \includegraphics{goniometer_features.pdf}
+        \caption{Goniometer features as defined by \citeauthorandnumber{ziemerGoniometersArePowerful2023} for the three example tracks. Each track clearly shows a unique profile in how the features vary over time.}
+        \label{fig:goinometer_features}
+    \end{subfigure}
+    \caption{Example goniometer features}
+    \label{fig:goniometer_main}
+\end{figure}
+
+\citeauthor{harmaClassificationTimefrequencyRegions2010}'s work on the classification of stereo audio in \cite{harmaClassificationTimefrequencyRegions2010,harmaClassificationTimefrequencyRegions2011,harmaStereoAudioClassification2011} presents a slightly different take on the problem. He proposes a signal model where the stereo mix is formed from a combination of a single centre source, a significant amplitude-panned source, plus left and right uncorrelated sources. He subsequently presents a list of 8 pre-defined classes representing various combinations of those sources. Furthermore, he shows that stereo recordings can be classified into 6 out of 8 of those classes by estimating the variances of the underlying source signals. The classes are visualized as areas on the surface of a unit sphere, with each dimension representing the variance of the 3 source types, as shown in \cref{fig:harma}. It should be noted that \citeauthor{harmaClassificationTimefrequencyRegions2010} does not give a method for the classification of the final class -- a mixture of all three source types -- deeming it too complex to detect. In the context of stereo image description, \citeauthor{harmaClassificationTimefrequencyRegions2010}'s work is somewhat different from the others since the descriptions (i.e. the 8 classes) are pre-defined; The main innovation is the method to assign an audio signal to a class.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics{harma.pdf}
+    \caption{
+        Visualization of 6 stereo mixture classes, recreated from \cite{harmaClassificationTimefrequencyRegions2010}. The axes $\sigma_s$ and $\sigma_p$ represent the variances of the centre source and panned source, whereas $\sigma_{uv}$ represents the covariance of the left and right uncorrelated sources. Classes are indicated as Roman numerals on the sphere's surface and separated by red dividing lines. Class 0 is silence and is hence trivial to detect. Class VII is cannot be detected by \citeauthor{harmaClassificationTimefrequencyRegions2010}'s method.
+    }
+    \label{fig:harma}
+\end{figure}
+
+% \FloatBarrier
+
+\subsection{\gls{ml}-based \glspl{sip}}
+
+All the previously mentioned algorithms use classical \gls{dsp} to create their spatial descriptors, but more recently there have been efforts to use \glsxtrfull{dl} to disentangle spatial information from audio content. \citeauthor{yangUpmixingStyleTransfer2022} presents one such example in \cite{yangUpmixingStyleTransfer2022}. While the original aim was to upmix stereo music to multichannel, a necessary component of the resulting neural network was a latent space that represents the spatial information of the multichannel signal. A simplified architecture diagram of \citeauthor{yangUpmixingStyleTransfer2022}'s method is shown in \cref{fig:dl_upmix}.
+
+\begin{figure}[htb]
+    \centering
+    \resizebox{\textwidth}{!}{
+        \begin{tikzpicture}[>=latex, node distance=4cm]
+
+        \node[flow_input] (stems) {Audio stems};
+        \node[flow_process] (audio5r) [right of=stems,yshift=1cm] {5-channel\\spectrogram A};
+        \node[flow_process] (audio5a) [below of=audio5r,yshift=2cm] {5-channel\\spectrogram B};
+        \node[flow_process] (bottleneck) [right of=audio5r] {Bottleneck\\neural network};
+        \node[flow_process] (downmix) [right of=audio5a] {Downmix to stereo};
+        \node[flow_process] (upmix) [right of=downmix] {Upmix\\neural network};
+        \node[flow_output,ultra thick] (latentvec) [right of=bottleneck,xshift=4cm] {Spatial description\\in latent space};
+        \node[flow_output] (recon) [right of=upmix] {Reconstructed\\5-channel audio};
+
+        \draw[arrow] (stems) to [out=0,in=180] (audio5r);
+        \draw[arrow] (stems) to [out=0,in=180] (audio5a);
+        \draw[arrow] (audio5r) to [out=0,in=180] (bottleneck);
+        \draw[arrow] (audio5a) to [out=0,in=180] (downmix);
+
+        \draw[arrow] (downmix) to [out=0,in=180] (upmix);
+        \draw[arrow] (bottleneck) to [out=0,in=180] ([yshift=0.25cm]upmix.west);
+        \draw[arrow] (upmix) to [out=0,in=180] (recon);
+        \draw[arrow] (bottleneck) to [out=0,in=180] (latentvec);
+        
+        \end{tikzpicture}
+    }
+    \caption{Architecture digram of \citeauthor{yangUpmixingStyleTransfer2022}'s neural network that learns a spatial representation of its audio training data. The latent vector (shown in a thick outline) can be used as a description of the spatial image. Spectrograms A and B use the same stems but different panning parameters. Recreated from \cite{yangUpmixingStyleTransfer2022}.}
+    \label{fig:dl_upmix}
+\end{figure}
+
+\gls{dl} has also been used outside the music domain to e.g. learn spatial relationships between individual microphones in an array \cite{yangSelfSupervisedLearningSpatial2024}. While such tasks do not directly address the research questions in this thesis, they demonstrate that learning spatial features on large amounts of unlabelled audio data is possible given the appropriate methods and pretext task.
+
+Neural generation of spatial audio also continues to be a hot topic up to the present day, with many attempts to generate high-quality binaural, ambisonic or multichannel audio from mono sources \cite{limEnhancingSpatialAudio2024,liCyclicLearningBinaural2024,liTASPersonalizedTextguided2024,chenCCStereoAudioVisualContextual2025,melechovskySonicMasterControllableAllinOne2025,santosLargeScaleSelfSupervisedLearning2025,wangSpatialV2AVisualGuidedHighfidelity2026}. In doing so, the networks must infer spatial information from a source other than audio (typically an accompanying video or text prompt), and in the process will learn the spatial qualities of their audio training data.
+
+\section{Prediction of perceptual scalars}
+\label{sec:prediction_of_perceptual_scalars}
+A perceptual scalar is a measurement that would usually be made via a perceptual listening test, e.g. \gls{asw} or \gls{lev} \cite{rumseySpatialAudioSensory2006}. Those tests are known to be slow and costly \cite{rumseySpatialQualityEvaluation2002}. Prediction of the perceptual scalars via objective means is therefore particularly useful to researchers as it allows for faster experimentation.
+
+\gls{asw} is one of the more common values that has been addressed in the literature. The early work of \citeauthorandnumber{supperOnsetGuidedSpatialAnalyser2005}, \citeauthorandnumber{masonImplementationApplicationBinaural2006}, and \citeauthorandnumber{dewhirstModellingPerceivedSpatial2008} detail the construction of \q{binaural analysers} that are able to estimate \gls{asw}. \citeauthor{dewhirstModellingPerceivedSpatial2008} compares several methods to estimate \gls{asw} given \gls{ild}, \gls{itd}, and \gls{iacc} cues from binaural audio signals. The prediction results were promising, but mixed. \citeauthor{dewhirstModellingPerceivedSpatial2008} even notes that the original values of \gls{asw} given by test participants were somewhat varied, concluding that the test itself was a difficult task.
+
+Since these early experiments the analysis of \gls{asw} has remained a topic of interest, with \citeauthorandnumber{kasbachAssessingContributionBinaural2016}, \citeauthorandnumber{miethObjectiveEvaluationTechniques2017}, and \citeauthorandnumber{antoniukBlindEstimationEnsemble2023} all proposing ways to calculate it. It is not restricted to the binaural domain, with \citeauthorandnumber{sarroffMeasurementsSpaciousnessStereophonic2008}, \citeauthorandnumber{wilsonPerceptionEvaluationAudio2013}, and \citeauthorandnumber{mourgelaExploringTrendsAudio2024} also proposing formulas for generic stereo signals. 
+
+\gls{lev} on the other hand has prompted slightly more varied discussion over the years. An early study by \citeauthorandnumber{soulodreNewObjectiveMeasures2004} compared several objective measures for it. The methodology was to fit a correlational model that predicted the output of perceptual test from objective audio measures. The objective measures were based on either the \gls{iacc} or \gls{lef} of the audio signal. \citeauthor{soulodreNewObjectiveMeasures2004} notes that the late-arriving sound ($>80$ms after the sound's onset) are most relevant to \gls{lev}, regardless of which objective measure is used. \citeauthorandnumber{sunishDevelopmentValidationUnintrusive2010}, \citeauthorandnumber{powerInvestigationImpact3D2013}, \citeauthorandnumber{jacksonEstimatesPerceivedSpatial2010}, and \citeauthorandnumber{nowakPerceptionPredictionApparent2017} later expanded the same concept by fitting models on different objective audio measures. 
+
+\citeauthor{dewhirstObjectiveAssessmentSpatial2005} propose a different measure in \cite{dewhirstObjectiveAssessmentSpatial2005} which involves calculating the area covered by the plurality of individual sound sources after estimating their directional localization. Although, by the authors' own admission, this is a crude measure and was not validated by perceptual tests.
+
+Notably, the prediction of \gls{lev} appears to be used more often to assess spatial audio reproduction (sometimes rendered to binaural), rather than plain stereo. \citeauthorandnumber{powerInvestigationImpact3D2013} even include both mono and stereo reproduction in their experiment, concluding that their subjective ratings for \gls{lev} were considerably lower than all spatial formats. \citeauthorandnumber{sunishDevelopmentValidationUnintrusive2010} also state that \gls{lev} might not be cleanly separable from \gls{asw}.
+
+Within the context of this thesis, the absolute accuracy of any prediction is not necessarily of primary importance. Rather, it matters that the value calculated for each recording in a corpus provides suitable comparisons to the other recordings. \citeauthor{mourgelaExploringTrendsAudio2024}'s work on trends in music production \cite{mourgelaExploringTrendsAudio2024} is one example of such a study. The study groups raw stereo width calculations into 4 buckets, thereby showing that finding recordings with similar stereo width is of more interest than the absolute value.
+
+
+\section{Spatial quality comparison}
+
+The \glspl{sip} described in \cref{sec:spatial_cues,sec:stereo_image_description,sec:prediction_of_perceptual_scalars} are often used to assess the spatial degradation of an audio signal after some sort of distortion has been applied. A typical method is to calculate the same spatial descriptor on both a reference and degraded signal, then calculate the difference in those descriptors. There is sometimes an additional aggregation step to reduce a multidimensional descriptor down to a scalar.
+
+The types of distortion vary, although a major industrial use is in the development of lossy codecs. The work of \citeauthorandnumber{youSpatialLocalizationEvaluation2012}, \citeauthorandnumber{wangObjectiveMeasurementSpatial2015}, \citeauthorandnumber{delgadoObjectiveMeasurementStereophonic2019}, and \citeauthorandnumber{delgadoObjectiveAssessmentSpatial2019} do exactly this. \Cref{fig:spatial_distortion} shows a typical workflow for the measurements of spatial distortion used in all these studies.
+
+\begin{figure}[htb]
+    \centering
+    \resizebox{0.618\textwidth}{!}{
+        \begin{tikzpicture}[>=latex, node distance=2cm]
+            \node[flow_input] (audio) {Audio};
+            \node[flow_process] (coder) [right of=audio, xshift=2cm] {Lossy coder};
+            \node[flow_process] (decoder) [right of=coder, xshift=2cm] {Decoder};
+            \node[flow_process] (sip1) [below of=decoder] {\gls{sip}};
+            \node[flow_process] (sip2) [below of=audio] {\gls{sip}};
+            \node[draw=black,circle,minimum width=1cm] (diff) [below of=coder] {$\Delta$};
+            \node[flow_process] (agg) [below of=diff] {Aggregation\\(optional)};
+            \node[flow_output] (dist) [below of=agg] {Spatial quality};
+
+            \node[anchor=west] (dist_label) at ([yshift=1cm]coder.west) {Distortion};
+            \node[draw=black,dashed,inner sep=8pt, rounded corners] (distortions) [fit=(coder) (decoder) (dist_label)] {};
+
+            \draw[arrow] (audio) -- (coder);
+            \draw[arrow] (audio) -- (sip2);
+            \draw[arrow] (coder) -- (decoder);
+            \draw[arrow] (decoder) -- (sip1);
+            \draw[arrow] (sip1) -- (diff);
+            \draw[arrow] (sip2) -- (diff);
+            \draw[arrow] (diff) -- (agg);
+            \draw[arrow] (agg) -- (dist);
+        \end{tikzpicture}
+    }
+    \caption{Example architecture to measure the spatial quality of a lossy audio codec. The two \gls{sip} blocks must use exactly the same method, although the choice of method is application-specific. The \q{Distortion} block may be replaced when using the workflow for other tasks.}
+    \label{fig:spatial_distortion}
+\end{figure}
+
+Spatial distortions other than lossy coding have also received attention in more recent years. For example, \citeauthor{barryBinaspectPythonLibrary2025} present a comparison of binaural rendering and downmix algorithms (as well as lossy codecs), showing that minute differences in binaural cues can be easily detected using their methods \cite{barryBinaspectPythonLibrary2025}. Taking the opposite approach, \citeauthor{watcharasupatQuantifyingSpatialAudio2024} demonstrates a new metric for assessing spatial quality and demonstrate it using several common, but artificial distortions \cite{watcharasupatQuantifyingSpatialAudio2024}.
+
+In all the above studies, the detail and implementation of the spatial descriptors vary. Some studies (e.g. \cite{delgadoObjectiveAssessmentSpatial2019,barryBinaspectPythonLibrary2025}) opt to use high-level \glspl{sip} such as \q{directional loudness maps} or \gls{ild} histograms, while others (e.g. \cite{wangObjectiveMeasurementSpatial2015}) use low-level spatial cues such as \gls{ild} and \gls{itd}. In short, both approaches are valid and relevant to the \glspl{rq} presented in this thesis. 
+
+Following from this establishment of objective measurements for spatial quality, it is increasingly common practice to use them as additional terms in \gls{dl} loss functions, thereby allowing the networks to learn spatial features. \citeauthorandnumber{erruzBinauralSourceSeparation2017} demonstrates a loss term based on the \gls{ild} of binaural audio, whereas both \citeauthorandnumber{limEnhancingSpatialAudio2024} and \citeauthorandnumber{giampiccoloModelingImpulseResponse2025} implement an \gls{icld} loss term for various combinations of ambisonic channels. In all these studies, the underlying industry motivation was the generation and rendering of new spatial audio formats, similar to the upmixing research mentioned in \cref{sec:history}.
+
+
+\section{Analysis of large musical datasets}
+
+Many of the studies cited in \cref{sec:stereo_image_description} use a large dataset of recorded music to demonstrate the effectiveness of their \glspl{sip}. For example, \cite{tzanetakisStereoPanningFeatures2007,tzanetakisStereoPanningInformation2010,tardieuProductionEffectAudio2011} tackle genre recognition, \cite{ziemerAcousticFeaturesRecording2021} predicts artist or \glsxtrshort{dj}, and \cite{tardieuProductionEffectAudio2011} determines the decade of the recordings. Similar studies such as \cite{zhouPredictingGeographicalOrigin2014,kedyteGeographicalOriginPrediction2017} show that the geographic origin of a recording can be determined from audio features, although they don't  include any spatial features. 
+
+\citeauthor{ziemerProducerVsRapper2025}'s continuation of their work on goniometer features (see \cref{sec:stereo_image_description}) uses a dataset comprising songs that were either produced or rapped by specific artists \cite{ziemerProducerVsRapper2025}. They train a \gls{som} on the goniometer features of the dataset. The results firstly show that specific artists have specific sonic profiles, and furthermore that when those artists collaborate, the sound profile of the resulting track is dominated by the producer.
+
+\citeauthor{collinsNewCuratedCorpus2018} collated a dataset of historical electronic music \cite{collinsNewCuratedCorpus2018}. As part of that work, they extracted two spatial metrics: \q{channel loudness difference} and \q{stereo spatial ebb}. The example experiment given to demonstrate the dataset showed that \q{stereo spatial ebb} changes according to the year of the recording, thus indicating an artistic trend over time. \q{Channel  loudness difference}, on the other hand, remained static.
+
+In \citeauthor{panteliCharacterizationSingingStyles2017}'s work on the classification of singing style \cite{panteliCharacterizationSingingStyles2017}, the classes -- instead of being determined by an a-priori known label -- are learned by first extracting low-level audio cues, then finding common features within those cues. The features are then used as the input to unsupervised clustering algorithms to determine the relationships of the recordings to each other. \citeauthor{panteliComputationalStudyOutliers2017} continued the work in \cite{panteliComputationalStudyOutliers2017} where outliers in the global dataset where found using similar techniques and links between different musical cultures were drawn. While neither of these studies addressed spatial information, they nevertheless present use cases where unsupervised learning on features extracted from large audio dataset generates cultural knowledge that extends beyond the musical domain. 
+
+On a cautionary note, \citeauthor{chauhanCrossCulturalBiasMelScale2026} recently showed that \gls{ml}-based tasks taking audio input from multiple cultures are biased towards Western sources if they use the Mel spectrogram as the audio frontend \cite{chauhanCrossCulturalBiasMelScale2026}. The authors recommend using alternative frontends, such as \gls{erb}.
+
+What all these studies have in common is an interest in the dataset itself regarding both the relationships between individual recordings, and the relationship of the entire corpus to the wider world. Low-level audio features are of lesser importance, other than to construct the high-level metrics that enable comparison between recordings.
