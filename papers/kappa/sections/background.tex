@@ -147,8 +147,8 @@ The psychoacoustic study of spatial hearing has been an active area of research 
                     \input{figures/itd_R.tex}
                     \addplot[densely dotted] coordinates {(\pibyfour 4, 1) (\pibyfour, -1)};
                     \addplot[densely dotted] coordinates {(\pibyfour + 1, 1) (\pibyfour + 1, -1)};
-                    \node (t1) at (axis cs: \pibyfour,1.1) {$t_1$};
-                    \node (t2) at (axis cs: \pibyfour+1,1.1) {$t_2$};
+                    \node (tr) at (axis cs: \pibyfour,1.1) {$t_r$};
+                    \node (tl) at (axis cs: \pibyfour+1,1.1) {$t_l$};
                     \coordinate (itd_left_y) at (yticklabel cs: 0.6);
                     \coordinate (itd_right_y) at (yticklabel cs: 0.2);
                     \end{axis}
@@ -161,7 +161,7 @@ The psychoacoustic study of spatial hearing has been an active area of research 
 
         \end{tikzpicture}
     }
-    \caption{Illustration of how humans perceive the direction of an incoming sound. The physical barrier of the head causes an \glsxtrfull{ild} between sound waves received at the two ears ($a_R-a_L$). The difference in distance from the source to the ears ($d_R - d_L$) causes an \glsxtrfull{itd} between the two ears ($t_2-t_1$).}
+    \caption{Illustration of how humans perceive the direction of an incoming sound. The physical barrier of the head causes an \glsxtrfull{ild} between sound waves received at the two ears ($a_R-a_L$). The difference in distance from the source to the ears ($d_R - d_L$) causes an \glsxtrfull{itd} between the two ears ($t_l-t_r$).}
     \label{fig:directional_hearing}
 \end{figure}
 
@@ -301,10 +301,10 @@ In traditional recording studio setups, the recording engineer or producer will 
 
 Amplitude panning is the most common panning technique in traditional music production \cite{shelvockHearingYourAudience2020}. It is associated with so-called \q{panning laws}, which govern how the amplitude is changed in each channel according the desired pan position \cite{izhakiPanning2023}. One example is the \q{energy-preserving pan law} (sometimes called the \mbox{\q{-3dB pan law}}) in which the squared sum of the channel gains always equals 1. The gains of the left and right channel are calculated by $g_L=\cos(\frac{\pi}{2}a)$ and $g_R=\sin(\frac{\pi}{2}a)$ respectively where $a$ is the panning position in the range $[0,1]$. \Cref{fig:equal_power_panning} shows how the channel gains relate to the panning position. The total perceived loudness will be equal at all panning positions.
 
-\begin{figure}[htb]
+\begin{figure}[hbt]
     \centering
-    \includegraphics{equal_power_panning.pdf}
-    \caption{Channel gains for equal power panning. When both channel gains are $\frac{1}{\sqrt{2}}$, the sound will be centre-panned. The perceived loudness is equal at all panning positions. }
+    \includegraphics[scale=0.85]{equal_power_panning.pdf}\fxwarning[noinline]{Make it so that this diagram is full size but the final sentence still fits on the page.}
+    \caption{Channel gains for equal power panning. When both channel gains are $\frac{1}{\sqrt{2}}$, the sound will be centre-panned. The perceived loudness is constant.}
     \label{fig:equal_power_panning}
 \end{figure}
 
@@ -312,9 +312,9 @@ Panning techniques are applied to single stems only. A typical recording session
 
 \subsection{Stereo image}
 \label{sec:stereo_image}
-The term \q{stereo image} is used to describe the overall distribution of sound across the horizontal plane after panning and any other production techniques have been applied on all stems. One may also use terms like \q{stereo field}, \q{soundstage}, or \q{panorama}, which all refer to the same thing. They are usually described in qualitative terms such as \q{big}, \q{wide}, and \q{ambient} rather than quantitative measures \cite{owsinskiMixingEngineersHandbook2006}. When mixing a musical recording, a producer will pan individual stems to their desired position within the stereo image. Those stems which are recorded in stereo in fact have their own stereo image, which can also be controlled by the producer. The combination of all stems into a final stereo mix, constitutes the overall stereo image. 
+The term \q{stereo image} is used to describe the overall distribution of sound across the horizontal plane after panning and any other production techniques have been applied on all stems. One may also use terms like \q{stereo field}, \q{soundstage}, or \q{panorama}, which all refer to the same thing. They are usually described in qualitative terms such as \q{big}, \q{wide}, and \q{ambient} rather than quantitative measures \cite{owsinskiMixingEngineersHandbook2006}. When mixing a musical recording, a producer will pan individual stems to their desired position within the stereo image. Those stems which are recorded in stereo have their own stereo image, which can also be controlled by the producer. The combination of all stems into a final stereo mix constitutes the overall stereo image. 
 
-\Cref{fig:stereo_image} shows a simple example stereo image, as perceived by the producer. It contains two mono stems -- vocals and violin, and one stereo stem -- piano. There are some common tropes seen throughout many productions, some of which are shown in the diagram. Firstly, vocals are recorded in mono and panned to the centre. Secondly, since the piano is panned slightly left, the violin is panned roughly the same amount to the right in order to achieve a balanced mix. Thirdly, all stems are placed in the stereo image in a way that emulates a natural performance on a stage, and to avoid separate instruments masking each other. Note that while these practices are commonplace, they are purely an artistic choice on behalf of the producer \cite{owsinskiMixingEngineersHandbook2006}; Recordings breaking the trend are not difficult to find.
+\Cref{fig:stereo_image} shows a simple example stereo image, as perceived by the producer. It contains two mono stems -- vocals and violin, and one stereo stem -- piano. There are some common tropes seen throughout many productions, some of which are shown in the diagram. Firstly, vocals are recorded in mono and panned to the centre. Secondly, since the piano is panned slightly left, the violin is panned roughly the same amount to the right in order to achieve a balanced mix. Thirdly, all stems are placed in the stereo image in a way that emulates a natural performance on a stage, and to avoid the instruments masking each other. Note that while these practices are commonplace, they are purely an artistic choice on behalf of the producer \cite{owsinskiMixingEngineersHandbook2006}; Recordings breaking the trend are not difficult to find.
 
 
 \begin{figure}[htb]
@@ -359,7 +359,8 @@ The term \q{stereo image} is used to describe the overall distribution of sound 
     \label{fig:stereo_image}
 \end{figure}
 
-Describing the stereo image of a recording has its roots in the acoustics domain, in which typical use cases are the analysis of concert halls and music reproduction systems. In these cases, the previously mentioned spatial cues (\gls{ild}, \gls{itd}, and \gls{iacc}) typically form the basis of the analysis. \Citeauthor{bergSystematicEvaluationPerceived2003}  give a long list of typical perceptual measures that can be derived from the low-level cues \cite{bergSystematicEvaluationPerceived2003}, although later literature has focused on the measures of \gls{asw} and \gls{lev}. However, as stated by \citeauthor{sarroffComputationalModelPerceived2011}, the task of describing the spatial aspects of recorded music is inherently different to that of acoustical signals since said recordings may exhibit spatial aspects that cannot occur in physical acoustic space \cite{sarroffComputationalModelPerceived2011}.
+% \fxwarning[noinline,margin]{Maybe this can be pushed to the next chapter}
+% Describing the stereo image of a recording has its roots in the acoustics domain, in which typical use cases are the analysis of concert halls and music reproduction systems. In these cases, the previously mentioned spatial cues (\gls{ild}, \gls{itd}, and \gls{iacc}) typically form the basis of the analysis. \Citeauthor{bergSystematicEvaluationPerceived2003}  give a long list of typical perceptual measures that can be derived from the low-level cues \cite{bergSystematicEvaluationPerceived2003}, although later literature has focused on the measures of \gls{asw} and \gls{lev}. However, as stated by \citeauthor{sarroffComputationalModelPerceived2011}, the task of describing the spatial aspects of recorded music is inherently different to that of acoustical signals since said recordings may exhibit spatial aspects that cannot occur in physical acoustic space \cite{sarroffComputationalModelPerceived2011}.
 
 
 \subsection{Production equipment and software}
@@ -395,7 +396,7 @@ In modern recording scenarios a music producer typically uses a \gls{daw} - grap
     \caption{Screenshots of example music production tools}
 \end{figure}
 
-The process of creating a stereo image is largely an artistic one. The producer pans each track individually by either physically turning the \mbox{pan-pots} or adjusting a digital panning control, and judges the stereo image purely by listening. In a large \gls{daw} session containing many tracks, the producer will make artistic choices about where in the stereo field to pan each track. While there are some typical practices in the industry, it must again be emphasized that panning and creation of stereo field more generally is an artistic process \cite{izhakiPanning2023}.
+While there are some typical practices in the industry, it must again be emphasized that panning and creation of stereo field more generally is an artistic process \cite{izhakiPanning2023}. The producer pans each track individually by either physically turning the \mbox{pan-pots} or adjusting a digital panning control, and judges the stereo image purely by listening. Producers are typically known for their individual style and taste, and the ways in which they use panning in a large \gls{daw} session containing many tracks forms part of that style.
 
 In some cases the producer consults monitoring equipment such as a level meter or goniometer to fine tune their mix \cite{ziemerAcousticFeaturesRecording2021,ziemerGoniometersArePowerful2023}. They also look for potential quality issues that can occur when the stereophonic recordings are mixed down into a monophonic signal for reproduction, which have been documented well before the advent of digital recording \cite{harveyCompatibilityProblemsTwochannel1962}. In more modern production, \gls{daw} plugins are generally used to visualize and assess the stereo qualities of the final mix \cite{bitzerSpatialDistributionMeter2007,ziemerGoniometersArePowerful2023}. \Cref{fig:goniometer} shows one example - the ToneBoosters Goniometer plugin \cite{ToneBoostersAudioPlugins}. It is designed to replicate an analogue goniometer, which, taking two voltage signals as input, displays them on a 2D axis such that a music producer might be able to discern the correlation between the signals.
 
@@ -426,6 +427,8 @@ Overall, stereo recordings are able to deliver high enough quality for the major
 \subsection{Lossless and lossy encoding}
 Regardless of which audio representation is chosen, the resulting recording will most likely be encoded to a compressed format for distribution. There are two types of compression: \q{lossless} and \q{lossy}. A lossless format, when decoded, will produce bit-for-bit recreation of the input signal. Lossy formats on the other hand will not produce the exact same signal, but will discard information that they consider irrelevant according to a psychoacoustic model. There are many lossy formats each suitable for different types of audio, but for the purposes of this thesis it is just pertinent that spatial information can be lost during lossy encoding.
 
+% \clearpage
+
 \section{Analysis of digital recordings}
 
 The output of a recording session is usually only the stereo mix. Stems and \gls{daw} sessions are generally kept private, with precious few being available under licensing terms that are conducive to academic research \cite{bittnerMedleyDBMultitrackDataset2014}. Thus, we assume that all analysis can only be performed on the final stereo mixes that are distributed for playback. The most common distribution format is a digital audio file, and there are some fundamental analysis techniques that can be applied to a digital audio signal.
@@ -435,7 +438,7 @@ When a sound wave interacts with a microphone, it generates an electrical signal
 
 Shannon's sampling theorem states that a signal can be perfectly recreated when sampled at twice the highest frequency contained in the signal. Conversely, the highest frequency that can be represented by sampling a signal at a given $f_s$ is half of that frequency. This limit is called the \q{Nyquist frequency} and is calculated by $f_N = \frac{f_s}{2}$ \cite{yaoNyquistFrequency1983}. This is illustrated by \Cref{fig:nyquist}, which shows the sampling of three waveforms. The lower plot shows a signal at the Nyquist frequency ($f_N$), which can be perfectly reconstructed from the digital samples. The upper two waveforms have frequencies equidistant but in opposite directions from the Nyquist frequency ($f_N \pm f_{\delta}$). The digital samples shown in circles could represent either of the two waveforms. In practice, when the analogue waveform is reconstructed, the lower frequency will always take precedence. 
 
-\begin{figure}[htb]
+\begin{figure}[t!]
     \centering
     \includegraphics{nyquist.pdf}
     \caption{Illustration of the Nyquist Frequency in digital audio signals. Dotted vertical lines represent sampling points with a separation of $T_s$, and monotonically increasing index $n$. The upper plot shows a cosine wave at exactly $f_N$. The lower plot shows two cosine waves with frequencies equidistant above and below the Nyquist frequency ($f_N$). Sampled values are shown as circle marks on the plots. The two upper signals can both be represented by same digital samples.}
@@ -467,41 +470,53 @@ The nature of the spectrogram is affected by two parameters: the frame size and 
 
 The \q{Mel scale} is a quasi-logarithmic frequency scale derived from perceptual experiments. Several definitions exist in the literature \cite{umeshFittingMelScale1999}, but popular implementations like that of librosa \cite{mcfeeLibrosaAudioMusic2015} and \gls{amt} \cite{majdakAMT1xToolbox2022} tend to underpin most audio experimentation.
 
-A \q{Mel filter bank} is a set of band-pass filters that are spaced equally on the Mel scale. Practically, they are implemented as sets of weights that are applied to an \gls{stft} spectrum with the relationship $M_n = \sum_{k=0}^{N} S_k W_{k,n}$ where $M_n$ is the $n$th Mel coefficient, $S_k$ is the $k$th \gls{stft} bin, $N$ is the number of \gls{stft} bins, and $W_{k,n}$ is the $k$th weight of the $n$th Mel filter. An example Mel filter bank with 8 filters is shown in \cref{fig:mel_filters}. While 8 filters are shown for demonstration purposes, audio analysis typically requires over 100. 
+A \q{Mel filter bank} is a set of band-pass filters that are spaced equally on the Mel scale. Practically, they are implemented as sets of weights that are applied to an \gls{stft} spectrum with the relationship $M_n = \sum_{k=0}^{N} S_k W_{k,n}$ where $M_n$ is the $n$th Mel coefficient, $S_k$ is the $k$th \gls{stft} bin, $N$ is the number of \gls{stft} bins, and $W_{k,n}$ is the $k$th weight of the $n$th Mel filter. An example Mel filter bank with 8 filters is shown in \cref{fig:mel_filters}. While 8 filters are shown for demonstration purposes, audio analysis typically requires over 100. When this filterbank is applied to each time step of an \gls{stft} spectrogram, the result is a \q{Mel spectrogram}, an example of which can be seen in \cref{fig:mel_spect}. Observe that the higher frequencies have been condensed into fewer frequency bins compared to the \gls{stft} spectrogram.
 
-When this filterbank is applied to each time step of an \gls{stft} spectrogram, the result is a \q{Mel spectrogram}, an example of which can be seen in \cref{fig:spect_comp}. Observe that the higher frequencies have been condensed into fewer frequency bins compared to the \gls{stft} spectrogram.
 
-\begin{figure}[htb]
+\begin{figure}[b!]
     \centering
-    \includegraphics{mel_filterbank.pdf}
-    \caption{Example Mel filter bank containing 8 filters, shown with linear (left) and logarithmic (right) frequency scales. Note that the bandwidth of each filter is roughly equal in logarithmic space. Since each filter is designed to give a weighted average of linearly spaced \gls{fft} bins, the amplitudes are scaled so that the sum of the weights in each band is equal. The filters are calculated using librosa \cite{LibrosafiltersmelLibrosa0110} using a sample rate of \SI{44100}{\hertz} and an \gls{fft} size of 4096 samples. Filter weights equal to zero are removed for clarity.}
-    \label{fig:mel_filters}
-\end{figure}
 
-\begin{figure}[htb]
-    \centering
-    \includegraphics{mel_spect.pdf}
-    \caption{Mel spectrogram of a speech recording.}
-    \label{fig:mel_spect}
+    \begin{subfigure}[h]{\textwidth}
+        \centering
+        \includegraphics{mel_filterbank.pdf}
+        \caption{Example Mel filter bank containing 8 filters, shown with linear (left) and logarithmic (right) frequency scales. The bandwidth of each filter is roughly equal in logarithmic space, and the amplitudes are scaled so that the sum of the weights in each band is equal. Filter weights equal to zero are removed for clarity. 
+        % The filters are calculated using librosa \cite{LibrosafiltersmelLibrosa0110} using a sample rate of \SI{44100}{\hertz} and an \gls{fft} size of 4096 samples.
+        }
+        \label{fig:mel_filters}
+    \end{subfigure}
+
+    \bigskip
+
+    \begin{subfigure}[h]{\textwidth}
+        \centering
+        \includegraphics{mel_spect.pdf}
+        \caption{Mel spectrogram of a speech recording, using 32 bands.}
+        \label{fig:mel_spect}
+    \end{subfigure}
 \end{figure}
 
 \subsubsection{Cochleagram}
 
-As an alternative to the two spectrogram representations, a cochleagram aims to make a \gls{tf} representation that models the acoustic response of the human cochlea more closely. To that end, all processing is performed in the time domain and is sometimes referred to as a \q{peripheral ear model}. Several examples appear in the literature \cite{boddenBinauralModelingAuditory1995,choiObjectiveMeasurementPerceived2008,delgadoDesignChoicesBinaural2023}. In the classical method \cite{boddenBinauralModelingAuditory1995} the original signal is first processed by a bank of gammatone filters with their centre frequencies placed according to a perceptual scale (such as the \gls{erb} scale \cite{smithiiiEquivalentRectangularBandwidth2020}), as shown in \cref{fig:gammatone_filters}. As with Mel filters, several definitions of gammatone filters exist in the literature, but the popular implementations (e.g. scipy \cite{virtanenSciPy10Fundamental2020} and \gls{amt} \cite{majdakAMT1xToolbox2022}) preside.
+As an alternative to the two spectrogram representations, a cochleagram aims to make a \gls{tf} representation that models the acoustic response of the human cochlea more closely. To that end, all processing is performed in the time domain and is sometimes referred to as a \q{peripheral ear model}. Several examples appear in the literature \cite{boddenBinauralModelingAuditory1995,choiObjectiveMeasurementPerceived2008,delgadoDesignChoicesBinaural2023}. In the classical method \cite{boddenBinauralModelingAuditory1995} the original signal is first processed by a bank of gammatone filters with their centre frequencies placed according to a perceptual scale (such as the \gls{erb} scale \cite{smithiiiEquivalentRectangularBandwidth2020}), as shown in \cref{fig:gammatone_filters}. As with Mel filters, several definitions of gammatone filters exist in the literature, but the popular implementations (e.g. scipy \cite{virtanenSciPy10Fundamental2020} and \gls{amt} \cite{majdakAMT1xToolbox2022}) preside. \Cref{fig:cochleagram} shows a cochleagram of the example speech recording.
 
+\Cref{fig:cochleagram_steps} shows the intermediate steps to generate a cochleagram. Each sub-band signal is processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patterns of the cilia and basilar membrane. The result is a signal representing the envelope of each sub-band. Those envelopes are then segmented into overlapping time chunks. The amplitude of each chunk is then calculated as the mean of all its values, forming one pixel in the cochleagram.
 
+\begin{figure}[hbt]
+    \centering
+    \includegraphics{cochleagram.pdf}
+    \caption{Cochleagram of a speech recording, using 32 bands.}
+    \label{fig:cochleagram}
+\end{figure}
 
 \begin{figure}[p!]
     \centering
-    \begin{subfigure}[b]{\textwidth}
+    \begin{subfigure}[b]{0.8\textwidth}
         \centering
         \includegraphics{gammatone_filterbank.pdf}
         \caption{Example gammatone filterbank with individual filters spaced equally on the \gls{erb} scale. The filters are \glsxtrfull{iir} and are applied to an audio signal in the time domain.}
         \label{fig:gammatone_filters}
     \end{subfigure}
 
-    \bigskip
-    
     \begin{subfigure}[b]{\textwidth}
         \includegraphics{cochleagram_steps.pdf}
         \caption{Steps of an example decomposition from time-domain audio to a cochleagram. The audio being filtered is a frequency sweep from 100 to 20000 Hz. First it is processed by a gammatone filterbank, generating 8 sub-band signals which are spaced equally on the \gls{erb} scale. Each sub-band has its envelope extracted. The envelope is then split into overlapping time chunks, which are averaged to form the cochleagram.}
@@ -510,25 +525,15 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
     \caption{Using a gammatone filterbank to make a cochleagram.}
 \end{figure}
 
-\Cref{fig:cochleagram_steps} shows the intermediate steps to generate a cochleagram. Each sub-band signal is processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patterns of the cilia and basilar membrane. The result is a signal representing the envelope of each sub-band. Those envelopes are then segmented into overlapping time chunks. The amplitude of each chunk is then calculated as the mean of all its values, forming one pixel in the cochleagram.
-
-\begin{figure}[htb]
-    \centering
-    \includegraphics{cochleagram.pdf}
-    \caption{Cochleagram of a speech recording.}
-    \label{fig:cochleagram}
-\end{figure}
-
-
-\Cref{fig:spect_comp} shows all three side by side for comparison.
 
 \begin{figure}[p!]
     \centering
     \includegraphics{spect_comp.pdf}
-    \caption{An example audio signal displayed as \gls{stft} spectrogram (above), Mel spectrogram (mid), and cochleagram (below). The spectrogram frequency bands are spaced linearly between 0Hz and the Nyquist frequency, which is not coherent with human perception. The Mel spectrogram is created from the original spectrogram based on linear combinations of its frequency bands and retains more detail in lower frequencies than higher frequencies. The Cochleagram is created directly from time domain audio by mimicking the physical response of the human ear. In all cases the pixel colour represent the sound intensity of the given \gls{tf} bin in decibels.}
+    \caption{An example audio signal displayed as \gls{stft} spectrogram (above), Mel spectrogram (mid), and cochleagram (below). The spectrogram frequency bands are spaced linearly between 0Hz and the Nyquist frequency, which is not coherent with human perception. The Mel spectrogram is created from the original spectrogram based on linear combinations of its frequency bands and retains more detail in lower frequencies than higher frequencies. The Cochleagram is created directly from time domain audio by mimicking the physical response of the human ear.}
     \label{fig:spect_comp}
 \end{figure}
 
+\pagebreak
 
 \subsection{Machine learning}
 Any data-driven audio research, particularly that using vast datasets, will naturally involve the use of \gls{ml}. Broadly speaking, \gls{ml} techniques can be classified as either supervised or unsupervised. When training a supervised  \gls{ml} model, the training dataset needs to include ground-truth labels such that the network can objectively discern via a loss function whether the predictions it is making are correct. Unsupervised \gls{ml} on the other hand does not require any labels. Instead, it seeks to form a representation of the underlying dataset via techniques such as clustering or dimensionality reduction, thereby learning the structures and patterns of the data while retaining as much key information as possible.

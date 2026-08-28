@@ -35,7 +35,7 @@
 \renewcommand{\vec}{\bm}
 
 \fxsetup{draft,inline,nomargin,theme=color}
-\captionsetup[subfigure]{skip=0.333\baselineskip}
+\captionsetup[subfigure]{skip=0.333\baselineskip, font=footnotesize}
 
 % The title is never printed but here it is anyway
 % \title{Analysis of stereo image in vast repositories of recorded music}
@@ -88,6 +88,8 @@
 \setcounter{biburllcpenalty}{9000}
 \addbibresource{../library_biblatex.bib}
 
+
+% \includeonly{sections/background.tex}
 
 %% Macros
 \newcommand{\citeauthorandnumber}[1]{\citeauthor{#1} \cite{#1}}
@@ -184,6 +186,9 @@
 Spatial information is crucial to the listener's experience of music, and stereophonic recordings have long been the standard for capturing this spatiality. Recent advancements in computing, coupled with the availability of new, very large musical corpora, have created opportunities for large-scale quantitative analysis of the stereo image of recorded music. In this licentiate thesis I address a key gap in current research: direct analysis of raw music recordings to describe the stereo image. The work comprises practice-led research, objective experiments, perceptual listening tests, and an extensive literature review. A combination of immersion in the creative aspects of stereo field and thorough mathematical evaluation of the recorded signals created a strong foundation for future research. The studies together revealed that the while there are many existing stereo descriptors, the musical features visible to each one vary considerably and therefore have differing use cases. Moreover, they don't always align with human perception. The combination of research methods was hence a highly effective way to critique the strengths and weakness of objective measurements. Future work should focus on applying and adapting the discovered methods to modern music datasets.
 \end{abstract}
 }
+
+
+\captionsetup{font=footnotesize}
 
 \begin{document}
 \frontmatter
