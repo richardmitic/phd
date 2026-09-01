@@ -287,7 +287,7 @@ def draw_spectrogram_comparison(
 
     x = 0.02
     y = 0.94
-    ax[0].text(x, y, "Spectrogram", transform=ax[0].transAxes, verticalalignment='top', bbox=annotation_bbox_props)
+    ax[0].text(x, y, "STFT Spectrogram", transform=ax[0].transAxes, verticalalignment='top', bbox=annotation_bbox_props)
     ax[1].text(x, y, "Mel Spectrogram", transform=ax[1].transAxes, verticalalignment='top', bbox=annotation_bbox_props)
     ax[2].text(x, y, "Cochleagram", transform=ax[2].transAxes, verticalalignment='top', bbox=annotation_bbox_props)
 
