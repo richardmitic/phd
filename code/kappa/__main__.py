@@ -427,7 +427,6 @@ def draw_adress(
     fap = np.mean(faas, axis=0)
     nulls_x = [np.argmin(fap[41]), np.argmin(fap[45])]
     freqs = np.fft.rfftfreq(fft_size, d=1/sr)
-    nulls_y = [freqs[41], freqs[45]]
 
     fig, ax = plt.subplots(1,1, figsize=figsize, layout='constrained')
     img = ax.imshow(np.flipud(fap), aspect='auto', cmap='gray_r', extent=(0, fap.shape[1], 0, sr/2))
@@ -439,30 +438,37 @@ def draw_adress(
 
     freqs = np.fft.rfftfreq(fft_size, d=1/sr)
     arrowprops = dict(arrowstyle="->")
+    bbox=dict(boxstyle='ellipse', alpha=0.)
     for i in [11,21,31,41]:
         null_y = freqs[i]
-        ax.annotate("nulls", (nulls_x[0], null_y), (100, 18000), xycoords='data', arrowprops=arrowprops, ha='center')
+        ax.annotate("nulls", (nulls_x[0], null_y), (100, 18000), xycoords='data', arrowprops=arrowprops, ha='center', bbox=bbox)
     for i in [15,25,35,45]:
         null_y = freqs[i]
-        ax.annotate("nulls", (nulls_x[1], null_y), (100, 18000), xycoords='data', arrowprops=arrowprops, ha='center')
-    # ax.annotate("nulls", (nulls_x[1], nulls_y[1]), (100, 18000), xycoords='data', arrowprops=arrowprops, ha='center')
-    # fig.colorbar(mappable=img)
+        ax.annotate("nulls", (nulls_x[1], null_y), (100, 18000), xycoords='data', arrowprops=arrowprops, ha='center', bbox=bbox)
 
-    # plt.show()
-
-    # xx, yy = np.meshgrid(np.fft.rfftfreq(fft_size, d=1/sr), np.arange(fap.shape[1]))
-
-    # fig = plt.figure(figsize=figsize)
-    # ax = fig.add_subplot(projection='3d')
-    # ax.plot_wireframe(xx, yy, fap.T, color='k', linewidth=0.5, rstride=10, cstride=4)
-    # ax.tick_params(axis='both', which='major', tick1On=False, tick2On=False, pad=-3)
-    # ax.set_xlabel("Frequency (Hz)", labelpad=-2)
-    # ax.set_ylabel("Azimuth", labelpad=-4)
-    # ax.set_zlabel("Peak Magnitude", labelpad=-5)
-    # ax.xaxis.set_inverted(True)
-    # ax.set_xticks([0, 5000, 10000, 15000, 20000], labels=['0', '5k', '10k', '15k', '20k'])
-    # ax.set_yticks([0, 100, 200], labels=["L", "C", "R"])
     fig.savefig(output_dir / "adress.pdf")
+
+
+def draw_adress_frames_for_track(
+    output_dir: Path,
+    track_filepath: Path,
+    fft_size = 128,
+    hop_size = 64,
+    start_frame = 700,
+    num_frames = 8,
+    frame_skip = 1,
+):
+    mix = pf.io.read_audio(track_filepath)
+
+    spect = np.abs(common.make_spectrogram(mix, fft_size=fft_size, hop_size=hop_size))
+    faas = sarroff.frequency_azimuth_analysis_signal(spect, 100, inverted=False)
+
+    cmap = plt.cm.gray_r
+    frame_selection = faas[start_frame : start_frame + num_frames : frame_skip]
+    for i, fap in enumerate(frame_selection):
+        norm = plt.Normalize(vmin=fap.min(), vmax=fap.max())
+        image = cmap(norm(np.flipud(fap)))
+        plt.imsave(output_dir / f"fa_{i:05d}.png", image)
 
 
 def get_demo_tracks() -> pd.DataFrame:
@@ -981,9 +987,10 @@ def draw_pi_and_ai(
         ax.set_yscale('log')
         ax.set_ylim(50, 20000)
         ax.set_ylabel("Frequency (Hz)")
+        ax.set_yticks([100, 1000, 10000], labels=["100", "1k", "10k"])
     axes[1].set_xlabel("Time (s)")
     
-    tx, ty = 0.015, 0.95
+    tx, ty = 0.03, 0.95
     axes[0].text(tx, ty, "Panning Index", transform=axes[0].transAxes, verticalalignment='top', bbox=annotation_bbox_props)
     axes[1].text(tx, ty, "Ambience Index", transform=axes[1].transAxes, verticalalignment='top', bbox=annotation_bbox_props)
 
@@ -1057,6 +1064,7 @@ def all():
     draw_mel_filters(OUTPUT_DIR, MID_WIDE_RECT)
     draw_cochleagram_steps(OUTPUT_DIR, WIDE_SKINNY_RECT)
     draw_adress(OUTPUT_DIR, WIDE_RECT)
+    draw_adress_frames_for_track(OUTPUT_DIR, tracks.iloc[2].local.filepath)
 
     make_demo_tracks_appendix_table(tracks, OUTPUT_DIR)
     draw_demo_tracks_spf(tracks, OUTPUT_DIR, WIDE_RECT)
@@ -1064,7 +1072,7 @@ def all():
     draw_demo_tracks_asf(tracks, OUTPUT_DIR, WIDE_RECT)
     draw_demo_tracks_goniometer(tracks, OUTPUT_DIR, WIDE_RECT)
 
-    draw_pi_and_ai(tracks.iloc[2].local.filepath, OUTPUT_DIR, WIDE_RECT, ANNOTATION_BBOX_PROPS)
+    draw_pi_and_ai(tracks.iloc[2].local.filepath, OUTPUT_DIR, WIDE_SQUARE, ANNOTATION_BBOX_PROPS)
 
     # It's important that the two graphs in this figure end up being square, so use a custom figsize.
     draw_example_goniometer(
@@ -1084,6 +1092,11 @@ def all():
 @app.command()
 def adress():
     draw_adress(OUTPUT_DIR, WIDE_RECT)
+    draw_adress_frames_for_track(OUTPUT_DIR, tracks.iloc[2].local.filepath)
+
+@app.command()
+def ai_pi():
+    draw_pi_and_ai(tracks.iloc[2].local.filepath, OUTPUT_DIR, WIDE_SQUARE, ANNOTATION_BBOX_PROPS)
 
 if __name__ == "__main__":
     app()
