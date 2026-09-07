@@ -7,7 +7,7 @@ In this chapter I break down the details of existing algorithms for stereo field
 \label{sec:history}
 Research into the stereo field of recorded music specifically (as opposed to generic spatial properties of audio signals) has its roots in the early 2000s. At the time, stereo recording was a well-established norm and audio distribution was handled by the early lossy encoding formats such as \gls{mp3} and \gls{aac} \cite{iso-11172-3:mpeg_audio,ISOIEC13818-7:2006-AAC}. Analysis and description of stereo field was used to increase the coding efficiency of these codecs, for example by e.g. \gls{ps} coding \cite{fallerParametricCodingSpatial2004,breebaartHighqualityParametricSpatial2004,breebaartParametricCodingStereo2005}. In parallel, new audio encoding schemes such as \gls{bcc} (later ratified as \q{\glsxtrshort{mpeg} Surround} \cite{iso/iec23003-1InformationTechnologyMPEG2007}) were developed based on the work of \citeauthorandnumber{baumgarteEstimationAuditorySpatial2002}. 
 
-The standardization of multi-channel audio presented an opportunity: new reproduction equipment needed to remain compatible with the existing back-catalogue of stereo recordings, and vendors could compete on sound quality. There was therefore a need algorithms that upmixed stereo audio to multi-channel. Analysis of the stereo field, source separation, and primary/ambient extraction were seen as effective ways to achieve this \cite{goodwinPrimaryAmbientSignalDecomposition2007}. In fact, such research is still ongoing today \cite{shiFastNonuniformSearching2022}.
+The standardization of multichannel audio presented an opportunity: new reproduction equipment needed to remain compatible with the existing back-catalogue of stereo recordings, and vendors could compete on sound quality. There was therefore a need algorithms that upmixed stereo audio to multichannel. Analysis of the stereo field, source separation, and primary/ambient extraction were seen as effective ways to achieve this \cite{goodwinPrimaryAmbientSignalDecomposition2007}. In fact, such research is still ongoing today \cite{shiFastNonuniformSearching2022}.
 
 In the prevailing years, object-based audio has been developed and standardized as e.g. Dolby Atmos \cite{DolbyAtmosNextGenerationAudioforCinema} and MPEG-H \cite{mpeg-h}, and the same early research into stereo field analysis is still relevant to these new formats for all the same reasons. Nowadays, it is commonplace to use \gls{ml}/\gls{dl} to perform the same tasks, although the results only outperform the \gls{dsp}-based predecessors in specific cases \cite{cobosOverviewMachineLearning2022}.
 
@@ -23,11 +23,11 @@ The \q{panning index} and \enquote{ambience index} specified by \citeauthor{aven
 \begin{figure}[!p]
     \centering
     \includegraphics{pi_ai.pdf}
-    \caption{Demonstration of \q{panning index} and \q{ambience index} on Track C. Several panned sources are visible as red or blue bands in the \pani, and at roughly 20s most sources fade out leaving a single one on the right. The \ambi~plot shows that the track starts off with no single dominant direct sound source. At 20s when most sources fade out, the \ambi~drops to 0 across the lower half of the spectrum, indicating that the remaining source is direct. In the upper half of the spectrum, the source remains slightly ambient. }
+    \caption{Demonstration of \pani{} and \ambi{} on Track C. Several panned sources are visible as red or blue bands in the \pani{}, and at roughly 20s most sources fade out leaving a single one on the right. The \ambi~plot shows that the track starts off with no single dominant direct sound source. At 20s when most sources fade out, the \ambi~drops to 0 across the lower half of the spectrum, indicating that the remaining source is direct. In the upper half of the spectrum, the source remains slightly ambient. }
     \label{fig:pi_ai}
 \end{figure}
 
-\citeauthor{prestiBivariateMixtureSpace2023} provides a re-contextualization of the panning and ambience indices in his work on \glspl{bms} \cite{prestiVisualizationManipulationStereophonic2014,prestiBivariateMixtureSpace2023}. He demonstrates that it can be used to analyse the panning position of individual \gls{tf} bins, plus the clarity (or trustworthyness) of that measurement. Thus, it is useful for tasks such as primary/ambient decomposition, stereo field manipulation, and visualization.
+\citeauthor{prestiBivariateMixtureSpace2023} provides a re-contextualization of the panning and ambience indices in his work on \glspl{bms} \cite{prestiVisualizationManipulationStereophonic2014,prestiBivariateMixtureSpace2023}. He demonstrates that it can be used to analyse the panning position of individual \gls{tf} bins, plus the clarity (or trustworthiness) of that measurement. Thus, it is useful for tasks such as primary/ambient decomposition, stereo field manipulation, and visualization.
 
 \citeauthor{barrySoundSourceSeparation2004} present another seminal technique in their paper defining the \gls{adress} algorithm \cite{barrySoundSourceSeparation2004}. The fundamental principle is to estimate the panning position of frequency bins in a stereo spectrogram by scaling one channel, inverting it, and mixing the channels back to mono. The resulting phase cancellation will determine the scaling factor that was applied to the original audio source during amplitude panning, and hence will show where the source was panned in the stereo field. To demonstrate, \cref{fig:adress} shows an example \gls{fa} plane for a combination of panned sine waves, where nulls in the plane show can be observed at the azimuths position that the sinusoids are panned to. To show a realistic use case, \cref{fig:faas} shows an \gls{fa} analysis signal for a music recording. While this was technique was originally intended to be used for audio source separation, it has been repurposed many times since.
 
@@ -82,7 +82,7 @@ Importantly, all the previously mentioned analyses are performed in the \gls{tf}
 
 Stereo image description refers to the generation of a numerical vector that represents the stereo image in an arbitrary feature space. Recordings with similar stereo image should be close within the space, although the distance metric is application-specific. A typical technique is to construct the vector from statistical summaries of low-level spatial cues. Throughout this section, these vectors are referred to as \glsxtrfullpl{sip}, and examples of each one are given on the three example tracks.
 
-\subsection{\gls{dsp}-based \glspl{sip}}
+\subsection{\glsentryshort{dsp}-based \glsentryshortpl{sip}}
 
 \citeauthor{tzanetakisStereoPanningFeatures2007} provide the earliest example of a technique specifically designed to interpret the use of panning in recorded music: \gls{spf} \cite{tzanetakisStereoPanningFeatures2007}. It targets amplitude panning only, using \citeauthor{avendanoFrequencyDomainTechniques2002}'s \pani{} as the basis. Additionally, it separates the frequency spectrum into 3 sub-bands -- lows, mids, and highs -- following the common practice of music producers. While not specifically stated by \citeauthor{tzanetakisStereoPanningFeatures2007}, I interpret the vector to represent the amount and variance of \q{fast panning} and \q{slow panning} in each frequency band. \citeauthor{tzanetakisStereoPanningInformation2010} later expanded the features by adding an estimation of the number of individual sources in the recording \cite{tzanetakisStereoPanningInformation2010}. The resulting \gls{sip} can be used to compare the recording and production styles of different music tracks, as shown in \cref{fig:spf}.
 
@@ -90,7 +90,7 @@ Stereo image description refers to the generation of a numerical vector that rep
     \centering
     \includegraphics{spf.pdf}
     \caption{
-        \glsxtrlong{spf} for three tracks from the \gls{fma} dataset \cite{defferrardFMADatasetMusic2017}. All tracks clearly show different panning and production styles. 
+        \glsentrylong{spf} for three tracks from the \gls{fma} dataset \cite{defferrardFMADatasetMusic2017}. All tracks clearly show different panning and production styles. 
     }
     \label{fig:spf}
 \end{figure}
@@ -101,7 +101,7 @@ While \gls{spf} shows production style at a high level, other descriptors contai
     \centering
     \includegraphics{panning_histograms.pdf}
     \caption{
-        \glsxtrlongpl{ph} for three tracks from the \gls{fma} dataset \cite{defferrardFMADatasetMusic2017}. All tracks clearly show different shapes of stereo field. The two different algorithms (\citeauthorandnumber{gomezMusicSimilaritySystems2008} and \citeauthorandnumber{sarroffMeasurementsSpaciousnessStereophonic2008}) produce slightly different fine detail, but they agree on the general azimuthal distribution.
+        \glsentrylongpl{ph} for three tracks from the \gls{fma} dataset \cite{defferrardFMADatasetMusic2017}. All tracks clearly show different shapes of stereo field. The two different algorithms (\citeauthorandnumber{gomezMusicSimilaritySystems2008} and \citeauthorandnumber{sarroffMeasurementsSpaciousnessStereophonic2008}) produce slightly different fine detail, but they agree on the general azimuthal distribution.
     }
     \label{fig:panning_histograms}
 \end{figure}
@@ -169,7 +169,7 @@ While all the aforementioned studies focus on descriptions of amplitude panning 
 
 \FloatBarrier
 
-\subsection{\gls{ml}-based \glspl{sip}}
+\subsection{\glsentryshort{ml}-based \glsentryshortpl{sip}}
 
 All the previously mentioned algorithms use classical \gls{dsp} to create their spatial descriptors, but more recently there have been efforts to use \glsxtrfull{dl} to disentangle spatial information from audio content. \citeauthor{yangUpmixingStyleTransfer2022} presents one such example in \cite{yangUpmixingStyleTransfer2022}. While the original aim was to upmix stereo music to multichannel, a necessary component of the resulting neural network was a latent space that represents the spatial information of the multichannel signal. A simplified architecture diagram of \citeauthor{yangUpmixingStyleTransfer2022}'s method is shown in \cref{fig:dl_upmix}.
 
@@ -275,7 +275,7 @@ Many of the studies cited in \cref{sec:stereo_image_description} use a large dat
 
 \citeauthor{collinsNewCuratedCorpus2018} collated a dataset of historical electronic music \cite{collinsNewCuratedCorpus2018}. As part of that work, they extracted two spatial metrics: \q{channel loudness difference} and \q{stereo spatial ebb}. The example experiment given to demonstrate the dataset showed that \q{stereo spatial ebb} changes according to the year of the recording, thus indicating an artistic trend over time. \q{Channel  loudness difference}, on the other hand, remained static.
 
-In \citeauthor{panteliCharacterizationSingingStyles2017}'s work on the classification of singing style \cite{panteliCharacterizationSingingStyles2017}, the classes -- instead of being determined by an a-priori known label -- are learned by first extracting low-level audio cues, then finding common features within those cues. The features are then used as the input to unsupervised clustering algorithms to determine the relationships of the recordings to each other. \citeauthor{panteliComputationalStudyOutliers2017} continued the work in \cite{panteliComputationalStudyOutliers2017} where outliers in the global dataset where found using similar techniques and links between different musical cultures were drawn. While neither of these studies addressed spatial information, they nevertheless present use cases where unsupervised learning on features extracted from large audio dataset generates cultural knowledge that extends beyond the musical domain. 
+In \citeauthor{panteliCharacterizationSingingStyles2017}'s work on the classification of singing style \cite{panteliCharacterizationSingingStyles2017}, the classes -- instead of being determined by known labels -- are learned by first extracting low-level audio cues, then finding common features within those cues. The features are then used as the input to unsupervised clustering algorithms to determine the relationships of the recordings to each other. \citeauthor{panteliComputationalStudyOutliers2017} continued the work in \cite{panteliComputationalStudyOutliers2017} where outliers in the global dataset where found using similar techniques and links between different musical cultures were drawn. While neither of these studies addressed spatial information, they nevertheless present use cases where unsupervised learning on features extracted from large audio dataset generates cultural knowledge that extends beyond the musical domain. 
 
 On a cautionary note, \citeauthor{chauhanCrossCulturalBiasMelScale2026} recently showed that \gls{ml}-based tasks taking audio input from multiple cultures are biased towards Western sources if they use the Mel spectrogram as the audio frontend \cite{chauhanCrossCulturalBiasMelScale2026}. The authors recommend using alternative frontends, such as \gls{erb}.
 

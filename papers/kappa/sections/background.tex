@@ -241,7 +241,7 @@ The concepts of directional hearing are applied in music production to make soun
     \label{fig:phantom_amplitude}
 \end{figure}
 
-Time panning (otherwise known as the \q{Haas effect}) exploits the phenomenon that the first ear to hear a sound generally dictates the direction that it appeared to come from. The process is to simply delay the signal in one channel by a time value within the \q{Haas window} (typically less than 40ms). The un-delayed channel will then dictate the phantom direction of the original source. In music production it is used both for panning and to add spaciousness to a recording \cite{stewartWhatHaasEffect2022,izhakiPanning2023}. 
+Time panning (otherwise known as the \q{Haas effect}) exploits the phenomenon that the first ear to hear a sound generally dictates the direction that it appeared to come from. The process is to simply delay the signal in one channel by a time value within the \q{Haas window} (typically less than 40ms). The undelayed channel will then dictate the phantom direction of the original source. In music production it is used both for panning and to add spaciousness to a recording \cite{stewartWhatHaasEffect2022,izhakiPanning2023}. 
 
 Another frequently used technique is \q{binaural panning}, which assigns combinations of amplitude and time difference to each stereo channel. This is typically achieved by using a \gls{hrir}. An \gls{hrir} is a pair of impulse responses recorded with microphones placed in the ears of either a real person or a dummy head. To obtain an \gls{hrir}, a known excitation signal is played from a specific position in a room and recorded with said binaural microphones (see \cref{fig:phantom_binaural}). The \gls{hrir} can then be convolved with any other monophonic recording to make it appear as though the recording came from the position of the excitation source. An \gls{hrir} can only be used to pan a sound to a single position, so it is typical to record many from different positions \cite{armstrongPerceptualEvaluationIndividual2018}.
 %  
@@ -455,7 +455,7 @@ In order to perform many types of audio analysis, the audio signal can be conver
 
 The \gls{stft} spectrogram is one of the most popular \gls{tf} representions across all audio processing work due to its computational efficiency. The fundamental principle is that a time-domain signal is split into short (1 to 100ms) overlapping chunks, and the \gls{fft} is performed on each chunk, thereby converting that chunk into the frequency domain.  By arranging subsequent frames along a time axis it is possible to represent the original signal as a 2D image known as a spectrogram. When the time-domain signal is entirely real, (which is the case for monophonic audio signals), the result of the \gls{fft} will be a complex signal which is symmetrical around the Nyquist frequency and the upper half is therefore dropped. Furthermore, the complex spectrum is usually represented in magnitude/phase form to better match the human auditory response.
 
-A fundamental property of the \gls{fft} is that it assumes that the signal repeats outside the time frame that is being analysed. Since this is generally not the case for audio signals, it is standard practice to apply a time-domain windowing function to each frame so that large transients do not occur at the boundaries. Serveral standard windowing functions exist, each with their own nuances, but for most audio applications the \q{Hann} window can be used \cite{LibrosastftLibrosa0110}. 
+A fundamental property of the \gls{fft} is that it assumes that the signal repeats outside the time frame that is being analysed. Since this is generally not the case for audio signals, it is standard practice to apply a time-domain windowing function to each frame so that large transients do not occur at the boundaries. Several standard windowing functions exist, each with their own nuances, but for most audio applications the \q{Hann} window can be used \cite{LibrosastftLibrosa0110}. 
 
 The nature of the spectrogram is affected by two parameters: the frame size and hop size. \q{Frame size} refers to the number of samples in each analysis frame. To obtain maximal computational efficiency this must be a power of 2. \q{Hop size} refers to the number of samples between the start of subsequent frames and is sometimes expressed as a percentage of the frame size. The frame size dictates the resolution of the spectrogram's frequency axis since the frequency bins will be spaced evenly between \SI{0}{\hertz} and the Nyquist frequency. Importantly, a longer frame size will result in lower time accuracy within each frame; sharp transients in the time domain will appear as wideband energy in the frequency domain, but information about exactly where the transient occurred within the frame is lost. To counteract this inaccuracy, a smaller hop size can be used so that transients might be detected as sharp changes between \gls{stft} frames. One major drawback of the \gls{stft} spectrogram is that the linearly-spaced frequency bins do not align well with the human perception of frequency, which is logarithmic. The \gls{stft} therefore contains redundant information in higher frequencies. Several common alternatives exist to account for this.
 
@@ -470,7 +470,7 @@ The nature of the spectrogram is affected by two parameters: the frame size and 
 
 The \q{Mel scale} is a quasi-logarithmic frequency scale derived from perceptual experiments. Several definitions exist in the literature \cite{umeshFittingMelScale1999}, but popular implementations like that of librosa \cite{mcfeeLibrosaAudioMusic2015} and \gls{amt} \cite{majdakAMT1xToolbox2022} tend to underpin most audio experimentation.
 
-A \q{Mel filter bank} is a set of band-pass filters that are spaced equally on the Mel scale. Practically, they are implemented as sets of weights that are applied to an \gls{stft} spectrum with the relationship $M_n = \sum_{k=0}^{N} S_k W_{k,n}$ where $M_n$ is the $n$th Mel coefficient, $S_k$ is the $k$th \gls{stft} bin, $N$ is the number of \gls{stft} bins, and $W_{k,n}$ is the $k$th weight of the $n$th Mel filter. An example Mel filter bank with 8 filters is shown in \cref{fig:mel_filters}. While 8 filters are shown for demonstration purposes, audio analysis typically requires over 100. When this filterbank is applied to each time step of an \gls{stft} spectrogram, the result is a \q{Mel spectrogram}, an example of which can be seen in \cref{fig:mel_spect}. Observe that the higher frequencies have been condensed into fewer frequency bins compared to the \gls{stft} spectrogram.
+A \q{Mel filter bank} is a set of band-pass filters that are spaced equally on the Mel scale. Practically, they are implemented as sets of weights that are applied to an \gls{stft} spectrum with the relationship $M_n = \sum_{k=0}^{N} S_k W_{k,n}$ where $M_n$ is the $n$th Mel coefficient, $S_k$ is the $k$th \gls{stft} bin, $N$ is the number of \gls{stft} bins, and $W_{k,n}$ is the $k$th weight of the $n$th Mel filter. An example Mel filter bank with 8 filters is shown in \cref{fig:mel_filters}. While 8 filters are shown for demonstration purposes, audio analysis typically requires over 100. When this filter bank is applied to each time step of an \gls{stft} spectrogram, the result is a \q{Mel spectrogram}, an example of which can be seen in \cref{fig:mel_spect}. Observe that the higher frequencies have been condensed into fewer frequency bins compared to the \gls{stft} spectrogram.
 
 
 \begin{figure}[b!]
@@ -513,16 +513,16 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
     \begin{subfigure}[b]{0.8\textwidth}
         \centering
         \includegraphics{gammatone_filterbank.pdf}
-        \caption{Example gammatone filterbank with individual filters spaced equally on the \gls{erb} scale. The filters are \glsxtrfull{iir} and are applied to an audio signal in the time domain.}
+        \caption{Example gammatone filter bank with individual filters spaced equally on the \gls{erb} scale. The filters are \glsentryfull{iir} and are applied to an audio signal in the time domain.}
         \label{fig:gammatone_filters}
     \end{subfigure}
 
     \begin{subfigure}[b]{\textwidth}
         \includegraphics{cochleagram_steps.pdf}
-        \caption{Steps of an example decomposition from time-domain audio to a cochleagram. The audio being filtered is a frequency sweep from 100 to 20000 Hz. First it is processed by a gammatone filterbank, generating 8 sub-band signals which are spaced equally on the \gls{erb} scale. Each sub-band has its envelope extracted. The envelope is then split into overlapping time chunks, which are averaged to form the cochleagram.}
+        \caption{Steps of an example decomposition from time-domain audio to a cochleagram. The audio being filtered is a frequency sweep from 100 to 20000 Hz. First it is processed by a gammatone filter bank, generating 8 sub-band signals which are spaced equally on the \gls{erb} scale. Each sub-band has its envelope extracted. The envelope is then split into overlapping time chunks, which are averaged to form the cochleagram.}
         \label{fig:cochleagram_steps}
     \end{subfigure}
-    \caption{Using a gammatone filterbank to make a cochleagram.}
+    \caption{Using a gammatone filter bank to make a cochleagram.}
 \end{figure}
 
 

@@ -1,4 +1,8 @@
-\documentclass{UUThesisTemplate}
+% Turn off spell checker in the preamble
+% LTeX: enabled=false
+\documentclass[final]{UUThesisTemplate}
+
+\usepackage{ifdraft}
 
 \usepackage[british]{babel}
 \usepackage{hyperref}
@@ -14,7 +18,7 @@
 \usepackage{afterpage}
 \usepackage{type1cm}
 % \usepackage[latin1]{inputenc}
-% \usepackage[T1]{fontenc}
+\usepackage[T1]{fontenc}
 \usepackage{mathptmx}
 \usepackage{amssymb}
 \usepackage{siunitx}
@@ -50,8 +54,8 @@
 % drawing figures
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric}
-\usetikzlibrary {arrows.meta}
-\usetikzlibrary {arrows}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{arrows}
 \usetikzlibrary{positioning}
 \usetikzlibrary{fit}
 \usetikzlibrary{backgrounds}
@@ -181,9 +185,12 @@
     section_label/.style={rectangle, rounded corners, draw=darkgray, fill=lightgray, rotate=90, minimum height=0.618cm, minimum width=4cm},
 }
 
+% And turn the spell checker back on
+% LTeX: enabled=true
+
 \abstractdummy{
 \begin{abstract}
-Spatial information is crucial to the listener's experience of music, and stereophonic recordings have long been the standard for capturing this spatiality. Recent advancements in computing, coupled with the availability of new, very large musical corpora, have created opportunities for large-scale quantitative analysis of the stereo image of recorded music. In this licentiate thesis I address a key gap in current research: direct analysis of raw music recordings to describe the stereo image. The work comprises practice-led research, objective experiments, perceptual listening tests, and an extensive literature review. A combination of immersion in the creative aspects of stereo field and thorough mathematical evaluation of the recorded signals created a strong foundation for future research. The studies together revealed that the while there are many existing stereo descriptors, the musical features visible to each one vary considerably and therefore have differing use cases. Moreover, they don't always align with human perception. The combination of research methods was hence a highly effective way to critique the strengths and weakness of objective measurements. Future work should focus on applying and adapting the discovered methods to modern music datasets.
+Spatial information is crucial to the listener's experience of music, and stereophonic recordings have long been the standard for capturing this spaciousness. Recent advancements in computing, coupled with the availability of new, very large musical corpora, have created opportunities for large-scale quantitative analysis of the stereo image of recorded music. In this licentiate thesis I address a key gap in current research: direct analysis of raw music recordings to describe the stereo image. The work comprises practice-led research, objective experiments, perceptual listening tests, and an extensive literature review. A combination of immersion in the creative aspects of stereo field and thorough mathematical evaluation of the recorded signals created a strong foundation for future research. The studies together revealed that the while there are many existing stereo descriptors, the musical features visible to each one vary considerably and therefore have differing use cases. Moreover, they don't always align with human perception. The combination of research methods was hence a highly effective way to critique the strengths and weakness of objective measurements. Future work should focus on applying and adapting the discovered methods to modern music datasets.
 \end{abstract}
 }
 
@@ -193,11 +200,14 @@ Spatial information is crucial to the listener's experience of music, and stereo
 \begin{document}
 \frontmatter
 
+\ifdraft{
 linewidth in inches: \printinunitsof{in}\prntlen{\linewidth}
 
 linewdith in cm: \printinunitsof{cm}\prntlen{\linewidth}
 
 \listoffixmes
+}{}
+
 \frontmatterCS
 
 \dedicationLeft{\footnotesize
