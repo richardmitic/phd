@@ -17,6 +17,7 @@ from matplotlib.collections import LineCollection
 import math
 import re
 import typer
+from numpy.typing import NDArray
 
 from cache_to_disk import cache_to_disk
 from typing import Tuple, Dict, Any
@@ -45,6 +46,8 @@ def _maybe_print(x: Any):
     if x is not None:
         print(x)
 
+def _to_dat(X: NDArray[np.float64], Y: NDArray[np.float64]) -> str:
+    return '\n'.join([f"{round(x, 3)} {round(y, 3)}" for x,y in zip(X,Y)])
 
 # Main app. Smaller functions can be called as individual comamnds
 app = typer.Typer(result_callback=_maybe_print)
@@ -131,13 +134,16 @@ tracks = get_demo_tracks()
 freesound_clips = get_freesound_clips()
 
 
-def get_hrirs():
+def get_hrirs(
+    angle: float = 60
+) -> Tuple[pf.Signal, pf.Signal]:
     hrirs, sources = pf.signals.files.head_related_impulse_responses(
         position="horizontal", diffuse_field_compensation=True
     )
     elevation = 0
-    azimuth_L = np.pi / 3  # 60 degrees left
-    azimuth_R = -np.pi / 3  # 60 degrees right
+    np.radians(angle)
+    azimuth_L = np.radians(angle)
+    azimuth_R = -azimuth_L
     radius = 1
 
     desired_direction_L = pf.Coordinates.from_spherical_elevation(
@@ -152,6 +158,34 @@ def get_hrirs():
 
     return hrirs[index_L], hrirs[index_R]
 
+
+@app.command()
+def make_brir_dats(output_dir: Path = OUTPUT_DIR):
+    _, hrir_R = get_hrirs(angle=30)
+    n = 64
+    start = 10
+    hrir_R = pf.dsp.time_crop(hrir_R, [start, start+n])
+    X = np.arange(n)
+
+    (output_dir / "brir_L.dat").write_text(_to_dat(X, hrir_R.time[0]))
+    (output_dir / "brir_R.dat").write_text(_to_dat(X, hrir_R.time[1]))
+
+
+@app.command()
+def make_ild_itd_dats(output_dir: Path = OUTPUT_DIR) -> float:
+    a = 1.99
+    rv = scipy.stats.gamma(a)
+    x = np.linspace(0, 10, 200)
+    y = rv.pdf(x) * np.cos(8*x) - 0.5
+    y2 = rv.pdf(x-1) * np.cos(8*(x-1)) + 0.5
+    y3 = (y*0.5) + 0.75
+
+    (output_dir / "itd_R.dat").write_text(_to_dat(x,y))
+    (output_dir / "itd_L.dat").write_text(_to_dat(x,y2))
+    (output_dir / "ild_R.dat").write_text(_to_dat(x,y))
+    (output_dir / "ild_L.dat").write_text(_to_dat(x,y3))
+
+    return max(rv.pdf(x))
 
 @app.command()
 def draw_panned_drums(
@@ -1352,6 +1386,8 @@ def make_page(img_dir: Path = OUTPUT_DIR):
 @app.command()
 def all(output_dir: Path = OUTPUT_DIR):
     make_freesound_appendix_table(output_dir)
+    make_brir_dats(output_dir)
+    make_ild_itd_dats(output_dir)
     draw_panned_drums(output_dir)
     draw_nyquist(output_dir)
     draw_equal_power_panning(output_dir)
@@ -1380,6 +1416,15 @@ def adress(
 ):
     draw_adress(output_dir, figsize)
     draw_adress_frames_for_track(output_dir, 2)
+
+# all the generated dat files
+@app.command()
+def dats(
+    output_dir: Path = OUTPUT_DIR,
+):
+    make_brir_dats(output_dir)
+    make_ild_itd_dats(output_dir)
+
 
 
 if __name__ == "__main__":

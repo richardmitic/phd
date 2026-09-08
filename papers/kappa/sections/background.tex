@@ -93,8 +93,8 @@ The psychoacoustic study of spatial hearing has been an active area of research 
                     xlabel={time},
                     xlabel style=below right,
                 ]
-                \input{figures/ild_L.tex}
-                \input{figures/ild_R.tex}
+                \addplot[domain=0:10, no markers, smooth] file {generated/ild_L.dat};
+                \addplot[domain=0:10, no markers, smooth] file {generated/ild_R.dat};
                 \addplot[densely dotted] coordinates {(0, 0.5+\ildamp) (10, 0.5+\ildamp)};
                 \addplot[densely dotted] coordinates {(0, 0.5-\ildamp) (10, 0.5-\ildamp)};
                 \addplot[densely dotted] coordinates {(0, -0.5+\ildamp*2) (10, -0.5+\ildamp*2)};
@@ -143,8 +143,8 @@ The psychoacoustic study of spatial hearing has been an active area of research 
                         xlabel={time},
                         xlabel style=below right,
                     ]
-                    \input{figures/itd_L.tex}
-                    \input{figures/itd_R.tex}
+                    \addplot[domain=0:10, no markers, smooth] file {generated/itd_L.dat};
+                    \addplot[domain=0:10, no markers, smooth] file {generated/itd_R.dat};
                     \addplot[densely dotted] coordinates {(\pibyfour 4, 1) (\pibyfour, -1)};
                     \addplot[densely dotted] coordinates {(\pibyfour + 1, 1) (\pibyfour + 1, -1)};
                     \node (tr) at (axis cs: \pibyfour,1.1) {$t_r$};
@@ -274,11 +274,11 @@ Another frequently used technique is \q{binaural panning}, which assigns combina
         
         \begin{scope}[xshift=-3cm, yshift=-1cm, draw=black, xscale=0.02, yscale=\yscale]
             \node[minimum width=1.3cm, minimum height=1cm, anchor=west] (left_brir_box) {};
-            \input{figures/brir_L.tex}
+            \draw plot file {generated/brir_L.dat};
         \end{scope}
         \begin{scope}[xshift=1.7cm, yshift=-1cm, draw=black, xscale=0.02, yscale=\yscale]
             \node[minimum width=1.3cm, minimum height=1cm, anchor=west] (right_brir_box) {};
-            \input{figures/brir_R.tex}
+            \draw plot file {generated/brir_R.dat};
         \end{scope}
 
         \pic[transform shape, scale=0.1, rotate=90, local bounding box=left_mic] (left_mic) at (-1.2,0) {mic};
