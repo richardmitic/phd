@@ -1,6 +1,3 @@
-# import sys
-# import pprint
-# pprint.pprint(sys.path)
 import matplotlib.pyplot as plt
 import pyfar as pf
 import numpy as np
@@ -15,12 +12,11 @@ from matplotlib.patches import ConnectionPatch
 from matplotlib.colors import LightSource
 from matplotlib.collections import LineCollection
 import math
-import re
 import typer
 from numpy.typing import NDArray
 
 from cache_to_disk import cache_to_disk
-from typing import Tuple, Dict, Any
+from typing import Tuple, Any
 
 from algorithms import (
     avendano,
@@ -31,6 +27,7 @@ from algorithms import (
     tzanetakis,
     ziemer,
     display,
+    cochleagram,
 )
 
 
@@ -128,10 +125,6 @@ def get_freesound_clips() -> pd.DataFrame:
     return pd.DataFrame(
         data=dict(name=name, filepath=filepath, user=user, url=url), index=freesound_id
     )
-
-
-tracks = get_demo_tracks()
-freesound_clips = get_freesound_clips()
 
 
 def get_hrirs(
@@ -390,26 +383,29 @@ def draw_spectrogram_comparison(
             return f"{int(x / 1000)}k"
 
     linear_freqs = np.fft.rfftfreq(stft_bands, d=1 / sr)
-    erb_freqs = pat.ErbSpace(low_freq=100, high_freq=sr / 2, n=num_bands)[::-1]
 
-    coefs = pat.MakeErbFilters(sr, num_bands, low_freq=100)
-    y = pat.ErbFilterBank(audio, coefs)
-    y *= np.sign(y)  # half wave rectify
-    y = np.sqrt(y)  # square root
+    erb_freqs, coch = cochleagram.cochleagram(pf.dsp.time_crop(signal, [start, end], unit='s'), num_bands, 0.02, 0.01)
 
-    # low pass
-    fc = 800
-    b, a = scipy.signal.butter(4, fc / sr, btype="low", analog=False)
-    y = scipy.signal.filtfilt(b, a, y)
+    # erb_freqs = pat.ErbSpace(low_freq=100, high_freq=sr / 2, n=num_bands)[::-1]
 
-    coch_chunk_length = 0.02
-    chunk_size = int(coch_chunk_length * sr)
-    hop_size = int(0.5 * chunk_size)
-    chunks = np.lib.stride_tricks.sliding_window_view(y, chunk_size, axis=1)[
-        :, ::hop_size, :
-    ]
-    # coch = np.sqrt(np.sum(np.pow(chunks, 2), axis=(2,))) # RMS
-    coch = librosa.amplitude_to_db(np.mean(chunks, axis=2))
+    # coefs = pat.MakeErbFilters(sr, num_bands, low_freq=100)
+    # y = pat.ErbFilterBank(audio, coefs)
+    # y *= np.sign(y)  # half wave rectify
+    # y = np.sqrt(y)  # square root
+
+    # # low pass
+    # fc = 800
+    # b, a = scipy.signal.butter(4, fc / sr, btype="low", analog=False)
+    # y = scipy.signal.filtfilt(b, a, y)
+
+    # coch_chunk_length = 0.02
+    # chunk_size = int(coch_chunk_length * sr)
+    # hop_size = int(0.5 * chunk_size)
+    # chunks = np.lib.stride_tricks.sliding_window_view(y, chunk_size, axis=1)[
+    #     :, ::hop_size, :
+    # ]
+    # # coch = np.sqrt(np.sum(np.pow(chunks, 2), axis=(2,))) # RMS
+    # coch = librosa.amplitude_to_db(np.mean(chunks, axis=2))
 
     D = np.abs(librosa.stft(audio, n_fft=stft_bands)) ** 2
     S = librosa.feature.melspectrogram(S=D, sr=sr, n_mels=num_bands)
@@ -474,7 +470,7 @@ def draw_spectrogram_comparison(
             verticalalignment="top",
             bbox=ANNOTATION_BBOX_PROPS,
         )
-        fig.colorbar(images[0], ax=ax, label="Normalized sound intensity", ticks=[])
+    fig.colorbar(images[0], ax=ax, label="Normalized sound intensity", ticks=[])
 
     fig.savefig(output_dir / "spect_comp.pdf")
 
