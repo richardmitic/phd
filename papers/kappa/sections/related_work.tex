@@ -13,6 +13,8 @@ In the prevailing years, object-based audio has been developed and standardized 
 
 With access to these efficient distribution formats, large digital music collections emerged and brought new problems to solve: collectors needed ways organize and categorize their music. Stereo field analysis was just one of the mechanisms used to facilitate this, paving the way for research into e.g. \gls{agr}, \gls{mir}, and music recommendation \cite{guausAudioContentProcessing2009,harmaClassificationTimefrequencyRegions2010,defferrardFMADatasetMusic2017}.
 
+\newpage
+
 \section{Spatial cues for stereo image}
 \label{sec:spatial_cues}
 
@@ -20,7 +22,7 @@ A \q{spatial cue} is a low-level analysis of spatial information in a short (rou
 
 The \q{panning index} and \enquote{ambience index} specified by \citeauthor{avendanoFrequencyDomainTechniques2002} \cite{avendanoFrequencyDomainTechniques2002} are loosely analogous to \gls{ild} and \gls{iacc} in the acoustics domain. To estimate the \q{panning index}, a signal model is assumed whereby a musical source is panned within the mix using the \enquote{energy preserving pan law}, in which each channel is scaled such that the sum of the squared amplitudes equals 1 (see \cref{sec:panning}). While this panning technique does not affect the phase of either channel, existing phase differences between channels are measured using the \q{ambience index}, which is defined such that it is low when the stereo channels are correlated (indicating a direct sound source), and high when channels are uncorrelated (indicating an ambient or reverberant sound source). An example of the panning and ambience indices for a musical recording can be seen in \cref{fig:pi_ai}.
 
-\begin{figure}[!p]
+\begin{figure}[bht]
     \centering
     \includegraphics{pi_ai.pdf}
     \caption{Demonstration of \pani{} and \ambi{} on Track C. Several panned sources are visible as red or blue bands in the \pani{}, and at roughly 20s most sources fade out leaving a single one on the right. The \ambi~plot shows that the track starts off with no single dominant direct sound source. At 20s when most sources fade out, the \ambi~drops to 0 across the lower half of the spectrum, indicating that the remaining source is direct. In the upper half of the spectrum, the source remains slightly ambient. }
@@ -31,9 +33,8 @@ The \q{panning index} and \enquote{ambience index} specified by \citeauthor{aven
 
 \citeauthor{barrySoundSourceSeparation2004} present another seminal technique in their paper defining the \gls{adress} algorithm \cite{barrySoundSourceSeparation2004}. The fundamental principle is to estimate the panning position of frequency bins in a stereo spectrogram by scaling one channel, inverting it, and mixing the channels back to mono. The resulting phase cancellation will determine the scaling factor that was applied to the original audio source during amplitude panning, and hence will show where the source was panned in the stereo field. To demonstrate, \cref{fig:adress} shows an example \gls{fa} plane for a combination of panned sine waves, where nulls in the plane show can be observed at the azimuths position that the sinusoids are panned to. To show a realistic use case, \cref{fig:faas} shows an \gls{fa} analysis signal for a music recording. While this was technique was originally intended to be used for audio source separation, it has been repurposed many times since.
 
-Importantly, all the previously mentioned analyses are performed in the \gls{tf} domain and result in one value per \gls{tf} bin. Their use cases typically involve reconstruction or editing of the original audio source as opposed to \textit{description} of it since they inherently entangle semantic content with spatial information. They have, however, become the basis of other algorithms that are designed specifically for description.
 
-\begin{figure}[hbt]
+\begin{figure}[hbpt]
     \centering
 
     \begin{subfigure}[b]{\columnwidth}
@@ -75,6 +76,8 @@ Importantly, all the previously mentioned analyses are performed in the \gls{tf}
     
 \end{figure}
 
+Importantly, all the previously mentioned analyses are performed in the \gls{tf} domain and result in one value per \gls{tf} bin. Their use cases typically involve reconstruction or editing of the original audio source as opposed to \textit{description} of it since they inherently entangle semantic content with spatial information. They have, however, become the basis of other algorithms that are designed specifically for description.
+
 \pagebreak
 
 \section{Stereo image description}
@@ -85,9 +88,11 @@ Stereo image description refers to the generation of a numerical vector that rep
 
 \subsection{\glsentryshort{dsp}-based \glsentryshortpl{sip}}
 
+\subsubsection*{\glspl{sip} based on amplitude panning}
+
 \citeauthor{tzanetakisStereoPanningFeatures2007} provide the earliest example of a technique specifically designed to interpret the use of panning in recorded music: \gls{spf} \cite{tzanetakisStereoPanningFeatures2007}. It targets amplitude panning only, using \citeauthor{avendanoFrequencyDomainTechniques2002}'s \pani{} as the basis. Additionally, it separates the frequency spectrum into 3 sub-bands -- lows, mids, and highs -- following the common practice of music producers. While not specifically stated by \citeauthor{tzanetakisStereoPanningFeatures2007}, I interpret the vector to represent the amount and variance of \q{fast panning} and \q{slow panning} in each frequency band. \citeauthor{tzanetakisStereoPanningInformation2010} later expanded the features by adding an estimation of the number of individual sources in the recording \cite{tzanetakisStereoPanningInformation2010}. The resulting \gls{sip} can be used to compare the recording and production styles of different music tracks, as shown in \cref{fig:spf}.
 
-\begin{figure}[p!]
+\begin{figure}[hbpt]
     \centering
     \includegraphics{spf.pdf}
     \caption{
@@ -98,7 +103,7 @@ Stereo image description refers to the generation of a numerical vector that rep
 
 While \gls{spf} shows production style at a high level, other descriptors contain more detail. \citeauthorandnumber{gomezMusicSimilaritySystems2008} and \citeauthorandnumber{sarroffMeasurementsSpaciousnessStereophonic2008} both present separate methods to form a \gls{ph}, which displays the likelihood of a sound source being panned to a specific azimuth. \Cref{fig:panning_histograms} shows examples of both methods for the same three example tracks. As \citeauthor{sarroffMeasurementsSpaciousnessStereophonic2008} state, the \q{azimuth} value should not be interpreted as a true angular position relative to the listener, but rather as a loose placement of a sound source within the stereo field. Note that compared to \gls{spf}, \gls{ph} visualizes the exact location of sound energy in the stereo field rather than just the \q{amount of panning}. On the other hand, \gls{ph} looses information about the \textit{dynamics} of the panning, which \gls{spf} does not. \citeauthor{sarroffMeasurementsSpaciousnessStereophonic2008} subsequently use the \gls{ph} to calculate an estimate of stereo width \cite{sarroffMeasurementsSpaciousnessStereophonic2008}, which is an important perceptual measure (see \cref{sec:prediction_of_perceptual_scalars}).
 
-\begin{figure}[p!]
+\begin{figure}[tbp]
     \centering
     \includegraphics{panning_histograms.pdf}
     \caption{
@@ -121,7 +126,7 @@ The efficacy of this technique remains under-tested, and my work in paper \ref{p
 
 \citeauthor{tardieuProductionEffectAudio2011} present another assessment of amplitude panning named \gls{asf} \cite{tardieuProductionEffectAudio2011}. Differing from the previously mentioned techniques, \citeauthor{tardieuProductionEffectAudio2011}'s method focuses on providing measurements of the amount and variation of panning in many frequency bands. The basis of the algorithm is the \gls{ild} of a stereo cochleagram, as opposed to an \gls{stft} spectrogram. \citeauthor{tardieuProductionEffectAudio2011} use 70 frequency bands equidistant on the \gls{erb} scale, each of which produce multiple features. Thus, the resulting \gls{sip} vector is an order of magnitude larger than \gls{spf} or \gls{ph}. As \cref{fig:asf} shows, \gls{asf}'s large size allows for a very detailed assessment of panning across the frequency dimension, although it runs the risk of including noise and redundant information.
 
-\begin{figure}[h!]
+\begin{figure}[thbp]
     \centering
     \includegraphics{asf.pdf}
     \caption{
@@ -130,10 +135,11 @@ The efficacy of this technique remains under-tested, and my work in paper \ref{p
     \label{fig:asf}
 \end{figure}
 
-% \pagebreak
 
-While all the aforementioned studies focus on descriptions of amplitude panning in stereo mixes, recording engineers can make use of phase-based techniques to add spatial feeling to their mix. \citeauthor{tardieuProductionEffectAudio2011} also suggest a measurement for these named \gls{psf} \cite{tardieuProductionEffectAudio2011}, underpinned by an \gls{stft} spectrogram derivative named \gls{ssps}. While the idea of measuring these common production effects has merit, I unfortunately could not confirm that it worked in practice because the method to calculate \gls{ssps} as defined by \citeauthor{tardieuProductionEffectAudio2011} produced spurious results for all recording that I tested.
 
+% \newpage
+
+\subsubsection*{\glspl{sip} based on studio equipment}
 \citeauthor{ziemerAcousticFeaturesRecording2021} argue the case in \cite{ziemerNovelRecordingStudio2020,ziemerAcousticFeaturesRecording2021,ziemerGoniometersArePowerful2023} that analyses based on a recording studio goniometer can aid in describing the stereo properties of music, particularly in differentiating between the artistic intentions of different recording sessions. The underlying logic is that since producers consult goniometers in their creative process, their readings must have inherent descriptive value. To perform the analyses, a virtual goniometer readout consisting of a lissajous figure and channel correlation measurement is constructed for non-overlapping time frames of an audio recording. The lissajous figure is quantized and reduced to a single number by counting the unique X/Y positions. Channel correlation is defined as the Pearson correlation coefficient \cite{howellStatisticalMethodsPsychology2010} between the left and right channel signals. \Cref{fig:goniometer_main} shows how an audio signal can be converted to goniometer features.
 
 \begin{figure}[p!]
@@ -155,6 +161,7 @@ While all the aforementioned studies focus on descriptions of amplitude panning 
     \label{fig:goniometer_main}
 \end{figure}
 
+\subsubsection*{Other techniques}
 \citeauthor{harmaClassificationTimefrequencyRegions2010}'s work on the classification of stereo audio in \cite{harmaClassificationTimefrequencyRegions2010,harmaClassificationTimefrequencyRegions2011,harmaStereoAudioClassification2011} presents a slightly different take on the problem. He proposes a signal model where the stereo mix is formed from a combination of a single centre source, a significant amplitude-panned source, plus left and right uncorrelated sources. He subsequently presents a list of 8 pre-defined classes representing various combinations of those sources. Furthermore, he shows that stereo recordings can be classified into 6 out of 8 of those classes by estimating the variances of the underlying source signals. The classes are visualized as areas on the surface of a unit sphere, with each dimension representing the variance of the 3 source types, as shown in \cref{fig:harma}. It should be noted that \citeauthor{harmaClassificationTimefrequencyRegions2010} does not give a method for the classification of the final class -- a mixture of all three source types -- deeming it too complex to detect. In the context of stereo image description, \citeauthor{harmaClassificationTimefrequencyRegions2010}'s work is somewhat different from the others since the descriptions (i.e. the 8 classes) are pre-defined; The main innovation is the method to assign an audio signal to a class.
 
 \begin{figure}[p!]
@@ -165,6 +172,9 @@ While all the aforementioned studies focus on descriptions of amplitude panning 
     }
     \label{fig:harma}
 \end{figure}
+
+
+While all the aforementioned studies focus on descriptions of amplitude panning in stereo mixes, recording engineers can make use of phase-based techniques to add spatial feeling to their mix. \citeauthor{tardieuProductionEffectAudio2011} also suggest a measurement for these named \gls{psf} \cite{tardieuProductionEffectAudio2011}, underpinned by an \gls{stft} spectrogram derivative named \gls{ssps}. While the idea of measuring these common production effects has merit, I unfortunately could not confirm that it worked in practice because the method to calculate \gls{ssps} as defined by \citeauthor{tardieuProductionEffectAudio2011} produced spurious results for all recording that I tested.
 
 \FloatBarrier
 

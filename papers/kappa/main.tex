@@ -1,9 +1,9 @@
 % Turn off spell checker in the preamble
 % LTeX: enabled=false
-\documentclass[final]{UUThesisTemplate}
+\documentclass[final,a4paper]{UUThesisTemplate}
 
+\usepackage{pdfpages}
 \usepackage{ifdraft}
-
 \usepackage[british]{babel}
 \usepackage{hyperref}
 \usepackage[autostyle]{csquotes}
@@ -26,12 +26,14 @@
 \usepackage[titletoc]{appendix}
 \usepackage{placeins}
 
+
+% \ifdraft{
 %% Use this to print the dimensions of the text
 %% so it can be copied for matplotlib diagrams.
-\usepackage{layouts}
-
+% \usepackage{layouts}
 %% Use this to show margins
 % \usepackage{showframe}
+% }{}
 
 
 % Vector notation should be bold and italic
@@ -40,13 +42,15 @@
 
 \fxsetup{draft,inline,nomargin,theme=color}
 \captionsetup[subfigure]{skip=0.333\baselineskip, font=footnotesize}
+\captionsetup{font=footnotesize}
 
 % The title is never printed but here it is anyway
 % \title{Analysis of stereo image in vast repositories of recorded music}
 
-%% Acronyms
-\usepackage[automake=immediate]{glossaries-extra}
+%% Abbreviations
+\usepackage[automake=immediate,abbreviations]{glossaries-extra}
 \setabbreviationstyle[acronym]{long-short}
+\renewcommand{\abbreviationsname}{Abbreviations}
 \makeglossaries{}
 \input{../acronyms.tex}
 
@@ -112,6 +116,10 @@
     \end{flushleft}%
     \vspace*{\stretch{1}}%
 }
+
+% \maketitle prints the dummy title page.
+% Remove it since we are including the real title page instead.
+\renewcommand{\maketitle}{}
 
 %% Custom citation command to print all authors' full names.
 \makeatletter
@@ -195,9 +203,14 @@ Spatial information is crucial to the listener's experience of music, and stereo
 }
 
 
-\captionsetup{font=footnotesize}
 
 \begin{document}
+
+
+% UUThesisTemplate defines voffset and hoffset for some reason, so counteract them individually here
+\includepdf[pages=1, offset=1in -1in]{external_pages/mdu-titelsidor_L388.pdf}
+\includepdf[pages=2, offset=-1in -1in]{external_pages/mdu-titelsidor_L388.pdf}
+
 \frontmatter
 
 \ifdraft{
@@ -211,7 +224,7 @@ linewdith in cm: \printinunitsof{cm}\prntlen{\linewidth}
 \frontmatterCS
 
 \dedicationLeft{\footnotesize
-This thesis is part of the \glsxtrshort{iresap} project - a collaboration between \glsxtrshort{mdu}, \glsxtrshort{kmh}, Spotify, Ericsson, and Teenage Engineering. It was funded by Spotify and \glsxtrshort{kks}.\\Special thanks to Rikard Lindell, Andreas Rossholm, and Elaine Åstrand for their advice and support, and to Wolmar Nyberg Åkerström for donating his \LaTeX~template.
+This thesis is part of the \glsxtrshort{iresap} project - a collaboration between \glsxtrshort{mdu}, \glsxtrshort{kmh}, Spotify, Ericsson, and Teenage Engineering. It was funded by Spotify and \glsxtrshort{kks}.\\Special thanks to Rikard Lindell, Andreas Rossholm, and Elaine Åstrand for their advice and support, and to Wolmar Nyberg Åkerström for donating his \LaTeX{} template.
 }
 
 \begin{listofpapers}
@@ -230,6 +243,9 @@ This thesis is part of the \glsxtrshort{iresap} project - a collaboration betwee
 \endgroup
 
 
+\printglossary[type=\glsxtrabbrvtype]
+
+
 \mainmatter
 
 \include{sections/intro.tex}
@@ -244,10 +260,10 @@ This thesis is part of the \glsxtrshort{iresap} project - a collaboration betwee
 \begin{appendices}
 
 \include{sections/demo_audio_files}
+\include{sections/spectrogram_comparison}
 
 \end{appendices}
 
-\printglossaries
 
 \printbibliography
 

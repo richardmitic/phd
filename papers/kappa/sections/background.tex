@@ -17,20 +17,19 @@ The ear contains three major sections, loosely labelled the \q{outer}, \q{middle
 
 \begin{figure}[htb]
     \centering
-    \resizebox{0.5\textwidth}{!}{
-        \begin{tikzpicture}
-            \node (pic) at (0,0) {\includegraphics[scale=0.5]{figures/inner_ear.pdf}};
-            \node (outer_label) at (-3.5, 0) {Outer ear};
-            \node (middle_label) at (0.5, 1.5) {Middle ear};
-            \node (inner_label) at (2, 1) {Inner ear};
-            \coordinate (outer_point) at (-1.1,-0.4);
-            \coordinate (middle_point) at (0.5,-0.1);
-            \coordinate (inner_point) at (1.3,-0.5);
-            \draw[arrow] (outer_label) -- (outer_point);
-            \draw[arrow] (middle_label) -- (middle_point);
-            \draw[arrow] (inner_label) -- (inner_point);
-        \end{tikzpicture}
-    }
+    \begin{tikzpicture}
+        \node (pic) at (0,0) {\includegraphics[width=0.5\linewidth]{figures/inner_ear.pdf}};
+        % \draw[gray] (-3,-3) grid (3,3);
+        \node (outer_label) at (-4.5, 0) {Outer ear};
+        \node (middle_label) at (0.2, 1.5) {Middle ear};
+        \node (inner_label) at (2.7, 1) {Inner ear};
+        \coordinate (outer_point) at (-1.5,-0.5);
+        \coordinate (middle_point) at (0.7,-0.1);
+        \coordinate (inner_point) at (1.7,-0.8);
+        \draw[arrow] (outer_label) -- (outer_point);
+        \draw[arrow] (middle_label) -- (middle_point);
+        \draw[arrow] (inner_label) -- (inner_point);
+    \end{tikzpicture}
     \caption{Diagram of the human ear\textsuperscript{*}. Air flows through the outer ear and vibrates the ear drum. The middle ear mechanically couples the outer ear to the inner ear. The inner ear converts mechanical movements to electrical signals.}
     \label{fig:ear}
     \begin{flushleft}{\scriptsize\textsuperscript{*}\href{https://commons.wikimedia.org/w/index.php?curid=34334173}{Original image} by Cancer Research UK is licensed under \href{https://creativecommons.org/licenses/by-sa/4.0/}{CC BY-SA 4.0}. Annotations have been edited.}\end{flushleft}
@@ -40,12 +39,12 @@ The basilar membrane reacts to a pressure wave from an incoming sound in an elas
 
 \begin{figure}[htb]
     \centering
-    \resizebox{\textwidth}{!}{
-        \input{figures/unfurled_cochlea.tikz}
-    }
+    \input{figures/unfurled_cochlea.tikz}
     \caption{Tonotopic diagram of the human cochlea. Dotted lines represent the cochlea in its normal shape while solid lines show a hypothetical unfurled cochlea with the basilar membrane running down the centre shown as a dashed line. The frequency response of the basilar membrane changes logarithmically along its length, with high frequencies detected at the base and low frequencies at the apex. }
     \label{fig:cochlea}
 \end{figure}
+
+\FloatBarrier
 
 \subsection{Directional hearing}
 \label{sec:directional_hearing}
@@ -170,7 +169,7 @@ The relative importance of \gls{ild} and \gls{itd} differ depending on the frequ
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[scale=0.96]{hihat_kick.pdf}
+    \includegraphics[width=\linewidth]{hihat_kick.pdf}
     \caption{Example sounds coming from the right-hand side, recorded binaurally. High-frequency content (above) has a large \gls{ild} and ambiguous \gls{ipd}, whereas low-frequency content (below) has negligible \gls{ild}, but an interpretable \gls{ipd}.}
     \label{fig:example_pan}
 \end{figure}
@@ -247,7 +246,6 @@ Another frequently used technique is \q{binaural panning}, which assigns combina
 
 \begin{figure}[htb]
     \centering
-
     \begin{tikzpicture}
         \def\rad{4};
         \def\expand{1.02};
@@ -301,12 +299,15 @@ Amplitude panning is the most common panning technique in traditional music prod
 
 \begin{figure}[hbt]
     \centering
-    \includegraphics[scale=0.85]{equal_power_panning.pdf}\fxwarning[noinline]{Make it so that this diagram is full size but the final sentence still fits on the page.}
+    \includegraphics{equal_power_panning.pdf}
     \caption{Channel gains for equal power panning. When both channel gains are $\frac{1}{\sqrt{2}}$, the sound will be centre-panned. The perceived loudness is constant.}
     \label{fig:equal_power_panning}
 \end{figure}
 
 Panning techniques are applied to single stems only. A typical recording session will contain multiple stems, each with its own panning.
+\fxwarning{maybe some more text here to make the last paragraph look less empty}
+
+\pagebreak
 
 \subsection{Stereo image}
 \label{sec:stereo_image}
@@ -394,6 +395,7 @@ While there are some typical practices in the industry, it must again be emphasi
 
 In some cases the producer consults monitoring equipment such as a level meter or goniometer to fine tune their mix \cite{ziemerAcousticFeaturesRecording2021,ziemerGoniometersArePowerful2023}. They also look for potential quality issues that can occur when the stereophonic recordings are mixed down into a monophonic signal for reproduction, which have been documented well before the advent of digital recording \cite{harveyCompatibilityProblemsTwochannel1962}. In more modern production, \gls{daw} plugins are generally used to visualize and assess the stereo qualities of the final mix \cite{bitzerSpatialDistributionMeter2007,ziemerGoniometersArePowerful2023}. \Cref{fig:goniometer} shows one example - the ToneBoosters Goniometer plugin \cite{ToneBoostersAudioPlugins}. It is designed to replicate an analogue goniometer, which, taking two voltage signals as input, displays them on a 2D axis such that a music producer might be able to discern the correlation between the signals.
 
+\FloatBarrier
 
 \subsection{Audio representations}
 Audio representations are standard paradigms that an audio recording can follow. If we consider an audio recording as a set of concurrent time signals, the representation defines how each signal in the set should be interpreted. They are usually grouped into \q{channel-based}, \q{scene-based}, and \q{object-based}. In channel-based audio, each signal represents the exact waveform that should be played back by a single loudspeaker. In scene-based and object-based audio, each signal represents one part of a larger scene, and rendering equipment is responsible for translating that scene to individual speakers \cite{sugimotoSpecificationAudioRepresentations2024}. While the focus of this thesis in on stereo audio, it is important to compare stereo to the wider audio landscape to understand why it is so heavily used for recorded music.
@@ -421,7 +423,7 @@ Overall, stereo recordings are able to deliver high enough quality for the major
 \subsection{Lossless and lossy encoding}
 Regardless of which audio representation is chosen, the resulting recording will most likely be encoded to a compressed format for distribution. There are two types of compression: \q{lossless} and \q{lossy}. A lossless format, when decoded, will produce bit-for-bit recreation of the input signal. Lossy formats on the other hand will not produce the exact same signal, but will discard information that they consider irrelevant according to a psychoacoustic model. There are many lossy formats each suitable for different types of audio, but for the purposes of this thesis it is just pertinent that spatial information can be lost during lossy encoding.
 
-% \clearpage
+\clearpage
 
 \section{Analysis of digital recordings}
 
@@ -432,7 +434,7 @@ When a sound wave interacts with a microphone, it generates an electrical signal
 
 Shannon's sampling theorem states that a signal can be perfectly recreated when sampled at twice the highest frequency contained in the signal. Conversely, the highest frequency that can be represented by sampling a signal at a given $f_s$ is half of that frequency. This limit is called the \q{Nyquist frequency} and is calculated by $f_N = \frac{f_s}{2}$ \cite{yaoNyquistFrequency1983}. This is illustrated by \Cref{fig:nyquist}, which shows the sampling of three waveforms. The lower plot shows a signal at the Nyquist frequency ($f_N$), which can be perfectly reconstructed from the digital samples. The upper two waveforms have frequencies equidistant but in opposite directions from the Nyquist frequency ($f_N \pm f_{\delta}$). The digital samples shown in circles could represent either of the two waveforms. In practice, when the analogue waveform is reconstructed, the lower frequency will always take precedence. 
 
-\begin{figure}[t!]
+\begin{figure}[b!]
     \centering
     \includegraphics{nyquist.pdf}
     \caption{Illustration of the Nyquist Frequency in digital audio signals. Dotted vertical lines represent sampling points with a separation of $T_s$, and monotonically increasing index $n$. The upper plot shows a cosine wave at exactly $f_N$. The lower plot shows two cosine waves with frequencies equidistant above and below the Nyquist frequency ($f_N$). Sampled values are shown as circle marks on the plots. The two upper signals can both be represented by same digital samples.}
@@ -443,7 +445,7 @@ A typical $f_s$ for music is \qty{44.1}{\kHz}, with a resulting $f_N$ of \qty{22
 
 \subsection{Time-Frequency representation of audio}
 
-In order to perform many types of audio analysis, the audio signal can be converted from the time domain into the \gls{tf} domain. In perceptual acoustics research there are several common forms of \gls{tf} representation, each with its own nuances. This section provides those details, and a side-by-side comparison is shown at the end of the section in \cref{fig:spect_comp}.
+In order to perform many types of audio analysis, the audio signal can be converted from the time domain into the \gls{tf} domain. In perceptual acoustics research there are several common forms of \gls{tf} representation, each with its own nuances. This section provides those details, and a side-by-side comparison is shown in \cref{app:spect_comp}.
 
 \subsubsection{\gls{stft} spectrogram}
 
@@ -460,40 +462,35 @@ The nature of the spectrogram is affected by two parameters: the frame size and 
     \label{fig:stft_spect}
 \end{figure}
 
+\FloatBarrier
+
 \subsubsection{Mel spectrogram}
 
 The \q{Mel scale} is a quasi-logarithmic frequency scale derived from perceptual experiments. Several definitions exist in the literature \cite{umeshFittingMelScale1999}, but popular implementations like that of librosa \cite{mcfeeLibrosaAudioMusic2015} and \gls{amt} \cite{majdakAMT1xToolbox2022} tend to underpin most audio experimentation.
 
 A \q{Mel filter bank} is a set of band-pass filters that are spaced equally on the Mel scale. Practically, they are implemented as sets of weights that are applied to an \gls{stft} spectrum with the relationship $M_n = \sum_{k=0}^{N} S_k W_{k,n}$ where $M_n$ is the $n$th Mel coefficient, $S_k$ is the $k$th \gls{stft} bin, $N$ is the number of \gls{stft} bins, and $W_{k,n}$ is the $k$th weight of the $n$th Mel filter. An example Mel filter bank with 8 filters is shown in \cref{fig:mel_filters}. While 8 filters are shown for demonstration purposes, audio analysis typically requires over 100. When this filter bank is applied to each time step of an \gls{stft} spectrogram, the result is a \q{Mel spectrogram}, an example of which can be seen in \cref{fig:mel_spect}. Observe that the higher frequencies have been condensed into fewer frequency bins compared to the \gls{stft} spectrogram.
 
-
-\begin{figure}[b!]
+\begin{figure}[h]
     \centering
-
-    \begin{subfigure}[h]{\textwidth}
-        \centering
-        \includegraphics{mel_filterbank.pdf}
-        \caption{Example Mel filter bank containing 8 filters, shown with linear (left) and logarithmic (right) frequency scales. The bandwidth of each filter is roughly equal in logarithmic space, and the amplitudes are scaled so that the sum of the weights in each band is equal. Filter weights equal to zero are removed for clarity. 
-        % The filters are calculated using librosa \cite{LibrosafiltersmelLibrosa0110} using a sample rate of \SI{44100}{\hertz} and an \gls{fft} size of 4096 samples.
-        }
-        \label{fig:mel_filters}
-    \end{subfigure}
-
-    \bigskip
-
-    \begin{subfigure}[h]{\textwidth}
-        \centering
-        \includegraphics{mel_spect.pdf}
-        \caption{Mel spectrogram of a speech recording, using 32 bands.}
-        \label{fig:mel_spect}
-    \end{subfigure}
+    \includegraphics{mel_filterbank.pdf}
+    \caption{Example Mel filter bank containing 8 filters, shown with linear (left) and logarithmic (right) frequency scales. The bandwidth of each filter is roughly equal in logarithmic space, and the amplitudes are scaled so that the sum of the weights in each band is equal. Filter weights equal to zero are removed for clarity. 
+    % The filters are calculated using librosa \cite{LibrosafiltersmelLibrosa0110} using a sample rate of \SI{44100}{\hertz} and an \gls{fft} size of 4096 samples.
+    }
+    \label{fig:mel_filters}
 \end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics{mel_spect.pdf}
+    \caption{Mel spectrogram of a speech recording, using 32 bands.}
+    \label{fig:mel_spect}
+\end{figure}
+
+\pagebreak
 
 \subsubsection{Cochleagram}
 
 As an alternative to the two spectrogram representations, a cochleagram aims to make a \gls{tf} representation that models the acoustic response of the human cochlea more closely. To that end, all processing is performed in the time domain and is sometimes referred to as a \q{peripheral ear model}. Several examples appear in the literature \cite{boddenBinauralModelingAuditory1995,choiObjectiveMeasurementPerceived2008,delgadoDesignChoicesBinaural2023}. In the classical method \cite{boddenBinauralModelingAuditory1995} the original signal is first processed by a bank of gammatone filters with their centre frequencies placed according to a perceptual scale (such as the \gls{erb} scale \cite{smithiiiEquivalentRectangularBandwidth2020}), as shown in \cref{fig:gammatone_filters}. As with Mel filters, several definitions of gammatone filters exist in the literature, but the popular implementations (e.g. scipy \cite{virtanenSciPy10Fundamental2020} and \gls{amt} \cite{majdakAMT1xToolbox2022}) preside. \Cref{fig:cochleagram} shows a cochleagram of the example speech recording.
-
-\Cref{fig:cochleagram_steps} shows the intermediate steps to generate a cochleagram. Each sub-band signal is processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patterns of the cilia and basilar membrane. The result is a signal representing the envelope of each sub-band. Those envelopes are then segmented into overlapping time chunks. The amplitude of each chunk is then calculated as the mean of all its values, forming one pixel in the cochleagram.
 
 \begin{figure}[hbt]
     \centering
@@ -502,32 +499,23 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
     \label{fig:cochleagram}
 \end{figure}
 
-\begin{figure}[p!]
-    \centering
-    \begin{subfigure}[b]{0.8\textwidth}
-        \centering
-        \includegraphics{gammatone_filterbank.pdf}
-        \caption{Example gammatone filter bank with individual filters spaced equally on the \gls{erb} scale. The filters are \glsentryfull{iir} and are applied to an audio signal in the time domain.}
-        \label{fig:gammatone_filters}
-    \end{subfigure}
+\Cref{fig:cochleagram_steps} shows the intermediate steps to generate a cochleagram. Each sub-band signal is processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patterns of the cilia and basilar membrane. The result is a signal representing the envelope of each sub-band. Those envelopes are then segmented into overlapping time chunks. The amplitude of each chunk is then calculated as the mean of all its values, forming one pixel in the cochleagram.
 
-    \begin{subfigure}[b]{\textwidth}
-        \includegraphics{cochleagram_steps.pdf}
-        \caption{Steps of an example decomposition from time-domain audio to a cochleagram. The audio being filtered is a frequency sweep from 100 to 20000 Hz. First it is processed by a gammatone filter bank, generating 8 sub-band signals which are spaced equally on the \gls{erb} scale. Each sub-band has its envelope extracted. The envelope is then split into overlapping time chunks, which are averaged to form the cochleagram.}
-        \label{fig:cochleagram_steps}
-    \end{subfigure}
+\begin{figure}[bht]
+    \centering
+    \includegraphics{gammatone_filterbank.pdf}
+    \caption{Example gammatone filter bank with individual filters spaced equally on the \gls{erb} scale. The filters are \glsentryfull{iir} and are applied to an audio signal in the time domain.}
+    \label{fig:gammatone_filters}
+\end{figure}
+
+\begin{figure}[thb]
+    \includegraphics{cochleagram_steps.pdf}
+    \caption{Steps of an example decomposition from time-domain audio to a cochleagram. The audio being filtered is a frequency sweep from 100 to 20000 Hz. First it is processed by a gammatone filter bank, generating 8 sub-band signals which are spaced equally on the \gls{erb} scale. Each sub-band has its envelope extracted. The envelope is then split into overlapping time chunks, which are averaged to form the cochleagram.}
+    \label{fig:cochleagram_steps}
     \caption{Using a gammatone filter bank to make a cochleagram.}
 \end{figure}
 
-
-\begin{figure}[p!]
-    \centering
-    \includegraphics{spect_comp.pdf}
-    \caption{An example audio signal displayed as \gls{stft} spectrogram (above), Mel spectrogram (mid), and cochleagram (below). The spectrogram frequency bands are spaced linearly between 0Hz and the Nyquist frequency, which is not coherent with human perception. The Mel spectrogram is created from the original spectrogram based on linear combinations of its frequency bands and retains more detail in lower frequencies than higher frequencies. The Cochleagram is created directly from time domain audio by mimicking the physical response of the human ear.}
-    \label{fig:spect_comp}
-\end{figure}
-
-\pagebreak
+\FloatBarrier
 
 \subsection{Machine learning}
 Any data-driven audio research, particularly that using vast datasets, will naturally involve the use of \gls{ml}. Broadly speaking, \gls{ml} techniques can be classified as either supervised or unsupervised. When training a supervised  \gls{ml} model, the training dataset needs to include ground-truth labels such that the network can objectively discern via a loss function whether the predictions it is making are correct. Unsupervised \gls{ml} on the other hand does not require any labels. Instead, it seeks to form a representation of the underlying dataset via techniques such as clustering or dimensionality reduction, thereby learning the structures and patterns of the data while retaining as much key information as possible.

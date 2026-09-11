@@ -58,19 +58,23 @@ OUTPUT_DIR = _git_root() / "papers/kappa/generated"
 ANNOTATION_BBOX_PROPS = dict(boxstyle="round", facecolor="white", alpha=0.9)
 
 # This linewidth value was printed from the latex UUThesisTemplate class
-LATEX_LINEWIDTH = 4.72533
+# LATEX_LINEWIDTH = 4.72533
+LATEX_LINEWIDTH = 5.90666
 
 # Standardized lengths
 GOLDEN_RATIO = 0.618
 WIDE = LATEX_LINEWIDTH
 MID_WIDE = LATEX_LINEWIDTH * np.sqrt(GOLDEN_RATIO)
 MID = LATEX_LINEWIDTH * GOLDEN_RATIO
-NARROW = LATEX_LINEWIDTH * GOLDEN_RATIO**2
+MID_NARROW = LATEX_LINEWIDTH * GOLDEN_RATIO * np.sqrt(GOLDEN_RATIO)
+NARROW = LATEX_LINEWIDTH * GOLDEN_RATIO * GOLDEN_RATIO
 
 # Standardized rectangle sizes
 WIDE_RECT = (WIDE, MID)
 WIDE_SKINNY_RECT = (WIDE, NARROW)
+WIDE_HALF_SKINNY_RECT = (WIDE, MID_NARROW)
 MID_WIDE_RECT = (MID_WIDE, NARROW)
+MID_WIDE_FAT_RECT = (MID_WIDE, MID)
 MID_RECT = (MID, NARROW)
 WIDE_SQUARE = (WIDE, WIDE)
 MID_WIDE_SQUARE = (MID_WIDE, MID_WIDE)
@@ -183,7 +187,7 @@ def make_ild_itd_dats(output_dir: Path = OUTPUT_DIR) -> float:
 @app.command()
 def draw_panned_drums(
     output_dir: Path = OUTPUT_DIR,
-    figsize: Tuple[float, float] = WIDE_RECT,
+    figsize: Tuple[float, float] = WIDE_HALF_SKINNY_RECT,
 ):
     hrir_L, hrir_R = get_hrirs()
     fs_clips = get_freesound_clips()
@@ -210,8 +214,8 @@ def draw_panned_drums(
     ax[0].set_xlabel(None)
     ax[1].set_xlabel("Time (ms)")
 
-    x = 0.02
-    y = 0.93
+    x = 0.015
+    y = 0.92
     ax[0].text(
         x,
         y,
@@ -324,7 +328,7 @@ def draw_nyquist(
 @app.command()
 def draw_equal_power_panning(
     output_dir: Path = OUTPUT_DIR,
-    figsize: Tuple[float, float] = MID_WIDE_RECT,
+    figsize: Tuple[float, float] = (MID_WIDE, MID_NARROW),
 ):
     fig, ax = plt.subplots(1, 1, figsize=figsize, layout="constrained")
     a = np.linspace(0, 1, 100)
@@ -734,7 +738,7 @@ def make_freesound_appendix_table(output_dir: Path = OUTPUT_DIR):
 @app.command()
 def draw_demo_tracks_spf(
     output_dir: Path = OUTPUT_DIR,
-    figsize: Tuple[float, float] = WIDE_RECT,
+    figsize: Tuple[float, float] = WIDE_HALF_SKINNY_RECT,
 ):
     tracks = get_demo_tracks()
     fig, axes = plt.subplots(1, 3, figsize=figsize, sharey=True, layout="constrained")
@@ -751,7 +755,7 @@ def draw_demo_tracks_spf(
         )
     axes[0].set_ylabel("Feature value")
     handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles=handles, labels=labels, loc="outside upper center", ncols=2)
+    fig.legend(handles=handles, labels=labels, loc="outside lower center", ncols=2)
 
     fig.savefig(output_dir / "spf.pdf")
 
@@ -759,7 +763,7 @@ def draw_demo_tracks_spf(
 @app.command()
 def draw_demo_tracks_ph(
     output_dir: Path = OUTPUT_DIR,
-    figsize: Tuple[float, float] = WIDE_RECT,
+    figsize: Tuple[float, float] = WIDE_HALF_SKINNY_RECT,
 ):
     tracks = get_demo_tracks()
     fig, axes = plt.subplots(1, 3, figsize=figsize, layout="constrained")
@@ -802,7 +806,7 @@ def draw_demo_tracks_ph(
     fig.legend(
         handles=handles,
         labels=labels,
-        loc="outside upper center",
+        loc="outside lower center",
         fancybox=True,
         shadow=False,
         ncol=2,
@@ -1301,7 +1305,7 @@ def draw_example_goniometer(
 def draw_pi_and_ai(
     output_dir: Path = OUTPUT_DIR,
     track_idx: int = 2,
-    figsize: Tuple[float, float] = WIDE_SQUARE,
+    figsize: Tuple[float, float] = WIDE_RECT,
 ):
     filepath = get_demo_tracks().iloc[track_idx].local.filepath
     fig, axes = plt.subplots(2, 1, figsize=figsize, sharex=True, layout="constrained")
@@ -1317,9 +1321,10 @@ def draw_pi_and_ai(
         aspect="auto",
         cmap="berlin",
         extent=extent,
-        # norm=SymLogNorm(0.1, vmin=-1, vmax=1)
+        vmin=-1,
+        vmax=1,
     )
-    img_ai = axes[1].imshow(np.rot90(ai), aspect="auto", cmap="grey", extent=extent)
+    img_ai = axes[1].imshow(np.rot90(ai), aspect="auto", cmap="grey", extent=extent, vmin=0, vmax=1)
 
     for ax in axes:
         ax.set_yscale("log")
@@ -1356,11 +1361,12 @@ def draw_pi_and_ai(
 
 @app.command()
 def make_page(img_dir: Path = OUTPUT_DIR):
+    import tempfile, shutil
+
     ltx = r"""
-    \documentclass[preview]{standalone}
+    \documentclass[multi=page,crop]{standalone}
     \usepackage{graphicx}
-    \setlength{\fboxsep}{0pt}
-    \setlength{\fboxrule}{1pt}
+    \newenvironment{wrapper}{\ignorespaces}{\unskip}
     \begin{document}
     IMGS
     \end{document}
@@ -1368,7 +1374,7 @@ def make_page(img_dir: Path = OUTPUT_DIR):
 
     imgs_str = ""
     for img in img_dir.glob("*.pdf"):
-        imgs_str += f"\\fbox{{\includegraphics{{{img}}}\n\\vspace{{1cm}}}}\n\n"
+        imgs_str += f"\\begin{{page}}\n\includegraphics{{{img}}}\n\\end{{page}}\n\n"
 
     ltx = ltx.replace("IMGS", imgs_str)
 
@@ -1376,7 +1382,11 @@ def make_page(img_dir: Path = OUTPUT_DIR):
 
     print(ltx)
 
-    subprocess.run(["tectonic", "-"], input=ltx.encode())
+    with tempfile.TemporaryDirectory() as tmpdir:
+        (Path(tmpdir) / "main.tex").write_text(ltx)
+        subprocess.run(["latexmk", "-pdf", "main.tex"], cwd=tmpdir)
+        shutil.copyfile(Path(tmpdir) / "main.pdf", "./demo_page.pdf")
+
 
 
 @app.command()
@@ -1420,6 +1430,16 @@ def dats(
 ):
     make_brir_dats(output_dir)
     make_ild_itd_dats(output_dir)
+
+# all DSP SIPs for demo tracks
+@app.command()
+def demo_sips(
+    output_dir: Path = OUTPUT_DIR,
+):
+    draw_demo_tracks_asf(output_dir)
+    draw_demo_tracks_spf(output_dir)
+    draw_demo_tracks_ph(output_dir)
+    draw_demo_tracks_goniometer(output_dir)
 
 
 

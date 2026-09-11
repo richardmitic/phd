@@ -6,13 +6,13 @@
     ymin=-0.5,
     xmin=10, 
     xmax=50000, 
-    width=15cm, 
+    width=\textwidth,
     height=6cm,
     axis x line*=bottom,
     axis y line=none,
     xlabel={Frequency (Hz)},
     xtick={20, 200, 2000, 20000},
-    xticklabels={20, 200, 2k, 20k}
+    xticklabels={20, 200, 2k, 20k},
 ]
 
     \coordinate (base) at (axis cs:20000,0);
