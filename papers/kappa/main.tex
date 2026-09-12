@@ -227,12 +227,15 @@ linewdith in cm: \printinunitsof{cm}\prntlen{\linewidth}
 This thesis is part of the \glsxtrshort{iresap} project - a collaboration between \glsxtrshort{mdu}, \glsxtrshort{kmh}, Spotify, Ericsson, and Teenage Engineering. It was funded by Spotify and \glsxtrshort{kks}.\\Special thanks to Rikard Lindell, Andreas Rossholm, and Elaine Åstrand for their advice and support, and to Wolmar Nyberg Åkerström for donating his \LaTeX{} template.
 }
 
+% Use ref section to stop these papers appearing in the bibliography
+\begin{refsection}
 \begin{listofpapers}
     \item \fullcite{franklinDevelopmentWebBasedRealTime2025} \label{paper:auxtrument}
     \item \fullcite{miticSystematicLiteratureReview2026}\label{paper:slr}
     \item \fullcite{miticObjectiveComparisonPanning2025}\label{paper:dafx}
     \item \fullcite{miticPerceptualEvaluationBinaurally2026}\label{paper:bth}
 \end{listofpapers}
+\end{refsection}
 
     
 \begingroup
