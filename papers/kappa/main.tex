@@ -3,7 +3,6 @@
 \documentclass[final,a4paper]{UUThesisTemplate}
 
 \usepackage{pdfpages}
-\usepackage{ifdraft}
 \usepackage[british]{babel}
 \usepackage{hyperref}
 \usepackage[autostyle]{csquotes}
@@ -25,15 +24,6 @@
 \usepackage{subcaption}
 \usepackage[titletoc]{appendix}
 \usepackage{placeins}
-
-
-% \ifdraft{
-%% Use this to print the dimensions of the text
-%% so it can be copied for matplotlib diagrams.
-% \usepackage{layouts}
-%% Use this to show margins
-% \usepackage{showframe}
-% }{}
 
 
 % Vector notation should be bold and italic
@@ -203,27 +193,14 @@ Spatial information is crucial to the listener's experience of music, and stereo
 }
 
 
-
 \begin{document}
 
 
-% UUThesisTemplate defines voffset and hoffset for some reason, so counteract them individually here
-\includepdf[pages=1, offset=1in -1in]{external_pages/mdu-titelsidor_L388.pdf}
-\includepdf[pages=2, offset=-1in -1in]{external_pages/mdu-titelsidor_L388.pdf}
-
 \frontmatter
-
-\ifdraft{
-linewidth in inches: \printinunitsof{in}\prntlen{\linewidth}
-
-linewdith in cm: \printinunitsof{cm}\prntlen{\linewidth}
-
-\listoffixmes
-}{}
 
 \frontmatterCS
 
-\dedicationLeft{\footnotesize
+\dedication{
 This thesis is part of the \glsxtrshort{iresap} project - a collaboration between \glsxtrshort{mdu}, \glsxtrshort{kmh}, Spotify, Ericsson, and Teenage Engineering. It was funded by Spotify and \glsxtrshort{kks}.\\Special thanks to Rikard Lindell, Andreas Rossholm, and Elaine Åstrand for their advice and support, and to Wolmar Nyberg Åkerström for donating his \LaTeX{} template.
 }
 
@@ -251,6 +228,8 @@ This thesis is part of the \glsxtrshort{iresap} project - a collaboration betwee
 
 \mainmatter
 
+\part{Thesis}
+
 \include{sections/intro.tex}
 \include{sections/research_questions_and_contributions.tex}
 \include{sections/background.tex}
@@ -271,5 +250,7 @@ This thesis is part of the \glsxtrshort{iresap} project - a collaboration betwee
 \printbibliography
 
 \clearpage  % Forces BibTeX to process the entire document
+
+\part{Included Papers}
 
 \end{document}

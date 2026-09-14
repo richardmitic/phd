@@ -546,34 +546,34 @@
 \fi
 
 % Part heading
-\renewcommand{\part}{%
-	\cleardoublepage%
-	\thispagestyle {empty}%
-	\@afterindentfalse%
-	\@UU@chapterafterparttrue%
-	\secdef\@part\@spart%
-}
-\renewcommand{\@part}[2][1]{%
-	\edef\@mtarg{\zap@space#2 \@empty}%
-	\vspace*{0.3\textheight}%
-	\edef\pgsdelimiter{\ifx\@empty\@mtarg\else :\fi}%
-	\ifnum \c@secnumdepth >-2\relax %
-		\refstepcounter{part}%
-		\addcontentsline{toc}{part}{\partname~\thepart :~#1}%
-	\else %
-		\addcontentsline {toc}{part}{#1}%
-	\fi %
-	\markboth{}{}%
-	{
-		\UU@RaggedRight%
-		\interlinepenalty \@M%
-		\chapterfont%
-		\LARGE%
-		\ifnum \c@secnumdepth >-2\relax \partname \nobreakspace \thepart\pgsdelimiter \par \fi %
-		#2\par%
-	}%
-	\@xsect{\baselineskip}
-}
+% \renewcommand{\part}{%
+% 	\cleardoublepage%
+% 	\thispagestyle {empty}%
+% 	\@afterindentfalse%
+% 	\@UU@chapterafterparttrue%
+% 	\secdef\@part\@spart%
+% }
+% \renewcommand{\@part}[2][1]{%
+% 	\edef\@mtarg{\zap@space#2 \@empty}%
+% 	\vspace*{0.3\textheight}%
+% 	\edef\pgsdelimiter{\ifx\@empty\@mtarg\else :\fi}%
+% 	\ifnum \c@secnumdepth >-2\relax %
+% 		\refstepcounter{part}%
+% 		\addcontentsline{toc}{part}{\partname~\thepart :~#1}%
+% 	\else %
+% 		\addcontentsline {toc}{part}{#1}%
+% 	\fi %
+% 	\markboth{}{}%
+% 	{
+% 		\UU@RaggedRight%
+% 		\interlinepenalty \@M%
+% 		\chapterfont%
+% 		\LARGE%
+% 		\ifnum \c@secnumdepth >-2\relax \partname \nobreakspace \thepart\pgsdelimiter \par \fi %
+% 		#2\par%
+% 	}%
+% 	\@xsect{\baselineskip}
+% }
 
 % Chapter heading
 \renewcommand\chapter{%
@@ -920,6 +920,8 @@
 	\begingroup%
 		\raggedbottom%
 		\cleardoublepage%
+		% Force a negative vertical space to keep the whole TOC on 1 page
+		\addtocontents{toc}{\protect\vspace*{-1em}}% 
 		\oldtableofcontents%
 		\vfill\null%
 		\clearpage%
