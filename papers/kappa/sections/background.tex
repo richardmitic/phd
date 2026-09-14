@@ -417,10 +417,10 @@ Ambisonics is a scene-based audio representation where each channel is one direc
 \subsubsection*{Object-based audio}
 In object-based audio, the entire audio scene is composed of individual audio objects accompanied by metadata specifying their location and movement. Rendering equipment is then responsible for translating those objects to speaker channels for playback. It is a relatively new format and while its main use is for cinematic sound, the music industry has recently begun to adopt it. In contrast to ambisonic recordings, object-based audio is distributed in its original form, allowing the same set of signals to be rendered in multiple ways.
 \\\\
-Overall, stereo recordings are able to deliver high enough quality for the majority of music listeners. The newer formats, while gathering interest in pockets of the music community, have yet to receive wide-spread adoption from consumers. The result is that the mainstream distribution of music still happens in stereo.
+Overall, stereo recordings are able to deliver high enough spatial fidelity for the majority of music listeners. The newer formats, while gathering interest in pockets of the music community, have yet to receive wide-spread adoption from consumers. The result is that the mainstream distribution of music still happens in stereo.
 
 \subsection{Lossless and lossy encoding}
-Regardless of which audio representation is chosen, the resulting recording will most likely be encoded to a compressed format for distribution. There are two types of compression: \q{lossless} and \q{lossy}. A lossless format, when decoded, will produce bit-for-bit recreation of the input signal. Lossy formats on the other hand will not produce the exact same signal, but will discard information that they consider irrelevant according to a psychoacoustic model. There are many lossy formats each suitable for different types of audio, but for the purposes of this thesis it is just pertinent that spatial information can be lost during lossy encoding.
+Regardless of which audio representation is chosen, the resulting recording will most likely be encoded to a compressed format for distribution. There are two types of compression: \q{lossless} and \q{lossy}. A lossless format, when decoded, will produce a bit-for-bit recreation of the input signal. Lossy formats on the other hand will not produce the exact same signal, but will discard information that they consider irrelevant according to a psychoacoustic model. There are many lossy formats each suitable for different types of audio, but for the purposes of this thesis it is just pertinent that spatial information can be lost during lossy encoding.
 
 \clearpage
 
@@ -431,7 +431,7 @@ The output of a recording session is usually only the stereo mix. Stems and \gls
 \subsection{Digital audio signals}
 When a sound wave interacts with a microphone, it generates an electrical signal in continuous time. To convert that analogue signal into a digital one, it is sampled at regular intervals. The sampling frequency ($f_s$) is related to the sampling interval ($T_s$) by the relationship $T_s = \frac{1}{f_s}$.
 
-Shannon's sampling theorem states that a signal can be perfectly recreated when sampled at twice the highest frequency contained in the signal. Conversely, the highest frequency that can be represented by sampling a signal at a given $f_s$ is half of that frequency. This limit is called the \q{Nyquist frequency} and is calculated by $f_N = \frac{f_s}{2}$ \cite{yaoNyquistFrequency1983}. This is illustrated by \Cref{fig:nyquist}, which shows the sampling of three waveforms. The lower plot shows a signal at the Nyquist frequency ($f_N$), which can be perfectly reconstructed from the digital samples. The upper two waveforms have frequencies equidistant but in opposite directions from the Nyquist frequency ($f_N \pm f_{\delta}$). The digital samples shown in circles could represent either of the two waveforms. In practice, when the analogue waveform is reconstructed, the lower frequency will always take precedence. 
+Shannon's sampling theorem states that a signal can be perfectly recreated when sampled at twice the highest frequency contained in the signal. Conversely, the highest frequency that can be represented by sampling a signal at a given $f_s$ is half of that frequency. This limit is called the \q{Nyquist frequency} and is calculated by $f_N = \frac{f_s}{2}$ \cite{yaoNyquistFrequency1983}. This is illustrated by \Cref{fig:nyquist}, which shows the sampling of three waveforms. The upper plot shows a signal at the Nyquist frequency ($f_N$), which can be perfectly reconstructed from the digital samples. The lower two waveforms have frequencies equidistant but in opposite directions from the Nyquist frequency ($f_N \pm f_{\delta}$). The digital samples shown in circles could represent either of the two waveforms. In practice, when the analogue waveform is reconstructed, the lower frequency will always take precedence. 
 
 \begin{figure}[b!]
     \centering
@@ -444,13 +444,13 @@ A typical $f_s$ for music is \qty{44.1}{\kHz}, with a resulting $f_N$ of \qty{22
 
 \subsection{Time-Frequency representation of audio}
 
-In order to perform many types of audio analysis, the audio signal can be converted from the time domain into the \gls{tf} domain. In perceptual acoustics research there are several common forms of \gls{tf} representation, each with its own nuances. This section provides those details, and a side-by-side comparison is shown in \cref{app:spect_comp}.
+In order to perform many types of audio analysis, the audio signal can be converted from the time domain into the \gls{tf} domain. In perceptual acoustics research there are several common forms of \gls{tf} representation, each with its own nuances. This section provides those details, and a side-by-side comparison is shown in appendix \ref{app:spect_comp}.
 
 \subsubsection{\gls{stft} spectrogram}
 
 The \gls{stft} spectrogram is one of the most popular \gls{tf} representions across all audio processing work due to its computational efficiency. The fundamental principle is that a time-domain signal is split into short (1 to 100ms) overlapping chunks, and the \gls{fft} is performed on each chunk, thereby converting that chunk into the frequency domain.  By arranging subsequent frames along a time axis it is possible to represent the original signal as a 2D image known as a spectrogram. When the time-domain signal is entirely real, (which is the case for monophonic audio signals), the result of the \gls{fft} will be a complex signal which is symmetrical around the Nyquist frequency and the upper half is therefore dropped. Furthermore, the complex spectrum is usually represented in magnitude/phase form to better match the human auditory response.
 
-A fundamental property of the \gls{fft} is that it assumes that the signal repeats outside the time frame that is being analysed. Since this is generally not the case for audio signals, it is standard practice to apply a time-domain windowing function to each frame so that large transients do not occur at the boundaries. Several standard windowing functions exist, each with their own nuances, but for most audio applications the \q{Hann} window can be used \cite{LibrosastftLibrosa0110}. 
+A fundamental property of the \gls{fft} is that it assumes the signal repeats outside the time frame that is being analysed. Since this is generally not the case for audio signals, it is standard practice to apply a time-domain windowing function to each frame so that large transients do not occur at the boundaries. Several standard windowing functions exist, each with their own nuances, but for most audio applications the \q{Hann} window can be used \cite{LibrosastftLibrosa0110}. 
 
 The nature of the spectrogram is affected by two parameters: the frame size and hop size. \q{Frame size} refers to the number of samples in each analysis frame. To obtain maximal computational efficiency this must be a power of 2. \q{Hop size} refers to the number of samples between the start of subsequent frames and is sometimes expressed as a percentage of the frame size. The frame size dictates the resolution of the spectrogram's frequency axis since the frequency bins will be spaced evenly between \SI{0}{\hertz} and the Nyquist frequency. Importantly, a longer frame size will result in lower time accuracy within each frame; sharp transients in the time domain will appear as wideband energy in the frequency domain, but information about exactly where the transient occurred within the frame is lost. To counteract this inaccuracy, a smaller hop size can be used so that transients might be detected as sharp changes between \gls{stft} frames. One major drawback of the \gls{stft} spectrogram is that the linearly-spaced frequency bins do not align well with the human perception of frequency, which is logarithmic. The \gls{stft} therefore contains redundant information in higher frequencies. Several common alternatives exist to account for this.
 
@@ -491,14 +491,12 @@ A \q{Mel filter bank} is a set of band-pass filters that are spaced equally on t
 
 As an alternative to the two spectrogram representations, a cochleagram aims to make a \gls{tf} representation that models the acoustic response of the human cochlea more closely. To that end, all processing is performed in the time domain and is sometimes referred to as a \q{peripheral ear model}. Several examples appear in the literature \cite{boddenBinauralModelingAuditory1995,choiObjectiveMeasurementPerceived2008,delgadoDesignChoicesBinaural2023}. In the classical method \cite{boddenBinauralModelingAuditory1995} the original signal is first processed by a bank of gammatone filters with their centre frequencies placed according to a perceptual scale (such as the \gls{erb} scale \cite{smithiiiEquivalentRectangularBandwidth2020}), as shown in \cref{fig:gammatone_filters}. As with Mel filters, several definitions of gammatone filters exist in the literature, but the popular implementations (e.g. scipy \cite{virtanenSciPy10Fundamental2020} and \gls{amt} \cite{majdakAMT1xToolbox2022}) preside. \Cref{fig:cochleagram} shows a cochleagram of the example speech recording.
 
-\begin{figure}[hbt]
+\begin{figure}[bht]
     \centering
     \includegraphics{cochleagram.pdf}
     \caption{Cochleagram of a speech recording, using 32 bands.}
     \label{fig:cochleagram}
 \end{figure}
-
-\Cref{fig:cochleagram_steps} shows the intermediate steps to generate a cochleagram. Each sub-band signal is processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patterns of the cilia and basilar membrane. The result is a signal representing the envelope of each sub-band. Those envelopes are then segmented into overlapping time chunks. The amplitude of each chunk is then calculated as the mean of all its values, forming one pixel in the cochleagram.
 
 \begin{figure}[bht]
     \centering
@@ -507,11 +505,14 @@ As an alternative to the two spectrogram representations, a cochleagram aims to 
     \label{fig:gammatone_filters}
 \end{figure}
 
+\newpage
+
+\Cref{fig:cochleagram_steps} shows the intermediate steps to generate a cochleagram. Each sub-band signal is processed by a half-wave rectifier, square root, and low-pass filter to mimic the excitation patterns of the cilia and basilar membrane. The result is a signal representing the envelope of each sub-band. Those envelopes are then segmented into overlapping time chunks. The amplitude of each chunk is then calculated as the mean of all its values, forming one pixel in the cochleagram.
+
 \begin{figure}[thb]
     \includegraphics{cochleagram_steps.pdf}
     \caption{Steps of an example decomposition from time-domain audio to a cochleagram. The audio being filtered is a frequency sweep from 100 to 20000 Hz. First it is processed by a gammatone filter bank, generating 8 sub-band signals which are spaced equally on the \gls{erb} scale. Each sub-band has its envelope extracted. The envelope is then split into overlapping time chunks, which are averaged to form the cochleagram.}
     \label{fig:cochleagram_steps}
-    \caption{Using a gammatone filter bank to make a cochleagram.}
 \end{figure}
 
 \FloatBarrier
