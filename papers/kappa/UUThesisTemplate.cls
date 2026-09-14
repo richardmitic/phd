@@ -1233,7 +1233,7 @@
 \providecommand{\abstractfoot}{}
 \providecommand{\abstractsection}{\vskip\baselineskip\noindent\textbf{Abstract}\par\noindent\ignorespaces}
 \providecommand{\abstractpreamble}{\clearpage\thispagestyle{empty}}
-\providecommand{\abstractfont}{\fontsize{9}{11}\fontshape{n}\selectfont}
+\providecommand{\abstractfont}{\fontsize{11}{11}\fontshape{n}\selectfont}
 
 \newenvironment{abstract}{%
 	\abstractfont\abstractpreamble %
