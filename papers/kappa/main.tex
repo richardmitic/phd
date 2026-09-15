@@ -1,0 +1,256 @@
+% Turn off spell checker in the preamble
+% LTeX: enabled=false
+\documentclass[final,a4paper]{UUThesisTemplate}
+
+\usepackage{pdfpages}
+\usepackage[british]{babel}
+\usepackage{hyperref}
+\usepackage[autostyle]{csquotes}
+\usepackage{booktabs}
+\usepackage{tabularx}
+% \usepackage{subfiles}
+\usepackage{amsmath}
+\usepackage{cleveref}
+\usepackage{fixme}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{afterpage}
+\usepackage{type1cm}
+% \usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage{amssymb}
+\usepackage{siunitx}
+\usepackage{subcaption}
+\usepackage[titletoc]{appendix}
+\usepackage{placeins}
+
+
+% Vector notation should be bold and italic
+\usepackage{bm}
+\renewcommand{\vec}{\bm}
+
+\fxsetup{draft,inline,nomargin,theme=color}
+\captionsetup[subfigure]{skip=0.333\baselineskip, font=footnotesize}
+\captionsetup{font=footnotesize}
+
+% The title is never printed but here it is anyway
+% \title{Analysis of stereo image in vast repositories of recorded music}
+
+%% Abbreviations
+\usepackage[automake=immediate,abbreviations,toc=false]{glossaries-extra}
+\setabbreviationstyle[acronym]{long-short}
+\renewcommand{\abbreviationsname}{Abbreviations}
+\makeglossaries{}
+\input{../acronyms.tex}
+
+
+% drawing figures
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{arrows}
+\usetikzlibrary{positioning}
+\usetikzlibrary{fit}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{intersections} % name path
+\usetikzlibrary{decorations.markings}
+\usepackage{pgfplots}
+\pgfplotsset{
+    compat=1.18,
+    table/search path={figures}
+}
+\usepgfplotslibrary{groupplots}
+
+% Make every plot render to a separate pdf which is included in later runs.
+\usepgfplotslibrary{external} 
+
+% Enable this to compile all tikz diagrams separately
+% Supposedly it make the compilation faster but it also makes the build directory impossible to navigate
+% \tikzexternalize 
+% \pgfrealjobname{main}
+
+\graphicspath{{./generated/}}
+
+
+%% References
+\usepackage[
+    bibstyle=ieee,
+    citestyle=numeric-comp,
+    backend=biber,
+    maxcitenames=2,
+]{biblatex}
+\setcounter{biburlnumpenalty}{9000}
+\setcounter{biburlucpenalty}{9000}
+\setcounter{biburllcpenalty}{9000}
+\addbibresource{../library_biblatex.bib}
+
+
+% \includeonly{sections/related_work.tex}
+
+%% Macros
+\newcommand{\citeauthorandnumber}[1]{\citeauthor{#1} \cite{#1}}
+\newcommand{\q}[1]{\enquote{#1}}
+\newcommand{\rqa}{\hyperref[rq:usecase]{$RQ_1$}}
+\newcommand{\rqb}{\hyperref[rq:methods]{$RQ_2$}}
+\newcommand{\pani}{\enquote{panning index}}
+\newcommand{\ambi}{\enquote{ambience index}}
+
+% Edited from UUThesisTemplate.cls
+\newcommand{\dedicationLeft}[1]{%
+    \cleardoublepage%
+    \vspace*{\stretch{3}}%
+    \begin{flushleft}%
+    {\@dedicationfont\Large\selectfont\emph{#1}}%
+    \end{flushleft}%
+    \vspace*{\stretch{1}}%
+}
+
+% \maketitle prints the dummy title page.
+% Remove it since we are including the real title page instead.
+\renewcommand{\maketitle}{}
+
+%% Custom citation command to print all authors' full names.
+\makeatletter
+% 1. Create a custom name format that manually grabs the raw, full name strings
+\DeclareNameFormat{ieeefullname}{%
+  \usebibmacro{name:given-family}
+    {\namepartfamily}
+    {\namepartgiven} % Safely extracts the complete first name string
+    {\namepartprefix}
+    {\namepartsuffix}%
+  \usebibmacro{name:andothers}%
+}
+
+% 2. Link this custom format to your citation macro
+\DeclareCiteCommand{\citefullauthors}
+  {\usebibmacro{prenote}}
+  {%
+    % Forces a loop from author 1 to 99, passing them to our custom formatting macro
+    \printnames[ieeefullname][1-99]{author}%
+  }
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+\makeatother
+
+%% Custom ciation command to print the publication name
+\makeatletter
+% Define the citation command wrapper
+\DeclareCiteCommand{\citepublication}
+  {\usebibmacro{prenote}}
+  {%
+    % Check if the entry has a journal title (for articles)
+    \iffieldundef{journaltitle}
+      {% If no journal, check for a book/conference title
+       \iffieldundef{booktitle}
+         {% Fallback: use main title if it is a book entry
+          \printfield[title]{title}}
+         {\printfield[booktitle]{booktitle}}}
+      {\printfield[journaltitle]{journaltitle}}%
+  }
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+\makeatother
+
+
+
+% Numbering of headings down to the subsection level
+\numberingdepth{subsection}
+
+% Including headings down to the subsection level in contents
+\contentsdepth{subsection}
+
+\tikzset{
+    speaker/.pic={
+        \draw[black, rotate=-90, transform shape] (-3,0) -- (3,0) -- (2,2) -- (-2,2) -- cycle (-2,2) -- (-2,4) -- (2,4) -- (2,2);
+    },
+    head/.pic={
+        \filldraw[color=black, fill=white] (0,0) circle[radius=1];
+        \filldraw[color=black, fill=white] (1.1,0) ellipse (0.1 and 0.2);
+        \filldraw[color=black, fill=white] (-1.1,0) ellipse (0.1 and 0.2);
+    },
+    mic/.pic={
+        \filldraw[color=black, fill=white] (0,0) circle[radius=1];
+        \draw[color=black, thick] (-1,1) -- (1, 1);
+        \draw[color=black] (250:1) -- (250:1 |- 0,-1.618);
+        \draw[color=black] (290:1) -- (290:1 |- 0,-1.618);
+    },
+    flow_input/.style={rounded rectangle, draw=black, minimum height=1cm, minimum width=3cm},
+    flow_process/.style={rectangle, draw=black, minimum height=1cm, minimum width=3cm, align=center},
+    flow_output/.style={rectangle, rounded corners, draw=black, minimum height=1cm, minimum width=3cm, align=center},
+    arrow/.style={->, >=Latex},
+    section_label/.style={rectangle, rounded corners, draw=darkgray, fill=lightgray, rotate=90, minimum height=0.618cm, minimum width=4cm},
+}
+
+% And turn the spell checker back on
+% LTeX: enabled=true
+
+\abstractdummy{
+\begin{abstract}
+Spatial information is crucial to the listener's experience of music, and stereophonic recordings have long been the standard for capturing this spaciousness. Recent advancements in computing, coupled with the availability of new, very large musical corpora, have created opportunities for large-scale quantitative analysis of the stereo image of recorded music. In this licentiate thesis I address a key gap in current research: direct analysis of raw music recordings to describe the stereo image. The work comprises practice-led research, objective experiments, perceptual listening tests, and an extensive literature review. A combination of immersion in the creative aspects of stereo field and thorough mathematical evaluation of the recorded signals created a strong foundation for future research. The studies together revealed that the while there are many existing stereo descriptors, the musical features visible to each one vary considerably and therefore have differing use cases. Moreover, they don't always align with human perception. The combination of research methods was hence a highly effective way to critique the strengths and weakness of objective measurements. Future work should focus on applying and adapting the discovered methods to modern music datasets.
+\end{abstract}
+}
+
+
+\begin{document}
+
+
+\frontmatter
+
+\frontmatterCS
+
+\dedication{
+This thesis is part of the \glsxtrshort{iresap} project - a collaboration between \glsxtrshort{mdu}, \glsxtrshort{kmh}, Spotify, Ericsson, and Teenage Engineering. It was funded by Spotify and \glsxtrshort{kks}.\\Special thanks to Rikard Lindell, Andreas Rossholm, and Elaine Åstrand for their advice and support, and to Wolmar Nyberg Åkerström for donating his \LaTeX{} template.
+}
+
+% Use ref section to stop these papers appearing in the bibliography
+\begin{refsection}
+\begin{listofpapers}
+    \item \fullcite{franklinDevelopmentWebBasedRealTime2025} \label{paper:auxtrument}
+    \item \fullcite{miticSystematicLiteratureReview2026}\label{paper:slr}
+    \item \fullcite{miticObjectiveComparisonPanning2025}\label{paper:dafx}
+    \item \fullcite{miticPerceptualEvaluationBinaurally2026}\label{paper:bth}
+\end{listofpapers}
+\end{refsection}
+
+    
+\begingroup
+    % To adjust the indentation in your table of contents, uncomment and enter the widest numbers for each level
+    %  E.g.  \settocnumwidth{widest chapter number}{widest section number}{widest subsection number}...{...}
+    %  \settocnumwidth{5}{4}{5}{3}{3}{3}
+    \tableofcontents
+\endgroup
+
+
+\printglossary[type=\glsxtrabbrvtype]
+
+
+\mainmatter
+
+\part{Thesis}
+
+\include{sections/intro.tex}
+\include{sections/research_questions_and_contributions.tex}
+\include{sections/background.tex}
+\include{sections/related_work.tex}
+\include{sections/research_methodology.tex}
+\include{sections/paper_summaries.tex}
+\include{sections/discussion.tex}
+
+
+\begin{appendices}
+
+\include{sections/demo_audio_files}
+\include{sections/spectrogram_comparison}
+
+\end{appendices}
+
+
+\printbibliography
+
+\clearpage  % Forces BibTeX to process the entire document
+
+\part{Included Papers}
+
+\end{document}

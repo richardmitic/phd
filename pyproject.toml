@@ -17,4 +17,28 @@ dependencies = [
     "statsmodels",
     "segno",
     "typer",
+    "sofar",
+    "pyfar",
+    "librosa",
+    "python_auditory_toolbox",
+    "matplot2tikz",
+    "rdp",
+    "celery",
+    "redis",
+    "tqdm",
+    "cache_to_disk",
 ]
+
+[tool.uv.sources]
+jupyter_tikz = { git = "https://github.com/lucaslrodri/jupyter-tikz", branch = "main" }
+
+[dependency-groups]
+dev = [
+  "pytest"
+]
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+pythonpath = ["code"]

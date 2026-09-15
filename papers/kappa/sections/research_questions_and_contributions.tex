@@ -1,0 +1,49 @@
+\chapter{Research Questions and Contributions}
+\label{sec:research_questions_and_contributions}
+
+The underlying purpose of the research documented in this thesis relates to \gls{mir}, and in particular to generating an understanding of the links between human musical creativity and musical output. While it might be possible for the creative people involved to explain how they make their music, it is far more objective to analyse their output as a representation of their musical ideas.
+
+\section{Research Questions}
+\label{sec:research_questions}
+
+Given the aforementioned context, the overarching \gls{rq} can be formed as:
+
+\vspace{1em}
+\noindent \hspace{4em} \textit{How do music producers use stereo field?}
+\vspace{1em}
+
+The basis of the research is access to extremely large musical corpora and modern computing techniques. The number and variety of recordings available for analysis makes them a decent representation of music producers in general. The spatial aspects of each track can be analysed individually using traditional \gls{dsp} techniques and a population-level analysis can be performed on the spatial features of all tracks together. Thus, I have broken down the main \gls{rq} into two smaller ones:
+
+\vspace{1em}
+\begin{enumerate}[
+    leftmargin=4em,
+    rightmargin=4em,
+    itemsep=0.618em
+]
+\item[$RQ_1$:] \textit{How does the stereo image of a recording relate to real-world musical knowledge?} \label{rq:usecase}
+\item[$RQ_2$:] \textit{What methods can be used to describe the stereo image of a music recording?} \label{rq:methods}
+\end{enumerate}
+\vspace{1em}
+
+These concrete questions are addressed through the four papers included in this licentiate thesis. \rqa~provides an important context of what quantitive spatial aspects receive attention from music practitioners, while \rqb~establishes a state-of-the-art baseline of relationships between those quantitive descriptions and objective measurements. The overarching research question spans both licentiate and doctoral studies, with future plans being detailed in \cref{sec:future_work}.
+
+
+\section{Research contributions}
+This section presents a summary of the research contributions achieved by the four included papers and explains their relationship to the \glspl{rq}. Many parts of the research required spatial descriptors to be extracted from raw audio signals. To facilitate this I implemented a library of software tools, allowing all the research tracks to be linked by a common mathematical framework.
+
+\subsection{An understanding of the musical uses of stereo field}
+With respect to the overarching research question, the act of personally creating musical output gives an insight into how music producers in general might use stereo field. We initially embarked on such a project, using audio from a remotely-located stereo microphone as the primary sonic material in a set of musical performances. Paper \ref{paper:auxtrument} was a retrospective account of the process, providing technical information to any musicians wishing to make a similar performance in the future. The paper also provided suggestions for future iterations of similar instruments and the standardized \glspl{api} which are built into web browsers, giving a basis for future work.
+
+The software library presented the opportunity to apply a more technical approach to \rqa{}. The exploration of stereo field in existing recordings furthered the knowledge gained from an individual musical project by allowing us to analytically compare stereo fields created by many producers. This allowed us to establish an understanding of the range and variation that stereo field can embody.
+
+\subsection{Signal processing techniques relating to stereo field}
+The software implementation and the resulting paper \ref{paper:dafx} contribute an understanding of how some established techniques for measuring stereo field react to existing recorded music. Moreover, that understanding is not limited to the techniques specified in paper \ref{paper:dafx} since I developed the software continuously throughout several literature searches, resulting a full-featured library that includes many other spatial analysis techniques.
+
+In order to fully answer \rqb{}, an extensive \gls{slr} (paper \ref{paper:slr}) was performed with two intentions. First and foremost, the intention was to conclusively find all existing mathematical techniques that describe stereo field. In addition, there was a goal to find \q{cross-pollination} opportunities from disparate areas of audio research which nonetheless derive spatial cues from audio signals. In doing so, it was possible to form a \q{general model} of \glspl{sip}, thereby making it easier to for future researchers to find or create a \gls{sip} that suits their specific use case.
+
+\subsection{Psychoacoustics of mixed music and speech}
+The perceptual listening test described in paper \ref{paper:bth} provided a new perspective on a classic problem in psychoacoustics research. While there is extensive literature describing how people perceive music or speech that has been intentionally masked by another sound, our experiment used music and speech that were intended to complement each other. The results firstly suggested that while people prefer speech that is panned towards the centre, there was an opportunity to increase the audible pleasantness by using very subtle panning. Contrary to our initial assumptions, the musical content had far less influence that originally expected, and speech became the dominant audial stream which was paramount to pleasantness for a majority of listeners.
+
+\subsection{Setup for future work on large datasets of audio}
+In regard to the future work described in \cref{sec:future_work}, the \gls{slr} provided both a list of relevant audio datasets, and many standardized implementations of mathematical techniques that extract spatial information from audio.
+Paper \ref{paper:dafx} also presented a good opportunity to assess the computational complexity of the algorithms implemented in the software library, thereby highlighting some opportunities for optimization when they are applied to extremely large corpora.
