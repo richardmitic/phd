@@ -1,0 +1,33 @@
+{
+  "merge" : {
+    "footer" : "false",
+    "input.0" : "/Users/richard/dev/phd_kappa/papers/kappa/external_pages/mdu-titelsidor_L388.pdf",
+    "input.1" : "/Users/richard/dev/phd_kappa/papers/kappa/main.pdf",
+    "toc" : "NONE",
+    "input.2" : "/Users/richard/dev/phd_kappa/papers/kappa/external_pages/JAES_V73_12_PG872hirez_Franklin.pdf",
+    "input.3" : "/Users/richard/dev/phd_kappa/papers/kappa/external_pages/s13636-026-00463-4.pdf",
+    "pageNormalization" : "NONE",
+    "merge.destinationbrowsableField" : "/Users/richard/dev/phd_kappa/papers/kappa/submitted/Richard Mitic - Licentiate - Analysis of stereo image in vast repositories of recorded music.pdf",
+    "input.size" : "6",
+    "acroForms" : "DISCARD",
+    "outline" : "RETAIN",
+    "input.4" : "/Users/richard/dev/phd_kappa/papers/kappa/external_pages/Mitic and Rossholm - 2025 - Towards an objective comparison of panning feature algorithms for unsupervised learning.pdf",
+    "input.5" : "/Users/richard/dev/phd_kappa/papers/kappa/external_pages/Percept_Eval_Binaurally_Panned_Speech_Music_Mixtures.pdf",
+    "blankIfOdd" : "false",
+    "overwrite" : "false",
+    "input.reverse.5" : "false",
+    "input.reverse.4" : "false",
+    "input.reverse.3" : "false",
+    "input.reverse.2" : "false",
+    "input.reverse.1" : "false",
+    "input.reverse.0" : "false",
+    "version" : "VERSION_1_5",
+    "input.step.0" : "1",
+    "input.step.1" : "1",
+    "input.step.2" : "1",
+    "input.step.3" : "1",
+    "input.step.4" : "1",
+    "input.step.5" : "1",
+    "compressionPolicy" : "COMPRESS"
+  }
+}
