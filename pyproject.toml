@@ -3,11 +3,12 @@ name = "phd"
 version = "0.1.0"
 description = "Monorepo for all PhD work"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = [
     "jupyterlab",
     "jupyter_tikz",
     "numpy",
+    "scipy>=1.18",
     "seaborn",
     "pandas",
     "matplotlib",
@@ -27,6 +28,8 @@ dependencies = [
     "redis",
     "tqdm",
     "cache_to_disk",
+    "openpyxl",
+    "scikit_posthocs"
 ]
 
 [tool.uv.sources]
