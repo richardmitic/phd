@@ -14,3 +14,7 @@ Please use Journal_of_the_Audio_Engineering_Society_JAES_template.tex as the tem
 Happy TeXing!!!
 
 Brian FG Katz, Kurt James Werner, and Vesa Välimäki
+
+JAES template generates compilation errors, so do:
+latexmk -pdf -interaction=nonstopmode main.tex
+pdflatex -interaction=nonstopmode main.tex
