@@ -1100,6 +1100,7 @@ def draw_example_goniometer(
 ):
 
     from numpy import pi
+    import matplotlib.patheffects as path_effects
 
     filename = get_demo_tracks().iloc[track_idx].local.filepath
 
@@ -1187,31 +1188,25 @@ def draw_example_goniometer(
     )
     x, y = _rotate_matrix(audio.time[0], audio.time[1], 45)
 
-    # draw shaded line
-    c = np.linspace(0, 1, audio.n_samples)
-    _colored_line(x, y, c, ax=ax[0], color="k", linewidth=0.5)
-    ax[0].set_xlim(-1, 1)
-    ax[0].set_ylim(-1, 1)
-
-    # draw unit circle
+    # draw circles
     for r in [0.25, 0.5, 0.75, 1]:
         M = 100
         xc = np.cos(np.linspace(0, 2 * np.pi, M)) * r
         yc = np.sin(np.linspace(0, 2 * np.pi, M)) * r
-        ax[0].plot(xc, yc, color="grey", alpha=0.5, linewidth=0.5, linestyle="dotted")
+        ax[0].plot(xc, yc, color="grey", alpha=1, linewidth=0.5, linestyle="dotted", solid_capstyle='round')
 
     # Draw left, centre, and right markers
     line_lx, line_ly = common.polar_to_cartesian(1, [-pi / 4, 3 * pi / 4])
     line_cx, line_cy = common.polar_to_cartesian(1, [-pi / 2, -3 * pi / 2])
     line_rx, line_ry = common.polar_to_cartesian(1, [pi / 4, -3 * pi / 4])
     ax[0].plot(
-        line_lx, line_ly, color="grey", alpha=0.5, linewidth=0.5, linestyle="dotted"
+        line_lx, line_ly, color="grey", alpha=1, linewidth=0.5, linestyle="dotted", solid_capstyle='round'
     )
     ax[0].plot(
-        line_cx, line_cy, color="grey", alpha=0.5, linewidth=0.5, linestyle="dotted"
+        line_cx, line_cy, color="grey", alpha=1, linewidth=0.5, linestyle="dotted", solid_capstyle='round'
     )
     ax[0].plot(
-        line_rx, line_ry, color="grey", alpha=0.5, linewidth=0.5, linestyle="dotted"
+        line_rx, line_ry, color="grey", alpha=1, linewidth=0.5, linestyle="dotted", solid_capstyle='round'
     )
 
     text_rx, text_ry = common.polar_to_cartesian(1.1, pi / 4)
@@ -1224,7 +1219,7 @@ def draw_example_goniometer(
         horizontalalignment="center",
         verticalalignment="center",
         transform=ax[0].transData,
-        color="grey",
+        color="dimgrey",
     )
     ax[0].text(
         text_cx,
@@ -1233,7 +1228,7 @@ def draw_example_goniometer(
         horizontalalignment="center",
         verticalalignment="center",
         transform=ax[0].transData,
-        color="grey",
+        color="dimgrey",
     )
     ax[0].text(
         text_lx,
@@ -1242,8 +1237,23 @@ def draw_example_goniometer(
         horizontalalignment="center",
         verticalalignment="center",
         transform=ax[0].transData,
-        color="grey",
+        color="dimgrey",
     )
+    
+    # draw audio trace
+    c = np.linspace(0, 1, audio.n_samples)
+    _colored_line(
+        x, y, c, 
+        ax=ax[0], 
+        color="k", 
+        linewidth=GOLDEN_RATIO,
+        # path_effects=[path_effects.Stroke(capstyle="round")]
+    )
+
+    # set limits
+    ax[0].set_xlim(-1.05, 1.05)
+    ax[0].set_ylim(-1.05, 1.05)
+
 
     # Box diagram
     N = 10
