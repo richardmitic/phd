@@ -29,7 +29,8 @@ dependencies = [
     "tqdm",
     "cache_to_disk",
     "openpyxl",
-    "scikit_posthocs"
+    "scikit_posthocs",
+    "pyloudnorm",
 ]
 
 [tool.uv.sources]
@@ -37,11 +38,13 @@ jupyter_tikz = { git = "https://github.com/lucaslrodri/jupyter-tikz", branch = "
 
 [dependency-groups]
 dev = [
-  "pytest"
+  "pytest",
+  "marimo",
+  "ruff>=0.16.8",
 ]
 
-[tool.pytest.ini_options]
-addopts = [
-    "--import-mode=importlib",
-]
+[tool.marimo.runtime]
+pythonpath = ["code"]
+
+[tool.pytest]
 pythonpath = ["code"]
