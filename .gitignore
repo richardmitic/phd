@@ -1,5 +1,6 @@
 # outputs
 code/results/
+generated_data/
 
 # macos
 .DS_Store

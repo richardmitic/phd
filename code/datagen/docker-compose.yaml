@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # 1. Message Broker: RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672" # AMQP port for Celery
+      - "15672:15672" # Management UI
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      # This ensures that the data directory is managed by the host system
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  # 2. Result Backend: Redis
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  # 3. Celery Worker: Executes the tasks defined in tasks.py
+  # worker:
+  #   build:
+  #     context: ./celery_worker
+  #     dockerfile: Dockerfile
+  #   container_name: celery_worker
+  #   command: celery -A tasks worker --loglevel=info
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_started
+  #   environment:
+  #     # Important: Tells Celery where to find the broker and backend
+  #     - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672//
+  #     - CELERY_RESULT_BACKEND=redis://redis:6379/0
+  #   restart: on-failure
+
+  # # 4. Processor Runner: Executes the main Python logic
+  # processor:
+  #   build:
+  #     context: ./processor
+  #     dockerfile: Dockerfile
+  #   container_name: processor_runner
+  #   depends_on:
+  #     worker:
+  #       condition: service_started
+  #   # This service runs the python script that triggers the whole workflow
+  #   command: python run_processor.py
+
+volumes:
+  rabbitmq_data:
+    driver: local
