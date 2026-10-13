@@ -4,7 +4,7 @@ import pyfar as pf
 from numpy.typing import NDArray
 from librosa import amplitude_to_db
 
-from algorithms.common import make_spectrogram, split_spectrogram_bands, downmix_to_mono
+from algorithms.common import make_spectrogram, split_spectrogram_bands, downmix_to_mono, peak_normalize
 
 
 class StereoWidth(Enum):
@@ -18,10 +18,12 @@ def _rms(x, axis=None):
     return np.sqrt(np.mean(x**2, axis=axis))
 
 
-def stereo_width(sig: pf.Signal) -> float:
+def stereo_width(sig: pf.Signal, norm: bool = True) -> float:
     if sig.cshape == (1,):
         return 0.0
     else:
+        if norm:
+            sig = peak_normalize(sig)
         return float(np.mean(np.abs(sig.time[1] - sig.time[0])))
 
 

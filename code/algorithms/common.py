@@ -91,3 +91,8 @@ def upmix_to_stereo(sig: pf.Signal) -> pf.Signal:
     return pf.Signal(
         np.stack([sig.time[0], sig.time[0]]) * a, sampling_rate=sig.sampling_rate
     )
+
+
+def peak_normalize(sig: pf.Signal) -> pf.Signal:
+    amp = np.max(np.abs(sig.time))
+    return sig / amp
