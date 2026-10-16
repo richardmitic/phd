@@ -1,0 +1,90 @@
+\begin{sankeydiagram}
+    \sankeyset{
+        ratio quantity=1000,
+        start style=simple, end style=simple,
+        records/.style={
+            fill/.style={
+                line width=0pt,
+                draw=yellow,
+                fill=yellow,
+            },
+        },
+        fade/.style={
+            fill/.style={
+                fill=none,
+                top color=yellow!93!red,
+                bottom color=red,
+                line width=0pt,
+            },
+        },
+        rejected/.style={
+            fill/.style={
+                fill=red,
+                draw=red,
+                line width=0pt,
+            },
+        },
+    }
+
+    \sankeyset{records}
+    \sankeynodestart{name=p0,at={0,0},angle=0,quantity=4678}
+    \path (p0.right) ++(0,-7mm) coordinate (c);
+
+    \newcommand\turnandstop[2]{ % valname, label
+        \begingroup
+        \sankeyturnright{#1}{90}
+        \sankeynode{as=#1,name=#1-stop,at={#1 |- c}}
+        \sankeyset{fade}
+        \sankeyoutin{#1}{#1-stop}
+        \sankeyset{rejected}
+        \sankeynode{as=#1-stop,name=#1}
+        \sankeyend{#1}
+        \node[below, align=center] at ([yshift=-3pt]#1) {#2\\(\sankeygetnodeqty{#1})};
+        \endgroup
+    }
+
+    \node[left,align=center] at (p0) {Database records\\(4678)};
+    \sankeyadvance{p0}{10pt};
+    
+    \sankeyfork{p0}{3130/p1,1548/p2}
+    \sankeyadvance{p1}{60pt}
+    \turnandstop{p2}{Auto-removed}
+    
+    \sankeyfork{p1}{763/p4,2367/p5}
+    \sankeyadvance{p4}{90pt}
+    \turnandstop{p5}{Excluded}
+
+    \sankeyfork{p4}{715/p6,48/p7}
+    \sankeyadvance{p6}{30pt}
+    \turnandstop{p7}{Not found}
+
+    \sankeyfork{p6}{178/p8,537/p9}
+    \turnandstop{p9}{Rejected}
+    \sankeyadvance{p8}{40pt}
+
+    \sankeyfork{p8}{149/p10,29/p11};
+    \sankeynode{
+        name=veryrelevant,
+        at={[shift={(25pt,-10pt)}]p10},
+        quantity=29
+    };
+    \node[below, align=center] at (veryrelevant) {Very relevant\\(29)};
+
+    \sankeynode{
+        name=included,
+        at={[xshift=50pt,yshift=-0.5pt]p10},
+        quantity=202, 
+        forked={24/p20,149/p21,29/p22}
+    };
+    
+    \sankeynodestart{name=p12,at={[xshift=25pt, yshift=10pt]p10},angle=0,quantity=24}
+    \node[left,align=center] at (p12) {Other sources (24)};
+
+    \sankeyoutin{p11}{veryrelevant}
+    \sankeyoutin{veryrelevant}{p22}
+    \sankeyoutin{p10}{p21}
+    \sankeyoutin{p12}{p20}
+    \sankeyend{included}
+    \node[right,align=center] at (included) {Included\\(202)};
+
+\end{sankeydiagram}

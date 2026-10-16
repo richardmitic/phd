@@ -1,0 +1,35 @@
+\begin{tikzpicture}
+    \def\rad{3};
+    \def\expand{1.02};
+
+    \begin{scope}[rotate around={150:(0,0)}]
+        \pic[transform shape, scale=0.2] (left_speaker) at (\rad*\expand,0) {speaker};
+    \end{scope}
+
+    \begin{scope}[rotate around={30:(0,0)}]
+        \pic[transform shape, scale=0.2] (right_speaker) at (\rad*\expand,0) {speaker};
+    \end{scope}
+
+    % Piano
+    \path[fill,lightgray] (0,0) -- (120:\rad)  arc (120:80:\rad) -- (0,0);
+    \node at (100:2.2) {Piano};
+
+    % Vocals
+    \fill (0,0) (90:\rad) circle (2pt) node[above] {Vocals};
+
+    % Violin
+    \fill (0,0) (60:\rad) circle (2pt) node[above right] {Violin};
+
+    % Stereo image
+    \path[draw, dashed] (0,0) -- (120:\rad);
+    \path[draw, dashed] (0,0) -- (60:\rad);
+    \path[draw, dotted] (0,0) -- (150:\rad);
+    \path[draw, dotted] (0,0) -- (30:\rad);
+
+    % Draw full stereo image arc
+    \draw (150:\rad) arc (150:30:\rad);
+
+    % Music producer
+    \pic[scale=0.618] (producer) at (0,0) {head};
+
+\end{tikzpicture}

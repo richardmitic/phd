@@ -1,0 +1,412 @@
+\documentclass[12pt,aspectratio=169]{beamer}
+\usetheme{Hannover}
+\useinnertheme{rectangles}
+% \setbeameroption{show notes on second screen=right}
+
+\usepackage{csquotes}
+\usepackage{fancybox}
+\usepackage{enumitem}
+\usepackage{adjustbox}
+\usepackage{tikz}
+\usepackage{sankey}
+\usetikzlibrary{calc}
+\usetikzlibrary{shadows}
+
+% MDU styling
+\usepackage{fontspec}
+\usefonttheme{serif}
+\setromanfont{Ducta MDH}
+% \setbeamerfont{normal text}{family=\fontfamily{Ducta MDH}}
+\usecolortheme{mdu}
+\makeatletter
+\addtobeamertemplate{sidebar left}{}{
+  \vfill
+  \makebox[\beamer@sidebarwidth][c]{\includegraphics[width=0.618\beamer@sidebarwidth]{mdu.pdf}}
+  \vspace{4pt}
+}
+\makeatother
+
+%% Smaller shadows
+\setlength{\shadowsize}{2pt}
+
+%% Make footnotes sensible
+\renewcommand{\footnotesize}{\tiny}
+
+%% Socrates overaly
+\newcommand{\socrates}{%
+\begin{tikzpicture}[remember picture, overlay]
+  \node[anchor=north east, inner sep=0pt] (pic) at ($(current page.north east) - (0.26,1.26)$) {
+      \includegraphics[width=1.618cm]{socrates.jpeg}
+  };
+  \end{tikzpicture}%
+}
+
+%% \hfill for frame titles
+\newcommand{\ftfill}{\hspace{0pt plus 1 filll}}
+
+%% Make quotes easier
+\let\q\enquote
+
+%% References
+\usepackage[
+    bibstyle=ieee,
+    citestyle=authoryear,
+    backend=biber,
+    maxcitenames=2,
+]{biblatex}
+\addbibresource{../library_biblatex.bib}
+
+% Title page information
+\title{Analysis of stereo image in\\vast repositories of recorded music}
+\author{Richard Mitic}
+\date{2026-10-31}
+\institute{Mälardalen University}
+\logo{\includegraphics[height=1cm]{mdu.pdf}}
+\titlegraphic{\hfill\includegraphics[height=1cm]{mdu.pdf}}
+
+%% Pull tikz styles from kappa
+\input{../kappa/figures/tikzset.tex}
+
+\begin{document}
+
+% Title slide
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Table of contents
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents[subsectionstyle=hide]
+\end{frame}
+
+% Introduction slide
+\section{Background}
+\begin{frame}
+  \begin{columns}
+    \column{0.45\textwidth}
+    \tableofcontents[sections=1]
+
+    \column{0.45\textwidth}
+    \centering
+    \includegraphics[height=0.618\textheight]{socrates.jpeg}
+  \end{columns}
+\end{frame}
+
+
+\subsection{Title breakdown}
+
+\begin{frame}
+  \frametitle{What is... \ftfill{} {\tiny Analysis of} stereo image {\tiny in vast repositories of recorded music} ?}
+  \socrates
+
+  \only<1> {
+    \begin{figure}[h]
+      \centering
+      \input{../kappa/figures/example_stereo_image.tex}
+      \label{fig:stereo_image}
+    \end{figure}
+    \note{Refer to the thesis for logical explanation of how a stereo image is created}
+  }
+
+  \only<2> {
+    \begin{columns}[b]
+      \tiny
+      \column{0.45\textwidth}
+        \blockcquote[{Dave Pensado, Mixing Engineer, quoted in}][]{owsinskiMixingEngineersHandbook2006}{I think that there are three sacred territories in a mix that if you put something there, you've got to have an incredibly good reason. That's extreme left, center, and extreme right. I've noticed that some mixers will get stereo tracks from synthesizers and effects, and they just instinctively pan them hard left and hard right. What they end up with is these big train wrecks out on the ends of the stereo spectrum. Then they pan their kick, snare, bass, and vocals center, and you've got all this stuff stacked on top of each other. If it were a visual, you wouldn't be able to see the things behind the things in front. So what I do is take a stereo synthesizer track, and I'll just toss one side because I don't need it. I'll create my own stereo by either adding a delay or a chorus or a predelayed reverb or something like that to give it a stereo image. I'll pan maybe the dry signal to 10:00, and then I'll pan the effects just inside the extreme left side. I would never put it hard left, because then there's too many things on top of it. I would pan it at 9:00 and then pan the dry signal to say 10:30, something like that.}
+        \vfill
+      \column{0.45\textwidth}
+        \blockcquote[{Steve Albini, Recording Engineer, quoted in}][]{owsinskiRecordingEngineersHandbook2009}{I've had really good luck with the Neumann SM 2 stereo mic over the piano. AKG C 12s and C 24s sound great, too. Those Audio-Technica 4051s are great piano mics. I'll usually place them perpendicular to the harp, one on the long strings and one on the short strings. You have to shuffle them in and out until the stereo image sounds normal. The SM 2 I'll put in front of the piano with the lid open, sort of looking in on the strings. Same with the C 24.}
+        \vfill
+    \end{columns}
+  }
+  \note{Don't spend too much effort reading these quotes, but they are from music profesionals at the top of their game, and their explanation of how they create stereo field is essentially "I dunno, I just do what sounds good".}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{What is... \ftfill{} {\tiny Analysis of stereo image in vast repositories of} recorded music ?}
+  \socrates
+  \begin{block}{recorded...}
+    \begin{itemize}
+      \item Digital audio recordings
+      \item Available for analysis
+    \end{itemize}
+  \end{block}
+  \begin{block}{...music}
+    \begin{itemize}
+      \item No-one can agree \parencite{cobussenDeconstructionMusic2002}
+      \item Ask the creator
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{What is... \ftfill{} {\tiny Analysis of stereo image in} vast {\tiny repositories of recorded music} ?}
+  \socrates
+  \centering
+  \begin{tikzpicture}
+    \node [thick, draw=black, inner sep=0pt, copy shadow={draw=gray, fill=gray, shadow xshift=0.5em, shadow yshift=-0.5em}] { \includegraphics[width=0.618\linewidth]{what_is_vast.png} };
+  \end{tikzpicture}
+
+  \vspace{3mm}
+  \parencite{miticSystematicLiteratureReview2026}
+\end{frame}
+
+\subsection{How recordings happen}
+\begin{frame}
+  \frametitle{Recording Studios}
+  \centering
+  \only<1>{\includegraphics[width=\linewidth]{recording_photos/gandr-collage_1.jpg}}
+  \only<2>{\includegraphics[width=\linewidth]{recording_photos/gandr-collage_2.jpg}}
+  \only<3>{\includegraphics[width=\linewidth]{recording_photos/gandr-collage_3.jpg}}
+  \only<4>{
+    \includegraphics[height=0.67\textheight]{recording_photos/pexels-cottonbro-5657670.jpg}
+    \includegraphics[height=0.67\textheight]{recording_photos/pexels-cottonbro-5657676.jpg}
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{Digital Audio Workstation}
+  \centering
+  \def\pluginwidth{3.2cm}
+  \begin{tikzpicture}
+    \node[anchor=north west] (daw) at (0,0) {\includegraphics[height=0.8\textheight]{odetozb.png}};
+    \node[anchor=north west] (eq) at (daw.north east) {\includegraphics[width=\pluginwidth]{eq.png}};
+    \node[anchor=west] (eq) at ($(daw.east) + (0,0.35)$) {\includegraphics[width=\pluginwidth]{compressor.png}};
+    \node[anchor=south west] (eq) at (daw.south east) {\includegraphics[width=\pluginwidth]{goniometer.png}};
+  \end{tikzpicture}
+  \footnote{\url{https://www.cockos.com/reaper/samples/ode_to_zb.zip}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Distribution}
+  \begin{itemize}
+    \item Producer renders a mixdown
+    \item Mixdown is sent to distributor(s)
+    \item Distributor(s) make(s) several (probably lossy) encodings
+    \item Encodings are played by a listener
+    \begin{itemize}
+      \item \alert{$\uparrow$ This is the recording available for analysis}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\section{Research}
+
+\begin{frame}
+  \tableofcontents[sections=2]
+\end{frame}
+
+\subsection{Motivation}
+\begin{frame}
+  \frametitle{Motivation}
+  \begin{itemize}
+    \item The amount of available recorded music has skyrocketed
+    \item Every track represents a combination of artistic choices
+    \item It's an opportunity to learn about human creativity
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Datasets}
+  \begin{itemize}
+    \item Public
+    \begin{itemize}
+      \item Free Music Archive - \cite{defferrardFMADatasetMusic2017}
+      \item MTG Jamendo - \cite{bogdanovMTGJamendoDatasetAutomatic2019}
+    \end{itemize}
+    \item Private
+    \begin{itemize}
+      \item Personal collections 
+      \begin{itemize}
+        \item \cite{tzanetakisStereoPanningFeatures2007}
+        \item \cite{tardieuProductionEffectAudio2011}
+        \item \cite{yangUpmixingStyleTransfer2022}
+        \item \cite{ziemerProducerVsRapper2025}
+      \end{itemize}
+      \item Company licensed
+      \begin{itemize}
+        \item \cite{bourbonInvestigationImmersiveContemporary2023}
+        \item \cite{mourgelaExploringTrendsAudio2024}
+      \end{itemize}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\subsection{Research questions}
+\begin{frame}
+  \frametitle{Research Questions}
+  \begin{block}{Overarching}
+    How do music producers use stereo field?
+  \end{block}
+
+  \begin{block}{Sub questions}
+      \begin{enumerate}
+        \item[$RQ_1$:] How does the stereo image of a recording relate to real-world musical knowledge? \label{rq:usecase}
+        \item[$RQ_2$:] What methods can be used to describe the stereo image of a music recording? \label{rq:methods}
+      \end{enumerate}
+      
+  \end{block}
+
+\end{frame}
+
+\subsection{Methodology}
+
+\begin{frame}
+  \frametitle{A dual methodology}
+  Two work-streams with different epistemologies were required to reach any kind of conclusion.
+  
+  \begin{columns}
+
+  \column{0.45\textwidth}
+    \begin{minipage}[t][\textheight][t]{\linewidth}
+      \begin{block}{Constructive ($RQ_1$)}
+        \begin{itemize}
+          \item Immersion in \\ musical practice
+          \item Stereo field perception
+        \end{itemize}
+      \end{block}
+    \end{minipage}
+  
+  \column{0.45\textwidth}
+    \begin{minipage}[t][\textheight][t]{\linewidth}
+      \begin{block}{Objective ($RQ_2$)}
+        \begin{itemize}
+          \item Construct a system for\\measurement of stereo field
+          \item Understand what the\\system measures
+        \end{itemize}
+      \end{block}
+    \end{minipage}
+  \end{columns}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{The Auxtrument}
+  \begin{figure}
+    \centering
+    \includegraphics[height=0.55\textheight, keepaspectratio]{auxtrument_app.png} \quad
+    \includegraphics[height=0.55\textheight, keepaspectratio]{auxtrument_locations.png}
+    \\\parencite{franklinComposingNetworkedReverberation2025}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Literature review}
+  \centering
+  \begin{tikzpicture}[font=\tiny]
+    \input{sankey_tikz.tex}
+  \end{tikzpicture}
+  % \includegraphics[height=0.7\textheight]{prisma.png}
+  % \\\parencite{miticSystematicLiteratureReview2026}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Stereo field perception}
+  \centering
+  \includegraphics[height=0.7\textheight]{../bth_perceptual_test_panned_speech/screenshot_cropped.png}
+  \\\parencite{miticPerceptualEvaluationBinaurally2026}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Objective analysis of stereo field}
+  \centering
+  \def\plotheight{7cm}
+  \def\plotheightthin{3cm}
+  \begin{tikzpicture}[inner sep=0pt]
+    \node[anchor=north west] (code) at (0,0) {
+      \includegraphics[height=\plotheight, keepaspectratio]{code.png}\footnote{\url{https://github.com/richardmitic/phd}}
+    };
+    \node[anchor=north east, outer sep=0.3cm] (spf) at (12,0) { 
+      \includegraphics[height=\plotheightthin, keepaspectratio]{spf.pdf}
+    };
+    \node[anchor=south east, outer sep=0.3cm] (ph) at (code.south -| spf.east) { 
+      \includegraphics[height=\plotheightthin, keepaspectratio]{panning_histograms.pdf}
+    };
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+  \frametitle{What is... Analysis {\tiny of stereo image in vast repositories of recorded music} ?}
+  % \socrates
+  \begin{figure}
+  \centering
+  \includegraphics[height=0.8\textheight]{socrates_headphones.jpg}
+  \end{figure}
+\end{frame}
+
+
+\section{Papers}
+\begin{frame}
+  \tableofcontents[sections=3]
+\end{frame}
+
+\begin{frame}
+  \frametitle{I - \citetitle{franklinDevelopmentWebBasedRealTime2025}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{II - \citetitle{miticSystematicLiteratureReview2026}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{III - \citetitle{miticObjectiveComparisonPanning2025}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{IV - \citetitle{miticPerceptualEvaluationBinaurally2026}}
+\end{frame}
+
+% Discussion slide
+\section{Discussion}
+\begin{frame}
+  \frametitle{Discussion}
+  \begin{itemize}
+    \item Interpretation of results
+    \item Comparison with existing work
+    \item Limitations
+    \item Implications
+  \end{itemize}
+\end{frame}
+
+% Conclusion slide
+\section{Conclusion}
+\begin{frame}
+  \frametitle{Conclusion}
+  \begin{itemize}
+    \item Summary of findings
+    \item Contributions
+    \item Future work
+    \item Final remarks
+  \end{itemize}
+\end{frame}
+
+% References slide
+\section{References}
+\begin{frame}[allowframebreaks]
+  \frametitle{References}
+  \AtNextBibliography{\tiny} 
+  \printbibliography
+  
+  % \begin{thebibliography}{9}
+  %   \bibitem{ref1}
+  %     Author A.~B. and Author C.~D. (Year). Title of the paper. \emph{Journal Name}, Volume(Issue), pages.
+    
+  %   \bibitem{ref2}
+  %     Author E.~F. (Year). Another paper title. \emph{Another Journal}, Volume, pages.
+  % \end{thebibliography}
+\end{frame}
+
+% Questions slide
+\begin{frame}
+  \frametitle{Questions?}
+  \begin{center}
+    \Huge{\color{blue} Thank you for your attention!}
+  \end{center}
+\end{frame}
+
+\end{document}
