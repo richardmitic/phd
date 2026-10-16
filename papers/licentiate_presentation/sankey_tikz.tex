@@ -28,7 +28,7 @@
 
     \sankeyset{records}
     \sankeynodestart{name=p0,at={0,0},angle=0,quantity=4678}
-    \path (p0.right) ++(0,-7mm) coordinate (c);
+    \path (p0.right) ++(0,-30pt) coordinate (c);
 
     \newcommand\turnandstop[2]{ % valname, label
         \begingroup
@@ -43,8 +43,8 @@
         \endgroup
     }
 
-    \node[left,align=center] at (p0) {Database records\\(4678)};
-    \sankeyadvance{p0}{10pt};
+    \node[left,align=center] at (p0) {Database\\records\\(4678)};
+    \sankeyadvance{p0}{20pt};
     
     \sankeyfork{p0}{3130/p1,1548/p2}
     \sankeyadvance{p1}{60pt}
@@ -56,7 +56,7 @@
 
     \sankeyfork{p4}{715/p6,48/p7}
     \sankeyadvance{p6}{30pt}
-    \turnandstop{p7}{Not found}
+    \turnandstop{p7}{Not retrieved}
 
     \sankeyfork{p6}{178/p8,537/p9}
     \turnandstop{p9}{Rejected}
@@ -65,14 +65,14 @@
     \sankeyfork{p8}{149/p10,29/p11};
     \sankeynode{
         name=veryrelevant,
-        at={[shift={(25pt,-10pt)}]p10},
+        at={[shift={(30pt,-10pt)}]p10},
         quantity=29
     };
     \node[below, align=center] at (veryrelevant) {Very relevant\\(29)};
 
     \sankeynode{
         name=included,
-        at={[xshift=50pt,yshift=-0.5pt]p10},
+        at={[xshift=60pt,yshift=-0.5pt]p10},
         quantity=202, 
         forked={24/p20,149/p21,29/p22}
     };
