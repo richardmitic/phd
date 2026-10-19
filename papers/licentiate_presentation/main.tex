@@ -3,14 +3,17 @@
 \useinnertheme{rectangles}
 % \setbeameroption{show notes on second screen=right}
 
+\usepackage[utf8]{inputenc}
 \usepackage{csquotes}
 \usepackage{fancybox}
 \usepackage{enumitem}
 \usepackage{adjustbox}
 \usepackage{tikz}
 \usepackage{sankey}
+\usepackage{ifthen}
 \usetikzlibrary{calc}
 \usetikzlibrary{shadows}
+\usetikzlibrary{arrows.meta}
 
 % MDU styling
 \usepackage{fontspec}
@@ -259,33 +262,54 @@
 \begin{frame}
   \frametitle{A dual methodology}
   Two work-streams with different epistemologies were required to reach any kind of conclusion.
-  
-  \begin{columns}
 
-  \column{0.45\textwidth}
-    \begin{minipage}[t][\textheight][t]{\linewidth}
-      \begin{block}{Constructive ($RQ_1$)}
-        \begin{itemize}
-          \item Immersion in \\ musical practice
-          \item Stereo field perception
-        \end{itemize}
-      \end{block}
-    \end{minipage}
-  
-  \column{0.45\textwidth}
-    \begin{minipage}[t][\textheight][t]{\linewidth}
-      \begin{block}{Objective ($RQ_2$)}
-        \begin{itemize}
-          \item Construct a system for\\measurement of stereo field
-          \item Understand what the\\system measures
-        \end{itemize}
-      \end{block}
-    \end{minipage}
-  \end{columns}
+  \begin{block}{Constructive ($RQ_1$)}
+    \begin{itemize}
+      \item Immersion in musical practice
+      \item Stereo field perception
+      \item Understand what can be measured
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Objective ($RQ_2$)}
+    \begin{itemize}
+      \item Systematic Literature Review
+      \item Software for measurement of stereo field
+    \end{itemize}
+  \end{block}
 
 \end{frame}
 
 \begin{frame}
+  \frametitle{A dual methodology (in reality)}
+  \centering
+  \begin{tikzpicture}[
+    arrow/.style={
+      Stealth-Stealth,
+      thick,
+      draw=black,
+    },
+    % every node/.style={}
+  ]
+    \def\r{3};
+    % Peripheral Nodes arranged in a circle around the center
+    \node (prac)    at (90:\r)   {Practice};
+    \node (perc)    at (162:\r)  {Perception};
+    \node (und) at (234:\r)  {Understanding};
+    \node (slr)  at (306:\r)  {SLR};
+    \node (sw) at (18:\r)   {Software};
+
+    \foreach \a/\ang in {prac/90, perc/180, und/270, slr/270, sw/0} {
+      \foreach \b in {prac, perc, und, slr, sw} {
+        \ifthenelse{\NOT\equal{\a}{\b}}{\draw[arrow] (\a) -- (\b);}{}
+      }
+      \draw[arrow] (\a) edge [in=\ang-30, out=\ang+30, loop, looseness=5] (\a);
+    }
+  \end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]
   \frametitle{The Auxtrument}
   \begin{figure}
     \centering
@@ -293,10 +317,19 @@
     \includegraphics[height=0.55\textheight, keepaspectratio]{auxtrument_locations.png}
     \\\parencite{franklinComposingNetworkedReverberation2025}
   \end{figure}
+
+  \begin{figure}
+    \centering
+    \begin{tikzpicture}
+      \node[anchor=north west] (pic1) at (0,0) {\includegraphics[width=6.5cm, keepaspectratio]{img/IMG_0994.jpg}};
+      \node[anchor=north west] (pic2) at (6.5,0) {\includegraphics[width=6.5cm, keepaspectratio]{img/IMG_1004.jpg}};
+    \end{tikzpicture}
+    \caption{Auxtrument concert, Nov. 14 2025, Västerås}
+  \end{figure}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Literature review}
+  \frametitle{Literature review(s)}
   \centering
   \begin{tikzpicture}[font=\tiny]
     \input{sankey_tikz.tex}
