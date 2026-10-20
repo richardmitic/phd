@@ -1,4 +1,5 @@
 import numpy as np
+from numpy.typing import NDArray
 import matplotlib.pyplot as plt
 import librosa
 from matplotlib.path import Path
@@ -35,11 +36,16 @@ def display_spf(
     ax.set_xlabel("Frequency band")
 
 
+def _quartiles(arr: NDArray[np.floating]) -> NDArray[np.floating]:
+    return np.interp([0.25, 0.75], np.cumsum(arr), np.linspace(0, len(arr), len(arr)))
+
 def draw_panning_histogram(
     hist: PanningHistogram,
     ax: plt.Axes,
     title: str,
     ylim: Tuple[float, float],
+    grid: bool = False,
+    quartiles: bool = False,
     **plot_kwargs: Dict[Any, Any], 
 ):
     ax.plot(hist, **plot_kwargs)
@@ -48,8 +54,15 @@ def draw_panning_histogram(
     ax.set_ylim(ylim)
     l = 0
     r = hist.shape[0] - 1
-    c = r / 2
+    c = int(hist.shape[0] / 2)
     ax.set_xticks([l,c,r], labels=['L', 'C', 'R'])
+    ax.set_xticks(np.linspace(0, len(hist) - 1, 7), minor=True)
+    if grid:
+        ax.grid(axis='x', which='major', linewidth=0.618, linestyle='dashed')
+        ax.grid(axis='x', which='minor', linewidth=0.618/2, linestyle='dotted')
+    if quartiles:
+        col = plot_kwargs.get('color', 'red')
+        ax.vlines(_quartiles(hist), *ylim, color=col, linestyles='solid', linewidth=0.618)
     ax.set_xlabel("Azimuth")
     ax.set_ylabel("Normalized histogram value")
     ax.legend(loc='upper left')

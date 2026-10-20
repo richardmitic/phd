@@ -8,12 +8,41 @@
 \usepackage{fancybox}
 \usepackage{enumitem}
 \usepackage{adjustbox}
+\usepackage{media9}
 \usepackage{tikz}
 \usepackage{sankey}
 \usepackage{ifthen}
 \usetikzlibrary{calc}
 \usetikzlibrary{shadows}
 \usetikzlibrary{arrows.meta}
+\usetikzlibrary{fadings}
+
+\newcommand{\fadedimage}[2]{
+  \begin{tikzpicture}
+    % This path isn't drawn. It just forces 
+    % the diagram to cover the entire width of the page.
+    \path (-0.5\linewidth,0) -- (0.5\linewidth, 0);
+
+    \node[fill=white] (img) at (0, 0) {
+      \includegraphics[
+        width=0.5\textwidth, 
+        page=1,
+        trim={0cm #1 0cm 0cm}, % left, bottom, right, top
+        clip,
+      ]{#2}};
+
+    \path (img.north west) -- (img.south west) coordinate[pos=0.618] (fadeStart);
+
+    \fill[MDUbeige, path fading=north] (fadeStart) rectangle (img.south east);
+  \end{tikzpicture} 
+}
+
+\newcommand{\paperslide}[4]{
+  \frametitle{#1}%
+  \fullcite{#2}%
+  \vspace{1em}%
+  \fadedimage{#3}{#4}%
+}
 
 % MDU styling
 \usepackage{fontspec}
@@ -28,6 +57,19 @@
   \vspace{4pt}
 }
 \makeatother
+\definecolor{MDUsuccess}{HTML}{327951}
+\definecolor{MDUwarning}{HTML}{ffbf12}
+\definecolor{MDUbeige}{HTML}{fcf4eb}
+\definecolor{MDUgreen}{HTML}{00352d}
+\definecolor{MDUorange}{HTML}{ff4800}
+
+%% Write slider number in nav bar
+\addtobeamertemplate{navigation symbols}{}{%
+  \usebeamerfont{footline}%
+  \usebeamercolor[fg]{footline}%
+  \hspace{0.618em}%
+  \raisebox{0.25em}{\insertframenumber/\inserttotalframenumber}
+}
 
 %% Smaller shadows
 \setlength{\shadowsize}{2pt}
@@ -329,24 +371,23 @@
 \end{frame}
 
 \begin{frame}
+  \paperslide{Paper I}{franklinDevelopmentWebBasedRealTime2025}{16cm}{../kappa/external_pages/JAES_V73_12_PG872hirez_Franklin.pdf}
+\end{frame}
+
+\begin{frame}
   \frametitle{Literature review(s)}
   \centering
   \begin{tikzpicture}[font=\tiny]
     \input{sankey_tikz.tex}
   \end{tikzpicture}
-  % \includegraphics[height=0.7\textheight]{prisma.png}
-  % \\\parencite{miticSystematicLiteratureReview2026}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Stereo field perception}
-  \centering
-  \includegraphics[height=0.7\textheight]{../bth_perceptual_test_panned_speech/screenshot_cropped.png}
-  \\\parencite{miticPerceptualEvaluationBinaurally2026}
+  \paperslide{Paper II}{miticSystematicLiteratureReview2026}{16cm}{../kappa/external_pages/s13636-026-00463-4.pdf}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Objective analysis of stereo field}
+  \frametitle{Software(s)}
   \centering
   \def\plotheight{7cm}
   \def\plotheightthin{3cm}
@@ -364,6 +405,47 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{Panning histograms}
+  \centering
+  \begin{tikzpicture}[every node/.style={scale=0.9}]
+    \node {\includegraphics[angle=0]{generated/Birds of a Feather (Billie Eilish) - SATB a cappella, arr. Emily Drum & Maryanne Muglia [C4I-xWRWH5w].pdf}};
+    \pause
+    \node {\includegraphics[angle=5]{generated/Freddie Mercury - The Great Pretender (Official Video Remastered) [mLRjFWDGs1g].pdf}};
+    \pause
+    \node {\includegraphics[angle=-2]{generated/Half Day Closing [X77qC-9YrpQ].pdf}};
+    \pause
+    \node {\includegraphics[angle=4]{generated/I Am the Very Model of a Modern Major-General [zSGWoXDFM64].pdf}};
+    \pause
+    \node {\includegraphics[angle=1]{generated/Manifesto (Live) [G-nyLkzu4Hk].pdf}};
+    \pause
+    \node {\includegraphics[angle=-3]{generated/Muse - Micro Cuts [HD] [y31WAq4cENo].pdf}};
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+  \paperslide{Paper III}{miticObjectiveComparisonPanning2025}{19cm}{../kappa/external_pages/Mitic and Rossholm - 2025 - Towards an objective comparison of panning feature algorithms for unsupervised learning.pdf}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Stereo field perception}
+  \centering
+  \includegraphics[height=0.7\textheight]{../bth_perceptual_test_panned_speech/screenshot_cropped.png}
+  \\\parencite{miticPerceptualEvaluationBinaurally2026}
+\end{frame}
+
+
+\begin{frame}
+  \paperslide{Paper IV}{miticPerceptualEvaluationBinaurally2026}{16cm}{../kappa/external_pages/Percept_Eval_Binaurally_Panned_Speech_Music_Mixtures.pdf}
+\end{frame}
+
+
+\section{Discussion}
+
+\begin{frame}
+  \tableofcontents[sections=3]
+\end{frame}
+
+\begin{frame}
   \frametitle{What is... Analysis {\tiny of stereo image in vast repositories of recorded music} ?}
   % \socrates
   \begin{figure}
@@ -372,30 +454,6 @@
   \end{figure}
 \end{frame}
 
-
-\section{Papers}
-\begin{frame}
-  \tableofcontents[sections=3]
-\end{frame}
-
-\begin{frame}
-  \frametitle{I - \citetitle{franklinDevelopmentWebBasedRealTime2025}}
-\end{frame}
-
-\begin{frame}
-  \frametitle{II - \citetitle{miticSystematicLiteratureReview2026}}
-\end{frame}
-
-\begin{frame}
-  \frametitle{III - \citetitle{miticObjectiveComparisonPanning2025}}
-\end{frame}
-
-\begin{frame}
-  \frametitle{IV - \citetitle{miticPerceptualEvaluationBinaurally2026}}
-\end{frame}
-
-% Discussion slide
-\section{Discussion}
 \begin{frame}
   \frametitle{Discussion}
   \begin{itemize}
@@ -424,14 +482,6 @@
   \frametitle{References}
   \AtNextBibliography{\tiny} 
   \printbibliography
-  
-  % \begin{thebibliography}{9}
-  %   \bibitem{ref1}
-  %     Author A.~B. and Author C.~D. (Year). Title of the paper. \emph{Journal Name}, Volume(Issue), pages.
-    
-  %   \bibitem{ref2}
-  %     Author E.~F. (Year). Another paper title. \emph{Another Journal}, Volume, pages.
-  % \end{thebibliography}
 \end{frame}
 
 % Questions slide

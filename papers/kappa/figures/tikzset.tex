@@ -1,0 +1,21 @@
+\tikzset{
+    speaker/.pic={
+        \draw[black, rotate=-90, transform shape] (-3,0) -- (3,0) -- (2,2) -- (-2,2) -- cycle (-2,2) -- (-2,4) -- (2,4) -- (2,2);
+    },
+    head/.pic={
+        \filldraw[color=black, fill=white] (0,0) circle[radius=1];
+        \filldraw[color=black, fill=white] (1.1,0) ellipse (0.1 and 0.2);
+        \filldraw[color=black, fill=white] (-1.1,0) ellipse (0.1 and 0.2);
+    },
+    mic/.pic={
+        \filldraw[color=black, fill=white] (0,0) circle[radius=1];
+        \draw[color=black, thick] (-1,1) -- (1, 1);
+        \draw[color=black] (250:1) -- (250:1 |- 0,-1.618);
+        \draw[color=black] (290:1) -- (290:1 |- 0,-1.618);
+    },
+    flow_input/.style={rounded rectangle, draw=black, minimum height=1cm, minimum width=3cm},
+    flow_process/.style={rectangle, draw=black, minimum height=1cm, minimum width=3cm, align=center},
+    flow_output/.style={rectangle, rounded corners, draw=black, minimum height=1cm, minimum width=3cm, align=center},
+    arrow/.style={->, >=Latex},
+    section_label/.style={rectangle, rounded corners, draw=darkgray, fill=lightgray, rotate=90, minimum height=0.618cm, minimum width=4cm},
+}
