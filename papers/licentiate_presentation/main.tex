@@ -13,6 +13,7 @@
 \usepackage{tikz}
 \usepackage{sankey}
 \usepackage{ifthen}
+\usepackage{etoolbox}
 \usetikzlibrary{calc}
 \usetikzlibrary{shadows}
 \usetikzlibrary{arrows.meta}
@@ -99,6 +100,13 @@
 %% \hfill for frame titles
 \newcommand{\ftfill}{\hspace{0pt plus 1 filll}}
 
+%% Highlighting that can be revealed
+\newcommand<>{\revealedhl}[1]{\alt#2{\hl{#1}}{#1}}
+
+%% Block quote in brackets
+\renewcommand{\mkccitation}[1]{ (\textit{#1})}
+
+
 %% Make quotes easier
 \let\q\enquote
 
@@ -164,27 +172,16 @@
     \note{Refer to the thesis for logical explanation of how a stereo image is created}
   }
 
-  \only<2> {
-    \begin{columns}[b]
-      \tiny
-      \column{0.45\textwidth}
-        \blockcquote[{Dave Pensado, Mixing Engineer, quoted in}][]{owsinskiMixingEngineersHandbook2006}{I think that there are three sacred territories in a mix that if you put something there, you've got to have an incredibly good reason. That's extreme left, center, and extreme right. I've noticed that some mixers will get stereo tracks from synthesizers and effects, and they just instinctively pan them hard left and hard right. What they end up with is these big train wrecks out on the ends of the stereo spectrum. Then they pan their kick, snare, bass, and vocals center, and you've got all this stuff stacked on top of each other. If it were a visual, you wouldn't be able to see the things behind the things in front. So what I do is take a stereo synthesizer track, and I'll just toss one side because I don't need it. I'll create my own stereo by either adding a delay or a chorus or a predelayed reverb or something like that to give it a stereo image. I'll pan maybe the dry signal to 10:00, and then I'll pan the effects just inside the extreme left side. I would never put it hard left, because then there's too many things on top of it. I would pan it at 9:00 and then pan the dry signal to say 10:30, something like that.}
-        \vfill
-      \column{0.45\textwidth}
-        \blockcquote[{Steve Albini, Recording Engineer, quoted in}][]{owsinskiRecordingEngineersHandbook2009}{I've had really good luck with the Neumann SM 2 stereo mic over the piano. AKG C 12s and C 24s sound great, too. Those Audio-Technica 4051s are great piano mics. I'll usually place them perpendicular to the harp, one on the long strings and one on the short strings. You have to shuffle them in and out until the stereo image sounds normal. The SM 2 I'll put in front of the piano with the lid open, sort of looking in on the strings. Same with the C 24.}
-        \vfill
-    \end{columns}
-  }
   \note{Don't spend too much effort reading these quotes, but they are from music profesionals at the top of their game, and their explanation of how they create stereo field is essentially "I dunno, I just do what sounds good".}
 
-  \only<3> {
+  \only<2-3> {
     \begin{columns}[b]
       \tiny
       \column{0.45\textwidth}
-        \blockcquote[{Dave Pensado, Mixing Engineer, quoted in}][]{owsinskiMixingEngineersHandbook2006}{\hl{I think} that there are three sacred territories in a mix that if you put something there, you've got to have an incredibly good reason. That's extreme left, center, and extreme right. \hl{I've noticed} that \hl{some} mixers will get stereo tracks from synthesizers and effects, and they {just instinctively} pan them hard left and hard right. What they end up with is these \hl{big train wrecks} out on the ends of the stereo spectrum. Then they pan their kick, snare, bass, and vocals center, and you've got \hl{all this stuff} stacked on top of each other. If it were a visual, you wouldn't be able to see \hl{the things behind the things} in front. So \hl{what I do} is take a stereo synthesizer track, and \hl{I'll just toss} one side because I don't need it. I'll create my own stereo by either adding a delay or a chorus or a predelayed reverb or \hl{something like that} to give it a stereo image. I'll pan \hl{maybe} the dry signal to 10:00, and then I'll pan the effects just inside the extreme left side. \hl{I would never} put it hard left, because then \hl{there's too many things} on top of it. I would pan it at 9:00 and then pan the dry signal to \hl{say} 10:30, \hl{something like that}.}
+        \blockcquote[{Dave Pensado, Mixing Engineer, quoted in}][]{owsinskiMixingEngineersHandbook2006}{\revealedhl<3>{I think} that there are three sacred territories in a mix that if you put something there, you've got to have an incredibly good reason. That's extreme left, center, and extreme right. \revealedhl<3>{I've noticed} that \revealedhl<3>{some} mixers will get stereo tracks from synthesizers and effects, and they {just instinctively} pan them hard left and hard right. What they end up with is these \revealedhl<3>{big train wrecks} out on the ends of the stereo spectrum. Then they pan their kick, snare, bass, and vocals center, and you've got \revealedhl<3>{all this stuff} stacked on top of each other. If it were a visual, you wouldn't be able to see \revealedhl<3>{the things behind the things} in front. So \revealedhl<3>{what I do} is take a stereo synthesizer track, and \revealedhl<3>{I'll just toss} one side because I don't need it. I'll create my own stereo by either adding a delay or a chorus or a predelayed reverb or \revealedhl<3>{something like that} to give it a stereo image. I'll pan \revealedhl<3>{maybe} the dry signal to 10:00, and then I'll pan the effects just inside the extreme left side. \revealedhl<3>{I would never} put it hard left, because then \revealedhl<3>{there's too many things} on top of it. I would pan it at 9:00 and then pan the dry signal to \revealedhl<3>{say} 10:30, \revealedhl<3>{something like that}.}
         \vfill
       \column{0.45\textwidth}
-        \blockcquote[{Steve Albini, Recording Engineer, quoted in}][]{owsinskiRecordingEngineersHandbook2009}{\hl{I've had really good luck} with the Neumann SM 2 stereo mic over the piano. AKG C 12s and C 24s \hl{sound great}, too. Those Audio-Technica 4051s are great piano mics. I'll \hl{usually} place them perpendicular to the harp, one on the long strings and one on the short strings. \hl{You have to shuffle them in and out until the stereo image sounds normal}. The SM 2 \hl{I'll put in front} of the piano with the lid open, \hl{sort of} looking in on the strings. \hl{Same with the} C 24.}
+        \blockcquote[{Steve Albini, Recording Engineer, quoted in}][]{owsinskiRecordingEngineersHandbook2009}{\revealedhl<3>{I've had really good luck} with the Neumann SM 2 stereo mic over the piano. AKG C 12s and C 24s \revealedhl<3>{sound great}, too. Those Audio-Technica 4051s are great piano mics. I'll \revealedhl<3>{usually} place them perpendicular to the harp, one on the long strings and one on the short strings. \revealedhl<3>{You have to shuffle them in and out until the stereo image sounds normal}. The SM 2 \revealedhl<3>{I'll put in front} of the piano with the lid open, \revealedhl<3>{sort of} looking in on the strings. Same with the C 24.}
         \vfill
     \end{columns}
   }
