@@ -9,6 +9,7 @@
 \usepackage{enumitem}
 \usepackage{adjustbox}
 \usepackage{soul}
+\usepackage{listofitems}
 \usepackage{tikz}
 \usepackage{sankey}
 \usepackage{ifthen}
@@ -16,7 +17,13 @@
 \usetikzlibrary{shadows}
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{fadings}
+\usetikzlibrary{spy}
 
+
+%% Image dir
+\graphicspath{{./img}}
+
+%% Display the first page of a PDF and fade it out to the background colour
 \newcommand{\fadedimage}[2]{
   \begin{tikzpicture}
     % This path isn't drawn. It just forces 
@@ -37,6 +44,7 @@
   \end{tikzpicture} 
 }
 
+%% Standard slide to demo a published paper
 \newcommand{\paperslide}[4]{
   \frametitle{#1}%
   \fullcite{#2}%
@@ -44,7 +52,7 @@
   \fadedimage{#3}{#4}%
 }
 
-% MDU styling
+%% MDU styling
 \usepackage{fontspec}
 \usefonttheme{serif}
 \setromanfont{Ducta MDH}
@@ -217,12 +225,12 @@
 \begin{frame}
   \frametitle{Recording Studios}
   \centering
-  \only<1>{\includegraphics[width=\linewidth]{recording_photos/gandr-collage_1.jpg}}
-  \only<2>{\includegraphics[width=\linewidth]{recording_photos/gandr-collage_2.jpg}}
-  \only<3>{\includegraphics[width=\linewidth]{recording_photos/gandr-collage_3.jpg}}
+  \only<1>{\includegraphics[width=\linewidth]{img/gandr-collage_1.jpg}}
+  \only<2>{\includegraphics[width=\linewidth]{img/gandr-collage_2.jpg}}
+  \only<3>{\includegraphics[width=\linewidth]{img/gandr-collage_3.jpg}}
   \only<4>{
-    \includegraphics[height=0.67\textheight]{recording_photos/pexels-cottonbro-5657670.jpg}
-    \includegraphics[height=0.67\textheight]{recording_photos/pexels-cottonbro-5657676.jpg}
+    \includegraphics[height=0.67\textheight]{img/pexels-cottonbro-5657670.jpg}
+    \includegraphics[height=0.67\textheight]{img/pexels-cottonbro-5657676.jpg}
   }
 \end{frame}
 
@@ -423,22 +431,62 @@
   \frametitle{Panning histograms}
   \centering
   \begin{tikzpicture}[every node/.style={scale=0.9}]
-    \node {\includegraphics[angle=0]{generated/Birds of a Feather (Billie Eilish) - SATB a cappella, arr. Emily Drum & Maryanne Muglia [C4I-xWRWH5w].pdf}};
+    \node {\includegraphics[angle=0]{generated/ph/1603.pdf}};
     \pause
-    \node {\includegraphics[angle=5]{generated/Freddie Mercury - The Great Pretender (Official Video Remastered) [mLRjFWDGs1g].pdf}};
+    \node {\includegraphics[angle=5]{generated/ph/7200.pdf}};
     \pause
-    \node {\includegraphics[angle=-2]{generated/Half Day Closing [X77qC-9YrpQ].pdf}};
+    \node {\includegraphics[angle=-2]{generated/ph/18504.pdf}};
     \pause
-    \node {\includegraphics[angle=4]{generated/I Am the Very Model of a Modern Major-General [zSGWoXDFM64].pdf}};
+    \node {\includegraphics[angle=4]{generated/ph/49403.pdf}};
     \pause
-    \node {\includegraphics[angle=1]{generated/Manifesto (Live) [G-nyLkzu4Hk].pdf}};
+    \node {\includegraphics[angle=1]{generated/ph/245201.pdf}};
     \pause
-    \node {\includegraphics[angle=-3]{generated/Muse - Micro Cuts [HD] [y31WAq4cENo].pdf}};
+    \node {\includegraphics[angle=-3]{generated/ph/111600.pdf}};
   \end{tikzpicture}
 \end{frame}
 
 \begin{frame}
+  \frametitle{Panning histograms}
+  \centering
+  \only<1>{\resizebox{!}{0.9\textheight}{\input{generated/grids/ph_grid_2x2.tex}}}
+  \only<2>{\resizebox{!}{0.8\textheight}{\input{generated/grids/ph_grid_5x5.tex}}}
+  \only<3>{\resizebox{!}{0.8\textheight}{\input{generated/grids/ph_grid_10x10.tex}}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Goniometers}
+  \centering
+  \resizebox{!}{0.8\textheight}{\input{generated/grids/gonio_grid_8x5.tex}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Stereo Panning Features}
+  \centering
+  \resizebox{!}{0.8\textheight}{\input{generated/grids/spf_grid_8x5.tex}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Finding similar stereo fields}
+  \centering
+  \includegraphics[height=0.8\textheight]{example-image-a}
+\end{frame}
+
+\begin{frame}
   \paperslide{Paper III}{miticObjectiveComparisonPanning2025}{19cm}{../kappa/external_pages/Mitic and Rossholm - 2025 - Towards an objective comparison of panning feature algorithms for unsupervised learning.pdf}
+\end{frame}
+
+\begin{frame}
+  \frametitle{DAFx2025 poster}
+  \centering
+  \begin{tikzpicture}[
+    spy using outlines={
+      rectangle,
+      magnification=2.5,
+      size=6cm,
+      connect spies}]
+    \node[inner sep=0pt] (img) {\pgfimage[height=0.8\textheight]{../dafx2025_sip_comparison/poster.pdf}};
+    \spy[MDUorange] on ([xshift=-0.1]img.center) in node at (.5\textwidth,0);
+  \end{tikzpicture}
 \end{frame}
 
 \begin{frame}[allowframebreaks]

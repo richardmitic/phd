@@ -13,6 +13,8 @@ TFRegion = NDArray[np.complex128]  # shape (channels, time, frequency)
 MagnitudeSpectrogram = NDArray[np.float64]  # shape (channels, time, frequency)
 PanningHistogram = NDArray[np.float64]  # shape (azimuth)
 
+GOLDEN_RATIO = 0.618
+
 
 def read_audio(
     file: Path, start: float = 0.0, duration: Optional[float] = None
