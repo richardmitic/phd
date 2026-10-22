@@ -1,3 +1,4 @@
+from nbformat.sign import algorithms
 import matplotlib.pyplot as plt
 import pyfar as pf
 import numpy as np
@@ -44,7 +45,7 @@ def _maybe_print(x: Any):
         print(x)
 
 def _to_dat(X: NDArray[np.float64], Y: NDArray[np.float64]) -> str:
-    return '\n'.join([f"{round(x, 3)} {round(y, 3)}" for x,y in zip(X,Y)])
+    return '\n'.join([f"{np.round(x, 3)} {np.round(y, 3)}" for x,y in zip(X,Y)])
 
 # Main app. Smaller functions can be called as individual comamnds
 app = typer.Typer(result_callback=_maybe_print)
@@ -162,7 +163,7 @@ def make_brir_dats(output_dir: Path = OUTPUT_DIR):
     n = 64
     start = 10
     hrir_R = pf.dsp.time_crop(hrir_R, [start, start+n])
-    X = np.arange(n)
+    X = np.arange(n).astype(float)
 
     (output_dir / "brir_L.dat").write_text(_to_dat(X, hrir_R.time[0]))
     (output_dir / "brir_R.dat").write_text(_to_dat(X, hrir_R.time[1]))
@@ -345,7 +346,7 @@ def draw_equal_power_panning(
     ax.plot(a, gr, color=cr, label="Right channel")
     ax.plot(a, total, "--", color=cc, label="Perceived loudness", linewidth=0.618)
     ax.set_xticks([0, 0.5, 1], labels=["0\n(Left)", "0.5\n(Centre)", "1\n(Right)"])
-    ax.set_yticks([0, centre_gain, 1], labels=[0, "$\\frac{1}{\sqrt{2}}$", 1])
+    ax.set_yticks([0, centre_gain, 1], labels=["0", "$\\frac{1}{\sqrt{2}}$", "1"])
     ax.set_xlabel("Panning factor")
     ax.set_ylabel("Amplitude")
     ax.hlines([centre_gain], 0, 0.5, color="k", linestyles="dotted", linewidth=0.5)
@@ -780,20 +781,24 @@ def draw_demo_tracks_ph(
             ax,
             track.local.letter,
             ylim,
-            color="k",
-            linestyle="--",
-            label="Gomez",
-            linewidth=0.618,
+            plot_kwargs = dict(
+                color="k",
+                linestyle="--",
+                label="Gomez",
+                linewidth=0.618,
+            )
         )
         display.draw_panning_histogram(
             ph_sarroff,
             ax,
             track.local.letter,
             ylim,
-            color="k",
-            linestyle="-",
-            label="Sarroff",
-            linewidth=0.618,
+            plot_kwargs = dict(
+                color="k",
+                linestyle="-",
+                label="Sarroff",
+                linewidth=0.618,
+            ),
         )
 
     for ax in axes[1:3]:
@@ -832,21 +837,7 @@ def draw_demo_tracks_asf(
     for (_idx, track), ax in zip(tracks.iterrows(), axes):
         asf = _make_asf(track.local.filepath)
         freqs = pat.ErbSpace(low_freq=30, high_freq=44100 / 2, n=70)[::-1]
-        ax.errorbar(
-            asf.mean_over_time,
-            freqs,
-            xerr=asf.std_over_time,
-            marker="o",
-            linestyle="none",
-            color="k",
-            linewidth=0.5,
-            markersize=2,
-        )
-        ax.set_yscale("log")
-        ax.set_ylim(20, 30000)
-        ax.set_xlim(-0.11, 0.11)
-        ax.set_xlabel("Panning amount")
-        ax.set_title(track.local.letter)
+        display.display_asf(asf, ax, freqs, 0.11, title=track.local.letter)
     axes[0].set_ylabel("Frequency (Hz)")
     fig.savefig(output_dir / "asf.pdf")
 
@@ -1104,159 +1095,17 @@ def draw_example_goniometer(
 
     filename = get_demo_tracks().iloc[track_idx].local.filepath
 
-    def _colored_line(x, y, c, ax=None, **lc_kwargs):
-        """
-        Plot a line with a color specified along the line by a third value.
-
-        It does this by creating a collection of line segments. Each line segment is
-        made up of two straight lines each connecting the current (x, y) point to the
-        midpoints of the lines connecting the current point with its two neighbors.
-        This creates a smooth line with no gaps between the line segments.
-
-        Parameters
-        ----------
-        x, y : array-like
-            The horizontal and vertical coordinates of the data points.
-        c : array-like
-            The color values, which should be the same size as x and y.
-        ax : matplotlib.axes.Axes, optional
-            The axes to plot on. If not provided, the current axes will be used.
-        **lc_kwargs
-            Any additional arguments to pass to matplotlib.collections.LineCollection
-            constructor. This should not include the array keyword argument because
-            that is set to the color argument. If provided, it will be overridden.
-
-        Returns
-        -------
-        matplotlib.collections.LineCollection
-            The generated line collection representing the colored line.
-        """
-
-        xy = np.stack((x, y), axis=-1)
-        xy_mid = np.concat(
-            (xy[0, :][None, :], (xy[:-1, :] + xy[1:, :]) / 2, xy[-1, :][None, :]),
-            axis=0,
-        )
-        segments = np.stack((xy_mid[:-1, :], xy, xy_mid[1:, :]), axis=-2)
-        # Note that
-        # segments[0, :, :] is [xy[0, :], xy[0, :], (xy[0, :] + xy[1, :]) / 2]
-        # segments[i, :, :] is [(xy[i - 1, :] + xy[i, :]) / 2, xy[i, :],
-        #     (xy[i, :] + xy[i + 1, :]) / 2] if i not in {0, len(x) - 1}
-        # segments[-1, :, :] is [(xy[-2, :] + xy[-1, :]) / 2, xy[-1, :], xy[-1, :]]
-
-        # lc_kwargs["array"] = c
-        lc_kwargs["alpha"] = c
-        lc = LineCollection(segments, **lc_kwargs)
-
-        # Plot the line collection to the axes
-        ax = ax or plt.gca()
-        ax.add_collection(lc)
-
-        return lc
-
-    def _rotate_matrix(x, y, angle, x_shift=0, y_shift=0, units="DEGREES"):
-        """
-        Rotates a point in the xy-plane counterclockwise through an angle about the origin
-        https://en.wikipedia.org/wiki/Rotation_matrix
-        :param x: x coordinate
-        :param y: y coordinate
-        :param x_shift: x-axis shift from origin (0, 0)
-        :param y_shift: y-axis shift from origin (0, 0)
-        :param angle: The rotation angle in degrees
-        :param units: DEGREES (default) or RADIANS
-        :return: Tuple of rotated x and y
-        """
-
-        # Shift to origin (0,0)
-        x = x - x_shift
-        y = y - y_shift
-
-        # Convert degrees to radians
-        if units == "DEGREES":
-            angle = math.radians(angle)
-
-        # Rotation matrix multiplication to get rotated x & y
-        xr = (x * math.cos(angle)) - (y * math.sin(angle)) + x_shift
-        yr = (x * math.sin(angle)) + (y * math.cos(angle)) + y_shift
-
-        return xr, yr
-
     # main figure
     fig, ax = plt.subplots(1, 2, figsize=figsize, layout="constrained")
     audio = pf.dsp.time_crop(
         pf.io.read_audio(filename), [start, start + duration], unit="s"
     )
-    x, y = _rotate_matrix(audio.time[0], audio.time[1], 45)
 
-    # draw circles
-    for r in [0.25, 0.5, 0.75, 1]:
-        M = 100
-        xc = np.cos(np.linspace(0, 2 * np.pi, M)) * r
-        yc = np.sin(np.linspace(0, 2 * np.pi, M)) * r
-        ax[0].plot(xc, yc, color="grey", alpha=1, linewidth=0.5, linestyle="dotted", solid_capstyle='round')
-
-    # Draw left, centre, and right markers
-    line_lx, line_ly = common.polar_to_cartesian(1, [-pi / 4, 3 * pi / 4])
-    line_cx, line_cy = common.polar_to_cartesian(1, [-pi / 2, -3 * pi / 2])
-    line_rx, line_ry = common.polar_to_cartesian(1, [pi / 4, -3 * pi / 4])
-    ax[0].plot(
-        line_lx, line_ly, color="grey", alpha=1, linewidth=0.5, linestyle="dotted", solid_capstyle='round'
-    )
-    ax[0].plot(
-        line_cx, line_cy, color="grey", alpha=1, linewidth=0.5, linestyle="dotted", solid_capstyle='round'
-    )
-    ax[0].plot(
-        line_rx, line_ry, color="grey", alpha=1, linewidth=0.5, linestyle="dotted", solid_capstyle='round'
-    )
-
-    text_rx, text_ry = common.polar_to_cartesian(1.1, pi / 4)
-    text_cx, text_cy = common.polar_to_cartesian(0.9, pi / 2 + 0.1)
-    text_lx, text_ly = common.polar_to_cartesian(1.1, 3 * pi / 4)
-    ax[0].text(
-        text_rx,
-        text_ry,
-        "R",
-        horizontalalignment="center",
-        verticalalignment="center",
-        transform=ax[0].transData,
-        color="dimgrey",
-    )
-    ax[0].text(
-        text_cx,
-        text_cy,
-        "C",
-        horizontalalignment="center",
-        verticalalignment="center",
-        transform=ax[0].transData,
-        color="dimgrey",
-    )
-    ax[0].text(
-        text_lx,
-        text_ly,
-        "L",
-        horizontalalignment="center",
-        verticalalignment="center",
-        transform=ax[0].transData,
-        color="dimgrey",
-    )
-    
-    # draw audio trace
-    c = np.linspace(0, 1, audio.n_samples)
-    _colored_line(
-        x, y, c, 
-        ax=ax[0], 
-        color="k", 
-        linewidth=GOLDEN_RATIO,
-        # path_effects=[path_effects.Stroke(capstyle="round")]
-    )
-
-    # set limits
-    ax[0].set_xlim(-1.05, 1.05)
-    ax[0].set_ylim(-1.05, 1.05)
-
+    display.draw_goniometer(audio, ax[0])
 
     # Box diagram
     N = 10
+    x, y = display.rotate_matrix(audio.time[0], audio.time[1], 45)
     xq = (x * N).astype(int) + N
     yq = (y * N).astype(int) + N
     grid = np.zeros((2 * N, 2 * N))

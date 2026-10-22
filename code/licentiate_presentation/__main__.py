@@ -17,7 +17,7 @@ import typer
 from numpy.typing import NDArray
 
 from cache_to_disk import cache_to_disk
-from typing import List, Tuple, Any
+from typing import List, Tuple, Any, Optional
 
 from algorithms import (
     avendano,
@@ -79,8 +79,10 @@ def draw_phs(
             ylim,
             grid=True,
             quartiles=True,
-            color="#FFC20A",  # type: ignore
-            label="Gomez",  # type: ignore
+            plot_kwargs=dict(
+                color="#FFC20A",
+                label="Gomez",
+            ),
         )
         display.draw_panning_histogram(
             ph_sarroff,
@@ -88,8 +90,10 @@ def draw_phs(
             "",
             ylim,
             quartiles=True,
-            color="#0C7BDC",  # type: ignore
-            label="Sarroff",  # type: ignore
+            plot_kwargs=dict(
+                color="#0C7BDC",
+                label="Sarroff",
+            )
         )
 
         fig.savefig(output_dir / f"{file.stem}.pdf")
@@ -126,6 +130,49 @@ def draw_spfs(
         display.display_spf(spf, "", ax, ylim={"bottom": -0.1, "top": 5})
         fig.savefig(output_dir / f"{file.stem}.pdf")
         plt.close()
+
+@app.command()
+def draw_asfs(
+    input_files: List[Path],
+    xy_range: Tuple[int, int] = (5,3),
+    figsize: Tuple[float, float] = (12.8, 7.2),
+    output_path: Optional[Path] = None,
+):
+    from python_auditory_toolbox import auditory_toolbox as pat
+    from cache_to_disk import cache_to_disk
+    
+    ncols, nrows = xy_range
+    fig, axes = plt.subplots(
+        nrows, ncols, 
+        sharex=True, 
+        sharey=True, 
+        layout='constrained',
+        figsize = figsize,
+    )
+
+    # calculating ASF is really slow so cache the results
+    @cache_to_disk()
+    def _get_asf(file: Path):
+        audio = common.read_audio(file, start=30, duration=30)
+        coch = tardieu.cochleagram(audio, 0.2, 0.1, 70)
+        return tardieu.amplitude_stereo_features(coch) 
+
+    for file, ax, in zip(input_files, axes.flat):
+        print(file)
+        asf = _get_asf(file)
+        freqs = pat.ErbSpace(low_freq=30, high_freq=44100/2, n=70)
+        display.display_asf(asf, ax, freqs, 0.05)
+    
+    for ax in axes[:,0]:
+        ax.set_ylabel("Frequency (Hz)")
+
+    for ax in axes[-1]:
+        ax.set_xlabel("Panning amount")
+
+    if output_path:
+        fig.savefig(output_path)
+    else:
+        plt.show()
 
 @app.command()
 def tile(

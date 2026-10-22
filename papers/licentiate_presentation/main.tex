@@ -1,6 +1,8 @@
 \documentclass[12pt,aspectratio=169]{beamer}
 \usetheme{Hannover}
-\useinnertheme{rectangles}
+% \useinnertheme{rounded}
+% \setbeamertemplate{itemize items}[triangle]  % Options: circle, ball, triangle, square
+% \setbeamertemplate{enumerate items}[circle]  % Options: circle, ball, triangle, square
 
 %% Render notes
 \setbeameroption{show notes}
@@ -8,11 +10,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{csquotes}
-\usepackage{fancybox}
-\usepackage{enumitem}
-\usepackage{adjustbox}
 \usepackage{soul}
-\usepackage{listofitems}
 \usepackage{tikz}
 \usepackage{sankey}
 \usepackage{ifthen}
@@ -88,9 +86,6 @@
   \hspace{0.618em}%
   \raisebox{0.25em}{\insertframenumber/\inserttotalframenumber}
 }
-
-%% Smaller shadows
-\setlength{\shadowsize}{2pt}
 
 %% Make footnotes sensible
 \renewcommand{\footnotesize}{\tiny}
@@ -284,13 +279,13 @@
 
 \begin{frame}
   \frametitle{Datasets}
-  \begin{itemize}
-    \item Public
+  \begin{block}{Public}
     \begin{itemize}
       \item Free Music Archive - \cite{defferrardFMADatasetMusic2017}
       \item MTG Jamendo - \cite{bogdanovMTGJamendoDatasetAutomatic2019}
     \end{itemize}
-    \item Private
+  \end{block}
+  \begin{block}{Private}
     \begin{itemize}
       \item Personal collections 
       \begin{itemize}
@@ -305,7 +300,7 @@
         \item \cite{mourgelaExploringTrendsAudio2024}
       \end{itemize}
     \end{itemize}
-  \end{itemize}
+  \end{block}
 \end{frame}
 
 
@@ -480,6 +475,12 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{Amplitude Panning Features}
+  \centering
+  \includegraphics[height=0.8\textheight]{generated/grids/asf_grid_8x3.pdf}
+\end{frame}
+
+\begin{frame}
   \frametitle{Finding similar stereo fields}
   \centering
   \includegraphics[height=0.8\textheight]{example-image-a}
@@ -509,10 +510,17 @@
   \note{We used several tracks that we found from the previous exploration to demonstrate what each panning feature algorithm can "hear". We considered all tracks to make different uses of stereo image, so we judged how well each algorithm was able to differentiate between them.}
 \end{frame}
 
-\begin{frame}[allowframebreaks]
+\begin{frame}
   \frametitle{Stereo field perception}
+  This is all about how computers perceived the recordings, but what about people? There's a big field of research for perception of music mixed with speech, but we noticed gap in that music is always considered the interfering source. We set up a perceptual test where music was the primary audio source and speech complimentary.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Perceptual test}
   \centering
-  \includegraphics[height=0.7\textheight]{../bth_perceptual_test_panned_speech/screenshot_cropped.png}
+  \includegraphics[height=0.3\linewidth]{../bth_perceptual_test_panned_speech/speech_angles.pdf}
+  \includegraphics[width=0.6\linewidth]{../bth_perceptual_test_panned_speech/screenshot_cropped.png}
+  % \quad
   \\\parencite{miticPerceptualEvaluationBinaurally2026}
 \end{frame}
 
@@ -523,7 +531,7 @@
     {miticPerceptualEvaluationBinaurally2026}
     {16cm}
     {../kappa/external_pages/Percept_Eval_Binaurally_Panned_Speech_Music_Mixtures.pdf}
-    {People have strong preferences and the data we collected didn't explain them.}
+    {People prefer centrally-panned speech but have highly personal preferences. Also, the voice }
 \end{frame}
 
 
@@ -533,6 +541,33 @@
   \tableofcontents[sections=3]
 \end{frame}
 
+\subsection{Research questions}
+\begin{frame}
+  \frametitle{Research Questions}
+
+  % \begin{block}{Overarching}
+  %   How do music producers use stereo field?
+  % \end{block}
+
+  % \begin{block}{Sub questions}
+    \begin{enumerate}
+      \item[$RQ_1$:] How does the stereo image of a recording relate to real-world musical knowledge?
+      \begin{itemize}
+        \item Building a new musical instrument gave insight into what aspects of stereo field are noteworthy - (Paper I).
+        \item Running existing SIP algorithms on (lost of) real music showcases what each one can detect - (Paper III)
+        \item Perception of stereo music can be highly influenced by external factors - (Paper IV).
+      \end{itemize}
+      \item[$RQ_2$:] What methods can be used to describe the stereo image of a music recording?
+      \begin{itemize}
+        \item Literal answer - Paper II.
+        \item Paper III deciphers what each method actually \q{hears}.
+      \end{itemize}
+    \end{enumerate}
+  % \end{block}
+
+\end{frame}
+
+\subsection{What is analysis?}
 \begin{frame}
   \frametitle{What is... Analysis {\tiny of stereo image in vast repositories of recorded music} ?}
   % \socrates
@@ -540,6 +575,7 @@
   \centering
   \includegraphics[height=0.8\textheight]{socrates_headphones.jpg}
   \end{figure}
+  \note{Recurring theme - you can measure anything you want but there's no guarantee that it'll tell you what you want to know.}
 \end{frame}
 
 \begin{frame}

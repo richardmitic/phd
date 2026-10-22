@@ -1,3 +1,5 @@
+from nbformat.sign import algorithms
+import tarfile
 from sympy.functions.combinatorial.numbers import nD
 import math
 import numpy as np
@@ -7,9 +9,45 @@ import librosa
 from matplotlib.path import Path
 from typing import Optional, Dict, Tuple, Any, List
 import pyfar as pf
+from python_auditory_toolbox import auditory_toolbox as pat
 
 from algorithms.tzanetakis import StereoPanningFeatures
+from algorithms.tardieu import AmplitudeStereoFeatures
 from algorithms.common import PanningHistogram, TFRegion, polar_to_cartesian
+
+def rotate_matrix(
+    x: NDArray[np.floating], 
+    y: NDArray[np.floating], 
+    angle: float,
+    x_shift: float = 0.,
+    y_shift: float = 0., 
+    units="DEGREES"
+):
+    """
+    Rotates a point in the xy-plane counterclockwise through an angle about the origin
+    https://en.wikipedia.org/wiki/Rotation_matrix
+    :param x: x coordinate
+    :param y: y coordinate
+    :param x_shift: x-axis shift from origin (0, 0)
+    :param y_shift: y-axis shift from origin (0, 0)
+    :param angle: The rotation angle in degrees
+    :param units: DEGREES (default) or RADIANS
+    :return: Tuple of rotated x and y
+    """
+
+    # Shift to origin (0,0)
+    x = x - x_shift
+    y = y - y_shift
+
+    # Convert degrees to radians
+    if units == "DEGREES":
+        angle = math.radians(angle)
+
+    # Rotation matrix multiplication to get rotated x & y
+    xr = (x * math.cos(angle)) - (y * math.sin(angle)) + x_shift
+    yr = (x * math.sin(angle)) + (y * math.cos(angle)) + y_shift
+
+    return xr, yr
 
 def display_spf(
     spf: StereoPanningFeatures, 
@@ -51,9 +89,9 @@ def draw_panning_histogram(
     ylim: Tuple[float, float],
     grid: bool = False,
     quartiles: bool = False,
-    **plot_kwargs: Dict[Any, Any], 
+    plot_kwargs: Dict[Any, Any] = {}, 
 ):
-    ax.plot(hist, **plot_kwargs)  # type: ignore
+    ax.plot(hist, **plot_kwargs)
     ax.set_yticks([])
     ax.set_title(title)
     ax.set_ylim(ylim)
@@ -147,42 +185,8 @@ def draw_goniometer(
 
         return lc
 
-    def _rotate_matrix(
-        x: NDArray[np.floating], 
-        y: NDArray[np.floating], 
-        angle: float,
-        x_shift: float = 0.,
-        y_shift: float = 0., 
-        units="DEGREES"
-    ):
-        """
-        Rotates a point in the xy-plane counterclockwise through an angle about the origin
-        https://en.wikipedia.org/wiki/Rotation_matrix
-        :param x: x coordinate
-        :param y: y coordinate
-        :param x_shift: x-axis shift from origin (0, 0)
-        :param y_shift: y-axis shift from origin (0, 0)
-        :param angle: The rotation angle in degrees
-        :param units: DEGREES (default) or RADIANS
-        :return: Tuple of rotated x and y
-        """
-
-        # Shift to origin (0,0)
-        x = x - x_shift
-        y = y - y_shift
-
-        # Convert degrees to radians
-        if units == "DEGREES":
-            angle = math.radians(angle)
-
-        # Rotation matrix multiplication to get rotated x & y
-        xr = (x * math.cos(angle)) - (y * math.sin(angle)) + x_shift
-        yr = (x * math.sin(angle)) + (y * math.cos(angle)) + y_shift
-
-        return xr, yr
-
     # main figure
-    x, y = _rotate_matrix(audio.time[0], audio.time[1], 45)
+    x, y = rotate_matrix(audio.time[0], audio.time[1], 45)
 
     # draw circles
     for r in [0.25, 0.5, 0.75, 1]:
@@ -248,3 +252,23 @@ def draw_goniometer(
     # set limits
     ax.set_xlim(-1.05, 1.05)
     ax.set_ylim(-1.05, 1.05)
+
+
+def display_asf(asf: AmplitudeStereoFeatures, ax: plt.Axes, freqs: NDArray[np.floating], symxlim: float, title: str = "", xlabel: str | None = None):
+    # These frequencies are implicit in the calculation of ASF. Not great, but it'll do.
+    # freqs = pat.ErbSpace(low_freq=30, high_freq=44100/2, n=70)[::-1]
+    ax.errorbar(
+        asf.mean_over_time,
+        freqs,
+        xerr=asf.std_over_time,
+        marker="o",
+        linestyle="none",
+        color="k",
+        linewidth=0.5,
+        markersize=2,
+    )
+    ax.set_yscale("log")
+    ax.set_ylim(20, 30000)
+    ax.set_xlim(left=-symxlim, right=symxlim)
+    ax.set_xlabel(xlabel)
+    ax.set_title(title)
