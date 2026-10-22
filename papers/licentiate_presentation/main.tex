@@ -1,7 +1,10 @@
 \documentclass[12pt,aspectratio=169]{beamer}
 \usetheme{Hannover}
 \useinnertheme{rectangles}
-% \setbeameroption{show notes on second screen=right}
+
+%% Render notes
+\setbeameroption{show notes}
+\setbeamerfont{note title}{size=\scriptsize}
 
 \usepackage[utf8]{inputenc}
 \usepackage{csquotes}
@@ -27,13 +30,9 @@
 %% Display the first page of a PDF and fade it out to the background colour
 \newcommand{\fadedimage}[2]{
   \begin{tikzpicture}
-    % This path isn't drawn. It just forces 
-    % the diagram to cover the entire width of the page.
-    \path (-0.5\linewidth,0) -- (0.5\linewidth, 0);
-
     \node[fill=white] (img) at (0, 0) {
       \includegraphics[
-        width=0.5\textwidth, 
+        width=\textwidth, 
         page=1,
         trim={0cm #1 0cm 0cm}, % left, bottom, right, top
         clip,
@@ -46,11 +45,19 @@
 }
 
 %% Standard slide to demo a published paper
-\newcommand{\paperslide}[4]{
+\newcommand{\paperslide}[5]{
   \frametitle{#1}%
+  \small
   \fullcite{#2}%
   \vspace{1em}%
-  \fadedimage{#3}{#4}%
+  \begin{columns}
+    \begin{column}{0.45\textwidth}
+      \fadedimage{#3}{#4}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \quad{TL;DR - #5}
+    \end{column}
+  \end{columns}
 }
 
 %% MDU styling
@@ -391,7 +398,12 @@
 \end{frame}
 
 \begin{frame}
-  \paperslide{Paper I}{franklinDevelopmentWebBasedRealTime2025}{16cm}{../kappa/external_pages/JAES_V73_12_PG872hirez_Franklin.pdf}
+  \paperslide
+    {Paper I}
+    {franklinDevelopmentWebBasedRealTime2025}
+    {16cm}
+    {../kappa/external_pages/JAES_V73_12_PG872hirez_Franklin.pdf}
+    {Technical aspects often overshadow artistic intention}
 \end{frame}
 
 \begin{frame}
@@ -403,7 +415,12 @@
 \end{frame}
 
 \begin{frame}
-  \paperslide{Paper II}{miticSystematicLiteratureReview2026}{16cm}{../kappa/external_pages/s13636-026-00463-4.pdf}
+  \paperslide
+    {Paper II}
+    {miticSystematicLiteratureReview2026}
+    {16cm}
+    {../kappa/external_pages/s13636-026-00463-4.pdf}
+    {Techniques for describing stereo image exist, but their effectiveness is understudied.}
 \end{frame}
 
 \begin{frame}
@@ -469,7 +486,12 @@
 \end{frame}
 
 \begin{frame}
-  \paperslide{Paper III}{miticObjectiveComparisonPanning2025}{19cm}{../kappa/external_pages/Mitic and Rossholm - 2025 - Towards an objective comparison of panning feature algorithms for unsupervised learning.pdf}
+  \paperslide
+    {Paper III}
+    {miticObjectiveComparisonPanning2025}
+    {19cm}
+    {../kappa/external_pages/Mitic and Rossholm - 2025 - Towards an objective comparison of panning feature algorithms for unsupervised learning.pdf}
+    {All panning feature algorithms have inherent limitations, but Stereo Panning Features offers the most promising results for unsupervised learning.}
 \end{frame}
 
 \begin{frame}
@@ -482,8 +504,9 @@
       size=6cm,
       connect spies}]
     \node[inner sep=0pt] (img) {\pgfimage[height=0.8\textheight]{../dafx2025_sip_comparison/poster.pdf}};
-    \spy[MDUorange] on ([xshift=-0.1]img.center) in node at (.5\textwidth,0);
+    \spy[MDUorange] on ([xshift=-1.5]img.center) in node at (.5\textwidth,0);
   \end{tikzpicture}
+  \note{We used several tracks that we found from the previous exploration to demonstrate what each panning feature algorithm can "hear". We considered all tracks to make different uses of stereo image, so we judged how well each algorithm was able to differentiate between them.}
 \end{frame}
 
 \begin{frame}[allowframebreaks]
@@ -495,7 +518,12 @@
 
 
 \begin{frame}
-  \paperslide{Paper IV}{miticPerceptualEvaluationBinaurally2026}{16cm}{../kappa/external_pages/Percept_Eval_Binaurally_Panned_Speech_Music_Mixtures.pdf}
+  \paperslide
+    {Paper IV}
+    {miticPerceptualEvaluationBinaurally2026}
+    {16cm}
+    {../kappa/external_pages/Percept_Eval_Binaurally_Panned_Speech_Music_Mixtures.pdf}
+    {People have strong preferences and the data we collected didn't explain them.}
 \end{frame}
 
 
