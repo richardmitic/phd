@@ -55,6 +55,7 @@ def display_spf(
     ax: plt.Axes, 
     ylim: Optional[Dict[str, float]] = None,
     xlim: Optional[Dict[str, float]] = None,
+    xlabel: Optional[str] = "Frequency band",
 ):
     mm = spf[0:4]
     sm = spf[4:8]
@@ -69,14 +70,13 @@ def display_spf(
     squiggly_marker = Path(list(zip(marker_x, marker_y)), closed=False)
     ax.errorbar(xl, mm, yerr=ms, label='Slow panning', color='k', marker="_", linestyle='none', linewidth=0.618)
     ax.errorbar(xr, sm, yerr=ss, label='Fast panning', color='k', marker=squiggly_marker, markerfacecolor='none', linestyle='none', linewidth=0.618)
-    # ax.set_ylim(bottom=-0.1)
     ax.set_title(title)
     if ylim is not None:
         ax.set_ylim(**ylim)  # type: ignore
     if xlim is not None:
         ax.set_xlim(**xlim)  # type: ignore
     ax.set_xticks([0.5,1.5,2.5,3.5], ["Full", "Low", "Mid", "High"])
-    ax.set_xlabel("Frequency band")
+    ax.set_xlabel(xlabel)  # type: ignore
 
 
 def _quartiles(arr: NDArray[np.floating]) -> NDArray[np.floating]:
@@ -89,7 +89,10 @@ def draw_panning_histogram(
     ylim: Tuple[float, float],
     grid: bool = False,
     quartiles: bool = False,
-    plot_kwargs: Dict[Any, Any] = {}, 
+    plot_kwargs: Dict[Any, Any] = {},
+    x_label: Optional[str] = "Azimuth",
+    y_label: Optional[str] = "Normalized histogram value",
+    legend: bool = True,
 ):
     ax.plot(hist, **plot_kwargs)
     ax.set_yticks([])
@@ -106,9 +109,10 @@ def draw_panning_histogram(
     if quartiles:
         col = plot_kwargs.get('color', 'red')
         ax.vlines(_quartiles(hist), *ylim, color=col, linestyles='solid', linewidth=0.618)
-    ax.set_xlabel("Azimuth")
-    ax.set_ylabel("Normalized histogram value")
-    ax.legend(loc='upper left')
+    ax.set_xlabel(x_label) # type: ignore
+    ax.set_ylabel(y_label) # type: ignore
+    if legend:
+        ax.legend(loc='upper left')
 
 
 def draw_spectograms(
@@ -253,6 +257,10 @@ def draw_goniometer(
     ax.set_xlim(-1.05, 1.05)
     ax.set_ylim(-1.05, 1.05)
 
+    # Don't display ticks
+    ax.set_xticks([])
+    ax.set_yticks([])
+
 
 def display_asf(asf: AmplitudeStereoFeatures, ax: plt.Axes, freqs: NDArray[np.floating], symxlim: float, title: str = "", xlabel: str | None = None):
     # These frequencies are implicit in the calculation of ASF. Not great, but it'll do.
@@ -270,5 +278,5 @@ def display_asf(asf: AmplitudeStereoFeatures, ax: plt.Axes, freqs: NDArray[np.fl
     ax.set_yscale("log")
     ax.set_ylim(20, 30000)
     ax.set_xlim(left=-symxlim, right=symxlim)
-    ax.set_xlabel(xlabel)
+    ax.set_xlabel(xlabel) # type: ignore
     ax.set_title(title)
