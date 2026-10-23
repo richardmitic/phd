@@ -457,21 +457,21 @@
 \begin{frame}
   \frametitle{Panning histograms}
   \centering
-  \only<1>{\resizebox{!}{0.9\textheight}{\input{generated/grids/ph_grid_2x2.tex}}}
-  \only<2>{\resizebox{!}{0.8\textheight}{\input{generated/grids/ph_grid_5x5.tex}}}
-  \only<3>{\resizebox{!}{0.8\textheight}{\input{generated/grids/ph_grid_10x10.tex}}}
+  \only<1>{\includegraphics[height=0.8\textheight]{generated/grids/ph_grid_3x2.pdf}}
+  \only<2>{\includegraphics[height=0.8\textheight]{generated/grids/ph_grid_6x5.pdf}}
+  \only<3>{\includegraphics[height=0.8\textheight]{generated/grids/ph_grid_12x8.pdf}}
 \end{frame}
 
 \begin{frame}
   \frametitle{Goniometers}
   \centering
-  \resizebox{!}{0.8\textheight}{\input{generated/grids/gonio_grid_8x5.tex}}
+  \includegraphics[height=0.8\textheight]{generated/grids/gonio_grid_8x5.pdf}
 \end{frame}
 
 \begin{frame}
   \frametitle{Stereo Panning Features}
   \centering
-  \resizebox{!}{0.8\textheight}{\input{generated/grids/spf_grid_8x5.tex}}
+  \includegraphics[height=0.8\textheight]{generated/grids/spf_grid_10x4.pdf}
 \end{frame}
 
 \begin{frame}
@@ -545,32 +545,25 @@
 \begin{frame}
   \frametitle{Research Questions}
 
-  % \begin{block}{Overarching}
-  %   How do music producers use stereo field?
-  % \end{block}
-
-  % \begin{block}{Sub questions}
-    \begin{enumerate}
-      \item[$RQ_1$:] How does the stereo image of a recording relate to real-world musical knowledge?
-      \begin{itemize}
-        \item Building a new musical instrument gave insight into what aspects of stereo field are noteworthy - (Paper I).
-        \item Running existing SIP algorithms on (lost of) real music showcases what each one can detect - (Paper III)
-        \item Perception of stereo music can be highly influenced by external factors - (Paper IV).
-      \end{itemize}
-      \item[$RQ_2$:] What methods can be used to describe the stereo image of a music recording?
-      \begin{itemize}
-        \item Literal answer - Paper II.
-        \item Paper III deciphers what each method actually \q{hears}.
-      \end{itemize}
-    \end{enumerate}
-  % \end{block}
+  \begin{enumerate}
+    \item[$RQ_1$:] How does the stereo image of a recording relate to real-world musical knowledge?
+    \begin{itemize}
+      \item Building a new musical instrument gave insight into what aspects of stereo field are noteworthy - (Paper I).
+      \item Running existing SIP algorithms on (lost of) real music showcases what each one can detect - (Paper III)
+      \item Perception of stereo image can be highly influenced by external factors - (Paper IV).
+    \end{itemize}
+    \item[$RQ_2$:] What methods can be used to describe the stereo image of a music recording?
+    \begin{itemize}
+      \item Literal answer - (Paper II).
+      \item What does each algorithm \q{hear}? - (Paper III).
+    \end{itemize}
+  \end{enumerate}
 
 \end{frame}
 
-\subsection{What is analysis?}
+\subsection{Recurring themes}
 \begin{frame}
   \frametitle{What is... Analysis {\tiny of stereo image in vast repositories of recorded music} ?}
-  % \socrates
   \begin{figure}
   \centering
   \includegraphics[height=0.8\textheight]{socrates_headphones.jpg}
@@ -578,14 +571,32 @@
   \note{Recurring theme - you can measure anything you want but there's no guarantee that it'll tell you what you want to know.}
 \end{frame}
 
+\subsection{Limitations}
 \begin{frame}
-  \frametitle{Discussion}
-  \begin{itemize}
-    \item Interpretation of results
-    \item Comparison with existing work
-    \item Limitations
-    \item Implications
-  \end{itemize}
+  \frametitle{Limitations}
+  \begin{block}{Biases}
+    \begin{itemize}
+      \item All music and DSP algorithms are western
+      \item Free music is a minority
+      \begin{itemize}
+        \item Access to music is a limitation. Computational power is not.
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+  \begin{block}{Not covered}
+    \begin{itemize}
+      \item Full analysis of all available music
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\subsection{Future work}
+\begin{frame}
+  \frametitle{Future work}
+  \begin{block}{Comparison with other work}
+  \end{block}
+  \begin{block}{Continuation to doctoral studies}
+  \end{block}
 \end{frame}
 
 % Conclusion slide
@@ -599,6 +610,13 @@
     \item Final remarks
   \end{itemize}
 \end{frame}
+
+\begin{frame}
+  \frametitle{Future work}
+  \begin{block}{How do music producers use stereo field?}
+  \end{block}
+\end{frame}
+
 
 % References slide
 \section{References}
