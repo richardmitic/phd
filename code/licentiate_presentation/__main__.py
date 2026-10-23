@@ -259,13 +259,11 @@ def cost_graph(
 
     sp_green = "#60d36d"
     sp_blue = "#adeee0"
-    mean_idle_cost = df.cost.loc[df.cost < 2].mean()
     idle_cost = df.cost.loc[df.cost < 2].sum()
     total_cost = df.cost.sum()
     processing_cost = total_cost - idle_cost
     ax.bar(df.date[df.cost>=2], df.cost[df.cost>=2], color=sp_green, label=f"Processing: ${processing_cost:.2f}")
     ax.bar(df.date[df.cost<2], df.cost[df.cost<2], color=sp_blue, label=f"Idle: ${idle_cost:.2f}")
-    ax.hlines([mean_idle_cost], xmin=min(df.date), xmax=max(df.date), color='k', linestyle='--')
     ax.set_ylabel("Cost (USD)")
     ax.xaxis.set_major_formatter(ConciseDateFormatter(ax.xaxis.get_major_locator()))
     ax.set_xlabel("Date")
