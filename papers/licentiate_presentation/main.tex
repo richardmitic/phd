@@ -9,9 +9,8 @@
 \setbeamerfont{note title}{size=\scriptsize}
 
 \usepackage[utf8]{inputenc}
-\usepackage{enumitem}
-% \setlist[enumerate]{parsep=0pt}
 \usepackage{csquotes}
+% \usepackage{enumitem}  %% DON'T USE ENUMITEM - the bullet points disappear
 \usepackage{soul}
 \usepackage{tikz}
 \usepackage{sankey}
@@ -22,7 +21,6 @@
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{fadings}
 \usetikzlibrary{spy}
-
 
 %% Image dir
 \graphicspath{{./img}}
@@ -53,6 +51,9 @@
   \end{tikzpicture} 
 }
 
+%% Nicer TL;DR
+\newcommand{\tldr}{TL\kern-0.04em;\kern-0.04emDR}
+
 %% Standard slide to demo a published paper
 \newcommand{\paperslide}[5]{
   \frametitle{#1}%
@@ -64,7 +65,7 @@
       \fadedimage{#3}{#4}
     \end{column}
     \begin{column}{0.45\textwidth}
-      \quad{TL;DR - #5}
+      \noindent \tldr{} - #5
     \end{column}
   \end{columns}
 }
@@ -163,8 +164,6 @@
 \institute{Mälardalen University}
 % \logo{\logos}
 \titlegraphic{\logos{2cm}}
-  % \hfill\includegraphics[height=1cm]{mdu.pdf}
-% }
 
 %% Pull tikz styles from kappa
 \input{../kappa/figures/tikzset.tex}
@@ -442,15 +441,19 @@
     {franklinDevelopmentWebBasedRealTime2025}
     {16cm}
     {../kappa/external_pages/JAES_V73_12_PG872hirez_Franklin.pdf}
-    {Technical aspects often overshadow artistic intention}
+    {Technical aspects often overshadow artistic intention.}
 \end{frame}
 
 \begin{frame}
   \frametitle{Literature review(s)}
-  \centering
-  \begin{tikzpicture}[font=\tiny]
-    \input{sankey_tikz.tex}
-  \end{tikzpicture}
+  % \centering
+  \moveleft 0.05\textwidth \hbox{
+    \resizebox{1.08\textwidth}{!}{
+      \begin{tikzpicture}[font=\small]
+      \input{sankey_tikz.tex}
+      \end{tikzpicture}
+    }
+  }
 \end{frame}
 
 \begin{frame}
@@ -527,7 +530,7 @@
 \begin{frame}
   \frametitle{Finding similar stereo fields}
   \centering
-  \includegraphics[height=0.8\textheight]{example-image-a}
+  \includegraphics[width=\textwidth]{generated/clusters.pdf}
 \end{frame}
 
 \begin{frame}
@@ -580,27 +583,26 @@
 
 
 \section{Discussion}
-\sectionslide
 
 \subsection{Research questions}
 \subsectionslide
 
 \begin{frame}
-  \frametitle{Research Questions}
+  \frametitle{Research Questions and Answers}
 
-  \begin{enumerate}
-    \item[$RQ_1$:] How does the stereo image of a recording relate to real-world musical knowledge?
+  \begin{itemize}
+    \item[\rqone:] How does the stereo image of a recording relate to real-world musical knowledge?
     \begin{itemize}
       \item Building a new musical instrument gave insight into what aspects of stereo field are noteworthy - (Paper I).
-      \item Running existing SIP algorithms on (lost of) real music showcases what each one can detect - (Paper III)
+      \item Running existing SIP algorithms on lots of real music showcases what each one can detect - (Paper III)
       \item Perception of stereo image can be highly influenced by external factors - (Paper IV).
     \end{itemize}
-    \item[$RQ_2$:] What methods can be used to describe the stereo image of a music recording?
+    \item[\rqtwo:] What methods can be used to describe the stereo image of a music recording?
     \begin{itemize}
       \item Literal answer - (Paper II).
       \item What does each algorithm \q{hear}? - (Paper III).
     \end{itemize}
-  \end{enumerate}
+  \end{itemize}
 
 \end{frame}
 
@@ -631,9 +633,10 @@
 
 \begin{frame}
   \frametitle{Computation is cheap}
-  \centering
-  \includegraphics[height=0.8\textheight]{generated/cost.pdf}
-  \note{Real data for the cost of analysing 250k tracks, several times.}
+  % \centering
+  % \includegraphics[height=0.8\textheight]{generated/cost.pdf}
+  % \note{Real data for the cost of analysing 250k tracks, several times.}
+  I opted to use DSP-based processing rather than theory-free ML. That was the right decision. You can easily process hundreds of thousands of tracks on a laptop.
 \end{frame}
 
 \subsection{Limitations}
