@@ -9,6 +9,8 @@
 \setbeamerfont{note title}{size=\scriptsize}
 
 \usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+% \setlist[enumerate]{parsep=0pt}
 \usepackage{csquotes}
 \usepackage{soul}
 \usepackage{tikz}
@@ -24,6 +26,15 @@
 
 %% Image dir
 \graphicspath{{./img}}
+
+% Image with both logos next to each other.
+% Argument is the separation.
+\newcommand{\logos}[1]{%
+  \begin{tikzpicture}
+    \node at (-0.5*#1,0) {\includegraphics[height=1cm]{mdu.pdf}};
+    \node at (0.5*#1,0) {\includegraphics[height=1cm]{Spotify_Primary_Logo_RGB_Green.png}};
+  \end{tikzpicture}
+}
 
 %% Display the first page of a PDF and fade it out to the background colour
 \newcommand{\fadedimage}[2]{
@@ -67,7 +78,10 @@
 \makeatletter
 \addtobeamertemplate{sidebar left}{}{
   \vfill
-  \makebox[\beamer@sidebarwidth][c]{\includegraphics[width=0.618\beamer@sidebarwidth]{mdu.pdf}}
+  \makebox[\beamer@sidebarwidth][c]{
+    \resizebox{0.9\beamer@sidebarwidth}{!}{\logos{1.5cm}}
+    % \includegraphics[width=0.618\beamer@sidebarwidth]{mdu.pdf}
+  }
   \vspace{4pt}
 }
 \makeatother
@@ -90,6 +104,23 @@
 %% Make footnotes sensible
 \renewcommand{\footnotesize}{\tiny}
 
+%% section divider slide
+\newcommand{\sectionslide}{%
+  \begin{frame}
+    \tableofcontents[sections=\value{section}]
+  \end{frame} 
+}
+
+\newcommand{\subsectionslide}{%
+  \begin{frame}
+    \tableofcontents[
+      currentsection, 
+      currentsubsection, 
+      sections=\value{section}
+    ]
+  \end{frame} 
+}
+
 %% Socrates overaly
 \newcommand{\socrates}{%
 \begin{tikzpicture}[remember picture, overlay]
@@ -98,6 +129,10 @@
   };
   \end{tikzpicture}%
 }
+
+%% Research questions
+\newcommand{\rqone}{RQ\textsubscript{1}}
+\newcommand{\rqtwo}{RQ\textsubscript{2}}
 
 %% \hfill for frame titles
 \newcommand{\ftfill}{\hspace{0pt plus 1 filll}}
@@ -126,8 +161,10 @@
 \author{Richard Mitic}
 \date{2026-10-31}
 \institute{Mälardalen University}
-\logo{\includegraphics[height=1cm]{mdu.pdf}}
-\titlegraphic{\hfill\includegraphics[height=1cm]{mdu.pdf}}
+% \logo{\logos}
+\titlegraphic{\logos{2cm}}
+  % \hfill\includegraphics[height=1cm]{mdu.pdf}
+% }
 
 %% Pull tikz styles from kappa
 \input{../kappa/figures/tikzset.tex}
@@ -143,14 +180,18 @@
 \begin{frame}
   \frametitle{Outline}
   \tableofcontents[subsectionstyle=hide]
+  % \tableofcontents
 \end{frame}
 
 % Introduction slide
 \section{Background}
+\subsection{Title breakdown}
+
+% This slide is customized, so don't use \sectionslide or \subsectionslide
 \begin{frame}
   \begin{columns}
     \column{0.45\textwidth}
-    \tableofcontents[sections=1]
+    \tableofcontents[currentsubsection,sections=\value{section}]
 
     \column{0.45\textwidth}
     \centering
@@ -158,8 +199,6 @@
   \end{columns}
 \end{frame}
 
-
-\subsection{Title breakdown}
 
 \begin{frame}
   \frametitle{What is... \ftfill{} {\tiny Analysis of} stereo image {\tiny in vast repositories of recorded music} ?}
@@ -173,8 +212,6 @@
     \end{figure}
     \note{Refer to the thesis for logical explanation of how a stereo image is created}
   }
-
-  \note{Don't spend too much effort reading these quotes, but they are from music profesionals at the top of their game, and their explanation of how they create stereo field is essentially "I dunno, I just do what sounds good".}
 
   \only<2-3> {
     \begin{columns}[b]
@@ -221,6 +258,8 @@
 \end{frame}
 
 \subsection{How recordings happen}
+\subsectionslide
+
 \begin{frame}
   \frametitle{Recording Studios}
   \centering
@@ -250,8 +289,9 @@
   \frametitle{Distribution}
   \begin{itemize}
     \item Producer renders a mixdown
-    \item Mixdown is sent to distributor(s)
-    \item Distributor(s) make(s) several (probably lossy) encodings
+    \item Mastering engineer makes a master
+    \item Master is sent to distributor(s)
+    \item Distributor(s) make(s) several encodings
     \item Encodings are played by a listener
     \begin{itemize}
       \item \alert{$\uparrow$ This is the recording available for analysis}
@@ -262,11 +302,10 @@
 
 \section{Research}
 
-\begin{frame}
-  \tableofcontents[sections=2]
-\end{frame}
-
 \subsection{Motivation}
+
+\subsectionslide
+
 \begin{frame}
   \frametitle{Motivation}
   \begin{itemize}
@@ -274,7 +313,6 @@
     \item Every track represents a combination of artistic choices
     \item It's an opportunity to learn about human creativity
   \end{itemize}
-
 \end{frame}
 
 \begin{frame}
@@ -283,51 +321,58 @@
     \begin{itemize}
       \item Free Music Archive - \cite{defferrardFMADatasetMusic2017}
       \item MTG Jamendo - \cite{bogdanovMTGJamendoDatasetAutomatic2019}
+      \item More smaller...
     \end{itemize}
   \end{block}
   \begin{block}{Private}
-    \begin{itemize}
-      \item Personal collections 
-      \begin{itemize}
-        \item \cite{tzanetakisStereoPanningFeatures2007}
-        \item \cite{tardieuProductionEffectAudio2011}
-        \item \cite{yangUpmixingStyleTransfer2022}
-        \item \cite{ziemerProducerVsRapper2025}
+    \begin{columns}[T]
+      \column{0.48\textwidth}
+        \begin{itemize}
+          \item Personal collections 
+          \begin{itemize}
+            \item \cite{tzanetakisStereoPanningFeatures2007}
+            \item \cite{tardieuProductionEffectAudio2011}
+            \item \cite{yangUpmixingStyleTransfer2022}
+            \item \cite{ziemerProducerVsRapper2025}
+          \end{itemize}
+        \end{itemize}
+      \column{0.48\textwidth}
+        \begin{itemize}
+        \item Company licensed
+        \begin{itemize}
+          \item \cite{bourbonInvestigationImmersiveContemporary2023}
+          \item \cite{mourgelaExploringTrendsAudio2024}
+        \end{itemize}
       \end{itemize}
-      \item Company licensed
-      \begin{itemize}
-        \item \cite{bourbonInvestigationImmersiveContemporary2023}
-        \item \cite{mourgelaExploringTrendsAudio2024}
-      \end{itemize}
-    \end{itemize}
+    \end{columns}
   \end{block}
 \end{frame}
 
 
 \subsection{Research questions}
+\subsectionslide
+
 \begin{frame}
   \frametitle{Research Questions}
   \begin{block}{Overarching}
     How do music producers use stereo field?
   \end{block}
-
   \begin{block}{Sub questions}
-      \begin{enumerate}
-        \item[$RQ_1$:] How does the stereo image of a recording relate to real-world musical knowledge? \label{rq:usecase}
-        \item[$RQ_2$:] What methods can be used to describe the stereo image of a music recording? \label{rq:methods}
-      \end{enumerate}
-      
+    \begin{enumerate}[leftmargin=3em]
+      \item[\rqone{}:] How does the stereo image of a recording relate to\\real-world musical knowledge? \label{rq:usecase}
+      \item[\rqtwo{}:] What methods can be used to describe the\\stereo image of a music recording? \label{rq:methods}
+    \end{enumerate}
   \end{block}
-
 \end{frame}
 
 \subsection{Methodology}
+\subsectionslide
 
 \begin{frame}
   \frametitle{A dual methodology}
-  Two work-streams with different epistemologies were required to reach any kind of conclusion.
+  Two work-streams with different epistemologies
 
-  \begin{block}{Constructive ($RQ_1$)}
+  \begin{block}{Constructive (\rqone{})}
     \begin{itemize}
       \item Immersion in musical practice
       \item Stereo field perception
@@ -335,10 +380,10 @@
     \end{itemize}
   \end{block}
 
-  \begin{block}{Objective ($RQ_2$)}
+  \begin{block}{Objective (\rqtwo{})}
     \begin{itemize}
       \item Systematic Literature Review
-      \item Software for measurement of stereo field
+      \item Software for measurement of stereo image
     \end{itemize}
   \end{block}
 
@@ -353,15 +398,14 @@
       thick,
       draw=black,
     },
-    % every node/.style={}
-  ]
+   ]
     \def\r{3};
     % Peripheral Nodes arranged in a circle around the center
-    \node (prac)    at (90:\r)   {Practice};
-    \node (perc)    at (162:\r)  {Perception};
-    \node (und) at (234:\r)  {Understanding};
-    \node (slr)  at (306:\r)  {SLR};
-    \node (sw) at (18:\r)   {Software};
+    \node (prac) at (90:\r)   {Practice};
+    \node (perc) at (162:\r)  {Perception};
+    \node (und)  at (234:\r)  {Understanding};
+    \node (slr)  at (306:\r)  {Literature};
+    \node (sw)   at (18:\r)   {Software};
 
     \foreach \a/\ang in {prac/90, perc/180, und/270, slr/270, sw/0} {
       \foreach \b in {prac, perc, und, slr, sw} {
@@ -536,12 +580,11 @@
 
 
 \section{Discussion}
-
-\begin{frame}
-  \tableofcontents[sections=3]
-\end{frame}
+\sectionslide
 
 \subsection{Research questions}
+\subsectionslide
+
 \begin{frame}
   \frametitle{Research Questions}
 
@@ -562,6 +605,8 @@
 \end{frame}
 
 \subsection{Recurring themes}
+\subsectionslide
+
 \begin{frame}
   \frametitle{What is... Analysis {\tiny of stereo image in vast repositories of recorded music} ?}
   \begin{figure}
@@ -592,6 +637,8 @@
 \end{frame}
 
 \subsection{Limitations}
+\subsectionslide
+
 \begin{frame}
   \frametitle{Limitations}
   \begin{block}{Biases}
@@ -611,16 +658,22 @@
 \end{frame}
 
 \subsection{Future work}
+\subsectionslide
+
 \begin{frame}
   \frametitle{Future work}
   \begin{block}{Comparison with other work}
   \end{block}
   \begin{block}{Continuation to doctoral studies}
+    \begin{itemize}
+      \item Process the vast repositories
+      \item Answer the overarching research question
+    \end{itemize}
   \end{block}
 \end{frame}
 
-% Conclusion slide
 \section{Conclusion}
+
 \begin{frame}
   \frametitle{Conclusion}
   \begin{itemize}
@@ -631,27 +684,23 @@
   \end{itemize}
 \end{frame}
 
+
+\section{Questions}
+
 \begin{frame}
-  \frametitle{Future work}
-  \begin{block}{How do music producers use stereo field?}
-  \end{block}
+  \frametitle{Questions?}
+  \centering
+  \includegraphics[height=0.8\textheight]{Socrates_and_Xanthippe.jpg}
 \end{frame}
 
 
-% References slide
-\section{References}
+% \section{References}
 \begin{frame}[allowframebreaks]
   \frametitle{References}
   \AtNextBibliography{\tiny} 
   \printbibliography
 \end{frame}
 
-% Questions slide
-\begin{frame}
-  \frametitle{Questions?}
-  \begin{center}
-    \Huge{\color{blue} Thank you for your attention!}
-  \end{center}
-\end{frame}
+
 
 \end{document}
