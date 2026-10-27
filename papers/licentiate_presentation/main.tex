@@ -588,7 +588,8 @@
     {miticPerceptualEvaluationBinaurally2026}
     {16cm}
     {../kappa/external_pages/Percept_Eval_Binaurally_Panned_Speech_Music_Mixtures.pdf}
-    {People prefer centrally-panned speech but have highly personal preferences. Also, the voice }
+    {People generally prefer centrally-panned speech but have highly personal preferences. Speech becomes the dominant audio source and is paramount to overall pleasantness.}
+  \note{2026-10-27 - JAES sent it back for very minor revisions}
 \end{frame}
 
 
@@ -605,8 +606,9 @@
     \begin{itemize}
       \item Building a new musical instrument gave insight into what aspects of stereo field are noteworthy - (Paper I).
       \item Running existing SIP algorithms on lots of real music showcases what each one can detect - (Paper III)
-      \item Perception of stereo image can be highly influenced by external factors - (Paper IV).
+      \item Stereo image might be used to maintain the perceptual quality of music when mixing it with other audio sources - (Paper IV).
     \end{itemize}
+    \clearpage
     \item[\rqtwo:] What methods can be used to describe the stereo image of a music recording?
     \begin{itemize}
       \item Literal answer - (Paper II).
@@ -643,10 +645,12 @@
 
 \begin{frame}
   \frametitle{Computation is cheap}
-  % \centering
-  % \includegraphics[height=0.8\textheight]{generated/cost.pdf}
-  % \note{Real data for the cost of analysing 250k tracks, several times.}
-  I opted to use DSP-based processing rather than theory-free ML. That was the right decision. You can easily process hundreds of thousands of tracks on a laptop.
+  \begin{itemize}
+    \item Theory-based DSP favoured over theory-free ML
+    \item Could process everything on a laptop
+    \item Access to music (not computing power) is the limitation 
+  \end{itemize}
+  \note{Spotify cost for processing about half a million files was about \$20. Idle cost for the machine was about \$1.50 per day.}
 \end{frame}
 
 \subsection{Limitations}
@@ -658,14 +662,11 @@
     \begin{itemize}
       \item All music and DSP algorithms are western
       \item Free music is a minority
-      \begin{itemize}
-        \item Access to music is a limitation. Computational power is not.
-      \end{itemize}
     \end{itemize}
   \end{block}
   \begin{block}{Not covered}
     \begin{itemize}
-      \item Full analysis of all available music
+      \item Overarching analysis of the global population of recordings
     \end{itemize}
   \end{block}
 \end{frame}
@@ -675,12 +676,12 @@
 
 \begin{frame}
   \frametitle{Future work}
-  \begin{block}{Comparison with other work}
-  \end{block}
   \begin{block}{Continuation to doctoral studies}
     \begin{itemize}
-      \item Process the vast repositories
-      \item Answer the overarching research question
+      \item Study the global population of music recordings
+      \item Compare the content of disparate datasets
+      \item Investigate distortions resulting from distribution
+      \item Fully answer the overarching research question
     \end{itemize}
   \end{block}
 \end{frame}
@@ -690,10 +691,9 @@
 \begin{frame}
   \frametitle{Conclusion}
   \begin{itemize}
-    \item Summary of findings
-    \item Contributions
-    \item Future work
-    \item Final remarks
+    \item Stereo image descriptors exist, but they are under-studied
+    \item Previous literature is difficult to replicate
+    \item Measuring things is easy - understanding what you measured is hard
   \end{itemize}
 \end{frame}
 
