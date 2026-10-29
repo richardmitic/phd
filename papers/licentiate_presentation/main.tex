@@ -21,6 +21,20 @@
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{fadings}
 \usetikzlibrary{spy}
+\usetikzlibrary{shadows.blur}
+
+%% Pull tikz styles from kappa
+\input{../kappa/figures/tikzset.tex}
+
+%% New tikz styles
+\tikzset{
+  screenshot/.style={
+    thick,
+    draw=black,
+    inner sep=0pt,
+    blur shadow={shadow blur radius=1pt, shadow opacity=20}
+  }
+}
 
 %% Image dir
 \graphicspath{{./img}}
@@ -166,8 +180,7 @@
 % \logo{\logos}
 \titlegraphic{\logos{2cm}}
 
-%% Pull tikz styles from kappa
-\input{../kappa/figures/tikzset.tex}
+
 
 \begin{document}
 
@@ -250,7 +263,7 @@
   \socrates
   \centering
   \begin{tikzpicture}
-    \node [thick, draw=black, inner sep=0pt, copy shadow={draw=gray, fill=gray, shadow xshift=0.5em, shadow yshift=-0.5em}] { \includegraphics[width=0.618\linewidth]{what_is_vast.png} };
+    \node [screenshot] { \includegraphics[width=0.618\linewidth]{what_is_vast.png} };
   \end{tikzpicture}
 
   \vspace{3mm}
@@ -649,10 +662,10 @@
   \frametitle{Naming things is difficult}
   \centering
   \begin{tikzpicture}
-    \node at (0,0) {\includegraphics[width=0.4\textwidth]{naming_is_hard_1.png}};
-    \node at (6,0.5) {\includegraphics[width=0.4\textwidth]{naming_is_hard_3.png}};
-    \node at (0,-2) {\includegraphics[width=0.4\textwidth]{naming_is_hard_2.png}};
-    \node at (6,-2) {\includegraphics[width=0.4\textwidth]{naming_is_hard_4.png}};
+    \node[screenshot] at (0,0) {\includegraphics[width=0.4\textwidth]{naming_is_hard_1.png}};
+    \node[screenshot] at (6,0.5) {\includegraphics[width=0.4\textwidth]{naming_is_hard_3.png}};
+    \node[screenshot] at (0,-2) {\includegraphics[width=0.4\textwidth]{naming_is_hard_2.png}};
+    \node[screenshot] at (6,-2) {\includegraphics[width=0.4\textwidth]{naming_is_hard_4.png}};
   \end{tikzpicture}
   \\\parencite{miticSystematicLiteratureReview2026}
   \note{One of the reasons the SLR was so huge is that no one can agree on what anything is called.}
