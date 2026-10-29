@@ -575,16 +575,21 @@
 \begin{frame}
   \frametitle{Perceptual test}
   \centering
-  \begin{tikzpicture}
-    \node at (0,0) {
-      \includegraphics[scale=1, trim=5mm 5mm 5mm 5mm, clip]
-      {../bth_perceptual_test_panned_speech/speech_angles.pdf}
-    };
-    \node at (6,0) {
-      \includegraphics[scale=0.18]
-      {../bth_perceptual_test_panned_speech/screenshot_cropped.png}
-    };
-  \end{tikzpicture}
+  \only<1> {
+    \begin{tikzpicture}
+      \node at (0,0) {
+        \includegraphics[scale=1, trim=5mm 5mm 5mm 5mm, clip]
+        {../bth_perceptual_test_panned_speech/speech_angles.pdf}
+      };
+      \node at (6,0) {
+        \includegraphics[scale=0.18]
+        {../bth_perceptual_test_panned_speech/screenshot_cropped.png}
+      };
+    \end{tikzpicture}
+  }
+  \only<2> {
+    \includegraphics[height=0.7\textheight]{../../bth_jaes/rank_boxplots.pdf}
+  }
   \\\parencite{miticPerceptualEvaluationBinaurally2026}
 \end{frame}
 
