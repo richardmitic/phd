@@ -605,6 +605,7 @@
   }
   \only<2> {
     \includegraphics[height=0.7\textheight]{../../bth_jaes/rank_boxplots.pdf}
+    \note{There's a general trend but the results are not clear-cut.}
   }
   \\\parencite{miticPerceptualEvaluationBinaurally2026}
 \end{frame}
@@ -628,22 +629,27 @@
 
 \begin{frame}
   \frametitle{Research Questions and Answers}
-
-  \begin{itemize}
-    \item[\rqone:] How does the stereo image of a recording relate to real-world musical knowledge?
-    \begin{itemize}
-      \item Building a new musical instrument gave insight into what aspects of stereo field are noteworthy - (Paper I).
-      \item Running existing SIP algorithms on lots of real music showcases what each one can detect - (Paper III)
-      \item Stereo image might be used to maintain the perceptual quality of music when mixing it with other audio sources - (Paper IV).
-    \end{itemize}
-    \clearpage
-    \item[\rqtwo:] What methods can be used to describe the stereo image of a music recording?
-    \begin{itemize}
-      \item Literal answer - (Paper II).
-      \item What does each algorithm \q{hear}? - (Paper III).
-    \end{itemize}
-  \end{itemize}
-
+  \only<1>{
+    \begin{block}{\rqone}
+      How does the stereo image of a recording relate to real-world musical knowledge?
+      \begin{itemize}
+        \setlength{\itemsep}{6pt}
+        \item The technology surrounding the audio can affect stereo image just as much as musical content.
+        \note{Paper 1 - streaming tech had an explicit influence over the musical material.\\Recording studio tech has had similar influence forever.}
+        \item Listeners have highly personal preferences.
+      \end{itemize}
+    \end{block}
+  }
+  \only<2>{
+    \begin{block}{\rqtwo}
+      What methods can be used to describe the stereo image of a music recording?
+      \begin{itemize}
+        \setlength{\itemsep}{6pt}
+        \item Existing methods showcased in paper II.
+        \item Different algorithms are good for different things and picking the right one is important.
+      \end{itemize}
+    \end{block}
+  }
 \end{frame}
 
 \subsection{Recurring themes}
@@ -662,11 +668,12 @@
   \frametitle{Naming things is difficult}
   \centering
   \begin{tikzpicture}
-    \node[screenshot] at (0,0) {\includegraphics[width=0.4\textwidth]{naming_is_hard_1.png}};
-    \node[screenshot] at (6,0.5) {\includegraphics[width=0.4\textwidth]{naming_is_hard_3.png}};
-    \node[screenshot] at (0,-2) {\includegraphics[width=0.4\textwidth]{naming_is_hard_2.png}};
-    \node[screenshot] at (6,-2) {\includegraphics[width=0.4\textwidth]{naming_is_hard_4.png}};
+    \node[screenshot, anchor=north] at (0,0) {\includegraphics[width=0.4\textwidth]{naming_is_hard_1.png}};
+    \node[screenshot, anchor=north] at (6.5,0) {\includegraphics[width=0.4\textwidth]{naming_is_hard_3.png}};
+    \node[screenshot, anchor=south] at (0,-3.5) {\includegraphics[width=0.5\textwidth]{naming_is_hard_2.png}};
+    \node[screenshot, anchor=south] at (6.5,-3.5) {\includegraphics[width=0.4\textwidth]{naming_is_hard_4.png}};
   \end{tikzpicture}
+  \vspace{1em}
   \\\parencite{miticSystematicLiteratureReview2026}
   \note{One of the reasons the SLR was so huge is that no one can agree on what anything is called.}
 \end{frame}
