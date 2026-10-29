@@ -4,9 +4,6 @@
 % \setbeamertemplate{itemize items}[triangle]  % Options: circle, ball, triangle, square
 % \setbeamertemplate{enumerate items}[circle]  % Options: circle, ball, triangle, square
 
-%% Render notes
-\setbeameroption{show notes}
-\setbeamerfont{note title}{size=\scriptsize}
 
 \usepackage[utf8]{inputenc}
 \usepackage{csquotes}
@@ -22,6 +19,19 @@
 \usetikzlibrary{fadings}
 \usetikzlibrary{spy}
 \usetikzlibrary{shadows.blur}
+
+%% Render notes
+\usepackage{pgfpages}
+\setbeamerfont{note title}{size=\scriptsize}
+\setbeameroption{show notes on second screen}
+%% wtf https://github.com/josephwright/beamer/issues/337
+\makeatletter
+\def\beamer@framenotesbegin{% at beginning of slide
+  \usebeamercolor[fg]{normal text}%
+  \gdef\beamer@noteitems{}%
+  \gdef\beamer@notes{}%
+}
+\makeatother
 
 %% Pull tikz styles from kappa
 \input{../kappa/figures/tikzset.tex}
