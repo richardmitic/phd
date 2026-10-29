@@ -1,3 +1,4 @@
+from operator import le
 import dis
 from enum import Enum
 from openpyxl.styles.builtins import total
@@ -55,7 +56,7 @@ app = typer.Typer(result_callback=_maybe_print)
 
 # default matplotlib style
 plt.rcParams["font.family"] = "Times"
-plt.rcParams["font.size"] = 9
+# plt.rcParams["font.size"] = 9
 
 # Default parameters
 OUTPUT_DIR = _git_root() / "papers/licentiate_presentation/generated"
@@ -462,7 +463,35 @@ def cluster(
     else:
         plt.show()
 
+@app.command()
+def smart_panning(
+    music: Path,
+    speech: Path,
+    figsize: Tuple[float, float] = (4,3),
+    output: Optional[Path] = None,
+):
+    fig, ax = plt.subplots(1,1, figsize=figsize, layout='constrained')
 
+    ph_music = __get_ph(music)["gomez"]
+    ph_speech = __get_ph(speech)["gomez"]
+    ph_music /= max(ph_music)
+    ph_speech /= max(ph_speech)
+
+    shift = 5
+    ph_speech_panned = np.append(ph_speech[shift:], np.zeros(shift))
+
+    display.draw_panning_histogram(ph_music, ax, None, None, grid=True, plot_kwargs={"c":"k", "linestyle":"dashed"}, legend=False)
+    display.draw_panning_histogram(ph_speech, ax, None, None, grid=True, plot_kwargs={"c":"k"}, legend=False)
+    display.draw_panning_histogram(ph_speech_panned, ax, None, None, grid=True, plot_kwargs={"c":"k"}, legend=False)
+
+    ax.annotate("Music", (40, ph_music[40]), xytext=(50, 0.5), arrowprops=dict(arrowstyle='->'))
+    ax.annotate("Original speech", (32, 0.7), xytext=(40, 0.8), arrowprops=dict(arrowstyle='->'))
+    ax.annotate("Panned speech", (27, 0.8), xytext=(1, 0.8), arrowprops=dict(arrowstyle='->'))
+
+    if output:
+        fig.savefig(output)
+    else:
+        plt.show()
 
 @app.command()
 def delete_cache(func: str):

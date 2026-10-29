@@ -559,10 +559,12 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Stereo field perception}
-  Practical application for a panning feature algorithm:
+  \frametitle{Potential application}
+  Mix speech and music using \q{smart} panning
 
-  \hspace{1em} Mix speech and music using \q{smart} panning
+  \begin{center}
+    \includegraphics[height=0.7\textheight]{generated/panned_speech.pdf}
+  \end{center}
   
   \note{Needed a perceptual test to determine the efficacy.\\}
   \note{Assumptions:\\}
@@ -573,9 +575,16 @@
 \begin{frame}
   \frametitle{Perceptual test}
   \centering
-  \includegraphics[height=0.3\linewidth]{../bth_perceptual_test_panned_speech/speech_angles.pdf}
-  \includegraphics[width=0.6\linewidth]{../bth_perceptual_test_panned_speech/screenshot_cropped.png}
-  % \quad
+  \begin{tikzpicture}
+    \node at (0,0) {
+      \includegraphics[scale=1, trim=5mm 5mm 5mm 5mm, clip]
+      {../bth_perceptual_test_panned_speech/speech_angles.pdf}
+    };
+    \node at (6,0) {
+      \includegraphics[scale=0.18]
+      {../bth_perceptual_test_panned_speech/screenshot_cropped.png}
+    };
+  \end{tikzpicture}
   \\\parencite{miticPerceptualEvaluationBinaurally2026}
 \end{frame}
 
