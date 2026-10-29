@@ -56,6 +56,7 @@ def display_spf(
     ylim: Optional[Dict[str, float]] = None,
     xlim: Optional[Dict[str, float]] = None,
     xlabel: Optional[str] = "Frequency band",
+    color: str = 'k',
 ):
     mm = spf[0:4]
     sm = spf[4:8]
@@ -68,8 +69,8 @@ def display_spf(
     marker_y = np.sin(np.linspace(0,2*np.pi,n_points)) * 0.5
     marker_x = np.linspace(-1,1,n_points)
     squiggly_marker = Path(list(zip(marker_x, marker_y)), closed=False)
-    ax.errorbar(xl, mm, yerr=ms, label='Slow panning', color='k', marker="_", linestyle='none', linewidth=0.618)
-    ax.errorbar(xr, sm, yerr=ss, label='Fast panning', color='k', marker=squiggly_marker, markerfacecolor='none', linestyle='none', linewidth=0.618)
+    ax.errorbar(xl, mm, yerr=ms, label='Slow panning', color=color, marker="_", linestyle='none', linewidth=0.618)
+    ax.errorbar(xr, sm, yerr=ss, label='Fast panning', color=color, marker=squiggly_marker, markerfacecolor='none', linestyle='none', linewidth=0.618)
     ax.set_title(title)
     if ylim is not None:
         ax.set_ylim(**ylim)  # type: ignore

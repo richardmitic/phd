@@ -530,7 +530,8 @@
 \begin{frame}
   \frametitle{Finding similar stereo fields}
   \centering
-  \includegraphics[width=\textwidth]{generated/clusters.pdf}
+  \only<1>{\includegraphics[width=\textwidth]{generated/clusters.pdf}}
+  \only<2>{\includegraphics[width=\textwidth]{generated/clusters_spf.pdf}}
 \end{frame}
 
 \begin{frame}
@@ -559,18 +560,14 @@
 
 \begin{frame}
   \frametitle{Stereo field perception}
-  \begin{itemize}
-    \item Practical application for a panning feature algorithm
-    \begin{itemize}
-      \item Mix speech and music using smart panning
-    \end{itemize}
-    \item Needed a perceptual test to determine the efficacy
-    \begin{itemize}
-      \item Music is the primary source \& speech is secondary
-      \item Panning the speech away from the musical energy will increase pleasantness
-    \end{itemize} 
-  \end{itemize}
-  \note{last two points are the assumptions}
+  Practical application for a panning feature algorithm:
+
+  \hspace{1em} Mix speech and music using \q{smart} panning
+  
+  \note{Needed a perceptual test to determine the efficacy.\\}
+  \note{Assumptions:\\}
+  \note{Music is the primary source \& speech is secondary.\\}
+  \note{Panning the speech away from the musical energy will increase pleasantness.\\}
 \end{frame}
 
 \begin{frame}

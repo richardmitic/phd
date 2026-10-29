@@ -1,3 +1,4 @@
+import dis
 from enum import Enum
 from openpyxl.styles.builtins import total
 import seaborn
@@ -322,6 +323,7 @@ def cluster(
     sip: SipType,
     output: Optional[Path] = None,
     seed: Optional[int] = None,
+    expand: float = 0.618,
 ):
     from sklearn.manifold import TSNE
     from sklearn.cluster import KMeans
@@ -395,16 +397,27 @@ def cluster(
                 plot_kwargs={"label": letter, "color": colors[i]},
                 x_label=None,
             )
+            for letter in "ABCD":
+                ax[letter].set_xticks([])
+            for letter in "EF":
+                ax[letter].set_xlabel("Azimuth")
         elif sip == SipType.spf:
-            display.display_spf(X[central_tracks[i]], letter, ax[letter])
+            display.display_spf(X[central_tracks[i]], letter, ax[letter], xlabel=None, ylim={"bottom": -0.5, "top": 6.5}, color=colors[i])
+            ax[letter].set_title(letter, y=1.0, pad=-12, color=colors[i])
+            if letter in "ABCD":
+                ax[letter].set_xticklabels([])
+                ax[letter].set_label(None)
+            if letter in "EF":
+                ax[letter].set_xlabel("Frequency band")
+            if letter in "BDF":
+                ax[letter].set_yticklabels([])
+            if letter in "ACE":
+                ax[letter].set_ylabel("Feature value")
     
-    for letter in "ABCD":
-        ax[letter].set_xticks([])
-    for letter in "EF":
-        ax[letter].set_xlabel("Azimuth")
+
 
     for i in range(n_clusters):
-        points = expand_from_centroid(Y[K == i])
+        points = expand_from_centroid(Y[K == i], distance=expand)
         if len(points) >= 3:
             hull = ConvexHull(points)
             verts = np.append(hull.vertices, hull.vertices[0])
